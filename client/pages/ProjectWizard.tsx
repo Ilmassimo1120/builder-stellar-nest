@@ -872,8 +872,12 @@ export default function ProjectWizard() {
         `���️ Timeline: ${projectData.timeline}\n\n` +
         `💾 Saved locally`;
 
-      alert(successMessage);
-      navigate("/dashboard");
+      setCreatedProject({
+        ...projectData,
+        name: projectData.projectInfo.name,
+        storageType: 'local'
+      });
+      setShowSuccessDialog(true);
     } catch (error) {
       console.error("Error creating project with localStorage:", error);
       throw error;
