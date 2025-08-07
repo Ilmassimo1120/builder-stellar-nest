@@ -155,7 +155,7 @@ export default function Index() {
               Everything You Need to Scale Your EV Business
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              From initial site assessment to project completion, ChargePro handles every aspect 
+              From initial site assessment to project completion, ChargeSource handles every aspect 
               of your EV infrastructure projects.
             </p>
           </div>
@@ -198,7 +198,7 @@ export default function Index() {
               </h3>
               <p className="text-xl mb-8 text-primary-foreground/90 max-w-2xl mx-auto">
                 Join hundreds of Australian electrical contractors who are streamlining their 
-                EV infrastructure projects with ChargePro.
+                EV infrastructure projects with ChargeSource.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button size="lg" variant="secondary" className="text-lg px-8" asChild>
