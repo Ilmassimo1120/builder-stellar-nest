@@ -660,10 +660,10 @@ export default function Dashboard() {
                             ) : (
                               <>
                                 <Button
-                                  variant="ghost"
+                                  variant="outline"
                                   size="sm"
                                   asChild
-                                  className="text-blue-600 hover:text-blue-600"
+                                  className="text-blue-600 hover:text-blue-600 hover:bg-blue-50 border-blue-200"
                                 >
                                   <Link to={`/projects/${project.id}`}>
                                     <Eye className="w-4 h-4 mr-1" />
@@ -671,10 +671,10 @@ export default function Dashboard() {
                                   </Link>
                                 </Button>
                                 <Button
-                                  variant="ghost"
+                                  variant="outline"
                                   size="sm"
                                   onClick={() => handleEditProject(project)}
-                                  className="text-green-600 hover:text-green-600"
+                                  className="text-green-600 hover:text-green-600 hover:bg-green-50 border-green-200"
                                 >
                                   <Edit className="w-4 h-4 mr-1" />
                                   Edit
