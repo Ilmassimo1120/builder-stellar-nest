@@ -270,7 +270,14 @@ export default function Dashboard() {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
           <div>
             <h1 className="text-3xl font-bold mb-2">Dashboard</h1>
-            <p className="text-muted-foreground">Welcome back, John. Here's your EV project overview.</p>
+            <div className="flex items-center gap-3">
+              <p className="text-muted-foreground">Welcome back, John. Here's your EV project overview.</p>
+              {!loading && (
+                <Badge variant={isSupabaseConnected ? "secondary" : "outline"} className="text-xs">
+                  {isSupabaseConnected ? "🟢 Cloud Connected" : "🟡 Local Storage"}
+                </Badge>
+              )}
+            </div>
           </div>
           <div className="flex items-center gap-3 mt-4 md:mt-0">
             <Button variant="outline" size="sm">
