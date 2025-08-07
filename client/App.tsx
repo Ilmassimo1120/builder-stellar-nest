@@ -42,7 +42,11 @@ const App = () => (
             } />
 
           {/* Project Management Routes */}
-          <Route path="/projects" element={<Placeholder title="Project Management" description="Manage all your EV infrastructure projects in one place" features={["Project dashboard", "Site assessment tools", "Progress tracking", "Team collaboration", "Document management"]} />} />
+          <Route path="/projects" element={
+            <ProtectedRoute>
+              <Projects />
+            </ProtectedRoute>
+          } />
           <Route path="/projects/new" element={
             <ProtectedRoute>
               <ProjectWizard />
