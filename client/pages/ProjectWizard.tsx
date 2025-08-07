@@ -413,8 +413,7 @@ export default function ProjectWizard() {
       setShowTemplateSelector(false);
     } else if (!draftId && user) {
       // Show template selector for new projects
-      // Temporarily disabled to test: setShowTemplateSelector(true);
-      setShowTemplateSelector(false);
+      setShowTemplateSelector(true);
     }
   }, [user]);
 
@@ -861,7 +860,7 @@ export default function ProjectWizard() {
         `🎉 Project "${projectData.projectInfo.name}" created successfully!\n\n` +
         `📋 Project ID: ${projectData.id}\n` +
         `💰 Estimated Cost: ${projectData.estimatedBudget}\n` +
-        `⏱️ Timeline: ${projectData.timeline}\n\n` +
+        `���️ Timeline: ${projectData.timeline}\n\n` +
         `💾 Saved locally`;
 
       alert(successMessage);
