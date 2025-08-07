@@ -12,6 +12,7 @@ import { Logo } from "@/components/ui/logo";
 import { SupabaseSetup } from "@/components/SupabaseSetup";
 import { Link, useNavigate } from "react-router-dom";
 import { projectService, autoConfigureSupabase } from "@/lib/supabase";
+import { useAuth } from "@/hooks/useAuth";
 import {
   ArrowLeft,
   ArrowRight,
