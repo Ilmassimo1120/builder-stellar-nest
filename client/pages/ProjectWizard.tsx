@@ -224,7 +224,7 @@ export default function ProjectWizard() {
         userId: user.id,
         draftName: generateDraftName(),
         currentStep,
-        createdAt: currentDraftId ? (await getDraftById(draftId))?.createdAt || now : now,
+        createdAt: currentDraftId ? now : now, // Simplified to avoid async issues
         updatedAt: now,
         clientRequirements,
         siteAssessment,
