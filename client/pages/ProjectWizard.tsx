@@ -519,9 +519,17 @@ export default function ProjectWizard() {
   };
 
   const handleSubmit = async () => {
+    console.log('🚀 Creating project...', {
+      step: currentStep,
+      projectName: siteAssessment.projectName,
+      clientName: clientRequirements.contactPersonName,
+      supabaseConnected: isSupabaseConnected
+    });
+
     const validationErrors = validateProjectData();
 
     if (validationErrors.length > 0) {
+      console.log('❌ Validation errors:', validationErrors);
       alert(`Please complete the following required fields:\n\n${validationErrors.join('\n')}`);
       return;
     }
