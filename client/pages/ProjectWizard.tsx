@@ -80,6 +80,7 @@ export default function ProjectWizard() {
     siteAddress: "",
     siteType: "",
     existingPowerSupply: "",
+    availableAmperes: "",
     estimatedLoad: "",
     parkingSpaces: "",
     accessRequirements: "",
