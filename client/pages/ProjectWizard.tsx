@@ -1539,7 +1539,7 @@ export default function ProjectWizard() {
               <ul className="text-sm text-blue-700 space-y-1">
                 <li>• Dynamic load balancing to optimize power usage</li>
                 <li>• Time-of-use scheduling to reduce peak demand</li>
-                <li>��� Smart charging algorithms to manage multiple vehicles</li>
+                <li>• Smart charging algorithms to manage multiple vehicles</li>
                 <li>• Integration with building management systems</li>
               </ul>
             </div>
@@ -1883,8 +1883,31 @@ export default function ProjectWizard() {
           </Button>
           
           <div className="flex gap-2">
-            <Button variant="ghost" asChild>
-              <Link to="/dashboard">Save Draft</Link>
+            <Button
+              variant="ghost"
+              onClick={async () => {
+                await saveDraft(true);
+                navigate("/dashboard");
+              }}
+              disabled={isDraftSaving}
+              className="flex items-center gap-2"
+            >
+              {isDraftSaving ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                  Saving...
+                </>
+              ) : draftSaved ? (
+                <>
+                  <CheckCircle2 className="w-4 h-4" />
+                  Draft Saved
+                </>
+              ) : (
+                <>
+                  <Save className="w-4 h-4" />
+                  Save Draft
+                </>
+              )}
             </Button>
             
             {currentStep < totalSteps ? (
