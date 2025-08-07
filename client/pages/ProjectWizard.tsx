@@ -526,44 +526,43 @@ export default function ProjectWizard() {
       return;
     }
 
-    // Always use localStorage for reliable, fast saving
-    // Cloud storage is just a bonus if available
-    if (isSupabaseConnected) {
-      try {
-        await handleSupabaseSubmit();
-        return;
-      } catch (error) {
-        console.log('Cloud storage unavailable, using local storage');
-        // Fall through to localStorage
-      }
-    }
-
     setIsSubmitting(true);
 
     try {
-      const supabaseData = createSupabaseProjectData();
+      // Try Supabase first if connected
+      if (isSupabaseConnected) {
+        try {
+          const supabaseData = createSupabaseProjectData();
+          const project = await projectService.createProject(supabaseData);
 
-      // Create project in Supabase
-      const project = await projectService.createProject(supabaseData);
+          console.log("Project Created Successfully in Supabase:", project);
 
-      console.log("Project Created Successfully in Supabase:", project);
+          // Remove draft if it exists
+          if (currentDraftId) {
+            const drafts = JSON.parse(localStorage.getItem('chargeSourceDrafts') || '[]');
+            const filteredDrafts = drafts.filter((d: ProjectDraft) => d.id !== currentDraftId);
+            localStorage.setItem('chargeSourceDrafts', JSON.stringify(filteredDrafts));
+          }
 
-      // Show success message and navigate
-      const recommendations = getChargerRecommendations();
-      alert(`Project "${project.name}" created successfully!\n\nProject ID: ${project.id}\nEstimated Cost: ${recommendations.estimatedCost}\nTimeline: ${recommendations.installationTime}`);
+          // Show success message and navigate
+          const recommendations = getChargerRecommendations();
+          alert(`Project "${project.name}" created successfully!\n\nProject ID: ${project.id}\nEstimated Cost: ${recommendations.estimatedCost}\nTimeline: ${recommendations.installationTime}`);
 
-      navigate("/dashboard");
+          navigate("/dashboard");
+          return;
+
+        } catch (error) {
+          console.log('Cloud storage failed, using local storage fallback');
+          // Fall through to localStorage
+        }
+      }
+
+      // Use localStorage (either as primary or fallback)
+      await handleLocalStorageSubmit();
 
     } catch (error) {
-      console.error("Error creating project in Supabase:", error);
-
-      // If Supabase fails, try localStorage as fallback
-      try {
-        await handleLocalStorageSubmit();
-      } catch (fallbackError) {
-        console.error("Fallback to localStorage also failed:", fallbackError);
-        alert("Failed to create project. Please check your connection and try again.");
-      }
+      console.error("Error creating project:", error);
+      alert("Failed to create project. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
