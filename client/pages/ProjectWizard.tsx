@@ -229,16 +229,182 @@ export default function ProjectWizard() {
     }
   };
 
-  const handleSubmit = () => {
-    // Here you would save the project data
-    console.log("Project Data:", {
-      clientRequirements,
-      siteAssessment,
-      chargerSelection,
-      gridCapacity,
-      compliance
-    });
-    navigate("/dashboard");
+  const validateProjectData = () => {
+    const errors = [];
+
+    // Validate Client Requirements
+    if (!clientRequirements.contactPersonName) errors.push("Primary Contact Name is required");
+    if (!clientRequirements.contactEmail) errors.push("Email Address is required");
+    if (!clientRequirements.organizationType) errors.push("Organization Type is required");
+    if (!clientRequirements.projectObjective) errors.push("Project Objective is required");
+    if (!clientRequirements.numberOfVehicles) errors.push("Number of Vehicles is required");
+
+    // Validate Site Assessment
+    if (!siteAssessment.projectName) errors.push("Project Name is required");
+    if (!siteAssessment.clientName) errors.push("Client Name is required");
+    if (!siteAssessment.siteAddress) errors.push("Site Address is required");
+    if (!siteAssessment.siteType) errors.push("Site Type is required");
+
+    // Validate Charger Selection
+    if (!chargerSelection.chargingType) errors.push("Charging Type is required");
+    if (!chargerSelection.powerRating) errors.push("Power Rating is required");
+    if (!chargerSelection.numberOfChargers) errors.push("Number of Chargers is required");
+    if (!chargerSelection.mountingType) errors.push("Mounting Type is required");
+
+    return errors;
+  };
+
+  const createProjectData = () => {
+    const projectId = `PRJ-${Date.now()}`;
+    const createdAt = new Date().toISOString();
+
+    return {
+      id: projectId,
+      createdAt,
+      status: "Planning",
+      progress: 100,
+      projectInfo: {
+        name: siteAssessment.projectName,
+        client: siteAssessment.clientName || clientRequirements.contactPersonName,
+        address: siteAssessment.siteAddress,
+        type: siteAssessment.siteType,
+        objective: clientRequirements.projectObjective
+      },
+      clientRequirements: {
+        ...clientRequirements,
+        vehicleTypesCount: clientRequirements.vehicleTypes.length,
+        sustainabilityGoalsCount: clientRequirements.sustainabilityGoals.length
+      },
+      siteAssessment: {
+        ...siteAssessment,
+        hasPhotos: siteAssessment.photos && siteAssessment.photos.length > 0
+      },
+      chargerConfiguration: {
+        ...chargerSelection,
+        connectorTypesCount: chargerSelection.connectorTypes.length,
+        estimatedCost: getChargerRecommendations().estimatedCost,
+        installationTime: getChargerRecommendations().installationTime
+      },
+      gridCapacity: {
+        ...gridCapacity,
+        upgradeRequired: gridCapacity.upgradeNeeded
+      },
+      compliance: {
+        ...compliance,
+        electricalStandardsCompliance: compliance.electricalStandards.length,
+        safetyRequirementsCompliance: compliance.safetyRequirements.length,
+        localPermitsCompliance: compliance.localPermits.length,
+        overallComplianceScore: Math.round(
+          ((compliance.electricalStandards.length +
+            compliance.safetyRequirements.length +
+            compliance.localPermits.length) / 18) * 100
+        )
+      },
+      estimatedBudget: getChargerRecommendations().estimatedCost,
+      timeline: getChargerRecommendations().installationTime
+    };
+  };
+
+  const handleSubmit = async () => {
+    const validationErrors = validateProjectData();
+
+    if (validationErrors.length > 0) {
+      alert(`Please complete the following required fields:\n\n${validationErrors.join('\n')}`);
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const projectData = createProjectData();
+
+      // Simulate API call - In a real app, this would be an API endpoint
+      await new Promise(resolve => setTimeout(resolve, 2000));
+
+      // Save to localStorage for demo purposes
+      const existingProjects = JSON.parse(localStorage.getItem('chargeSourceProjects') || '[]');
+      existingProjects.unshift(projectData);
+      localStorage.setItem('chargeSourceProjects', JSON.stringify(existingProjects));
+
+      console.log("Project Created Successfully:", projectData);
+
+      // Show success message and navigate
+      alert(`Project "${projectData.projectInfo.name}" created successfully!\n\nProject ID: ${projectData.id}\nEstimated Cost: ${projectData.estimatedBudget}\nTimeline: ${projectData.timeline}`);
+
+      navigate("/dashboard");
+
+    } catch (error) {
+      console.error("Error creating project:", error);
+      alert("Failed to create project. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const getChargerRecommendations = () => {
+    const orgType = clientRequirements.organizationType;
+    const vehicleCount = clientRequirements.numberOfVehicles;
+    const usagePattern = clientRequirements.dailyUsagePattern;
+
+    let recommendations = {
+      chargingType: "",
+      powerRating: "",
+      numberOfChargers: "",
+      reasoning: "",
+      estimatedCost: "",
+      installationTime: ""
+    };
+
+    // Determine charging type based on organization and usage
+    if (orgType === "fleet" || orgType === "commercial" || orgType === "retail") {
+      if (usagePattern === "24-7" || usagePattern === "peak-times") {
+        recommendations.chargingType = "dc-fast";
+        recommendations.powerRating = "50kw";
+        recommendations.reasoning = "DC fast charging recommended for high-utilization commercial sites with quick turnaround needs.";
+      } else {
+        recommendations.chargingType = "mixed";
+        recommendations.powerRating = "22kw";
+        recommendations.reasoning = "Mixed AC/DC installation offers flexibility for different vehicle types and charging needs.";
+      }
+    } else if (orgType === "residential" || orgType === "office") {
+      recommendations.chargingType = "ac-level2";
+      recommendations.powerRating = "7kw";
+      recommendations.reasoning = "AC Level 2 charging ideal for longer dwell times typical in residential and office environments.";
+    } else {
+      recommendations.chargingType = "mixed";
+      recommendations.powerRating = "22kw";
+      recommendations.reasoning = "Mixed installation provides versatility for diverse user needs.";
+    }
+
+    // Estimate number of chargers based on vehicle count
+    if (vehicleCount === "1-5") {
+      recommendations.numberOfChargers = "2";
+    } else if (vehicleCount === "6-15") {
+      recommendations.numberOfChargers = "4";
+    } else if (vehicleCount === "16-30") {
+      recommendations.numberOfChargers = "8";
+    } else if (vehicleCount === "31-50") {
+      recommendations.numberOfChargers = "12";
+    } else if (vehicleCount === "51-100") {
+      recommendations.numberOfChargers = "20";
+    } else {
+      recommendations.numberOfChargers = "30";
+    }
+
+    // Estimate cost and installation time
+    const chargerCount = parseInt(recommendations.numberOfChargers);
+    if (recommendations.chargingType === "dc-fast") {
+      recommendations.estimatedCost = `$${(chargerCount * 45000).toLocaleString()} - $${(chargerCount * 65000).toLocaleString()}`;
+      recommendations.installationTime = "8-12 weeks";
+    } else if (recommendations.chargingType === "mixed") {
+      recommendations.estimatedCost = `$${(chargerCount * 25000).toLocaleString()} - $${(chargerCount * 35000).toLocaleString()}`;
+      recommendations.installationTime = "6-10 weeks";
+    } else {
+      recommendations.estimatedCost = `$${(chargerCount * 8000).toLocaleString()} - $${(chargerCount * 15000).toLocaleString()}`;
+      recommendations.installationTime = "4-6 weeks";
+    }
+
+    return recommendations;
   };
 
   const renderStepContent = () => {
@@ -782,7 +948,7 @@ export default function ProjectWizard() {
                   <p><strong>Best For:</strong> Commercial, high-turnover</p>
                   <p><strong>Cost:</strong> $45,000-$65,000 per unit</p>
                   <p className="text-green-600"><strong>✓ Rapid charging</strong></p>
-                  <p className="text-green-600"><strong>��� High vehicle throughput</strong></p>
+                  <p className="text-green-600"><strong>✓ High vehicle throughput</strong></p>
                 </CardContent>
               </Card>
 
