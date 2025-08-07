@@ -8,6 +8,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
+import Projects from "./pages/Projects";
 import ProjectWizard from "./pages/ProjectWizard";
 import ConnectionTest from "./pages/ConnectionTest";
 import Login from "./pages/Login";
