@@ -10,6 +10,34 @@ interface SupabaseSetupProps {
 }
 
 export function SupabaseSetup({ isConnected, onRetry }: SupabaseSetupProps) {
+  const [isRetrying, setIsRetrying] = useState(false);
+
+  const handleRetry = async () => {
+    setIsRetrying(true);
+    try {
+      await onRetry();
+    } catch (error) {
+      console.error('Error during retry:', error);
+    } finally {
+      setIsRetrying(false);
+    }
+  };
+
+  const handleOpenMCP = () => {
+    // This will trigger the MCP popover action link
+    const event = new CustomEvent('openMCPPopover');
+    window.dispatchEvent(event);
+
+    // Fallback: try to trigger via hash navigation
+    window.location.hash = 'open-mcp-popover';
+
+    // Additional fallback: try to click any existing MCP trigger
+    const mcpTrigger = document.querySelector('[data-mcp-trigger]') as HTMLElement;
+    if (mcpTrigger) {
+      mcpTrigger.click();
+    }
+  };
+
   if (isConnected) {
     return (
       <Alert className="border-green-200 bg-green-50">
