@@ -432,6 +432,33 @@ export default function ProjectWizard() {
     checkCloudStorage();
   }, []);
 
+  // Template handling functions
+  const handleSelectTemplate = (template: ProjectTemplate) => {
+    const templateData = applyTemplate(template);
+
+    // Apply template data to state
+    setClientRequirements(templateData.clientRequirements);
+    setSiteAssessment(templateData.siteAssessment);
+    setChargerSelection(templateData.chargerSelection);
+    setGridCapacity(templateData.gridCapacity);
+    setCompliance(templateData.compliance);
+    setSelectedTemplate(template);
+    setShowTemplateSelector(false);
+
+    // Auto-populate project name if not set
+    if (!templateData.siteAssessment.projectName) {
+      setSiteAssessment(prev => ({
+        ...prev,
+        projectName: `${template.name} Project`,
+      }));
+    }
+  };
+
+  const handleSkipTemplate = () => {
+    setShowTemplateSelector(false);
+    setSelectedTemplate(null);
+  };
+
   const getStepTitle = (step: number) => {
     switch (step) {
       case 1:
