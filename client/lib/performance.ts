@@ -1,5 +1,5 @@
 // Performance utilities for ChargeSource app
-import { useCallback, useRef, useEffect } from 'react';
+import React, { useCallback, useRef, useEffect } from 'react';
 
 /**
  * Debounce hook for preventing excessive API calls or state updates
