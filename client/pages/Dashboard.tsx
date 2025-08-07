@@ -28,13 +28,18 @@ import {
   MapPin,
   Zap,
   Calculator,
-  ArrowUpRight
+  ArrowUpRight,
+  User,
+  LogOut
 } from "lucide-react";
 import { Logo } from "@/components/ui/logo";
 import { SupabaseSetup } from "@/components/SupabaseSetup";
 import { projectService, autoConfigureSupabase } from "@/lib/supabase";
+import { useAuth } from "@/hooks/useAuth";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 
 export default function Dashboard() {
+  const { user, logout } = useAuth();
   const [projects, setProjects] = useState<any[]>([]);
   const [isSupabaseConnected, setIsSupabaseConnected] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -279,9 +284,32 @@ export default function Dashboard() {
             <Button variant="ghost" size="icon">
               <Settings className="w-5 h-5" />
             </Button>
-            <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-primary-foreground text-sm font-medium">
-              JD
-            </div>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="w-8 h-8 rounded-full bg-primary text-primary-foreground hover:bg-primary/90">
+                  {user?.name?.charAt(0) || user?.firstName?.charAt(0) || 'U'}
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <div className="px-2 py-1.5">
+                  <p className="text-sm font-medium">{user?.name}</p>
+                  <p className="text-xs text-muted-foreground">{user?.email}</p>
+                  <p className="text-xs text-muted-foreground">{user?.company}</p>
+                </div>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link to="/settings" className="flex items-center">
+                    <User className="w-4 h-4 mr-2" />
+                    Account Settings
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={logout} className="text-red-600 focus:text-red-600">
+                  <LogOut className="w-4 h-4 mr-2" />
+                  Sign Out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
       </header>
@@ -292,7 +320,7 @@ export default function Dashboard() {
           <div>
             <h1 className="text-3xl font-bold mb-2">Dashboard</h1>
             <div className="flex items-center gap-3">
-              <p className="text-muted-foreground">Welcome back, John. Here's your EV project overview.</p>
+              <p className="text-muted-foreground">Welcome back, {user?.name || user?.firstName || 'User'}. Here's your EV project overview.</p>
               {!loading && (
                 <Badge variant="secondary" className="text-xs">
                   {isSupabaseConnected ? "☁️ Cloud Storage" : "💾 Ready to Use"}
