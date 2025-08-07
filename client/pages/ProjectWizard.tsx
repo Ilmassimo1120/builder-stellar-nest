@@ -159,6 +159,25 @@ export default function ProjectWizard() {
     accessibilityCompliance: false
   });
 
+  // Check Supabase connection on component mount
+  useEffect(() => {
+    const checkConnection = async () => {
+      try {
+        const isConnected = await checkSupabaseConnection();
+        setIsSupabaseConnected(isConnected);
+        if (!isConnected) {
+          setConnectionError('Supabase not configured. Projects will be saved locally.');
+        }
+      } catch (error) {
+        console.error('Error checking Supabase connection:', error);
+        setIsSupabaseConnected(false);
+        setConnectionError('Unable to connect to database. Projects will be saved locally.');
+      }
+    };
+
+    checkConnection();
+  }, []);
+
   const getStepTitle = (step: number) => {
     switch (step) {
       case 1: return "Client Requirements";
