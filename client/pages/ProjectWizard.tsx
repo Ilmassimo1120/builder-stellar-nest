@@ -587,7 +587,7 @@ export default function ProjectWizard() {
           </div>
         );
 
-      case 2:
+      case 3:
         return (
           <div className="space-y-6">
             <div className="bg-muted/30 p-4 rounded-lg">
