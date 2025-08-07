@@ -804,123 +804,211 @@ export default function ProjectWizard() {
               </Card>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <Label htmlFor="chargingType">Charging Type *</Label>
-                <Select value={chargerSelection.chargingType} onValueChange={(value) => setChargerSelection({...chargerSelection, chargingType: value})}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select charging type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="ac-level2">AC Level 2 (7-22kW)</SelectItem>
-                    <SelectItem value="dc-fast">DC Fast Charging (50-150kW)</SelectItem>
-                    <SelectItem value="dc-ultra">DC Ultra Fast (150kW+)</SelectItem>
-                    <SelectItem value="mixed">Mixed AC/DC Installation</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="powerRating">Power Rating per Charger</Label>
-                <Select value={chargerSelection.powerRating} onValueChange={(value) => setChargerSelection({...chargerSelection, powerRating: value})}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select power rating" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="7kw">7kW (AC)</SelectItem>
-                    <SelectItem value="11kw">11kW (AC)</SelectItem>
-                    <SelectItem value="22kw">22kW (AC)</SelectItem>
-                    <SelectItem value="50kw">50kW (DC)</SelectItem>
-                    <SelectItem value="75kw">75kW (DC)</SelectItem>
-                    <SelectItem value="150kw">150kW (DC)</SelectItem>
-                    <SelectItem value="350kw">350kW (DC Ultra)</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <Label htmlFor="numberOfChargers">Number of Charging Points</Label>
-                <Input
-                  id="numberOfChargers"
-                  type="number"
-                  value={chargerSelection.numberOfChargers}
-                  onChange={(e) => setChargerSelection({...chargerSelection, numberOfChargers: e.target.value})}
-                  placeholder="e.g., 8"
-                  min="1"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="mountingType">Mounting Type</Label>
-                <Select value={chargerSelection.mountingType} onValueChange={(value) => setChargerSelection({...chargerSelection, mountingType: value})}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select mounting type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="pedestal">Pedestal Mount</SelectItem>
-                    <SelectItem value="wall">Wall Mount</SelectItem>
-                    <SelectItem value="overhead">Overhead Mount</SelectItem>
-                    <SelectItem value="pole">Pole Mount</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <Label>Connector Types (select all that apply)</Label>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                {["Type 2 AC", "CCS2", "CHAdeMO", "Tesla"].map((connector) => (
-                  <div key={connector} className="flex items-center space-x-2">
-                    <Checkbox
-                      id={connector}
-                      checked={chargerSelection.connectorTypes.includes(connector)}
-                      onCheckedChange={(checked) => {
-                        if (checked) {
-                          setChargerSelection({
-                            ...chargerSelection,
-                            connectorTypes: [...chargerSelection.connectorTypes, connector]
-                          });
-                        } else {
-                          setChargerSelection({
-                            ...chargerSelection,
-                            connectorTypes: chargerSelection.connectorTypes.filter(c => c !== connector)
-                          });
-                        }
-                      }}
-                    />
-                    <Label htmlFor={connector} className="text-sm">{connector}</Label>
+            {/* Configuration Selection Form */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Configuration Details</CardTitle>
+                <CardDescription>Customize your charging installation based on specific requirements</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="chargingType">Charging Type *</Label>
+                    <Select
+                      value={chargerSelection.chargingType || recommendations.chargingType}
+                      onValueChange={(value) => setChargerSelection({...chargerSelection, chargingType: value})}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select charging type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="ac-level2">
+                          <div className="flex items-center gap-2">
+                            <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
+                            AC Level 2 (7-22kW) - Long dwell time
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="dc-fast">
+                          <div className="flex items-center gap-2">
+                            <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                            DC Fast Charging (50-150kW) - Quick turnaround
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="dc-ultra">
+                          <div className="flex items-center gap-2">
+                            <div className="w-3 h-3 bg-purple-500 rounded-full"></div>
+                            DC Ultra Fast (150kW+) - Premium rapid charging
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="mixed">
+                          <div className="flex items-center gap-2">
+                            <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                            Mixed AC/DC Installation - Maximum flexibility
+                          </div>
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                    {recommendations.chargingType && (
+                      <p className="text-xs text-primary">Recommended: {recommendations.chargingType.replace('-', ' ').toUpperCase()}</p>
+                    )}
                   </div>
-                ))}
-              </div>
-            </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="weatherProtection"
-                  checked={chargerSelection.weatherProtection}
-                  onCheckedChange={(checked) => setChargerSelection({...chargerSelection, weatherProtection: checked as boolean})}
-                />
-                <Label htmlFor="weatherProtection">Weather Protection Required</Label>
-              </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="powerRating">Power Rating per Charger *</Label>
+                    <Select
+                      value={chargerSelection.powerRating || recommendations.powerRating}
+                      onValueChange={(value) => setChargerSelection({...chargerSelection, powerRating: value})}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select power rating" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="7kw">7kW (AC) - Standard residential</SelectItem>
+                        <SelectItem value="11kw">11kW (AC) - Fast residential</SelectItem>
+                        <SelectItem value="22kw">22kW (AC) - Commercial AC</SelectItem>
+                        <SelectItem value="50kw">50kW (DC) - Standard fast charging</SelectItem>
+                        <SelectItem value="75kw">75kW (DC) - Enhanced fast charging</SelectItem>
+                        <SelectItem value="150kw">150kW (DC) - Ultra-fast charging</SelectItem>
+                        <SelectItem value="350kw">350kW (DC) - Premium ultra-fast</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    {recommendations.powerRating && (
+                      <p className="text-xs text-primary">Recommended: {recommendations.powerRating}</p>
+                    )}
+                  </div>
+                </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="networkConnectivity">Network Connectivity</Label>
-                <Select value={chargerSelection.networkConnectivity} onValueChange={(value) => setChargerSelection({...chargerSelection, networkConnectivity: value})}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select connectivity" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="4g">4G/LTE</SelectItem>
-                    <SelectItem value="wifi">WiFi</SelectItem>
-                    <SelectItem value="ethernet">Ethernet</SelectItem>
-                    <SelectItem value="offline">Offline Operation</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="numberOfChargers">Number of Charging Points *</Label>
+                    <div className="flex items-center gap-2">
+                      <Input
+                        id="numberOfChargers"
+                        type="number"
+                        value={chargerSelection.numberOfChargers || recommendations.numberOfChargers}
+                        onChange={(e) => setChargerSelection({...chargerSelection, numberOfChargers: e.target.value})}
+                        placeholder="e.g., 8"
+                        min="1"
+                        max="100"
+                        className="flex-1"
+                      />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setChargerSelection({...chargerSelection, numberOfChargers: recommendations.numberOfChargers})}
+                      >
+                        Use Recommended ({recommendations.numberOfChargers})
+                      </Button>
+                    </div>
+                    <p className="text-xs text-muted-foreground">Based on {clientRequirements.numberOfVehicles} expected vehicles</p>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="mountingType">Mounting Type *</Label>
+                    <Select value={chargerSelection.mountingType} onValueChange={(value) => setChargerSelection({...chargerSelection, mountingType: value})}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select mounting type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="pedestal">Pedestal Mount - Freestanding installation</SelectItem>
+                        <SelectItem value="wall">Wall Mount - Space-saving option</SelectItem>
+                        <SelectItem value="overhead">Overhead Mount - Suspended installation</SelectItem>
+                        <SelectItem value="pole">Pole Mount - Street light style</SelectItem>
+                        <SelectItem value="canopy">Canopy Integrated - Weather protected</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Connector Types (select all that apply)</Label>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    {[
+                      {name: "Type 2 AC", desc: "European standard AC"},
+                      {name: "CCS2", desc: "Combined Charging System"},
+                      {name: "CHAdeMO", desc: "Japanese DC standard"},
+                      {name: "Tesla", desc: "Tesla Supercharger"}
+                    ].map((connector) => (
+                      <div key={connector.name} className="flex items-start space-x-2 p-2 border rounded-lg hover:bg-muted/50">
+                        <Checkbox
+                          id={connector.name}
+                          checked={chargerSelection.connectorTypes.includes(connector.name)}
+                          onCheckedChange={(checked) => {
+                            if (checked) {
+                              setChargerSelection({
+                                ...chargerSelection,
+                                connectorTypes: [...chargerSelection.connectorTypes, connector.name]
+                              });
+                            } else {
+                              setChargerSelection({
+                                ...chargerSelection,
+                                connectorTypes: chargerSelection.connectorTypes.filter(c => c !== connector.name)
+                              });
+                            }
+                          }}
+                        />
+                        <div className="flex-1">
+                          <Label htmlFor={connector.name} className="text-sm font-medium">{connector.name}</Label>
+                          <p className="text-xs text-muted-foreground">{connector.desc}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-4">
+                    <div className="flex items-center space-x-2">
+                      <Checkbox
+                        id="weatherProtection"
+                        checked={chargerSelection.weatherProtection}
+                        onCheckedChange={(checked) => setChargerSelection({...chargerSelection, weatherProtection: checked as boolean})}
+                      />
+                      <Label htmlFor="weatherProtection">Weather Protection Required</Label>
+                    </div>
+                    <p className="text-xs text-muted-foreground ml-6">IP65 rated enclosures for outdoor installations</p>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="networkConnectivity">Network Connectivity *</Label>
+                    <Select value={chargerSelection.networkConnectivity} onValueChange={(value) => setChargerSelection({...chargerSelection, networkConnectivity: value})}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select connectivity" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="4g">4G/LTE - Cellular connection</SelectItem>
+                        <SelectItem value="wifi">WiFi - Wireless network</SelectItem>
+                        <SelectItem value="ethernet">Ethernet - Wired connection</SelectItem>
+                        <SelectItem value="offline">Offline Operation - No connectivity</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+
+                {/* Cost Summary */}
+                <div className="bg-muted/30 p-4 rounded-lg">
+                  <h4 className="font-medium mb-2 flex items-center gap-2">
+                    <Calculator className="w-4 h-4 text-primary" />
+                    Estimated Project Cost
+                  </h4>
+                  <div className="grid md:grid-cols-3 gap-4 text-sm">
+                    <div>
+                      <p className="font-medium">Equipment Cost:</p>
+                      <p className="text-muted-foreground">{recommendations.estimatedCost}</p>
+                    </div>
+                    <div>
+                      <p className="font-medium">Installation Timeline:</p>
+                      <p className="text-muted-foreground">{recommendations.installationTime}</p>
+                    </div>
+                    <div>
+                      <p className="font-medium">Total Charging Points:</p>
+                      <p className="text-muted-foreground">{chargerSelection.numberOfChargers || recommendations.numberOfChargers} units</p>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         );
 
