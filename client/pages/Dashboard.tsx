@@ -156,10 +156,12 @@ export default function Dashboard() {
       <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <PlugZap className="w-8 h-8 text-primary" />
-            <div className="flex flex-col">
-              <span className="text-xl font-bold">ChargeSource</span>
-              <span className="text-xs text-muted-foreground">Powered By Charge N Go Australia</span>
+            <div className="flex items-center space-x-3">
+              <PlugZap className="w-8 h-8 text-primary" />
+              <div className="flex flex-col">
+                <span className="text-lg font-bold text-primary">Charge N Go</span>
+                <span className="text-sm text-muted-foreground">ChargeSource Platform</span>
+              </div>
             </div>
           </div>
           <nav className="hidden md:flex items-center space-x-6">
