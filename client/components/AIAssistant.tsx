@@ -95,13 +95,33 @@ export function AIAssistant() {
   // AI Response System
   const getAIResponse = async (userMessage: string): Promise<ChatMessage> => {
     const message = userMessage.toLowerCase();
-    
+
     // Context-aware responses based on current page
     const pageContext = aiContext.currentPage;
-    
+
     let response = "";
     let suggestions: string[] = [];
     let actions: Array<{ label: string; action: string; icon?: React.ReactNode }> = [];
+
+    // First, check the AI knowledge database for expert responses
+    const knowledgeResponse = findAIResponse(userMessage);
+    if (knowledgeResponse) {
+      response = knowledgeResponse.response;
+      suggestions = knowledgeResponse.suggestions || [];
+      actions = knowledgeResponse.actions?.map(action => ({
+        ...action,
+        icon: action.icon ? <FileText className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />
+      })) || [];
+
+      return {
+        id: `ai-${Date.now()}`,
+        type: "assistant",
+        content: response,
+        timestamp: new Date(),
+        suggestions,
+        actions
+      };
+    }
 
     // Installation and Technical Queries
     if (message.includes("install") || message.includes("installation")) {
