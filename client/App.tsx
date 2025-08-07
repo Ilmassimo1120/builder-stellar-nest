@@ -62,6 +62,14 @@ const App = () => (
                 </ProtectedRoute>
               }
             />
+            <Route
+              path="/projects/:projectId"
+              element={
+                <ProtectedRoute>
+                  <ProjectDetail />
+                </ProtectedRoute>
+              }
+            />
 
             {/* Development/Testing Routes */}
             <Route path="/test-connection" element={<ConnectionTest />} />
