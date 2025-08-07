@@ -1624,9 +1624,22 @@ export default function ProjectWizard() {
                 <ArrowRight className="w-4 h-4" />
               </Button>
             ) : (
-              <Button onClick={handleSubmit} className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4" />
-                Create Project
+              <Button
+                onClick={handleSubmit}
+                disabled={isSubmitting}
+                className="flex items-center gap-2 min-w-[140px]"
+              >
+                {isSubmitting ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    Creating...
+                  </>
+                ) : (
+                  <>
+                    <CheckCircle2 className="w-4 h-4" />
+                    Create Project
+                  </>
+                )}
               </Button>
             )}
           </div>
