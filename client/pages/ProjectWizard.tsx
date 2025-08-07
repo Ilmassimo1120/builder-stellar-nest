@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Logo } from "@/components/ui/logo";
 import { Link, useNavigate } from "react-router-dom";
+import { projectService, checkSupabaseConnection } from "@/lib/supabase";
 import {
   ArrowLeft,
   ArrowRight,
@@ -95,6 +96,8 @@ export default function ProjectWizard() {
   const totalSteps = 6;
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+  const [isSupabaseConnected, setIsSupabaseConnected] = useState(false);
+  const [connectionError, setConnectionError] = useState<string | null>(null);
 
   const [clientRequirements, setClientRequirements] = useState<ClientRequirements>({
     contactPersonName: "",
@@ -254,54 +257,93 @@ export default function ProjectWizard() {
     return errors;
   };
 
-  const createProjectData = () => {
-    const projectId = `PRJ-${Date.now()}`;
-    const createdAt = new Date().toISOString();
+  const createSupabaseProjectData = () => {
+    const recommendations = getChargerRecommendations();
+
+    // Parse cost range for min/max values
+    const costMatch = recommendations.estimatedCost.match(/\$([\d,]+).*?\$([\d,]+)/);
+    const costMin = costMatch ? parseInt(costMatch[1].replace(/,/g, '')) : 0;
+    const costMax = costMatch ? parseInt(costMatch[2].replace(/,/g, '')) : 0;
 
     return {
-      id: projectId,
-      createdAt,
-      status: "Planning",
-      progress: 100,
-      projectInfo: {
+      project: {
+        status: 'Planning' as const,
+        progress: 100,
         name: siteAssessment.projectName,
-        client: siteAssessment.clientName || clientRequirements.contactPersonName,
-        address: siteAssessment.siteAddress,
-        type: siteAssessment.siteType,
-        objective: clientRequirements.projectObjective
+        client_name: siteAssessment.clientName || clientRequirements.contactPersonName,
+        site_address: siteAssessment.siteAddress,
+        site_type: siteAssessment.siteType,
+        project_objective: clientRequirements.projectObjective,
+        estimated_budget_min: costMin,
+        estimated_budget_max: costMax,
+        estimated_timeline: recommendations.installationTime,
+        created_by: 'wizard',
+        notes: `Created via Project Planning Wizard. ${clientRequirements.specialRequirements ? 'Special Requirements: ' + clientRequirements.specialRequirements : ''}`
       },
       clientRequirements: {
-        ...clientRequirements,
-        vehicleTypesCount: clientRequirements.vehicleTypes.length,
-        sustainabilityGoalsCount: clientRequirements.sustainabilityGoals.length
+        contact_person_name: clientRequirements.contactPersonName,
+        contact_title: clientRequirements.contactTitle,
+        contact_email: clientRequirements.contactEmail,
+        contact_phone: clientRequirements.contactPhone,
+        organization_type: clientRequirements.organizationType,
+        project_objective: clientRequirements.projectObjective,
+        number_of_vehicles: clientRequirements.numberOfVehicles,
+        vehicle_types: clientRequirements.vehicleTypes,
+        daily_usage_pattern: clientRequirements.dailyUsagePattern,
+        budget_range: clientRequirements.budgetRange,
+        project_timeline: clientRequirements.projectTimeline,
+        sustainability_goals: clientRequirements.sustainabilityGoals,
+        accessibility_requirements: clientRequirements.accessibilityRequirements,
+        special_requirements: clientRequirements.specialRequirements,
+        preferred_charger_brands: clientRequirements.preferredChargerBrands,
+        payment_model: clientRequirements.paymentModel
       },
       siteAssessment: {
-        ...siteAssessment,
-        hasPhotos: siteAssessment.photos && siteAssessment.photos.length > 0
+        project_name: siteAssessment.projectName,
+        client_name: siteAssessment.clientName,
+        site_address: siteAssessment.siteAddress,
+        site_type: siteAssessment.siteType,
+        existing_power_supply: siteAssessment.existingPowerSupply,
+        available_amperes: siteAssessment.availableAmperes ? parseInt(siteAssessment.availableAmperes) : undefined,
+        estimated_load: siteAssessment.estimatedLoad,
+        parking_spaces: siteAssessment.parkingSpaces ? parseInt(siteAssessment.parkingSpaces) : undefined,
+        access_requirements: siteAssessment.accessRequirements,
+        additional_notes: siteAssessment.additionalNotes,
+        photos: siteAssessment.photos
       },
       chargerConfiguration: {
-        ...chargerSelection,
-        connectorTypesCount: chargerSelection.connectorTypes.length,
-        estimatedCost: getChargerRecommendations().estimatedCost,
-        installationTime: getChargerRecommendations().installationTime
+        charging_type: chargerSelection.chargingType,
+        power_rating: chargerSelection.powerRating,
+        mounting_type: chargerSelection.mountingType,
+        number_of_chargers: parseInt(chargerSelection.numberOfChargers),
+        connector_types: chargerSelection.connectorTypes,
+        weather_protection: chargerSelection.weatherProtection,
+        network_connectivity: chargerSelection.networkConnectivity,
+        estimated_cost_min: costMin,
+        estimated_cost_max: costMax,
+        installation_time: recommendations.installationTime
       },
-      gridCapacity: {
-        ...gridCapacity,
-        upgradeRequired: gridCapacity.upgradeNeeded
+      gridCapacityAssessment: {
+        current_supply: gridCapacity.currentSupply ? parseInt(gridCapacity.currentSupply) : undefined,
+        required_capacity: gridCapacity.requiredCapacity ? parseInt(gridCapacity.requiredCapacity) : undefined,
+        upgrade_needed: gridCapacity.upgradeNeeded,
+        upgrade_type: gridCapacity.upgradeType,
+        estimated_upgrade_cost: gridCapacity.estimatedUpgradeCost,
+        utility_contact: gridCapacity.utilityContact,
+        load_management_notes: 'Generated via Project Planning Wizard'
       },
-      compliance: {
-        ...compliance,
-        electricalStandardsCompliance: compliance.electricalStandards.length,
-        safetyRequirementsCompliance: compliance.safetyRequirements.length,
-        localPermitsCompliance: compliance.localPermits.length,
-        overallComplianceScore: Math.round(
+      complianceChecklist: {
+        electrical_standards: compliance.electricalStandards,
+        safety_requirements: compliance.safetyRequirements,
+        local_permits: compliance.localPermits,
+        environmental_considerations: compliance.environmentalConsiderations,
+        accessibility_compliance: compliance.accessibilityCompliance,
+        overall_compliance_score: Math.round(
           ((compliance.electricalStandards.length +
             compliance.safetyRequirements.length +
             compliance.localPermits.length) / 18) * 100
         )
-      },
-      estimatedBudget: getChargerRecommendations().estimatedCost,
-      timeline: getChargerRecommendations().installationTime
+      }
     };
   };
 
@@ -313,31 +355,79 @@ export default function ProjectWizard() {
       return;
     }
 
+    if (!isSupabaseConnected) {
+      // Fallback to localStorage if Supabase is not connected
+      await handleLocalStorageSubmit();
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
-      const projectData = createProjectData();
+      const supabaseData = createSupabaseProjectData();
 
-      // Simulate API call - In a real app, this would be an API endpoint
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Create project in Supabase
+      const project = await projectService.createProject(supabaseData);
 
-      // Save to localStorage for demo purposes
-      const existingProjects = JSON.parse(localStorage.getItem('chargeSourceProjects') || '[]');
-      existingProjects.unshift(projectData);
-      localStorage.setItem('chargeSourceProjects', JSON.stringify(existingProjects));
-
-      console.log("Project Created Successfully:", projectData);
+      console.log("Project Created Successfully in Supabase:", project);
 
       // Show success message and navigate
-      alert(`Project "${projectData.projectInfo.name}" created successfully!\n\nProject ID: ${projectData.id}\nEstimated Cost: ${projectData.estimatedBudget}\nTimeline: ${projectData.timeline}`);
+      const recommendations = getChargerRecommendations();
+      alert(`Project "${project.name}" created successfully!\n\nProject ID: ${project.id}\nEstimated Cost: ${recommendations.estimatedCost}\nTimeline: ${recommendations.installationTime}`);
 
       navigate("/dashboard");
 
     } catch (error) {
-      console.error("Error creating project:", error);
-      alert("Failed to create project. Please try again.");
+      console.error("Error creating project in Supabase:", error);
+
+      // If Supabase fails, try localStorage as fallback
+      try {
+        await handleLocalStorageSubmit();
+      } catch (fallbackError) {
+        console.error("Fallback to localStorage also failed:", fallbackError);
+        alert("Failed to create project. Please check your connection and try again.");
+      }
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handleLocalStorageSubmit = async () => {
+    try {
+      const projectId = `PRJ-${Date.now()}`;
+      const createdAt = new Date().toISOString();
+      const recommendations = getChargerRecommendations();
+
+      const projectData = {
+        id: projectId,
+        createdAt,
+        status: "Planning",
+        progress: 100,
+        projectInfo: {
+          name: siteAssessment.projectName,
+          client: siteAssessment.clientName || clientRequirements.contactPersonName,
+          address: siteAssessment.siteAddress,
+          type: siteAssessment.siteType,
+          objective: clientRequirements.projectObjective
+        },
+        estimatedBudget: recommendations.estimatedCost,
+        timeline: recommendations.installationTime
+      };
+
+      // Save to localStorage
+      const existingProjects = JSON.parse(localStorage.getItem('chargeSourceProjects') || '[]');
+      existingProjects.unshift(projectData);
+      localStorage.setItem('chargeSourceProjects', JSON.stringify(existingProjects));
+
+      console.log("Project Created Successfully (localStorage):", projectData);
+
+      // Show success message and navigate
+      alert(`Project "${projectData.projectInfo.name}" created successfully!\n\nProject ID: ${projectData.id}\nEstimated Cost: ${projectData.estimatedBudget}\nTimeline: ${projectData.timeline}\n\nNote: Saved locally. Connect to Supabase for cloud storage.`);
+
+      navigate("/dashboard");
+    } catch (error) {
+      console.error("Error creating project with localStorage:", error);
+      throw error;
     }
   };
 
