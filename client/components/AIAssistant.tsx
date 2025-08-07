@@ -515,9 +515,15 @@ Could you please be more specific about what you need help with?`;
                     <Bot className="w-4 h-4 text-white" />
                   </div>
                   <div>
-                    <DialogTitle className="text-sm">EV Charging Assistant</DialogTitle>
+                    <DialogTitle className="text-sm flex items-center gap-2">
+                      EV Charging Assistant
+                      <Badge variant="secondary" className="text-xs bg-green-100 text-green-800">
+                        <Sparkles className="w-3 h-3 mr-1" />
+                        Expert AI
+                      </Badge>
+                    </DialogTitle>
                     <DialogDescription className="text-xs">
-                      Specialized AI for electrical contractors
+                      Specialized for Australian electrical contractors
                     </DialogDescription>
                   </div>
                 </div>
