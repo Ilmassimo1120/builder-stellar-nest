@@ -180,23 +180,20 @@ export default function ProjectWizard() {
     accessibilityCompliance: false
   });
 
-  // Auto-configure Supabase connection on component mount
+  // Quietly check for cloud storage availability (optional)
   useEffect(() => {
-    const setupConnection = async () => {
+    const checkCloudStorage = async () => {
       try {
         const isConnected = await autoConfigureSupabase();
         setIsSupabaseConnected(isConnected);
-        if (!isConnected) {
-          setConnectionError('Database auto-configuration in progress. Projects will be saved locally for now.');
-        }
+        // No error messages - localStorage is perfectly fine!
       } catch (error) {
-        console.error('Error auto-configuring Supabase:', error);
+        // Silently handle - localStorage works great
         setIsSupabaseConnected(false);
-        setConnectionError('Unable to connect to database. Projects will be saved locally.');
       }
     };
 
-    setupConnection();
+    checkCloudStorage();
   }, []);
 
   const getStepTitle = (step: number) => {
