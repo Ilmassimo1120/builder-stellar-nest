@@ -649,6 +649,51 @@ export default function Dashboard() {
           </CardContent>
         </Card>
 
+        {/* Knowledge Base Widget */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+          <div className="lg:col-span-2">
+            <KnowledgeBaseWidget />
+          </div>
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <HelpCircle className="w-5 h-5 text-primary" />
+                Quick Help
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-3">
+                <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                  <h4 className="font-medium text-blue-900 mb-1">New to EV Charging?</h4>
+                  <p className="text-sm text-blue-700">
+                    Start with our installation basics guide to understand the fundamentals.
+                  </p>
+                </div>
+
+                <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
+                  <h4 className="font-medium text-green-900 mb-1">Need Support?</h4>
+                  <p className="text-sm text-green-700 mb-2">
+                    Our technical team is here to help with installations and troubleshooting.
+                  </p>
+                  <Button size="sm" variant="outline" className="w-full">
+                    Contact Support
+                  </Button>
+                </div>
+
+                <div className="p-3 bg-purple-50 border border-purple-200 rounded-lg">
+                  <h4 className="font-medium text-purple-900 mb-1">Training Available</h4>
+                  <p className="text-sm text-purple-700 mb-2">
+                    Join our upcoming EV charging certification courses.
+                  </p>
+                  <Button size="sm" variant="outline" className="w-full">
+                    View Courses
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
         {/* Main Content Tabs */}
         <Tabs defaultValue="projects" className="space-y-6">
           <TabsList className="grid w-full grid-cols-3 lg:w-[400px]">
