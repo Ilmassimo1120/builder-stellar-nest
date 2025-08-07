@@ -337,11 +337,10 @@ class QuoteService {
 
   integrateProjectData(quote: Quote, projectData: ProjectIntegration): Quote {
     const rawProject = projectData.rawProjectData;
+    const clientReq = projectData.clientRequirements || {};
 
     // Update client information from project - comprehensive integration
     if (projectData.clientRequirements || rawProject) {
-      const clientReq = projectData.clientRequirements || {};
-
       quote.clientInfo = {
         id: projectData.projectId,
         name: clientReq.contactPersonName || rawProject?.client_name || rawProject?.client || '',
