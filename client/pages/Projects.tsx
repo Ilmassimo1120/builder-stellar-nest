@@ -549,9 +549,8 @@ export default function Projects() {
       const editDraftId = `edit-${project.id}-${Date.now()}`;
       const now = new Date().toISOString();
 
-      // Try to load original detailed project data from localStorage
-      const localProjects = JSON.parse(localStorage.getItem('chargeSourceProjects') || '[]');
-      const originalProject = localProjects.find((p: any) => p.id === project.id);
+      // Use preserved original detailed project data
+      const originalProject = project._originalData || {};
 
       // Extract detailed data if available from original project
       const originalClientReq = originalProject?.clientRequirements || {};
@@ -559,6 +558,13 @@ export default function Projects() {
       const originalChargerSel = originalProject?.chargerSelection || {};
       const originalGridCap = originalProject?.gridCapacity || {};
       const originalCompliance = originalProject?.compliance || {};
+
+      console.log('Editing project with original data:', {
+        hasOriginalData: !!project._originalData,
+        clientReq: originalClientReq,
+        siteAssess: originalSiteAssess,
+        chargerSel: originalChargerSel
+      });
 
       // Convert the project data back to wizard format for editing with better data mapping
       const editDraft = {
