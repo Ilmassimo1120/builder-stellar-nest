@@ -522,9 +522,9 @@ export default function ProjectWizard() {
                 <Label htmlFor="clientName">Client Name *</Label>
                 <Input
                   id="clientName"
-                  value={siteAssessment.clientName}
+                  value={siteAssessment.clientName || clientRequirements.contactPersonName}
                   onChange={(e) => setSiteAssessment({...siteAssessment, clientName: e.target.value})}
-                  placeholder="e.g., Westfield Group"
+                  placeholder={clientRequirements.contactPersonName || "e.g., Westfield Group"}
                 />
               </div>
             </div>
@@ -1086,7 +1086,7 @@ export default function ProjectWizard() {
             <div className="bg-yellow-50 border border-yellow-200 p-4 rounded-lg">
               <h3 className="font-medium text-yellow-800 mb-2">Next Steps</h3>
               <ul className="text-sm text-yellow-700 space-y-1">
-                <li>��� Generate detailed quote and project timeline</li>
+                <li>• Generate detailed quote and project timeline</li>
                 <li>• Schedule site visit for final assessment</li>
                 <li>• Submit permit applications</li>
                 <li>• Coordinate with utility company (if upgrade required)</li>
