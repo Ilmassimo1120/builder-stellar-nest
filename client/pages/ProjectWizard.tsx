@@ -772,20 +772,16 @@ export default function ProjectWizard() {
             );
           }
 
-          // Show success message and navigate
+          // Show success dialog
           const recommendations = getChargerRecommendations();
           console.log("✅ Project created successfully in Supabase:", project);
 
-          // Use a more user-friendly notification
-          const successMessage =
-            `🎉 Project "${project.name}" created successfully!\n\n` +
-            `📋 Project ID: ${project.id}\n` +
-            `💰 Estimated Cost: ${recommendations.estimatedCost}\n` +
-            `⏱️ Timeline: ${recommendations.installationTime}\n\n` +
-            `✅ Saved to cloud storage`;
-
-          alert(successMessage);
-          navigate("/dashboard");
+          setCreatedProject({
+            ...project,
+            recommendations,
+            storageType: 'cloud'
+          });
+          setShowSuccessDialog(true);
           return;
         } catch (error) {
           console.log("Cloud storage failed, using local storage fallback");
