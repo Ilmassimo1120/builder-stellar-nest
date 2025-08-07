@@ -314,15 +314,7 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Supabase Setup Section */}
-        {!isSupabaseConnected && !loading && (
-          <div className="mb-8">
-            <SupabaseSetup
-              isConnected={isSupabaseConnected}
-              onRetry={retryConnection}
-            />
-          </div>
-        )}
+        {/* Optional Cloud Storage Upgrade - only show if user explicitly wants it */}
 
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
