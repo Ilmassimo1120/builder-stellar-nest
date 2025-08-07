@@ -1710,13 +1710,7 @@ export default function ProjectWizard() {
           </div>
         </div>
 
-        {/* Supabase Setup Section */}
-        <div className="max-w-4xl mx-auto mb-4">
-          <SupabaseSetup
-            isConnected={isSupabaseConnected}
-            onRetry={retryConnection}
-          />
-        </div>
+        {/* Optional: Show cloud storage upgrade only if explicitly requested */}
 
         {/* Main Content */}
         <Card className="max-w-4xl mx-auto">
