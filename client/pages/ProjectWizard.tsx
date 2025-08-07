@@ -10,7 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Logo } from "@/components/ui/logo";
 import { Link, useNavigate } from "react-router-dom";
-import { projectService, checkSupabaseConnection } from "@/lib/supabase";
+import { projectService, autoConfigureSupabase } from "@/lib/supabase";
 import {
   ArrowLeft,
   ArrowRight,
