@@ -60,12 +60,8 @@ interface ChatMessage {
   }>;
 }
 
-interface AIAssistantProps {
-  currentPage?: string;
-  userContext?: any;
-}
-
-export function AIAssistant({ currentPage, userContext }: AIAssistantProps) {
+export function AIAssistant() {
+  const aiContext = useAIContext();
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([
