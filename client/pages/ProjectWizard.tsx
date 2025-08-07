@@ -98,7 +98,7 @@ export default function ProjectWizard() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [isSupabaseConnected, setIsSupabaseConnected] = useState(false);
-  const [connectionError, setConnectionError] = useState<string | null>(null);
+  const [showCloudUpgrade, setShowCloudUpgrade] = useState(false);
 
   // Function to retry Supabase connection
   const retryConnection = async (): Promise<void> => {
