@@ -26,41 +26,41 @@ export function SupabaseSetup({ isConnected, onRetry }: SupabaseSetupProps) {
   const handleOpenMCP = () => {
     console.log('🔗 Attempting to open MCP popover...');
 
-    // Method 1: Try the documented action link format
+    // Method 1: Use the Builder.io action link format
     try {
+      // Create a proper link element and trigger it
       const link = document.createElement('a');
       link.href = '#open-mcp-popover';
+      link.style.display = 'none';
+      document.body.appendChild(link);
       link.click();
+      document.body.removeChild(link);
       console.log('✅ Triggered MCP popover via action link');
+      return; // Exit early if successful
     } catch (error) {
       console.log('❌ Action link method failed:', error);
     }
 
-    // Method 2: Try to find and click MCP-related buttons
+    // Method 2: Try direct navigation
     try {
-      const mcpButtons = document.querySelectorAll('button, [role="button"]');
-      mcpButtons.forEach((button) => {
-        const text = button.textContent?.toLowerCase();
-        if (text?.includes('mcp') || text?.includes('integration') || text?.includes('popover')) {
-          (button as HTMLElement).click();
-          console.log('✅ Found and clicked MCP button');
-        }
-      });
+      window.location.href = '#open-mcp-popover';
+      console.log('✅ Triggered via location.href');
+      return;
     } catch (error) {
-      console.log('❌ Button search method failed:', error);
+      console.log('❌ Location.href method failed:', error);
     }
 
-    // Method 3: Custom event dispatch
+    // Method 3: Try hash change
     try {
-      window.dispatchEvent(new CustomEvent('openMCPPopover'));
-      window.dispatchEvent(new CustomEvent('open-mcp-popover'));
-      console.log('✅ Dispatched custom events');
+      window.location.hash = 'open-mcp-popover';
+      console.log('✅ Triggered via hash change');
+      return;
     } catch (error) {
-      console.log('❌ Custom event method failed:', error);
+      console.log('❌ Hash change method failed:', error);
     }
 
-    // Method 4: Show instructions to user
-    alert('To connect Supabase:\\n\\n1. Look for an "MCP" or "Integrations" button in the UI\\n2. Click it to open the MCP popover\\n3. Find and connect to "Supabase"\\n4. Come back and click "Check Connection Again"');
+    // Fallback: Show user instructions
+    alert('To connect Supabase:\\n\\n1. Look for an "MCP" or "Integrations" button in the top toolbar\\n2. Click it to open the MCP popover\\n3. Find and connect to "Supabase"\\n4. Come back and click "Check Connection Again"\\n\\nNote: The MCP button is usually located in the top navigation or toolbar area.');
   };
 
   if (isConnected) {
