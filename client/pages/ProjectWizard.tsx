@@ -406,16 +406,19 @@ export default function ProjectWizard() {
   };
 
   const nextStep = () => {
-    console.log('NextStep clicked - currentStep:', currentStep, 'totalSteps:', totalSteps);
+    if (import.meta.env.DEV) {
+      console.log('NextStep clicked - currentStep:', currentStep, 'totalSteps:', totalSteps);
+    }
+
     if (currentStep < totalSteps) {
       // Auto-populate site assessment when moving from client requirements to site assessment
       if (currentStep === 1) {
-        console.log('Populating site assessment from client requirements');
+        if (import.meta.env.DEV) console.log('Populating site assessment from client requirements');
         populateSiteAssessmentFromClientRequirements();
       }
       // Auto-populate charger selection with recommendations when moving to Step 3
       if (currentStep === 2) {
-        console.log('Populating charger recommendations');
+        if (import.meta.env.DEV) console.log('Populating charger recommendations');
         populateChargerRecommendations();
       }
       setCurrentStep(currentStep + 1);
