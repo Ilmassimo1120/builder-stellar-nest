@@ -284,6 +284,19 @@ export default function ProjectWizard() {
     setGridCapacity(draft.gridCapacity);
     setCompliance(draft.compliance);
     setCurrentDraftId(draft.id);
+
+    // If charger selection is empty but we have client requirements, populate recommendations
+    if (!draft.chargerSelection.chargingType && draft.clientRequirements.organizationType) {
+      setTimeout(() => {
+        const recommendations = getChargerRecommendations();
+        setChargerSelection(prev => ({
+          ...prev,
+          chargingType: recommendations.chargingType,
+          powerRating: recommendations.powerRating,
+          numberOfChargers: recommendations.numberOfChargers
+        }));
+      }, 100); // Small delay to ensure state is updated
+    }
   };
 
   // Auto-save draft every 30 seconds when user is actively working
