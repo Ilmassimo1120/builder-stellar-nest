@@ -94,6 +94,21 @@ interface Compliance {
   accessibilityCompliance: boolean;
 }
 
+interface ProjectDraft {
+  id: string;
+  userId: string;
+  draftName: string;
+  currentStep: number;
+  createdAt: string;
+  updatedAt: string;
+  clientRequirements: ClientRequirements;
+  siteAssessment: SiteAssessment;
+  chargerSelection: ChargerSelection;
+  gridCapacity: GridCapacity;
+  compliance: Compliance;
+  progress: number;
+}
+
 export default function ProjectWizard() {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(1);
