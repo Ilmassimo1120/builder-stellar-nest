@@ -29,11 +29,11 @@ export function Logo({ size = "md", showText = true, className = "" }: LogoProps
 
       {showText && (
         <div className="flex flex-col">
-          <span className={`${textSizes[size].main} font-bold text-primary`}>
-            Charge N Go
+          <span className={`${textSizes[size].main} font-bold`}>
+            ChargeSource
           </span>
           <span className={`${textSizes[size].sub} text-muted-foreground`}>
-            ChargeSource Platform
+            Powered By Charge N Go Australia
           </span>
         </div>
       )}
