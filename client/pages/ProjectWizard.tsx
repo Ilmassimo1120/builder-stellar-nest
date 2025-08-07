@@ -554,8 +554,16 @@ export default function ProjectWizard() {
 
           // Show success message and navigate
           const recommendations = getChargerRecommendations();
-          alert(`Project "${project.name}" created successfully!\n\nProject ID: ${project.id}\nEstimated Cost: ${recommendations.estimatedCost}\nTimeline: ${recommendations.installationTime}`);
+          console.log('✅ Project created successfully in Supabase:', project);
 
+          // Use a more user-friendly notification
+          const successMessage = `🎉 Project "${project.name}" created successfully!\n\n` +
+                                `📋 Project ID: ${project.id}\n` +
+                                `💰 Estimated Cost: ${recommendations.estimatedCost}\n` +
+                                `⏱️ Timeline: ${recommendations.installationTime}\n\n` +
+                                `✅ Saved to cloud storage`;
+
+          alert(successMessage);
           navigate("/dashboard");
           return;
 
