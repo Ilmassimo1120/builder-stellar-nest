@@ -1689,6 +1689,21 @@ export default function ProjectWizard() {
           </div>
         </div>
 
+        {/* Connection Status Notice */}
+        {connectionError && (
+          <div className="max-w-4xl mx-auto mb-4">
+            <div className="bg-yellow-50 border border-yellow-200 p-4 rounded-lg">
+              <div className="flex items-center gap-2 mb-2">
+                <AlertTriangle className="w-4 h-4 text-yellow-600" />
+                <h3 className="font-medium text-yellow-800">Database Configuration Notice</h3>
+              </div>
+              <p className="text-sm text-yellow-700">
+                {connectionError} To enable cloud storage, please configure your Supabase environment variables.
+              </p>
+            </div>
+          </div>
+        )}
+
         {/* Main Content */}
         <Card className="max-w-4xl mx-auto">
           <CardHeader>
