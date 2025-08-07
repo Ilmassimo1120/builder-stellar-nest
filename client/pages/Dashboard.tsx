@@ -530,11 +530,25 @@ export default function Dashboard() {
                               </>
                             ) : (
                               <>
-                                <Button variant="ghost" size="sm">
-                                  <Eye className="w-4 h-4" />
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  asChild
+                                  className="text-blue-600 hover:text-blue-600"
+                                >
+                                  <Link to={`/projects/${project.id}`}>
+                                    <Eye className="w-4 h-4 mr-1" />
+                                    View
+                                  </Link>
                                 </Button>
-                                <Button variant="ghost" size="sm">
-                                  <Edit className="w-4 h-4" />
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => handleEditProject(project)}
+                                  className="text-green-600 hover:text-green-600"
+                                >
+                                  <Edit className="w-4 h-4 mr-1" />
+                                  Edit
                                 </Button>
                                 <Button variant="ghost" size="sm">
                                   <MoreHorizontal className="w-4 h-4" />
