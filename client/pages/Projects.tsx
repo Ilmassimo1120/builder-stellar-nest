@@ -1099,7 +1099,7 @@ export default function Projects() {
                       </Link>
                     </Button>
                   ) : (
-                    <Button>
+                    <Button onClick={() => handleEditProject(selectedProject)}>
                       <Edit className="w-4 h-4 mr-2" />
                       Edit Project
                     </Button>
