@@ -8,6 +8,8 @@ interface LogoProps {
 }
 
 export function Logo({ size = "md", showText = true, className = "" }: LogoProps) {
+  const [imageError, setImageError] = useState(false);
+
   // Ensure size is valid, fallback to "md" if invalid
   const validSize = (size === "sm" || size === "md" || size === "lg" || size === "xl") ? size : "md";
 
@@ -31,15 +33,16 @@ export function Logo({ size = "md", showText = true, className = "" }: LogoProps
 
   return (
     <div className={`flex items-center space-x-3 ${className}`}>
-      <img
-        src="https://cdn.builder.io/api/v1/image/assets%2Fd8af561546d8452e90f10c66e582c7bd%2F30d900209495466eb21054f3229abe7e?format=webp&width=800"
-        alt="Charge N Go"
-        className={`${currentSizeClass} object-contain`}
-        onError={(e) => {
-          // Fallback to a simple icon if image fails to load
-          e.currentTarget.style.display = 'none';
-        }}
-      />
+      {!imageError ? (
+        <img
+          src="https://cdn.builder.io/api/v1/image/assets%2Fd8af561546d8452e90f10c66e582c7bd%2F30d900209495466eb21054f3229abe7e?format=webp&width=800"
+          alt="Charge N Go"
+          className={`${currentSizeClass} object-contain`}
+          onError={() => setImageError(true)}
+        />
+      ) : (
+        <PlugZap className={`${currentSizeClass} text-primary`} />
+      )}
 
       {showText && (
         <div className="flex flex-col">
