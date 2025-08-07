@@ -202,6 +202,118 @@ export default function ProjectWizard() {
     accessibilityCompliance: false
   });
 
+  // Draft management functions
+  const generateDraftName = () => {
+    const clientName = clientRequirements.contactPersonName || "New Client";
+    const projectName = siteAssessment.projectName || "Untitled Project";
+    const name = projectName || `${clientName} Project`;
+    return name.substring(0, 50); // Limit length
+  };
+
+  const saveDraft = async (showNotification = true) => {
+    if (!user) return;
+
+    try {
+      setIsDraftSaving(true);
+
+      const draftId = currentDraftId || `draft-${Date.now()}-${user.id}`;
+      const now = new Date().toISOString();
+
+      const draft: ProjectDraft = {
+        id: draftId,
+        userId: user.id,
+        draftName: generateDraftName(),
+        currentStep,
+        createdAt: currentDraftId ? (await getDraftById(draftId))?.createdAt || now : now,
+        updatedAt: now,
+        clientRequirements,
+        siteAssessment,
+        chargerSelection,
+        gridCapacity,
+        compliance,
+        progress: Math.round((currentStep / totalSteps) * 100)
+      };
+
+      // Get existing drafts
+      const existingDrafts = JSON.parse(localStorage.getItem('chargeSourceDrafts') || '[]');
+
+      // Update or add draft
+      const draftIndex = existingDrafts.findIndex((d: ProjectDraft) => d.id === draftId);
+      if (draftIndex >= 0) {
+        existingDrafts[draftIndex] = draft;
+      } else {
+        existingDrafts.unshift(draft);
+      }
+
+      // Keep only last 10 drafts per user
+      const userDrafts = existingDrafts.filter((d: ProjectDraft) => d.userId === user.id);
+      const otherDrafts = existingDrafts.filter((d: ProjectDraft) => d.userId !== user.id);
+      const limitedUserDrafts = userDrafts.slice(0, 10);
+
+      localStorage.setItem('chargeSourceDrafts', JSON.stringify([...limitedUserDrafts, ...otherDrafts]));
+
+      setCurrentDraftId(draftId);
+      setDraftSaved(true);
+
+      if (showNotification) {
+        // Show temporary success notification
+        setTimeout(() => setDraftSaved(false), 3000);
+      }
+
+    } catch (error) {
+      console.error('Error saving draft:', error);
+    } finally {
+      setIsDraftSaving(false);
+    }
+  };
+
+  const getDraftById = async (draftId: string): Promise<ProjectDraft | null> => {
+    try {
+      const drafts = JSON.parse(localStorage.getItem('chargeSourceDrafts') || '[]');
+      return drafts.find((d: ProjectDraft) => d.id === draftId) || null;
+    } catch {
+      return null;
+    }
+  };
+
+  const loadDraft = (draft: ProjectDraft) => {
+    setCurrentStep(draft.currentStep);
+    setClientRequirements(draft.clientRequirements);
+    setSiteAssessment(draft.siteAssessment);
+    setChargerSelection(draft.chargerSelection);
+    setGridCapacity(draft.gridCapacity);
+    setCompliance(draft.compliance);
+    setCurrentDraftId(draft.id);
+  };
+
+  // Auto-save draft every 30 seconds when user is actively working
+  useEffect(() => {
+    if (!user) return;
+
+    const autoSaveInterval = setInterval(() => {
+      // Only auto-save if there's content and user hasn't just saved
+      if (clientRequirements.contactPersonName || siteAssessment.projectName) {
+        saveDraft(false); // Auto-save without notification
+      }
+    }, 30000); // 30 seconds
+
+    return () => clearInterval(autoSaveInterval);
+  }, [user, currentStep, clientRequirements, siteAssessment, chargerSelection, gridCapacity, compliance]);
+
+  // Check for draft from URL params or load existing
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const draftId = urlParams.get('draft');
+
+    if (draftId && user) {
+      getDraftById(draftId).then(draft => {
+        if (draft && draft.userId === user.id) {
+          loadDraft(draft);
+        }
+      });
+    }
+  }, [user]);
+
   // Quietly check for cloud storage availability (optional)
   useEffect(() => {
     const checkCloudStorage = async () => {
@@ -1427,7 +1539,7 @@ export default function ProjectWizard() {
               <ul className="text-sm text-blue-700 space-y-1">
                 <li>• Dynamic load balancing to optimize power usage</li>
                 <li>• Time-of-use scheduling to reduce peak demand</li>
-                <li>• Smart charging algorithms to manage multiple vehicles</li>
+                <li>��� Smart charging algorithms to manage multiple vehicles</li>
                 <li>• Integration with building management systems</li>
               </ul>
             </div>
