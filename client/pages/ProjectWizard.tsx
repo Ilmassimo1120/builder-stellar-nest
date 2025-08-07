@@ -392,10 +392,16 @@ export default function ProjectWizard() {
       return;
     }
 
-    if (!isSupabaseConnected) {
-      // Fallback to localStorage if Supabase is not connected
-      await handleLocalStorageSubmit();
-      return;
+    // Always use localStorage for reliable, fast saving
+    // Cloud storage is just a bonus if available
+    if (isSupabaseConnected) {
+      try {
+        await handleSupabaseSubmit();
+        return;
+      } catch (error) {
+        console.log('Cloud storage unavailable, using local storage');
+        // Fall through to localStorage
+      }
     }
 
     setIsSubmitting(true);
