@@ -2755,6 +2755,14 @@ export default function ProjectWizard() {
 
           <div className="flex gap-2">
             <Button
+              variant="outline"
+              onClick={() => setShowTemplateSelector(true)}
+              className="flex items-center gap-2"
+            >
+              <Settings className="w-4 h-4" />
+              {selectedTemplate ? "Change Template" : "Use Template"}
+            </Button>
+            <Button
               variant="ghost"
               onClick={async () => {
                 await saveDraft(true);
