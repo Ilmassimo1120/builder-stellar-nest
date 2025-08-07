@@ -10,8 +10,12 @@ import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
 import ProjectWizard from "./pages/ProjectWizard";
 import ConnectionTest from "./pages/ConnectionTest";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 import Placeholder from "./pages/Placeholder";
 import NotFound from "./pages/NotFound";
+import { AuthProvider } from "./hooks/useAuth";
+import { ProtectedRoute } from "./components/ProtectedRoute";
 
 const queryClient = new QueryClient();
 
