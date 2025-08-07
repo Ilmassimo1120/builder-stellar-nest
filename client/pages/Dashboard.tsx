@@ -31,7 +31,7 @@ import {
   ArrowUpRight
 } from "lucide-react";
 import { Logo } from "@/components/ui/logo";
-import { projectService, checkSupabaseConnection } from "@/lib/supabase";
+import { projectService, autoConfigureSupabase } from "@/lib/supabase";
 
 export default function Dashboard() {
   const [projects, setProjects] = useState<any[]>([]);
