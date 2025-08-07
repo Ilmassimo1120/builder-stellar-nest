@@ -952,7 +952,7 @@ export default function ProjectWizard() {
           </div>
         );
 
-      case 5:
+      case 6:
         return (
           <div className="space-y-6">
             <div className="bg-primary/5 border border-primary/20 p-4 rounded-lg">
