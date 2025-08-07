@@ -720,7 +720,7 @@ export default function ProjectWizard() {
           </div>
         );
 
-      case 3:
+      case 4:
         return (
           <div className="space-y-6">
             <div className="bg-yellow-50 border border-yellow-200 p-4 rounded-lg">
