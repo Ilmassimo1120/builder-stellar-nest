@@ -491,6 +491,22 @@ export default function ProjectWizard() {
       case 2:
         return (
           <div className="space-y-6">
+            {/* Recommendations based on client requirements */}
+            {clientRequirements.organizationType && (
+              <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg">
+                <h3 className="font-medium text-blue-800 mb-2 flex items-center gap-2">
+                  <Zap className="w-4 h-4" />
+                  Site Assessment Recommendations
+                </h3>
+                <div className="text-sm text-blue-700 space-y-1">
+                  <p><strong>Organization Type:</strong> {clientRequirements.organizationType}</p>
+                  <p><strong>Expected Vehicles:</strong> {clientRequirements.numberOfVehicles}</p>
+                  <p><strong>Usage Pattern:</strong> {clientRequirements.dailyUsagePattern}</p>
+                  {clientRequirements.budgetRange && <p><strong>Budget Range:</strong> {clientRequirements.budgetRange}</p>}
+                </div>
+              </div>
+            )}
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
                 <Label htmlFor="projectName">Project Name *</Label>
@@ -498,7 +514,7 @@ export default function ProjectWizard() {
                   id="projectName"
                   value={siteAssessment.projectName}
                   onChange={(e) => setSiteAssessment({...siteAssessment, projectName: e.target.value})}
-                  placeholder="e.g., Westfield Shopping Centre EV Hub"
+                  placeholder={clientRequirements.organizationType ? `${clientRequirements.organizationType} EV Charging Project` : "e.g., Westfield Shopping Centre EV Hub"}
                 />
               </div>
               
@@ -1070,7 +1086,7 @@ export default function ProjectWizard() {
             <div className="bg-yellow-50 border border-yellow-200 p-4 rounded-lg">
               <h3 className="font-medium text-yellow-800 mb-2">Next Steps</h3>
               <ul className="text-sm text-yellow-700 space-y-1">
-                <li>• Generate detailed quote and project timeline</li>
+                <li>��� Generate detailed quote and project timeline</li>
                 <li>• Schedule site visit for final assessment</li>
                 <li>• Submit permit applications</li>
                 <li>• Coordinate with utility company (if upgrade required)</li>
