@@ -72,11 +72,11 @@ export default function Index() {
       {/* Header */}
       <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-3">
             <PlugZap className="w-8 h-8 text-primary" />
             <div className="flex flex-col">
-              <span className="text-xl font-bold">ChargeSource</span>
-              <span className="text-xs text-muted-foreground">Powered By Charge N Go Australia</span>
+              <span className="text-lg font-bold text-primary">Charge N Go</span>
+              <span className="text-sm text-muted-foreground">ChargeSource Platform</span>
             </div>
           </div>
           <nav className="hidden md:flex items-center space-x-6">
@@ -220,11 +220,11 @@ export default function Index() {
         <div className="container mx-auto">
           <div className="grid md:grid-cols-4 gap-8">
             <div>
-              <div className="flex items-center space-x-2 mb-4">
+              <div className="flex items-center space-x-3 mb-4">
                 <PlugZap className="w-6 h-6 text-primary" />
                 <div className="flex flex-col">
-                  <span className="text-lg font-bold">ChargeSource</span>
-                  <span className="text-xs text-muted-foreground">Powered By Charge N Go Australia</span>
+                  <span className="text-lg font-bold text-primary">Charge N Go</span>
+                  <span className="text-sm text-muted-foreground">ChargeSource Platform</span>
                 </div>
               </div>
               <p className="text-sm text-muted-foreground mb-4">
@@ -269,7 +269,7 @@ export default function Index() {
           
           <div className="border-t mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
             <p className="text-sm text-muted-foreground">
-              © 2024 ChargeSource. All rights reserved.
+              © 2024 Charge N Go Australia. All rights reserved.
             </p>
             <div className="flex items-center gap-4 text-sm text-muted-foreground mt-4 md:mt-0">
               <span>🇦🇺 Made in Australia</span>
