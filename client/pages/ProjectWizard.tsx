@@ -228,7 +228,7 @@ export default function ProjectWizard() {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="space-y-2">
                 <Label htmlFor="existingPowerSupply">Existing Power Supply</Label>
                 <Select value={siteAssessment.existingPowerSupply} onValueChange={(value) => setSiteAssessment({...siteAssessment, existingPowerSupply: value})}>
@@ -243,6 +243,17 @@ export default function ProjectWizard() {
                     <SelectItem value="unknown">Unknown - Requires Assessment</SelectItem>
                   </SelectContent>
                 </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="availableAmperes">Available Amperes (Amps)</Label>
+                <Input
+                  id="availableAmperes"
+                  type="number"
+                  value={siteAssessment.availableAmperes}
+                  onChange={(e) => setSiteAssessment({...siteAssessment, availableAmperes: e.target.value})}
+                  placeholder="e.g., 200"
+                />
               </div>
 
               <div className="space-y-2">
