@@ -460,9 +460,20 @@ export default function QuoteBuilder() {
               {/* Client Information */}
               <Card>
                 <CardHeader>
-                  <CardTitle>Client Information</CardTitle>
+                  <CardTitle className="flex items-center gap-2">
+                    Client Information
+                    {quote.projectId && (
+                      <Badge variant="secondary" className="text-xs">
+                        <Home className="w-3 h-3 mr-1" />
+                        From Project
+                      </Badge>
+                    )}
+                  </CardTitle>
                   <CardDescription>
-                    Client contact details and billing information
+                    {quote.projectId
+                      ? 'Client details loaded from Project Management system'
+                      : 'Client contact details and billing information'
+                    }
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
@@ -541,9 +552,20 @@ export default function QuoteBuilder() {
               {/* Project Information */}
               <Card>
                 <CardHeader>
-                  <CardTitle>Project Information</CardTitle>
+                  <CardTitle className="flex items-center gap-2">
+                    Project Information
+                    {quote.projectData && (
+                      <Badge variant="secondary" className="text-xs">
+                        <Building className="w-3 h-3 mr-1" />
+                        From Project
+                      </Badge>
+                    )}
+                  </CardTitle>
                   <CardDescription>
-                    Project details and requirements
+                    {quote.projectData
+                      ? 'Project details loaded from Project Management system'
+                      : 'Project details and requirements'
+                    }
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
@@ -569,25 +591,57 @@ export default function QuoteBuilder() {
                   {quote.projectData && (
                     <>
                       <div className="space-y-2">
-                        <Label>Site Address</Label>
-                        <div className="p-2 bg-muted rounded text-sm">
+                        <Label className="flex items-center gap-2">
+                          Site Address
+                          <Badge variant="outline" className="text-xs px-1 py-0">
+                            Auto-filled
+                          </Badge>
+                        </Label>
+                        <div className="p-3 bg-green-50 border border-green-200 rounded text-sm text-green-800">
+                          <MapPin className="w-4 h-4 inline mr-2" />
                           {quote.projectData.siteAddress || 'Not specified'}
                         </div>
                       </div>
                       <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2">
-                          <Label>Site Type</Label>
-                          <div className="p-2 bg-muted rounded text-sm">
+                          <Label className="flex items-center gap-2">
+                            Site Type
+                            <Badge variant="outline" className="text-xs px-1 py-0">
+                              Auto-filled
+                            </Badge>
+                          </Label>
+                          <div className="p-3 bg-blue-50 border border-blue-200 rounded text-sm text-blue-800">
+                            <Building className="w-4 h-4 inline mr-2" />
                             {quote.projectData.siteType || 'Not specified'}
                           </div>
                         </div>
                         <div className="space-y-2">
-                          <Label>Project Name</Label>
-                          <div className="p-2 bg-muted rounded text-sm">
+                          <Label className="flex items-center gap-2">
+                            Project Name
+                            <Badge variant="outline" className="text-xs px-1 py-0">
+                              Auto-filled
+                            </Badge>
+                          </Label>
+                          <div className="p-3 bg-purple-50 border border-purple-200 rounded text-sm text-purple-800">
+                            <Zap className="w-4 h-4 inline mr-2" />
                             {quote.projectData.projectName || 'Not specified'}
                           </div>
                         </div>
                       </div>
+                      {quote.projectData.projectObjective && (
+                        <div className="space-y-2">
+                          <Label className="flex items-center gap-2">
+                            Project Objective
+                            <Badge variant="outline" className="text-xs px-1 py-0">
+                              Auto-filled
+                            </Badge>
+                          </Label>
+                          <div className="p-3 bg-amber-50 border border-amber-200 rounded text-sm text-amber-800">
+                            <Target className="w-4 h-4 inline mr-2" />
+                            {quote.projectData.projectObjective}
+                          </div>
+                        </div>
+                      )}
                     </>
                   )}
                 </CardContent>
