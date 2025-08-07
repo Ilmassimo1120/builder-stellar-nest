@@ -17,7 +17,10 @@ export default function Placeholder({ title, description, features = [] }: Place
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <PlugZap className="w-8 h-8 text-primary" />
-            <span className="text-xl font-bold">ChargePro Australia</span>
+            <div className="flex flex-col">
+              <span className="text-xl font-bold">ChargeSource</span>
+              <span className="text-xs text-muted-foreground">Powered By Charge N Go Australia</span>
+            </div>
           </div>
           <nav className="hidden md:flex items-center space-x-6">
             <Link to="/dashboard" className="text-sm font-medium hover:text-primary transition-colors">
