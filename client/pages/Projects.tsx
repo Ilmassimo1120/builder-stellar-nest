@@ -423,17 +423,21 @@ export default function Projects() {
     loadProjects();
   }, []);
 
-  // Filter and sort projects
-  useEffect(() => {
+  // Debounced search to improve performance
+  const debouncedSearchQuery = useDebounce(searchQuery, 300);
+
+  // Memoized filtering and sorting function
+  const filteredAndSortedProjects = useMemo(() => {
     let filtered = [...projects];
 
     // Search filter
-    if (searchQuery) {
+    if (debouncedSearchQuery) {
+      const query = debouncedSearchQuery.toLowerCase();
       filtered = filtered.filter(project =>
-        project.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        project.client.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        project.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        project.type.toLowerCase().includes(searchQuery.toLowerCase())
+        project.name.toLowerCase().includes(query) ||
+        project.client.toLowerCase().includes(query) ||
+        project.location.toLowerCase().includes(query) ||
+        project.type.toLowerCase().includes(query)
       );
     }
 
@@ -449,8 +453,8 @@ export default function Projects() {
 
     // Sort
     filtered.sort((a, b) => {
-      let aValue, bValue;
-      
+      let aValue: any, bValue: any;
+
       switch (sortBy) {
         case "name":
           aValue = a.name.toLowerCase();
@@ -486,8 +490,13 @@ export default function Projects() {
       }
     });
 
-    setFilteredProjects(filtered);
-  }, [projects, searchQuery, statusFilter, typeFilter, sortBy, sortOrder]);
+    return filtered;
+  }, [projects, debouncedSearchQuery, statusFilter, typeFilter, sortBy, sortOrder]);
+
+  // Update filtered projects when memoized result changes
+  useEffect(() => {
+    setFilteredProjects(filteredAndSortedProjects);
+  }, [filteredAndSortedProjects]);
 
   const getStatusColor = (status: string) => {
     switch (status) {
