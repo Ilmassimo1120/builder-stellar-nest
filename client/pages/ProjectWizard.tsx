@@ -101,16 +101,20 @@ export default function ProjectWizard() {
   const [connectionError, setConnectionError] = useState<string | null>(null);
 
   // Function to retry Supabase connection
-  const retryConnection = async () => {
+  const retryConnection = async (): Promise<void> => {
     try {
+      console.log('🔄 Retrying Supabase connection...');
       setConnectionError(null);
       const isConnected = await autoConfigureSupabase();
       setIsSupabaseConnected(isConnected);
       if (!isConnected) {
         setConnectionError('Database auto-configuration in progress. Projects will be saved locally for now.');
+        console.log('⚠️ Connection still not available');
+      } else {
+        console.log('✅ Connection successful!');
       }
     } catch (error) {
-      console.error('Error retrying Supabase connection:', error);
+      console.error('❌ Error retrying Supabase connection:', error);
       setIsSupabaseConnected(false);
       setConnectionError('Unable to connect to database. Projects will be saved locally.');
     }
