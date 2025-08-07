@@ -299,16 +299,25 @@ export const checkSupabaseConnection = async () => {
 // Auto-configure Supabase for ChargeSource
 export const autoConfigureSupabase = async () => {
   console.log('🚀 Auto-configuring Supabase for ChargeSource...');
+  console.log('📍 URL:', supabaseUrl);
+  console.log('🔑 Key length:', supabaseAnonKey.length);
 
   try {
-    // Check connection first
+    // First check if we have valid environment variables
+    if (supabaseUrl.includes('your-project') || supabaseAnonKey.includes('your-anon-key')) {
+      console.log('⚠️ Using fallback credentials - MCP integration not connected');
+      return false;
+    }
+
+    // Check connection
+    console.log('🔍 Testing database connection...');
     const isConnected = await checkSupabaseConnection();
 
     if (isConnected) {
       console.log('✅ Supabase auto-configuration successful');
       return true;
     } else {
-      console.log('⚠️ Supabase not available, using localStorage fallback');
+      console.log('⚠️ Supabase connection test failed, using localStorage fallback');
       return false;
     }
   } catch (error) {
