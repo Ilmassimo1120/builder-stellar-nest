@@ -1,5 +1,5 @@
 // Bundle size optimization utilities
-import { lazy } from 'react';
+import React, { lazy } from 'react';
 
 /**
  * Lazy load components with error boundaries
@@ -9,15 +9,18 @@ export const createLazyComponent = <T extends React.ComponentType<any>>(
   fallback?: React.ComponentType
 ) => {
   const LazyComponent = lazy(factory);
-  
+
   if (fallback) {
-    return (props: React.ComponentProps<T>) => (
-      <React.Suspense fallback={<fallback />}>
-        <LazyComponent {...props} />
-      </React.Suspense>
-    );
+    return (props: React.ComponentProps<T>) => {
+      const FallbackComponent = fallback;
+      return React.createElement(
+        React.Suspense,
+        { fallback: React.createElement(FallbackComponent) },
+        React.createElement(LazyComponent, props)
+      );
+    };
   }
-  
+
   return LazyComponent;
 };
 
