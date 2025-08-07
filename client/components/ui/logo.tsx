@@ -1,7 +1,7 @@
 import { PlugZap } from "lucide-react";
 
 interface LogoProps {
-  size?: "sm" | "md" | "lg";
+  size?: "sm" | "md" | "lg" | "xl";
   showText?: boolean;
   className?: string;
 }
