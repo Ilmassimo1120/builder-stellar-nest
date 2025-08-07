@@ -93,6 +93,8 @@ export default function ProjectWizard() {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(1);
   const totalSteps = 6;
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
 
   const [clientRequirements, setClientRequirements] = useState<ClientRequirements>({
     contactPersonName: "",
@@ -780,7 +782,7 @@ export default function ProjectWizard() {
                   <p><strong>Best For:</strong> Commercial, high-turnover</p>
                   <p><strong>Cost:</strong> $45,000-$65,000 per unit</p>
                   <p className="text-green-600"><strong>✓ Rapid charging</strong></p>
-                  <p className="text-green-600"><strong>✓ High vehicle throughput</strong></p>
+                  <p className="text-green-600"><strong>��� High vehicle throughput</strong></p>
                 </CardContent>
               </Card>
 
