@@ -1,10 +1,22 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
@@ -31,7 +43,7 @@ import {
   Settings,
   Users,
   Save,
-  Clock
+  Clock,
 } from "lucide-react";
 
 interface ClientRequirements {
@@ -140,7 +152,7 @@ export default function ProjectWizard() {
     // If enough time has passed, save immediately
     if (timeSinceLastSave >= minInterval) {
       if (clientRequirements.contactPersonName || siteAssessment.projectName) {
-        console.log('Auto-saving draft...');
+        console.log("Auto-saving draft...");
         saveDraft(false);
         lastAutoSaveRef.current = now;
       }
@@ -148,8 +160,11 @@ export default function ProjectWizard() {
       // Otherwise, schedule a save for later
       const timeToWait = minInterval - timeSinceLastSave;
       autoSaveTimeoutRef.current = setTimeout(() => {
-        if (clientRequirements.contactPersonName || siteAssessment.projectName) {
-          console.log('Auto-saving draft (delayed)...');
+        if (
+          clientRequirements.contactPersonName ||
+          siteAssessment.projectName
+        ) {
+          console.log("Auto-saving draft (delayed)...");
           saveDraft(false);
           lastAutoSaveRef.current = Date.now();
         }
@@ -160,41 +175,46 @@ export default function ProjectWizard() {
   // Function to retry Supabase connection
   const retryConnection = async (): Promise<void> => {
     try {
-      console.log('🔄 Retrying Supabase connection...');
+      console.log("🔄 Retrying Supabase connection...");
       setConnectionError(null);
       const isConnected = await autoConfigureSupabase();
       setIsSupabaseConnected(isConnected);
       if (!isConnected) {
-        setConnectionError('Database auto-configuration in progress. Projects will be saved locally for now.');
-        console.log('⚠️ Connection still not available');
+        setConnectionError(
+          "Database auto-configuration in progress. Projects will be saved locally for now.",
+        );
+        console.log("⚠️ Connection still not available");
       } else {
-        console.log('✅ Connection successful!');
+        console.log("✅ Connection successful!");
       }
     } catch (error) {
-      console.error('❌ Error retrying Supabase connection:', error);
+      console.error("❌ Error retrying Supabase connection:", error);
       setIsSupabaseConnected(false);
-      setConnectionError('Unable to connect to database. Projects will be saved locally.');
+      setConnectionError(
+        "Unable to connect to database. Projects will be saved locally.",
+      );
     }
   };
 
-  const [clientRequirements, setClientRequirements] = useState<ClientRequirements>({
-    contactPersonName: "",
-    contactTitle: "",
-    contactEmail: "",
-    contactPhone: "",
-    organizationType: "",
-    projectObjective: "",
-    numberOfVehicles: "",
-    vehicleTypes: [],
-    dailyUsagePattern: "",
-    budgetRange: "",
-    projectTimeline: "",
-    sustainabilityGoals: [],
-    accessibilityRequirements: false,
-    specialRequirements: "",
-    preferredChargerBrands: [],
-    paymentModel: ""
-  });
+  const [clientRequirements, setClientRequirements] =
+    useState<ClientRequirements>({
+      contactPersonName: "",
+      contactTitle: "",
+      contactEmail: "",
+      contactPhone: "",
+      organizationType: "",
+      projectObjective: "",
+      numberOfVehicles: "",
+      vehicleTypes: [],
+      dailyUsagePattern: "",
+      budgetRange: "",
+      projectTimeline: "",
+      sustainabilityGoals: [],
+      accessibilityRequirements: false,
+      specialRequirements: "",
+      preferredChargerBrands: [],
+      paymentModel: "",
+    });
 
   const [siteAssessment, setSiteAssessment] = useState<SiteAssessment>({
     projectName: "",
@@ -207,7 +227,7 @@ export default function ProjectWizard() {
     parkingSpaces: "",
     accessRequirements: "",
     photos: [],
-    additionalNotes: ""
+    additionalNotes: "",
   });
 
   const [chargerSelection, setChargerSelection] = useState<ChargerSelection>({
@@ -217,7 +237,7 @@ export default function ProjectWizard() {
     numberOfChargers: "",
     connectorTypes: [],
     weatherProtection: false,
-    networkConnectivity: ""
+    networkConnectivity: "",
   });
 
   const [gridCapacity, setGridCapacity] = useState<GridCapacity>({
@@ -226,7 +246,7 @@ export default function ProjectWizard() {
     upgradeNeeded: false,
     upgradeType: "",
     estimatedUpgradeCost: "",
-    utilityContact: ""
+    utilityContact: "",
   });
 
   const [compliance, setCompliance] = useState<Compliance>({
@@ -234,7 +254,7 @@ export default function ProjectWizard() {
     safetyRequirements: [],
     localPermits: [],
     environmentalConsiderations: [],
-    accessibilityCompliance: false
+    accessibilityCompliance: false,
   });
 
   // Draft management functions
@@ -259,23 +279,29 @@ export default function ProjectWizard() {
         userId: user.id,
         draftName: generateDraftName(),
         currentStep,
-        createdAt: currentDraftId ?
-          (JSON.parse(localStorage.getItem('chargeSourceDrafts') || '[]')
-            .find((d: any) => d.id === draftId)?.createdAt || now) : now,
+        createdAt: currentDraftId
+          ? JSON.parse(localStorage.getItem("chargeSourceDrafts") || "[]").find(
+              (d: any) => d.id === draftId,
+            )?.createdAt || now
+          : now,
         updatedAt: now,
         clientRequirements,
         siteAssessment,
         chargerSelection,
         gridCapacity,
         compliance,
-        progress: Math.round((currentStep / totalSteps) * 100)
+        progress: Math.round((currentStep / totalSteps) * 100),
       };
 
       // Get existing drafts
-      const existingDrafts = JSON.parse(localStorage.getItem('chargeSourceDrafts') || '[]');
+      const existingDrafts = JSON.parse(
+        localStorage.getItem("chargeSourceDrafts") || "[]",
+      );
 
       // Update or add draft
-      const draftIndex = existingDrafts.findIndex((d: ProjectDraft) => d.id === draftId);
+      const draftIndex = existingDrafts.findIndex(
+        (d: ProjectDraft) => d.id === draftId,
+      );
       if (draftIndex >= 0) {
         existingDrafts[draftIndex] = draft;
       } else {
@@ -283,11 +309,18 @@ export default function ProjectWizard() {
       }
 
       // Keep only last 10 drafts per user
-      const userDrafts = existingDrafts.filter((d: ProjectDraft) => d.userId === user.id);
-      const otherDrafts = existingDrafts.filter((d: ProjectDraft) => d.userId !== user.id);
+      const userDrafts = existingDrafts.filter(
+        (d: ProjectDraft) => d.userId === user.id,
+      );
+      const otherDrafts = existingDrafts.filter(
+        (d: ProjectDraft) => d.userId !== user.id,
+      );
       const limitedUserDrafts = userDrafts.slice(0, 10);
 
-      localStorage.setItem('chargeSourceDrafts', JSON.stringify([...limitedUserDrafts, ...otherDrafts]));
+      localStorage.setItem(
+        "chargeSourceDrafts",
+        JSON.stringify([...limitedUserDrafts, ...otherDrafts]),
+      );
 
       setCurrentDraftId(draftId);
       setDraftSaved(true);
@@ -296,17 +329,20 @@ export default function ProjectWizard() {
         // Show temporary success notification
         setTimeout(() => setDraftSaved(false), 3000);
       }
-
     } catch (error) {
-      console.error('Error saving draft:', error);
+      console.error("Error saving draft:", error);
     } finally {
       setIsDraftSaving(false);
     }
   };
 
-  const getDraftById = async (draftId: string): Promise<ProjectDraft | null> => {
+  const getDraftById = async (
+    draftId: string,
+  ): Promise<ProjectDraft | null> => {
     try {
-      const drafts = JSON.parse(localStorage.getItem('chargeSourceDrafts') || '[]');
+      const drafts = JSON.parse(
+        localStorage.getItem("chargeSourceDrafts") || "[]",
+      );
       return drafts.find((d: ProjectDraft) => d.id === draftId) || null;
     } catch {
       return null;
@@ -323,14 +359,17 @@ export default function ProjectWizard() {
     setCurrentDraftId(draft.id);
 
     // If charger selection is empty but we have client requirements, populate recommendations
-    if (!draft.chargerSelection.chargingType && draft.clientRequirements.organizationType) {
+    if (
+      !draft.chargerSelection.chargingType &&
+      draft.clientRequirements.organizationType
+    ) {
       setTimeout(() => {
         const recommendations = getChargerRecommendations();
-        setChargerSelection(prev => ({
+        setChargerSelection((prev) => ({
           ...prev,
           chargingType: recommendations.chargingType,
           powerRating: recommendations.powerRating,
-          numberOfChargers: recommendations.numberOfChargers
+          numberOfChargers: recommendations.numberOfChargers,
         }));
       }, 100); // Small delay to ensure state is updated
     }
@@ -354,10 +393,10 @@ export default function ProjectWizard() {
   // Check for draft from URL params or load existing
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    const draftId = urlParams.get('draft');
+    const draftId = urlParams.get("draft");
 
     if (draftId && user) {
-      getDraftById(draftId).then(draft => {
+      getDraftById(draftId).then((draft) => {
         if (draft && draft.userId === user.id) {
           loadDraft(draft);
         }
@@ -383,42 +422,63 @@ export default function ProjectWizard() {
 
   const getStepTitle = (step: number) => {
     switch (step) {
-      case 1: return "Client Requirements";
-      case 2: return "Site Assessment";
-      case 3: return "Charger Selection";
-      case 4: return "Grid Capacity Analysis";
-      case 5: return "Compliance Checklist";
-      case 6: return "Project Summary";
-      default: return "Project Planning";
+      case 1:
+        return "Client Requirements";
+      case 2:
+        return "Site Assessment";
+      case 3:
+        return "Charger Selection";
+      case 4:
+        return "Grid Capacity Analysis";
+      case 5:
+        return "Compliance Checklist";
+      case 6:
+        return "Project Summary";
+      default:
+        return "Project Planning";
     }
   };
 
   const getStepIcon = (step: number) => {
     switch (step) {
-      case 1: return <Users className="w-5 h-5" />;
-      case 2: return <MapPin className="w-5 h-5" />;
-      case 3: return <Plug className="w-5 h-5" />;
-      case 4: return <Gauge className="w-5 h-5" />;
-      case 5: return <Shield className="w-5 h-5" />;
-      case 6: return <FileText className="w-5 h-5" />;
-      default: return <Settings className="w-5 h-5" />;
+      case 1:
+        return <Users className="w-5 h-5" />;
+      case 2:
+        return <MapPin className="w-5 h-5" />;
+      case 3:
+        return <Plug className="w-5 h-5" />;
+      case 4:
+        return <Gauge className="w-5 h-5" />;
+      case 5:
+        return <Shield className="w-5 h-5" />;
+      case 6:
+        return <FileText className="w-5 h-5" />;
+      default:
+        return <Settings className="w-5 h-5" />;
     }
   };
 
   const nextStep = () => {
     if (import.meta.env.DEV) {
-      console.log('NextStep clicked - currentStep:', currentStep, 'totalSteps:', totalSteps);
+      console.log(
+        "NextStep clicked - currentStep:",
+        currentStep,
+        "totalSteps:",
+        totalSteps,
+      );
     }
 
     if (currentStep < totalSteps) {
       // Auto-populate site assessment when moving from client requirements to site assessment
       if (currentStep === 1) {
-        if (import.meta.env.DEV) console.log('Populating site assessment from client requirements');
+        if (import.meta.env.DEV)
+          console.log("Populating site assessment from client requirements");
         populateSiteAssessmentFromClientRequirements();
       }
       // Auto-populate charger selection with recommendations when moving to Step 3
       if (currentStep === 2) {
-        if (import.meta.env.DEV) console.log('Populating charger recommendations');
+        if (import.meta.env.DEV)
+          console.log("Populating charger recommendations");
         populateChargerRecommendations();
       }
       setCurrentStep(currentStep + 1);
@@ -434,31 +494,32 @@ export default function ProjectWizard() {
   const populateSiteAssessmentFromClientRequirements = () => {
     // Auto-populate client name if available
     if (clientRequirements.contactPersonName && !siteAssessment.clientName) {
-      setSiteAssessment(prev => ({
+      setSiteAssessment((prev) => ({
         ...prev,
-        clientName: clientRequirements.contactPersonName
+        clientName: clientRequirements.contactPersonName,
       }));
     }
 
     // Suggest site type based on organization type
     if (clientRequirements.organizationType && !siteAssessment.siteType) {
       const siteTypeMapping: Record<string, string> = {
-        'retail': 'retail',
-        'office': 'office',
-        'residential': 'residential',
-        'hotel': 'commercial',
-        'government': 'public',
-        'fleet': 'fleet',
-        'healthcare': 'commercial',
-        'education': 'public',
-        'industrial': 'industrial'
+        retail: "retail",
+        office: "office",
+        residential: "residential",
+        hotel: "commercial",
+        government: "public",
+        fleet: "fleet",
+        healthcare: "commercial",
+        education: "public",
+        industrial: "industrial",
       };
 
-      const suggestedSiteType = siteTypeMapping[clientRequirements.organizationType];
+      const suggestedSiteType =
+        siteTypeMapping[clientRequirements.organizationType];
       if (suggestedSiteType) {
-        setSiteAssessment(prev => ({
+        setSiteAssessment((prev) => ({
           ...prev,
-          siteType: suggestedSiteType
+          siteType: suggestedSiteType,
         }));
       }
     }
@@ -469,11 +530,11 @@ export default function ProjectWizard() {
     if (!chargerSelection.chargingType && clientRequirements.organizationType) {
       const recommendations = getChargerRecommendations();
 
-      setChargerSelection(prev => ({
+      setChargerSelection((prev) => ({
         ...prev,
         chargingType: recommendations.chargingType,
         powerRating: recommendations.powerRating,
-        numberOfChargers: recommendations.numberOfChargers
+        numberOfChargers: recommendations.numberOfChargers,
       }));
     }
   };
@@ -482,11 +543,16 @@ export default function ProjectWizard() {
     const errors = [];
 
     // Validate Client Requirements
-    if (!clientRequirements.contactPersonName) errors.push("Primary Contact Name is required");
-    if (!clientRequirements.contactEmail) errors.push("Email Address is required");
-    if (!clientRequirements.organizationType) errors.push("Organization Type is required");
-    if (!clientRequirements.projectObjective) errors.push("Project Objective is required");
-    if (!clientRequirements.numberOfVehicles) errors.push("Number of Vehicles is required");
+    if (!clientRequirements.contactPersonName)
+      errors.push("Primary Contact Name is required");
+    if (!clientRequirements.contactEmail)
+      errors.push("Email Address is required");
+    if (!clientRequirements.organizationType)
+      errors.push("Organization Type is required");
+    if (!clientRequirements.projectObjective)
+      errors.push("Project Objective is required");
+    if (!clientRequirements.numberOfVehicles)
+      errors.push("Number of Vehicles is required");
 
     // Validate Site Assessment
     if (!siteAssessment.projectName) errors.push("Project Name is required");
@@ -495,10 +561,13 @@ export default function ProjectWizard() {
     if (!siteAssessment.siteType) errors.push("Site Type is required");
 
     // Validate Charger Selection
-    if (!chargerSelection.chargingType) errors.push("Charging Type is required");
+    if (!chargerSelection.chargingType)
+      errors.push("Charging Type is required");
     if (!chargerSelection.powerRating) errors.push("Power Rating is required");
-    if (!chargerSelection.numberOfChargers) errors.push("Number of Chargers is required");
-    if (!chargerSelection.mountingType) errors.push("Mounting Type is required");
+    if (!chargerSelection.numberOfChargers)
+      errors.push("Number of Chargers is required");
+    if (!chargerSelection.mountingType)
+      errors.push("Mounting Type is required");
 
     return errors;
   };
@@ -507,24 +576,27 @@ export default function ProjectWizard() {
     const recommendations = getChargerRecommendations();
 
     // Parse cost range for min/max values
-    const costMatch = recommendations.estimatedCost.match(/\$([\d,]+).*?\$([\d,]+)/);
-    const costMin = costMatch ? parseInt(costMatch[1].replace(/,/g, '')) : 0;
-    const costMax = costMatch ? parseInt(costMatch[2].replace(/,/g, '')) : 0;
+    const costMatch = recommendations.estimatedCost.match(
+      /\$([\d,]+).*?\$([\d,]+)/,
+    );
+    const costMin = costMatch ? parseInt(costMatch[1].replace(/,/g, "")) : 0;
+    const costMax = costMatch ? parseInt(costMatch[2].replace(/,/g, "")) : 0;
 
     return {
       project: {
-        status: 'Planning' as const,
+        status: "Planning" as const,
         progress: 100,
         name: siteAssessment.projectName,
-        client_name: siteAssessment.clientName || clientRequirements.contactPersonName,
+        client_name:
+          siteAssessment.clientName || clientRequirements.contactPersonName,
         site_address: siteAssessment.siteAddress,
         site_type: siteAssessment.siteType,
         project_objective: clientRequirements.projectObjective,
         estimated_budget_min: costMin,
         estimated_budget_max: costMax,
         estimated_timeline: recommendations.installationTime,
-        created_by: 'wizard',
-        notes: `Created via Project Planning Wizard. ${clientRequirements.specialRequirements ? 'Special Requirements: ' + clientRequirements.specialRequirements : ''}`
+        created_by: "wizard",
+        notes: `Created via Project Planning Wizard. ${clientRequirements.specialRequirements ? "Special Requirements: " + clientRequirements.specialRequirements : ""}`,
       },
       clientRequirements: {
         contact_person_name: clientRequirements.contactPersonName,
@@ -539,10 +611,11 @@ export default function ProjectWizard() {
         budget_range: clientRequirements.budgetRange,
         project_timeline: clientRequirements.projectTimeline,
         sustainability_goals: clientRequirements.sustainabilityGoals,
-        accessibility_requirements: clientRequirements.accessibilityRequirements,
+        accessibility_requirements:
+          clientRequirements.accessibilityRequirements,
         special_requirements: clientRequirements.specialRequirements,
         preferred_charger_brands: clientRequirements.preferredChargerBrands,
-        payment_model: clientRequirements.paymentModel
+        payment_model: clientRequirements.paymentModel,
       },
       siteAssessment: {
         project_name: siteAssessment.projectName,
@@ -550,12 +623,16 @@ export default function ProjectWizard() {
         site_address: siteAssessment.siteAddress,
         site_type: siteAssessment.siteType,
         existing_power_supply: siteAssessment.existingPowerSupply,
-        available_amperes: siteAssessment.availableAmperes ? parseInt(siteAssessment.availableAmperes) : undefined,
+        available_amperes: siteAssessment.availableAmperes
+          ? parseInt(siteAssessment.availableAmperes)
+          : undefined,
         estimated_load: siteAssessment.estimatedLoad,
-        parking_spaces: siteAssessment.parkingSpaces ? parseInt(siteAssessment.parkingSpaces) : undefined,
+        parking_spaces: siteAssessment.parkingSpaces
+          ? parseInt(siteAssessment.parkingSpaces)
+          : undefined,
         access_requirements: siteAssessment.accessRequirements,
         additional_notes: siteAssessment.additionalNotes,
-        photos: siteAssessment.photos
+        photos: siteAssessment.photos,
       },
       chargerConfiguration: {
         charging_type: chargerSelection.chargingType,
@@ -567,16 +644,20 @@ export default function ProjectWizard() {
         network_connectivity: chargerSelection.networkConnectivity,
         estimated_cost_min: costMin,
         estimated_cost_max: costMax,
-        installation_time: recommendations.installationTime
+        installation_time: recommendations.installationTime,
       },
       gridCapacityAssessment: {
-        current_supply: gridCapacity.currentSupply ? parseInt(gridCapacity.currentSupply) : undefined,
-        required_capacity: gridCapacity.requiredCapacity ? parseInt(gridCapacity.requiredCapacity) : undefined,
+        current_supply: gridCapacity.currentSupply
+          ? parseInt(gridCapacity.currentSupply)
+          : undefined,
+        required_capacity: gridCapacity.requiredCapacity
+          ? parseInt(gridCapacity.requiredCapacity)
+          : undefined,
         upgrade_needed: gridCapacity.upgradeNeeded,
         upgrade_type: gridCapacity.upgradeType,
         estimated_upgrade_cost: gridCapacity.estimatedUpgradeCost,
         utility_contact: gridCapacity.utilityContact,
-        load_management_notes: 'Generated via Project Planning Wizard'
+        load_management_notes: "Generated via Project Planning Wizard",
       },
       complianceChecklist: {
         electrical_standards: compliance.electricalStandards,
@@ -587,25 +668,29 @@ export default function ProjectWizard() {
         overall_compliance_score: Math.round(
           ((compliance.electricalStandards.length +
             compliance.safetyRequirements.length +
-            compliance.localPermits.length) / 18) * 100
-        )
-      }
+            compliance.localPermits.length) /
+            18) *
+            100,
+        ),
+      },
     };
   };
 
   const handleSubmit = async () => {
-    console.log('🚀 Creating project...', {
+    console.log("🚀 Creating project...", {
       step: currentStep,
       projectName: siteAssessment.projectName,
       clientName: clientRequirements.contactPersonName,
-      supabaseConnected: isSupabaseConnected
+      supabaseConnected: isSupabaseConnected,
     });
 
     const validationErrors = validateProjectData();
 
     if (validationErrors.length > 0) {
-      console.log('❌ Validation errors:', validationErrors);
-      alert(`Please complete the following required fields:\n\n${validationErrors.join('\n')}`);
+      console.log("❌ Validation errors:", validationErrors);
+      alert(
+        `Please complete the following required fields:\n\n${validationErrors.join("\n")}`,
+      );
       return;
     }
 
@@ -622,39 +707,48 @@ export default function ProjectWizard() {
 
           // Remove draft if it exists
           if (currentDraftId) {
-            const drafts = JSON.parse(localStorage.getItem('chargeSourceDrafts') || '[]');
-            const filteredDrafts = drafts.filter((d: ProjectDraft) => d.id !== currentDraftId);
-            localStorage.setItem('chargeSourceDrafts', JSON.stringify(filteredDrafts));
+            const drafts = JSON.parse(
+              localStorage.getItem("chargeSourceDrafts") || "[]",
+            );
+            const filteredDrafts = drafts.filter(
+              (d: ProjectDraft) => d.id !== currentDraftId,
+            );
+            localStorage.setItem(
+              "chargeSourceDrafts",
+              JSON.stringify(filteredDrafts),
+            );
           }
 
           // Show success message and navigate
           const recommendations = getChargerRecommendations();
-          console.log('✅ Project created successfully in Supabase:', project);
+          console.log("✅ Project created successfully in Supabase:", project);
 
           // Use a more user-friendly notification
-          const successMessage = `🎉 Project "${project.name}" created successfully!\n\n` +
-                                `📋 Project ID: ${project.id}\n` +
-                                `💰 Estimated Cost: ${recommendations.estimatedCost}\n` +
-                                `⏱️ Timeline: ${recommendations.installationTime}\n\n` +
-                                `✅ Saved to cloud storage`;
+          const successMessage =
+            `🎉 Project "${project.name}" created successfully!\n\n` +
+            `📋 Project ID: ${project.id}\n` +
+            `💰 Estimated Cost: ${recommendations.estimatedCost}\n` +
+            `⏱️ Timeline: ${recommendations.installationTime}\n\n` +
+            `✅ Saved to cloud storage`;
 
           alert(successMessage);
           navigate("/dashboard");
           return;
-
         } catch (error) {
-          console.log('Cloud storage failed, using local storage fallback');
+          console.log("Cloud storage failed, using local storage fallback");
           // Fall through to localStorage
         }
       }
 
       // Use localStorage (either as primary or fallback)
       await handleLocalStorageSubmit();
-
     } catch (error) {
       console.error("❌ Error creating project:", error);
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-      alert(`❌ Failed to create project.\n\nError: ${errorMessage}\n\nPlease try again or contact support if the problem persists.`);
+      const errorMessage =
+        error instanceof Error ? error.message : "Unknown error occurred";
+      alert(
+        `❌ Failed to create project.\n\nError: ${errorMessage}\n\nPlease try again or contact support if the problem persists.`,
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -673,10 +767,11 @@ export default function ProjectWizard() {
         progress: 100,
         projectInfo: {
           name: siteAssessment.projectName,
-          client: siteAssessment.clientName || clientRequirements.contactPersonName,
+          client:
+            siteAssessment.clientName || clientRequirements.contactPersonName,
           address: siteAssessment.siteAddress,
           type: siteAssessment.siteType,
-          objective: clientRequirements.projectObjective
+          objective: clientRequirements.projectObjective,
         },
         estimatedBudget: recommendations.estimatedCost,
         timeline: recommendations.installationTime,
@@ -686,31 +781,47 @@ export default function ProjectWizard() {
         chargerSelection,
         gridCapacity,
         compliance,
-        userId: user?.id
+        userId: user?.id,
       };
 
       // Save to localStorage
-      const existingProjects = JSON.parse(localStorage.getItem('chargeSourceProjects') || '[]');
+      const existingProjects = JSON.parse(
+        localStorage.getItem("chargeSourceProjects") || "[]",
+      );
       existingProjects.unshift(projectData);
-      localStorage.setItem('chargeSourceProjects', JSON.stringify(existingProjects));
+      localStorage.setItem(
+        "chargeSourceProjects",
+        JSON.stringify(existingProjects),
+      );
 
       // Remove draft if it exists (project is now complete)
       if (currentDraftId) {
-        const drafts = JSON.parse(localStorage.getItem('chargeSourceDrafts') || '[]');
-        const filteredDrafts = drafts.filter((d: ProjectDraft) => d.id !== currentDraftId);
-        localStorage.setItem('chargeSourceDrafts', JSON.stringify(filteredDrafts));
+        const drafts = JSON.parse(
+          localStorage.getItem("chargeSourceDrafts") || "[]",
+        );
+        const filteredDrafts = drafts.filter(
+          (d: ProjectDraft) => d.id !== currentDraftId,
+        );
+        localStorage.setItem(
+          "chargeSourceDrafts",
+          JSON.stringify(filteredDrafts),
+        );
       }
 
       console.log("Project Created Successfully (localStorage):", projectData);
 
       // Show success message and navigate
-      console.log('✅ Project created successfully in localStorage:', projectData);
+      console.log(
+        "✅ Project created successfully in localStorage:",
+        projectData,
+      );
 
-      const successMessage = `🎉 Project "${projectData.projectInfo.name}" created successfully!\n\n` +
-                            `📋 Project ID: ${projectData.id}\n` +
-                            `💰 Estimated Cost: ${projectData.estimatedBudget}\n` +
-                            `⏱️ Timeline: ${projectData.timeline}\n\n` +
-                            `💾 Saved locally`;
+      const successMessage =
+        `🎉 Project "${projectData.projectInfo.name}" created successfully!\n\n` +
+        `📋 Project ID: ${projectData.id}\n` +
+        `💰 Estimated Cost: ${projectData.estimatedBudget}\n` +
+        `⏱️ Timeline: ${projectData.timeline}\n\n` +
+        `💾 Saved locally`;
 
       alert(successMessage);
       navigate("/dashboard");
@@ -731,28 +842,36 @@ export default function ProjectWizard() {
       numberOfChargers: "",
       reasoning: "",
       estimatedCost: "",
-      installationTime: ""
+      installationTime: "",
     };
 
     // Determine charging type based on organization and usage
-    if (orgType === "fleet" || orgType === "commercial" || orgType === "retail") {
+    if (
+      orgType === "fleet" ||
+      orgType === "commercial" ||
+      orgType === "retail"
+    ) {
       if (usagePattern === "24-7" || usagePattern === "peak-times") {
         recommendations.chargingType = "dc-fast";
         recommendations.powerRating = "50kw";
-        recommendations.reasoning = "DC fast charging recommended for high-utilization commercial sites with quick turnaround needs.";
+        recommendations.reasoning =
+          "DC fast charging recommended for high-utilization commercial sites with quick turnaround needs.";
       } else {
         recommendations.chargingType = "mixed";
         recommendations.powerRating = "22kw";
-        recommendations.reasoning = "Mixed AC/DC installation offers flexibility for different vehicle types and charging needs.";
+        recommendations.reasoning =
+          "Mixed AC/DC installation offers flexibility for different vehicle types and charging needs.";
       }
     } else if (orgType === "residential" || orgType === "office") {
       recommendations.chargingType = "ac-level2";
       recommendations.powerRating = "7kw";
-      recommendations.reasoning = "AC Level 2 charging ideal for longer dwell times typical in residential and office environments.";
+      recommendations.reasoning =
+        "AC Level 2 charging ideal for longer dwell times typical in residential and office environments.";
     } else {
       recommendations.chargingType = "mixed";
       recommendations.powerRating = "22kw";
-      recommendations.reasoning = "Mixed installation provides versatility for diverse user needs.";
+      recommendations.reasoning =
+        "Mixed installation provides versatility for diverse user needs.";
     }
 
     // Estimate number of chargers based on vehicle count
@@ -797,17 +916,25 @@ export default function ProjectWizard() {
                 Understanding Your EV Charging Needs
               </h3>
               <p className="text-sm text-muted-foreground">
-                Let's start by understanding your specific requirements and project goals to tailor the best EV charging solution.
+                Let's start by understanding your specific requirements and
+                project goals to tailor the best EV charging solution.
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <Label htmlFor="contactPersonName">Primary Contact Name *</Label>
+                <Label htmlFor="contactPersonName">
+                  Primary Contact Name *
+                </Label>
                 <Input
                   id="contactPersonName"
                   value={clientRequirements.contactPersonName}
-                  onChange={(e) => setClientRequirements({...clientRequirements, contactPersonName: e.target.value})}
+                  onChange={(e) =>
+                    setClientRequirements({
+                      ...clientRequirements,
+                      contactPersonName: e.target.value,
+                    })
+                  }
                   placeholder="e.g., John Smith"
                 />
               </div>
@@ -817,7 +944,12 @@ export default function ProjectWizard() {
                 <Input
                   id="contactTitle"
                   value={clientRequirements.contactTitle}
-                  onChange={(e) => setClientRequirements({...clientRequirements, contactTitle: e.target.value})}
+                  onChange={(e) =>
+                    setClientRequirements({
+                      ...clientRequirements,
+                      contactTitle: e.target.value,
+                    })
+                  }
                   placeholder="e.g., Facilities Manager"
                 />
               </div>
@@ -830,7 +962,12 @@ export default function ProjectWizard() {
                   id="contactEmail"
                   type="email"
                   value={clientRequirements.contactEmail}
-                  onChange={(e) => setClientRequirements({...clientRequirements, contactEmail: e.target.value})}
+                  onChange={(e) =>
+                    setClientRequirements({
+                      ...clientRequirements,
+                      contactEmail: e.target.value,
+                    })
+                  }
                   placeholder="john.smith@company.com"
                 />
               </div>
@@ -841,7 +978,12 @@ export default function ProjectWizard() {
                   id="contactPhone"
                   type="tel"
                   value={clientRequirements.contactPhone}
-                  onChange={(e) => setClientRequirements({...clientRequirements, contactPhone: e.target.value})}
+                  onChange={(e) =>
+                    setClientRequirements({
+                      ...clientRequirements,
+                      contactPhone: e.target.value,
+                    })
+                  }
                   placeholder="(02) 1234 5678"
                 />
               </div>
@@ -850,16 +992,30 @@ export default function ProjectWizard() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
                 <Label htmlFor="organizationType">Organization Type *</Label>
-                <Select value={clientRequirements.organizationType} onValueChange={(value) => setClientRequirements({...clientRequirements, organizationType: value})}>
+                <Select
+                  value={clientRequirements.organizationType}
+                  onValueChange={(value) =>
+                    setClientRequirements({
+                      ...clientRequirements,
+                      organizationType: value,
+                    })
+                  }
+                >
                   <SelectTrigger>
                     <SelectValue placeholder="Select organization type" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="retail">Retail/Shopping Centre</SelectItem>
+                    <SelectItem value="retail">
+                      Retail/Shopping Centre
+                    </SelectItem>
                     <SelectItem value="office">Office Building</SelectItem>
-                    <SelectItem value="residential">Residential Complex</SelectItem>
+                    <SelectItem value="residential">
+                      Residential Complex
+                    </SelectItem>
                     <SelectItem value="hotel">Hotel/Hospitality</SelectItem>
-                    <SelectItem value="government">Government/Public</SelectItem>
+                    <SelectItem value="government">
+                      Government/Public
+                    </SelectItem>
                     <SelectItem value="fleet">Fleet/Logistics</SelectItem>
                     <SelectItem value="healthcare">Healthcare</SelectItem>
                     <SelectItem value="education">Education</SelectItem>
@@ -870,19 +1026,43 @@ export default function ProjectWizard() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="projectObjective">Primary Project Objective *</Label>
-                <Select value={clientRequirements.projectObjective} onValueChange={(value) => setClientRequirements({...clientRequirements, projectObjective: value})}>
+                <Label htmlFor="projectObjective">
+                  Primary Project Objective *
+                </Label>
+                <Select
+                  value={clientRequirements.projectObjective}
+                  onValueChange={(value) =>
+                    setClientRequirements({
+                      ...clientRequirements,
+                      projectObjective: value,
+                    })
+                  }
+                >
                   <SelectTrigger>
                     <SelectValue placeholder="Select primary objective" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="employee-benefit">Employee Benefit</SelectItem>
-                    <SelectItem value="customer-attraction">Customer Attraction</SelectItem>
-                    <SelectItem value="fleet-electrification">Fleet Electrification</SelectItem>
-                    <SelectItem value="revenue-generation">Revenue Generation</SelectItem>
-                    <SelectItem value="sustainability-goals">Sustainability Goals</SelectItem>
-                    <SelectItem value="regulatory-compliance">Regulatory Compliance</SelectItem>
-                    <SelectItem value="future-proofing">Future-Proofing</SelectItem>
+                    <SelectItem value="employee-benefit">
+                      Employee Benefit
+                    </SelectItem>
+                    <SelectItem value="customer-attraction">
+                      Customer Attraction
+                    </SelectItem>
+                    <SelectItem value="fleet-electrification">
+                      Fleet Electrification
+                    </SelectItem>
+                    <SelectItem value="revenue-generation">
+                      Revenue Generation
+                    </SelectItem>
+                    <SelectItem value="sustainability-goals">
+                      Sustainability Goals
+                    </SelectItem>
+                    <SelectItem value="regulatory-compliance">
+                      Regulatory Compliance
+                    </SelectItem>
+                    <SelectItem value="future-proofing">
+                      Future-Proofing
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -890,8 +1070,18 @@ export default function ProjectWizard() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <Label htmlFor="numberOfVehicles">Expected Number of Vehicles *</Label>
-                <Select value={clientRequirements.numberOfVehicles} onValueChange={(value) => setClientRequirements({...clientRequirements, numberOfVehicles: value})}>
+                <Label htmlFor="numberOfVehicles">
+                  Expected Number of Vehicles *
+                </Label>
+                <Select
+                  value={clientRequirements.numberOfVehicles}
+                  onValueChange={(value) =>
+                    setClientRequirements({
+                      ...clientRequirements,
+                      numberOfVehicles: value,
+                    })
+                  }
+                >
                   <SelectTrigger>
                     <SelectValue placeholder="Select range" />
                   </SelectTrigger>
@@ -908,16 +1098,30 @@ export default function ProjectWizard() {
 
               <div className="space-y-2">
                 <Label htmlFor="dailyUsagePattern">Daily Usage Pattern</Label>
-                <Select value={clientRequirements.dailyUsagePattern} onValueChange={(value) => setClientRequirements({...clientRequirements, dailyUsagePattern: value})}>
+                <Select
+                  value={clientRequirements.dailyUsagePattern}
+                  onValueChange={(value) =>
+                    setClientRequirements({
+                      ...clientRequirements,
+                      dailyUsagePattern: value,
+                    })
+                  }
+                >
                   <SelectTrigger>
                     <SelectValue placeholder="Select usage pattern" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="business-hours">Business Hours Only (8am-6pm)</SelectItem>
-                    <SelectItem value="extended-hours">Extended Hours (6am-10pm)</SelectItem>
+                    <SelectItem value="business-hours">
+                      Business Hours Only (8am-6pm)
+                    </SelectItem>
+                    <SelectItem value="extended-hours">
+                      Extended Hours (6am-10pm)
+                    </SelectItem>
                     <SelectItem value="24-7">24/7 Operation</SelectItem>
                     <SelectItem value="peak-times">Peak Times Only</SelectItem>
-                    <SelectItem value="overnight">Overnight Charging</SelectItem>
+                    <SelectItem value="overnight">
+                      Overnight Charging
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -926,26 +1130,48 @@ export default function ProjectWizard() {
             <div className="space-y-2">
               <Label>Vehicle Types (select all that apply)</Label>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                {["Passenger Cars", "Light Commercial", "Buses", "Trucks/Heavy Vehicles", "Motorcycles/Scooters", "Delivery Vans", "Emergency Vehicles", "Other Fleet"].map((vehicleType) => (
-                  <div key={vehicleType} className="flex items-center space-x-2">
+                {[
+                  "Passenger Cars",
+                  "Light Commercial",
+                  "Buses",
+                  "Trucks/Heavy Vehicles",
+                  "Motorcycles/Scooters",
+                  "Delivery Vans",
+                  "Emergency Vehicles",
+                  "Other Fleet",
+                ].map((vehicleType) => (
+                  <div
+                    key={vehicleType}
+                    className="flex items-center space-x-2"
+                  >
                     <Checkbox
                       id={vehicleType}
-                      checked={clientRequirements.vehicleTypes.includes(vehicleType)}
+                      checked={clientRequirements.vehicleTypes.includes(
+                        vehicleType,
+                      )}
                       onCheckedChange={(checked) => {
                         if (checked) {
                           setClientRequirements({
                             ...clientRequirements,
-                            vehicleTypes: [...clientRequirements.vehicleTypes, vehicleType]
+                            vehicleTypes: [
+                              ...clientRequirements.vehicleTypes,
+                              vehicleType,
+                            ],
                           });
                         } else {
                           setClientRequirements({
                             ...clientRequirements,
-                            vehicleTypes: clientRequirements.vehicleTypes.filter(v => v !== vehicleType)
+                            vehicleTypes:
+                              clientRequirements.vehicleTypes.filter(
+                                (v) => v !== vehicleType,
+                              ),
                           });
                         }
                       }}
                     />
-                    <Label htmlFor={vehicleType} className="text-sm">{vehicleType}</Label>
+                    <Label htmlFor={vehicleType} className="text-sm">
+                      {vehicleType}
+                    </Label>
                   </div>
                 ))}
               </div>
@@ -954,7 +1180,15 @@ export default function ProjectWizard() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
                 <Label htmlFor="budgetRange">Estimated Budget Range</Label>
-                <Select value={clientRequirements.budgetRange} onValueChange={(value) => setClientRequirements({...clientRequirements, budgetRange: value})}>
+                <Select
+                  value={clientRequirements.budgetRange}
+                  onValueChange={(value) =>
+                    setClientRequirements({
+                      ...clientRequirements,
+                      budgetRange: value,
+                    })
+                  }
+                >
                   <SelectTrigger>
                     <SelectValue placeholder="Select budget range" />
                   </SelectTrigger>
@@ -962,9 +1196,15 @@ export default function ProjectWizard() {
                     <SelectItem value="under-25k">Under $25,000</SelectItem>
                     <SelectItem value="25-50k">$25,000 - $50,000</SelectItem>
                     <SelectItem value="50-100k">$50,000 - $100,000</SelectItem>
-                    <SelectItem value="100-250k">$100,000 - $250,000</SelectItem>
-                    <SelectItem value="250-500k">$250,000 - $500,000</SelectItem>
-                    <SelectItem value="500k-1m">$500,000 - $1,000,000</SelectItem>
+                    <SelectItem value="100-250k">
+                      $100,000 - $250,000
+                    </SelectItem>
+                    <SelectItem value="250-500k">
+                      $250,000 - $500,000
+                    </SelectItem>
+                    <SelectItem value="500k-1m">
+                      $500,000 - $1,000,000
+                    </SelectItem>
                     <SelectItem value="over-1m">Over $1,000,000</SelectItem>
                     <SelectItem value="tbd">To Be Determined</SelectItem>
                   </SelectContent>
@@ -972,17 +1212,35 @@ export default function ProjectWizard() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="projectTimeline">Desired Project Timeline</Label>
-                <Select value={clientRequirements.projectTimeline} onValueChange={(value) => setClientRequirements({...clientRequirements, projectTimeline: value})}>
+                <Label htmlFor="projectTimeline">
+                  Desired Project Timeline
+                </Label>
+                <Select
+                  value={clientRequirements.projectTimeline}
+                  onValueChange={(value) =>
+                    setClientRequirements({
+                      ...clientRequirements,
+                      projectTimeline: value,
+                    })
+                  }
+                >
                   <SelectTrigger>
                     <SelectValue placeholder="Select timeline" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="urgent">Urgent (1-2 months)</SelectItem>
-                    <SelectItem value="fast">Fast Track (3-4 months)</SelectItem>
-                    <SelectItem value="standard">Standard (4-6 months)</SelectItem>
-                    <SelectItem value="flexible">Flexible (6-12 months)</SelectItem>
-                    <SelectItem value="long-term">Long-term Planning (12+ months)</SelectItem>
+                    <SelectItem value="fast">
+                      Fast Track (3-4 months)
+                    </SelectItem>
+                    <SelectItem value="standard">
+                      Standard (4-6 months)
+                    </SelectItem>
+                    <SelectItem value="flexible">
+                      Flexible (6-12 months)
+                    </SelectItem>
+                    <SelectItem value="long-term">
+                      Long-term Planning (12+ months)
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -991,26 +1249,44 @@ export default function ProjectWizard() {
             <div className="space-y-2">
               <Label>Sustainability Goals (select all that apply)</Label>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                {["Carbon Neutral by 2030", "Renewable Energy Integration", "NABERS Rating Improvement", "Green Building Certification", "Corporate ESG Goals", "Government Incentives", "Community Environmental Impact"].map((goal) => (
+                {[
+                  "Carbon Neutral by 2030",
+                  "Renewable Energy Integration",
+                  "NABERS Rating Improvement",
+                  "Green Building Certification",
+                  "Corporate ESG Goals",
+                  "Government Incentives",
+                  "Community Environmental Impact",
+                ].map((goal) => (
                   <div key={goal} className="flex items-center space-x-2">
                     <Checkbox
                       id={goal}
-                      checked={clientRequirements.sustainabilityGoals.includes(goal)}
+                      checked={clientRequirements.sustainabilityGoals.includes(
+                        goal,
+                      )}
                       onCheckedChange={(checked) => {
                         if (checked) {
                           setClientRequirements({
                             ...clientRequirements,
-                            sustainabilityGoals: [...clientRequirements.sustainabilityGoals, goal]
+                            sustainabilityGoals: [
+                              ...clientRequirements.sustainabilityGoals,
+                              goal,
+                            ],
                           });
                         } else {
                           setClientRequirements({
                             ...clientRequirements,
-                            sustainabilityGoals: clientRequirements.sustainabilityGoals.filter(g => g !== goal)
+                            sustainabilityGoals:
+                              clientRequirements.sustainabilityGoals.filter(
+                                (g) => g !== goal,
+                              ),
                           });
                         }
                       }}
                     />
-                    <Label htmlFor={goal} className="text-sm">{goal}</Label>
+                    <Label htmlFor={goal} className="text-sm">
+                      {goal}
+                    </Label>
                   </div>
                 ))}
               </div>
@@ -1020,7 +1296,12 @@ export default function ProjectWizard() {
               <Checkbox
                 id="accessibilityRequirements"
                 checked={clientRequirements.accessibilityRequirements}
-                onCheckedChange={(checked) => setClientRequirements({...clientRequirements, accessibilityRequirements: checked as boolean})}
+                onCheckedChange={(checked) =>
+                  setClientRequirements({
+                    ...clientRequirements,
+                    accessibilityRequirements: checked as boolean,
+                  })
+                }
               />
               <Label htmlFor="accessibilityRequirements">
                 Accessibility requirements for disabled users (DDA compliance)
@@ -1028,11 +1309,18 @@ export default function ProjectWizard() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="specialRequirements">Special Requirements or Considerations</Label>
+              <Label htmlFor="specialRequirements">
+                Special Requirements or Considerations
+              </Label>
               <Textarea
                 id="specialRequirements"
                 value={clientRequirements.specialRequirements}
-                onChange={(e) => setClientRequirements({...clientRequirements, specialRequirements: e.target.value})}
+                onChange={(e) =>
+                  setClientRequirements({
+                    ...clientRequirements,
+                    specialRequirements: e.target.value,
+                  })
+                }
                 placeholder="Any specific requirements, constraints, or preferences..."
                 rows={3}
               />
@@ -1051,10 +1339,24 @@ export default function ProjectWizard() {
                   Site Assessment Recommendations
                 </h3>
                 <div className="text-sm text-blue-700 space-y-1">
-                  <p><strong>Organization Type:</strong> {clientRequirements.organizationType}</p>
-                  <p><strong>Expected Vehicles:</strong> {clientRequirements.numberOfVehicles}</p>
-                  <p><strong>Usage Pattern:</strong> {clientRequirements.dailyUsagePattern}</p>
-                  {clientRequirements.budgetRange && <p><strong>Budget Range:</strong> {clientRequirements.budgetRange}</p>}
+                  <p>
+                    <strong>Organization Type:</strong>{" "}
+                    {clientRequirements.organizationType}
+                  </p>
+                  <p>
+                    <strong>Expected Vehicles:</strong>{" "}
+                    {clientRequirements.numberOfVehicles}
+                  </p>
+                  <p>
+                    <strong>Usage Pattern:</strong>{" "}
+                    {clientRequirements.dailyUsagePattern}
+                  </p>
+                  {clientRequirements.budgetRange && (
+                    <p>
+                      <strong>Budget Range:</strong>{" "}
+                      {clientRequirements.budgetRange}
+                    </p>
+                  )}
                 </div>
               </div>
             )}
@@ -1065,18 +1367,38 @@ export default function ProjectWizard() {
                 <Input
                   id="projectName"
                   value={siteAssessment.projectName}
-                  onChange={(e) => setSiteAssessment({...siteAssessment, projectName: e.target.value})}
-                  placeholder={clientRequirements.organizationType ? `${clientRequirements.organizationType} EV Charging Project` : "e.g., Westfield Shopping Centre EV Hub"}
+                  onChange={(e) =>
+                    setSiteAssessment({
+                      ...siteAssessment,
+                      projectName: e.target.value,
+                    })
+                  }
+                  placeholder={
+                    clientRequirements.organizationType
+                      ? `${clientRequirements.organizationType} EV Charging Project`
+                      : "e.g., Westfield Shopping Centre EV Hub"
+                  }
                 />
               </div>
-              
+
               <div className="space-y-2">
                 <Label htmlFor="clientName">Client Name *</Label>
                 <Input
                   id="clientName"
-                  value={siteAssessment.clientName || clientRequirements.contactPersonName}
-                  onChange={(e) => setSiteAssessment({...siteAssessment, clientName: e.target.value})}
-                  placeholder={clientRequirements.contactPersonName || "e.g., Westfield Group"}
+                  value={
+                    siteAssessment.clientName ||
+                    clientRequirements.contactPersonName
+                  }
+                  onChange={(e) =>
+                    setSiteAssessment({
+                      ...siteAssessment,
+                      clientName: e.target.value,
+                    })
+                  }
+                  placeholder={
+                    clientRequirements.contactPersonName ||
+                    "e.g., Westfield Group"
+                  }
                 />
               </div>
             </div>
@@ -1086,7 +1408,12 @@ export default function ProjectWizard() {
               <Input
                 id="siteAddress"
                 value={siteAssessment.siteAddress}
-                onChange={(e) => setSiteAssessment({...siteAssessment, siteAddress: e.target.value})}
+                onChange={(e) =>
+                  setSiteAssessment({
+                    ...siteAssessment,
+                    siteAddress: e.target.value,
+                  })
+                }
                 placeholder="Full site address including postcode"
               />
             </div>
@@ -1094,14 +1421,25 @@ export default function ProjectWizard() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
                 <Label htmlFor="siteType">Site Type *</Label>
-                <Select value={siteAssessment.siteType} onValueChange={(value) => setSiteAssessment({...siteAssessment, siteType: value})}>
+                <Select
+                  value={siteAssessment.siteType}
+                  onValueChange={(value) =>
+                    setSiteAssessment({ ...siteAssessment, siteType: value })
+                  }
+                >
                   <SelectTrigger>
                     <SelectValue placeholder="Select site type" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="commercial">Commercial Building</SelectItem>
-                    <SelectItem value="residential">Residential Complex</SelectItem>
-                    <SelectItem value="retail">Retail/Shopping Centre</SelectItem>
+                    <SelectItem value="commercial">
+                      Commercial Building
+                    </SelectItem>
+                    <SelectItem value="residential">
+                      Residential Complex
+                    </SelectItem>
+                    <SelectItem value="retail">
+                      Retail/Shopping Centre
+                    </SelectItem>
                     <SelectItem value="office">Office Building</SelectItem>
                     <SelectItem value="public">Public Facility</SelectItem>
                     <SelectItem value="industrial">Industrial Site</SelectItem>
@@ -1116,7 +1454,12 @@ export default function ProjectWizard() {
                   id="parkingSpaces"
                   type="number"
                   value={siteAssessment.parkingSpaces}
-                  onChange={(e) => setSiteAssessment({...siteAssessment, parkingSpaces: e.target.value})}
+                  onChange={(e) =>
+                    setSiteAssessment({
+                      ...siteAssessment,
+                      parkingSpaces: e.target.value,
+                    })
+                  }
                   placeholder="e.g., 150"
                 />
               </div>
@@ -1124,28 +1467,55 @@ export default function ProjectWizard() {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="space-y-2">
-                <Label htmlFor="existingPowerSupply">Existing Power Supply</Label>
-                <Select value={siteAssessment.existingPowerSupply} onValueChange={(value) => setSiteAssessment({...siteAssessment, existingPowerSupply: value})}>
+                <Label htmlFor="existingPowerSupply">
+                  Existing Power Supply
+                </Label>
+                <Select
+                  value={siteAssessment.existingPowerSupply}
+                  onValueChange={(value) =>
+                    setSiteAssessment({
+                      ...siteAssessment,
+                      existingPowerSupply: value,
+                    })
+                  }
+                >
                   <SelectTrigger>
                     <SelectValue placeholder="Select power supply" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="single-phase">Single Phase (240V)</SelectItem>
-                    <SelectItem value="three-phase-415v">Three Phase (415V)</SelectItem>
-                    <SelectItem value="three-phase-480v">Three Phase (480V)</SelectItem>
-                    <SelectItem value="high-voltage">High Voltage (&gt;1kV)</SelectItem>
-                    <SelectItem value="unknown">Unknown - Requires Assessment</SelectItem>
+                    <SelectItem value="single-phase">
+                      Single Phase (240V)
+                    </SelectItem>
+                    <SelectItem value="three-phase-415v">
+                      Three Phase (415V)
+                    </SelectItem>
+                    <SelectItem value="three-phase-480v">
+                      Three Phase (480V)
+                    </SelectItem>
+                    <SelectItem value="high-voltage">
+                      High Voltage (&gt;1kV)
+                    </SelectItem>
+                    <SelectItem value="unknown">
+                      Unknown - Requires Assessment
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="availableAmperes">Available Amperes (Amps)</Label>
+                <Label htmlFor="availableAmperes">
+                  Available Amperes (Amps)
+                </Label>
                 <Input
                   id="availableAmperes"
                   type="number"
                   value={siteAssessment.availableAmperes}
-                  onChange={(e) => setSiteAssessment({...siteAssessment, availableAmperes: e.target.value})}
+                  onChange={(e) =>
+                    setSiteAssessment({
+                      ...siteAssessment,
+                      availableAmperes: e.target.value,
+                    })
+                  }
                   placeholder="e.g., 200"
                 />
               </div>
@@ -1155,18 +1525,30 @@ export default function ProjectWizard() {
                 <Input
                   id="estimatedLoad"
                   value={siteAssessment.estimatedLoad}
-                  onChange={(e) => setSiteAssessment({...siteAssessment, estimatedLoad: e.target.value})}
+                  onChange={(e) =>
+                    setSiteAssessment({
+                      ...siteAssessment,
+                      estimatedLoad: e.target.value,
+                    })
+                  }
                   placeholder="e.g., 50 kWh/day"
                 />
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="accessRequirements">Site Access Requirements</Label>
+              <Label htmlFor="accessRequirements">
+                Site Access Requirements
+              </Label>
               <Textarea
                 id="accessRequirements"
                 value={siteAssessment.accessRequirements}
-                onChange={(e) => setSiteAssessment({...siteAssessment, accessRequirements: e.target.value})}
+                onChange={(e) =>
+                  setSiteAssessment({
+                    ...siteAssessment,
+                    accessRequirements: e.target.value,
+                  })
+                }
                 placeholder="Describe access restrictions, special requirements, security procedures..."
                 rows={3}
               />
@@ -1177,7 +1559,8 @@ export default function ProjectWizard() {
               <div className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-6 text-center">
                 <Camera className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
                 <p className="text-sm text-muted-foreground">
-                  Upload photos of the site, electrical panels, and proposed installation areas
+                  Upload photos of the site, electrical panels, and proposed
+                  installation areas
                 </p>
                 <Button variant="outline" className="mt-2">
                   <Camera className="w-4 h-4 mr-2" />
@@ -1201,32 +1584,60 @@ export default function ProjectWizard() {
               </h3>
               <div className="grid md:grid-cols-2 gap-4 mb-4">
                 <div className="space-y-2">
-                  <p className="text-sm font-medium text-primary">Recommended Configuration:</p>
-                  <p className="text-sm text-muted-foreground">{recommendations.reasoning}</p>
+                  <p className="text-sm font-medium text-primary">
+                    Recommended Configuration:
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    {recommendations.reasoning}
+                  </p>
                   <div className="flex items-center gap-4 text-sm">
-                    <span className="font-medium">Type: {recommendations.chargingType.replace('-', ' ').toUpperCase()}</span>
-                    <span className="font-medium">Power: {recommendations.powerRating}</span>
-                    <span className="font-medium">Quantity: {recommendations.numberOfChargers} units</span>
+                    <span className="font-medium">
+                      Type:{" "}
+                      {recommendations.chargingType
+                        .replace("-", " ")
+                        .toUpperCase()}
+                    </span>
+                    <span className="font-medium">
+                      Power: {recommendations.powerRating}
+                    </span>
+                    <span className="font-medium">
+                      Quantity: {recommendations.numberOfChargers} units
+                    </span>
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <p className="text-sm font-medium text-secondary">Project Estimates:</p>
+                  <p className="text-sm font-medium text-secondary">
+                    Project Estimates:
+                  </p>
                   <div className="space-y-1 text-sm text-muted-foreground">
-                    <p><strong>Estimated Cost:</strong> {recommendations.estimatedCost}</p>
-                    <p><strong>Installation Time:</strong> {recommendations.installationTime}</p>
-                    <p><strong>Based on:</strong> {clientRequirements.organizationType} • {clientRequirements.numberOfVehicles} vehicles</p>
+                    <p>
+                      <strong>Estimated Cost:</strong>{" "}
+                      {recommendations.estimatedCost}
+                    </p>
+                    <p>
+                      <strong>Installation Time:</strong>{" "}
+                      {recommendations.installationTime}
+                    </p>
+                    <p>
+                      <strong>Based on:</strong>{" "}
+                      {clientRequirements.organizationType} •{" "}
+                      {clientRequirements.numberOfVehicles} vehicles
+                    </p>
                   </div>
                 </div>
               </div>
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
                 <CheckCircle2 className="w-4 h-4 text-secondary" />
-                Recommendations based on your client requirements and industry best practices
+                Recommendations based on your client requirements and industry
+                best practices
               </div>
             </div>
 
             {/* Charger Type Comparison */}
             <div className="grid md:grid-cols-3 gap-4">
-              <Card className={`cursor-pointer transition-all hover:shadow-md ${chargerSelection.chargingType === 'ac-level2' ? 'border-primary bg-primary/5' : ''}`}>
+              <Card
+                className={`cursor-pointer transition-all hover:shadow-md ${chargerSelection.chargingType === "ac-level2" ? "border-primary bg-primary/5" : ""}`}
+              >
                 <CardHeader className="pb-3">
                   <CardTitle className="text-sm flex items-center gap-2">
                     <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
@@ -1236,16 +1647,30 @@ export default function ProjectWizard() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2 text-xs">
-                  <p><strong>Power:</strong> 7-22kW</p>
-                  <p><strong>Charging Time:</strong> 4-8 hours</p>
-                  <p><strong>Best For:</strong> Overnight, workplace</p>
-                  <p><strong>Cost:</strong> $8,000-$15,000 per unit</p>
-                  <p className="text-green-600"><strong>✓ Lower installation cost</strong></p>
-                  <p className="text-green-600"><strong>✓ Suitable for long dwell times</strong></p>
+                  <p>
+                    <strong>Power:</strong> 7-22kW
+                  </p>
+                  <p>
+                    <strong>Charging Time:</strong> 4-8 hours
+                  </p>
+                  <p>
+                    <strong>Best For:</strong> Overnight, workplace
+                  </p>
+                  <p>
+                    <strong>Cost:</strong> $8,000-$15,000 per unit
+                  </p>
+                  <p className="text-green-600">
+                    <strong>✓ Lower installation cost</strong>
+                  </p>
+                  <p className="text-green-600">
+                    <strong>✓ Suitable for long dwell times</strong>
+                  </p>
                 </CardContent>
               </Card>
 
-              <Card className={`cursor-pointer transition-all hover:shadow-md ${chargerSelection.chargingType === 'dc-fast' ? 'border-primary bg-primary/5' : ''}`}>
+              <Card
+                className={`cursor-pointer transition-all hover:shadow-md ${chargerSelection.chargingType === "dc-fast" ? "border-primary bg-primary/5" : ""}`}
+              >
                 <CardHeader className="pb-3">
                   <CardTitle className="text-sm flex items-center gap-2">
                     <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center">
@@ -1255,16 +1680,30 @@ export default function ProjectWizard() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2 text-xs">
-                  <p><strong>Power:</strong> 50-150kW</p>
-                  <p><strong>Charging Time:</strong> 20-60 minutes</p>
-                  <p><strong>Best For:</strong> Commercial, high-turnover</p>
-                  <p><strong>Cost:</strong> $45,000-$65,000 per unit</p>
-                  <p className="text-green-600"><strong>✓ Rapid charging</strong></p>
-                  <p className="text-green-600"><strong>✓ High vehicle throughput</strong></p>
+                  <p>
+                    <strong>Power:</strong> 50-150kW
+                  </p>
+                  <p>
+                    <strong>Charging Time:</strong> 20-60 minutes
+                  </p>
+                  <p>
+                    <strong>Best For:</strong> Commercial, high-turnover
+                  </p>
+                  <p>
+                    <strong>Cost:</strong> $45,000-$65,000 per unit
+                  </p>
+                  <p className="text-green-600">
+                    <strong>✓ Rapid charging</strong>
+                  </p>
+                  <p className="text-green-600">
+                    <strong>✓ High vehicle throughput</strong>
+                  </p>
                 </CardContent>
               </Card>
 
-              <Card className={`cursor-pointer transition-all hover:shadow-md ${chargerSelection.chargingType === 'mixed' ? 'border-primary bg-primary/5' : ''}`}>
+              <Card
+                className={`cursor-pointer transition-all hover:shadow-md ${chargerSelection.chargingType === "mixed" ? "border-primary bg-primary/5" : ""}`}
+              >
                 <CardHeader className="pb-3">
                   <CardTitle className="text-sm flex items-center gap-2">
                     <div className="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center">
@@ -1274,12 +1713,24 @@ export default function ProjectWizard() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2 text-xs">
-                  <p><strong>Power:</strong> 7kW-150kW</p>
-                  <p><strong>Charging Time:</strong> Variable</p>
-                  <p><strong>Best For:</strong> Diverse user needs</p>
-                  <p><strong>Cost:</strong> $25,000-$35,000 avg per unit</p>
-                  <p className="text-green-600"><strong>✓ Maximum flexibility</strong></p>
-                  <p className="text-green-600"><strong>✓ Future-proof solution</strong></p>
+                  <p>
+                    <strong>Power:</strong> 7kW-150kW
+                  </p>
+                  <p>
+                    <strong>Charging Time:</strong> Variable
+                  </p>
+                  <p>
+                    <strong>Best For:</strong> Diverse user needs
+                  </p>
+                  <p>
+                    <strong>Cost:</strong> $25,000-$35,000 avg per unit
+                  </p>
+                  <p className="text-green-600">
+                    <strong>✓ Maximum flexibility</strong>
+                  </p>
+                  <p className="text-green-600">
+                    <strong>✓ Future-proof solution</strong>
+                  </p>
                 </CardContent>
               </Card>
             </div>
@@ -1288,15 +1739,26 @@ export default function ProjectWizard() {
             <Card>
               <CardHeader>
                 <CardTitle>Configuration Details</CardTitle>
-                <CardDescription>Customize your charging installation based on specific requirements</CardDescription>
+                <CardDescription>
+                  Customize your charging installation based on specific
+                  requirements
+                </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <Label htmlFor="chargingType">Charging Type *</Label>
                     <Select
-                      value={chargerSelection.chargingType || recommendations.chargingType}
-                      onValueChange={(value) => setChargerSelection({...chargerSelection, chargingType: value})}
+                      value={
+                        chargerSelection.chargingType ||
+                        recommendations.chargingType
+                      }
+                      onValueChange={(value) =>
+                        setChargerSelection({
+                          ...chargerSelection,
+                          chargingType: value,
+                        })
+                      }
                     >
                       <SelectTrigger>
                         <SelectValue placeholder="Select charging type" />
@@ -1329,44 +1791,85 @@ export default function ProjectWizard() {
                       </SelectContent>
                     </Select>
                     {recommendations.chargingType && (
-                      <p className="text-xs text-primary">Recommended: {recommendations.chargingType.replace('-', ' ').toUpperCase()}</p>
+                      <p className="text-xs text-primary">
+                        Recommended:{" "}
+                        {recommendations.chargingType
+                          .replace("-", " ")
+                          .toUpperCase()}
+                      </p>
                     )}
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="powerRating">Power Rating per Charger *</Label>
+                    <Label htmlFor="powerRating">
+                      Power Rating per Charger *
+                    </Label>
                     <Select
-                      value={chargerSelection.powerRating || recommendations.powerRating}
-                      onValueChange={(value) => setChargerSelection({...chargerSelection, powerRating: value})}
+                      value={
+                        chargerSelection.powerRating ||
+                        recommendations.powerRating
+                      }
+                      onValueChange={(value) =>
+                        setChargerSelection({
+                          ...chargerSelection,
+                          powerRating: value,
+                        })
+                      }
                     >
                       <SelectTrigger>
                         <SelectValue placeholder="Select power rating" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="7kw">7kW (AC) - Standard residential</SelectItem>
-                        <SelectItem value="11kw">11kW (AC) - Fast residential</SelectItem>
-                        <SelectItem value="22kw">22kW (AC) - Commercial AC</SelectItem>
-                        <SelectItem value="50kw">50kW (DC) - Standard fast charging</SelectItem>
-                        <SelectItem value="75kw">75kW (DC) - Enhanced fast charging</SelectItem>
-                        <SelectItem value="150kw">150kW (DC) - Ultra-fast charging</SelectItem>
-                        <SelectItem value="350kw">350kW (DC) - Premium ultra-fast</SelectItem>
+                        <SelectItem value="7kw">
+                          7kW (AC) - Standard residential
+                        </SelectItem>
+                        <SelectItem value="11kw">
+                          11kW (AC) - Fast residential
+                        </SelectItem>
+                        <SelectItem value="22kw">
+                          22kW (AC) - Commercial AC
+                        </SelectItem>
+                        <SelectItem value="50kw">
+                          50kW (DC) - Standard fast charging
+                        </SelectItem>
+                        <SelectItem value="75kw">
+                          75kW (DC) - Enhanced fast charging
+                        </SelectItem>
+                        <SelectItem value="150kw">
+                          150kW (DC) - Ultra-fast charging
+                        </SelectItem>
+                        <SelectItem value="350kw">
+                          350kW (DC) - Premium ultra-fast
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                     {recommendations.powerRating && (
-                      <p className="text-xs text-primary">Recommended: {recommendations.powerRating}</p>
+                      <p className="text-xs text-primary">
+                        Recommended: {recommendations.powerRating}
+                      </p>
                     )}
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <Label htmlFor="numberOfChargers">Number of Charging Points *</Label>
+                    <Label htmlFor="numberOfChargers">
+                      Number of Charging Points *
+                    </Label>
                     <div className="flex items-center gap-2">
                       <Input
                         id="numberOfChargers"
                         type="number"
-                        value={chargerSelection.numberOfChargers || recommendations.numberOfChargers}
-                        onChange={(e) => setChargerSelection({...chargerSelection, numberOfChargers: e.target.value})}
+                        value={
+                          chargerSelection.numberOfChargers ||
+                          recommendations.numberOfChargers
+                        }
+                        onChange={(e) =>
+                          setChargerSelection({
+                            ...chargerSelection,
+                            numberOfChargers: e.target.value,
+                          })
+                        }
                         placeholder="e.g., 8"
                         min="1"
                         max="100"
@@ -1376,26 +1879,52 @@ export default function ProjectWizard() {
                         type="button"
                         variant="outline"
                         size="sm"
-                        onClick={() => setChargerSelection({...chargerSelection, numberOfChargers: recommendations.numberOfChargers})}
+                        onClick={() =>
+                          setChargerSelection({
+                            ...chargerSelection,
+                            numberOfChargers: recommendations.numberOfChargers,
+                          })
+                        }
                       >
                         Use Recommended ({recommendations.numberOfChargers})
                       </Button>
                     </div>
-                    <p className="text-xs text-muted-foreground">Based on {clientRequirements.numberOfVehicles} expected vehicles</p>
+                    <p className="text-xs text-muted-foreground">
+                      Based on {clientRequirements.numberOfVehicles} expected
+                      vehicles
+                    </p>
                   </div>
 
                   <div className="space-y-2">
                     <Label htmlFor="mountingType">Mounting Type *</Label>
-                    <Select value={chargerSelection.mountingType} onValueChange={(value) => setChargerSelection({...chargerSelection, mountingType: value})}>
+                    <Select
+                      value={chargerSelection.mountingType}
+                      onValueChange={(value) =>
+                        setChargerSelection({
+                          ...chargerSelection,
+                          mountingType: value,
+                        })
+                      }
+                    >
                       <SelectTrigger>
                         <SelectValue placeholder="Select mounting type" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="pedestal">Pedestal Mount - Freestanding installation</SelectItem>
-                        <SelectItem value="wall">Wall Mount - Space-saving option</SelectItem>
-                        <SelectItem value="overhead">Overhead Mount - Suspended installation</SelectItem>
-                        <SelectItem value="pole">Pole Mount - Street light style</SelectItem>
-                        <SelectItem value="canopy">Canopy Integrated - Weather protected</SelectItem>
+                        <SelectItem value="pedestal">
+                          Pedestal Mount - Freestanding installation
+                        </SelectItem>
+                        <SelectItem value="wall">
+                          Wall Mount - Space-saving option
+                        </SelectItem>
+                        <SelectItem value="overhead">
+                          Overhead Mount - Suspended installation
+                        </SelectItem>
+                        <SelectItem value="pole">
+                          Pole Mount - Street light style
+                        </SelectItem>
+                        <SelectItem value="canopy">
+                          Canopy Integrated - Weather protected
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -1405,32 +1934,50 @@ export default function ProjectWizard() {
                   <Label>Connector Types (select all that apply)</Label>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                     {[
-                      {name: "Type 2 AC", desc: "European standard AC"},
-                      {name: "CCS2", desc: "Combined Charging System"},
-                      {name: "CHAdeMO", desc: "Japanese DC standard"},
-                      {name: "Tesla", desc: "Tesla Supercharger"}
+                      { name: "Type 2 AC", desc: "European standard AC" },
+                      { name: "CCS2", desc: "Combined Charging System" },
+                      { name: "CHAdeMO", desc: "Japanese DC standard" },
+                      { name: "Tesla", desc: "Tesla Supercharger" },
                     ].map((connector) => (
-                      <div key={connector.name} className="flex items-start space-x-2 p-2 border rounded-lg hover:bg-muted/50">
+                      <div
+                        key={connector.name}
+                        className="flex items-start space-x-2 p-2 border rounded-lg hover:bg-muted/50"
+                      >
                         <Checkbox
                           id={connector.name}
-                          checked={chargerSelection.connectorTypes.includes(connector.name)}
+                          checked={chargerSelection.connectorTypes.includes(
+                            connector.name,
+                          )}
                           onCheckedChange={(checked) => {
                             if (checked) {
                               setChargerSelection({
                                 ...chargerSelection,
-                                connectorTypes: [...chargerSelection.connectorTypes, connector.name]
+                                connectorTypes: [
+                                  ...chargerSelection.connectorTypes,
+                                  connector.name,
+                                ],
                               });
                             } else {
                               setChargerSelection({
                                 ...chargerSelection,
-                                connectorTypes: chargerSelection.connectorTypes.filter(c => c !== connector.name)
+                                connectorTypes:
+                                  chargerSelection.connectorTypes.filter(
+                                    (c) => c !== connector.name,
+                                  ),
                               });
                             }
                           }}
                         />
                         <div className="flex-1">
-                          <Label htmlFor={connector.name} className="text-sm font-medium">{connector.name}</Label>
-                          <p className="text-xs text-muted-foreground">{connector.desc}</p>
+                          <Label
+                            htmlFor={connector.name}
+                            className="text-sm font-medium"
+                          >
+                            {connector.name}
+                          </Label>
+                          <p className="text-xs text-muted-foreground">
+                            {connector.desc}
+                          </p>
                         </div>
                       </div>
                     ))}
@@ -1443,24 +1990,51 @@ export default function ProjectWizard() {
                       <Checkbox
                         id="weatherProtection"
                         checked={chargerSelection.weatherProtection}
-                        onCheckedChange={(checked) => setChargerSelection({...chargerSelection, weatherProtection: checked as boolean})}
+                        onCheckedChange={(checked) =>
+                          setChargerSelection({
+                            ...chargerSelection,
+                            weatherProtection: checked as boolean,
+                          })
+                        }
                       />
-                      <Label htmlFor="weatherProtection">Weather Protection Required</Label>
+                      <Label htmlFor="weatherProtection">
+                        Weather Protection Required
+                      </Label>
                     </div>
-                    <p className="text-xs text-muted-foreground ml-6">IP65 rated enclosures for outdoor installations</p>
+                    <p className="text-xs text-muted-foreground ml-6">
+                      IP65 rated enclosures for outdoor installations
+                    </p>
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="networkConnectivity">Network Connectivity *</Label>
-                    <Select value={chargerSelection.networkConnectivity} onValueChange={(value) => setChargerSelection({...chargerSelection, networkConnectivity: value})}>
+                    <Label htmlFor="networkConnectivity">
+                      Network Connectivity *
+                    </Label>
+                    <Select
+                      value={chargerSelection.networkConnectivity}
+                      onValueChange={(value) =>
+                        setChargerSelection({
+                          ...chargerSelection,
+                          networkConnectivity: value,
+                        })
+                      }
+                    >
                       <SelectTrigger>
                         <SelectValue placeholder="Select connectivity" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="4g">4G/LTE - Cellular connection</SelectItem>
-                        <SelectItem value="wifi">WiFi - Wireless network</SelectItem>
-                        <SelectItem value="ethernet">Ethernet - Wired connection</SelectItem>
-                        <SelectItem value="offline">Offline Operation - No connectivity</SelectItem>
+                        <SelectItem value="4g">
+                          4G/LTE - Cellular connection
+                        </SelectItem>
+                        <SelectItem value="wifi">
+                          WiFi - Wireless network
+                        </SelectItem>
+                        <SelectItem value="ethernet">
+                          Ethernet - Wired connection
+                        </SelectItem>
+                        <SelectItem value="offline">
+                          Offline Operation - No connectivity
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -1475,15 +2049,23 @@ export default function ProjectWizard() {
                   <div className="grid md:grid-cols-3 gap-4 text-sm">
                     <div>
                       <p className="font-medium">Equipment Cost:</p>
-                      <p className="text-muted-foreground">{recommendations.estimatedCost}</p>
+                      <p className="text-muted-foreground">
+                        {recommendations.estimatedCost}
+                      </p>
                     </div>
                     <div>
                       <p className="font-medium">Installation Timeline:</p>
-                      <p className="text-muted-foreground">{recommendations.installationTime}</p>
+                      <p className="text-muted-foreground">
+                        {recommendations.installationTime}
+                      </p>
                     </div>
                     <div>
                       <p className="font-medium">Total Charging Points:</p>
-                      <p className="text-muted-foreground">{chargerSelection.numberOfChargers || recommendations.numberOfChargers} units</p>
+                      <p className="text-muted-foreground">
+                        {chargerSelection.numberOfChargers ||
+                          recommendations.numberOfChargers}{" "}
+                        units
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -1498,32 +2080,49 @@ export default function ProjectWizard() {
             <div className="bg-yellow-50 border border-yellow-200 p-4 rounded-lg">
               <div className="flex items-center gap-2 mb-2">
                 <AlertTriangle className="w-4 h-4 text-yellow-600" />
-                <h3 className="font-medium text-yellow-800">Grid Capacity Assessment Required</h3>
+                <h3 className="font-medium text-yellow-800">
+                  Grid Capacity Assessment Required
+                </h3>
               </div>
               <p className="text-sm text-yellow-700">
-                Based on your charger selection, we need to assess if the existing electrical infrastructure can support the new load.
+                Based on your charger selection, we need to assess if the
+                existing electrical infrastructure can support the new load.
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <Label htmlFor="currentSupply">Current Electrical Supply (kVA)</Label>
+                <Label htmlFor="currentSupply">
+                  Current Electrical Supply (kVA)
+                </Label>
                 <Input
                   id="currentSupply"
                   type="number"
                   value={gridCapacity.currentSupply}
-                  onChange={(e) => setGridCapacity({...gridCapacity, currentSupply: e.target.value})}
+                  onChange={(e) =>
+                    setGridCapacity({
+                      ...gridCapacity,
+                      currentSupply: e.target.value,
+                    })
+                  }
                   placeholder="e.g., 400"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="requiredCapacity">Required Additional Capacity (kVA)</Label>
+                <Label htmlFor="requiredCapacity">
+                  Required Additional Capacity (kVA)
+                </Label>
                 <Input
                   id="requiredCapacity"
                   type="number"
                   value={gridCapacity.requiredCapacity}
-                  onChange={(e) => setGridCapacity({...gridCapacity, requiredCapacity: e.target.value})}
+                  onChange={(e) =>
+                    setGridCapacity({
+                      ...gridCapacity,
+                      requiredCapacity: e.target.value,
+                    })
+                  }
                   placeholder="Calculated: 600"
                   disabled
                 />
@@ -1534,45 +2133,81 @@ export default function ProjectWizard() {
               <Checkbox
                 id="upgradeNeeded"
                 checked={gridCapacity.upgradeNeeded}
-                onCheckedChange={(checked) => setGridCapacity({...gridCapacity, upgradeNeeded: checked as boolean})}
+                onCheckedChange={(checked) =>
+                  setGridCapacity({
+                    ...gridCapacity,
+                    upgradeNeeded: checked as boolean,
+                  })
+                }
               />
-              <Label htmlFor="upgradeNeeded">Electrical Infrastructure Upgrade Required</Label>
+              <Label htmlFor="upgradeNeeded">
+                Electrical Infrastructure Upgrade Required
+              </Label>
             </div>
 
             {gridCapacity.upgradeNeeded && (
               <div className="space-y-4 p-4 border rounded-lg bg-muted/30">
                 <div className="space-y-2">
                   <Label htmlFor="upgradeType">Type of Upgrade Required</Label>
-                  <Select value={gridCapacity.upgradeType} onValueChange={(value) => setGridCapacity({...gridCapacity, upgradeType: value})}>
+                  <Select
+                    value={gridCapacity.upgradeType}
+                    onValueChange={(value) =>
+                      setGridCapacity({ ...gridCapacity, upgradeType: value })
+                    }
+                  >
                     <SelectTrigger>
                       <SelectValue placeholder="Select upgrade type" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="meter-upgrade">Meter Upgrade</SelectItem>
-                      <SelectItem value="switchboard-upgrade">Switchboard Upgrade</SelectItem>
-                      <SelectItem value="transformer-upgrade">Transformer Upgrade</SelectItem>
-                      <SelectItem value="service-upgrade">Service Connection Upgrade</SelectItem>
-                      <SelectItem value="full-infrastructure">Full Infrastructure Upgrade</SelectItem>
+                      <SelectItem value="meter-upgrade">
+                        Meter Upgrade
+                      </SelectItem>
+                      <SelectItem value="switchboard-upgrade">
+                        Switchboard Upgrade
+                      </SelectItem>
+                      <SelectItem value="transformer-upgrade">
+                        Transformer Upgrade
+                      </SelectItem>
+                      <SelectItem value="service-upgrade">
+                        Service Connection Upgrade
+                      </SelectItem>
+                      <SelectItem value="full-infrastructure">
+                        Full Infrastructure Upgrade
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="estimatedUpgradeCost">Estimated Upgrade Cost (AUD)</Label>
+                  <Label htmlFor="estimatedUpgradeCost">
+                    Estimated Upgrade Cost (AUD)
+                  </Label>
                   <Input
                     id="estimatedUpgradeCost"
                     value={gridCapacity.estimatedUpgradeCost}
-                    onChange={(e) => setGridCapacity({...gridCapacity, estimatedUpgradeCost: e.target.value})}
+                    onChange={(e) =>
+                      setGridCapacity({
+                        ...gridCapacity,
+                        estimatedUpgradeCost: e.target.value,
+                      })
+                    }
                     placeholder="e.g., $25,000"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="utilityContact">Utility Company Contact</Label>
+                  <Label htmlFor="utilityContact">
+                    Utility Company Contact
+                  </Label>
                   <Input
                     id="utilityContact"
                     value={gridCapacity.utilityContact}
-                    onChange={(e) => setGridCapacity({...gridCapacity, utilityContact: e.target.value})}
+                    onChange={(e) =>
+                      setGridCapacity({
+                        ...gridCapacity,
+                        utilityContact: e.target.value,
+                      })
+                    }
                     placeholder="Contact person/department for utility approval"
                   />
                 </div>
@@ -1580,7 +2215,9 @@ export default function ProjectWizard() {
             )}
 
             <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg">
-              <h3 className="font-medium text-blue-800 mb-2">Load Management Options</h3>
+              <h3 className="font-medium text-blue-800 mb-2">
+                Load Management Options
+              </h3>
               <ul className="text-sm text-blue-700 space-y-1">
                 <li>• Dynamic load balancing to optimize power usage</li>
                 <li>• Time-of-use scheduling to reduce peak demand</li>
@@ -1597,16 +2234,21 @@ export default function ProjectWizard() {
             <div className="bg-green-50 border border-green-200 p-4 rounded-lg">
               <div className="flex items-center gap-2 mb-2">
                 <Shield className="w-4 h-4 text-green-600" />
-                <h3 className="font-medium text-green-800">AS/NZS 3000 Compliance Checklist</h3>
+                <h3 className="font-medium text-green-800">
+                  AS/NZS 3000 Compliance Checklist
+                </h3>
               </div>
               <p className="text-sm text-green-700">
-                Ensure your EV charging installation meets Australian electrical standards and local regulations.
+                Ensure your EV charging installation meets Australian electrical
+                standards and local regulations.
               </p>
             </div>
 
             <div className="space-y-4">
               <div>
-                <Label className="text-base font-medium">Electrical Standards Compliance</Label>
+                <Label className="text-base font-medium">
+                  Electrical Standards Compliance
+                </Label>
                 <div className="mt-2 space-y-2">
                   {[
                     "AS/NZS 3000:2018 Wiring Rules compliance",
@@ -1614,7 +2256,7 @@ export default function ProjectWizard() {
                     "Earth leakage protection (RCD) installation",
                     "Surge protection devices installed",
                     "Proper cable sizing and protection",
-                    "Electrical isolation and switching"
+                    "Electrical isolation and switching",
                   ].map((item) => (
                     <div key={item} className="flex items-center space-x-2">
                       <Checkbox
@@ -1624,24 +2266,34 @@ export default function ProjectWizard() {
                           if (checked) {
                             setCompliance({
                               ...compliance,
-                              electricalStandards: [...compliance.electricalStandards, item]
+                              electricalStandards: [
+                                ...compliance.electricalStandards,
+                                item,
+                              ],
                             });
                           } else {
                             setCompliance({
                               ...compliance,
-                              electricalStandards: compliance.electricalStandards.filter(s => s !== item)
+                              electricalStandards:
+                                compliance.electricalStandards.filter(
+                                  (s) => s !== item,
+                                ),
                             });
                           }
                         }}
                       />
-                      <Label htmlFor={item} className="text-sm">{item}</Label>
+                      <Label htmlFor={item} className="text-sm">
+                        {item}
+                      </Label>
                     </div>
                   ))}
                 </div>
               </div>
 
               <div>
-                <Label className="text-base font-medium">Safety Requirements</Label>
+                <Label className="text-base font-medium">
+                  Safety Requirements
+                </Label>
                 <div className="mt-2 space-y-2">
                   {[
                     "Emergency stop functionality",
@@ -1649,7 +2301,7 @@ export default function ProjectWizard() {
                     "Adequate lighting for night use",
                     "Clear signage and user instructions",
                     "Fire safety compliance",
-                    "Weather protection and IP ratings"
+                    "Weather protection and IP ratings",
                   ].map((item) => (
                     <div key={item} className="flex items-center space-x-2">
                       <Checkbox
@@ -1659,24 +2311,34 @@ export default function ProjectWizard() {
                           if (checked) {
                             setCompliance({
                               ...compliance,
-                              safetyRequirements: [...compliance.safetyRequirements, item]
+                              safetyRequirements: [
+                                ...compliance.safetyRequirements,
+                                item,
+                              ],
                             });
                           } else {
                             setCompliance({
                               ...compliance,
-                              safetyRequirements: compliance.safetyRequirements.filter(s => s !== item)
+                              safetyRequirements:
+                                compliance.safetyRequirements.filter(
+                                  (s) => s !== item,
+                                ),
                             });
                           }
                         }}
                       />
-                      <Label htmlFor={item} className="text-sm">{item}</Label>
+                      <Label htmlFor={item} className="text-sm">
+                        {item}
+                      </Label>
                     </div>
                   ))}
                 </div>
               </div>
 
               <div>
-                <Label className="text-base font-medium">Local Permits & Approvals</Label>
+                <Label className="text-base font-medium">
+                  Local Permits & Approvals
+                </Label>
                 <div className="mt-2 space-y-2">
                   {[
                     "Local council development approval",
@@ -1684,7 +2346,7 @@ export default function ProjectWizard() {
                     "Network operator connection approval",
                     "Building permit (if required)",
                     "Environmental impact assessment",
-                    "Heritage considerations (if applicable)"
+                    "Heritage considerations (if applicable)",
                   ].map((item) => (
                     <div key={item} className="flex items-center space-x-2">
                       <Checkbox
@@ -1694,17 +2356,21 @@ export default function ProjectWizard() {
                           if (checked) {
                             setCompliance({
                               ...compliance,
-                              localPermits: [...compliance.localPermits, item]
+                              localPermits: [...compliance.localPermits, item],
                             });
                           } else {
                             setCompliance({
                               ...compliance,
-                              localPermits: compliance.localPermits.filter(s => s !== item)
+                              localPermits: compliance.localPermits.filter(
+                                (s) => s !== item,
+                              ),
                             });
                           }
                         }}
                       />
-                      <Label htmlFor={item} className="text-sm">{item}</Label>
+                      <Label htmlFor={item} className="text-sm">
+                        {item}
+                      </Label>
                     </div>
                   ))}
                 </div>
@@ -1714,9 +2380,17 @@ export default function ProjectWizard() {
                 <Checkbox
                   id="accessibilityCompliance"
                   checked={compliance.accessibilityCompliance}
-                  onCheckedChange={(checked) => setCompliance({...compliance, accessibilityCompliance: checked as boolean})}
+                  onCheckedChange={(checked) =>
+                    setCompliance({
+                      ...compliance,
+                      accessibilityCompliance: checked as boolean,
+                    })
+                  }
                 />
-                <Label htmlFor="accessibilityCompliance" className="font-medium">
+                <Label
+                  htmlFor="accessibilityCompliance"
+                  className="font-medium"
+                >
                   Accessibility compliance (DDA/BCA requirements)
                 </Label>
               </div>
@@ -1746,11 +2420,26 @@ export default function ProjectWizard() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2 text-sm">
-                  <div><strong>Project:</strong> {siteAssessment.projectName || "Not specified"}</div>
-                  <div><strong>Client:</strong> {siteAssessment.clientName || "Not specified"}</div>
-                  <div><strong>Site Type:</strong> {siteAssessment.siteType || "Not specified"}</div>
-                  <div><strong>Address:</strong> {siteAssessment.siteAddress || "Not specified"}</div>
-                  <div><strong>Parking Spaces:</strong> {siteAssessment.parkingSpaces || "Not specified"}</div>
+                  <div>
+                    <strong>Project:</strong>{" "}
+                    {siteAssessment.projectName || "Not specified"}
+                  </div>
+                  <div>
+                    <strong>Client:</strong>{" "}
+                    {siteAssessment.clientName || "Not specified"}
+                  </div>
+                  <div>
+                    <strong>Site Type:</strong>{" "}
+                    {siteAssessment.siteType || "Not specified"}
+                  </div>
+                  <div>
+                    <strong>Address:</strong>{" "}
+                    {siteAssessment.siteAddress || "Not specified"}
+                  </div>
+                  <div>
+                    <strong>Parking Spaces:</strong>{" "}
+                    {siteAssessment.parkingSpaces || "Not specified"}
+                  </div>
                 </CardContent>
               </Card>
 
@@ -1762,11 +2451,36 @@ export default function ProjectWizard() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2 text-sm">
-                  <div><strong>Type:</strong> {chargerSelection.chargingType ? chargerSelection.chargingType.replace('-', ' ').toUpperCase() : "Not specified"}</div>
-                  <div><strong>Power Rating:</strong> {chargerSelection.powerRating || "Not specified"}</div>
-                  <div><strong>Number of Chargers:</strong> {chargerSelection.numberOfChargers || "Not specified"}</div>
-                  <div><strong>Mounting:</strong> {chargerSelection.mountingType ? chargerSelection.mountingType.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase()) : "Not specified"}</div>
-                  <div><strong>Connectors:</strong> {chargerSelection.connectorTypes.length > 0 ? chargerSelection.connectorTypes.join(", ") : "None selected"}</div>
+                  <div>
+                    <strong>Type:</strong>{" "}
+                    {chargerSelection.chargingType
+                      ? chargerSelection.chargingType
+                          .replace("-", " ")
+                          .toUpperCase()
+                      : "Not specified"}
+                  </div>
+                  <div>
+                    <strong>Power Rating:</strong>{" "}
+                    {chargerSelection.powerRating || "Not specified"}
+                  </div>
+                  <div>
+                    <strong>Number of Chargers:</strong>{" "}
+                    {chargerSelection.numberOfChargers || "Not specified"}
+                  </div>
+                  <div>
+                    <strong>Mounting:</strong>{" "}
+                    {chargerSelection.mountingType
+                      ? chargerSelection.mountingType
+                          .replace("-", " ")
+                          .replace(/\b\w/g, (l) => l.toUpperCase())
+                      : "Not specified"}
+                  </div>
+                  <div>
+                    <strong>Connectors:</strong>{" "}
+                    {chargerSelection.connectorTypes.length > 0
+                      ? chargerSelection.connectorTypes.join(", ")
+                      : "None selected"}
+                  </div>
                 </CardContent>
               </Card>
 
@@ -1778,13 +2492,32 @@ export default function ProjectWizard() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2 text-sm">
-                  <div><strong>Current Supply:</strong> {gridCapacity.currentSupply ? `${gridCapacity.currentSupply} kVA` : "Not specified"}</div>
-                  <div><strong>Required Capacity:</strong> {gridCapacity.requiredCapacity ? `${gridCapacity.requiredCapacity} kVA` : "To be calculated"}</div>
-                  <div><strong>Upgrade Needed:</strong> {gridCapacity.upgradeNeeded ? "Yes" : "No"}</div>
+                  <div>
+                    <strong>Current Supply:</strong>{" "}
+                    {gridCapacity.currentSupply
+                      ? `${gridCapacity.currentSupply} kVA`
+                      : "Not specified"}
+                  </div>
+                  <div>
+                    <strong>Required Capacity:</strong>{" "}
+                    {gridCapacity.requiredCapacity
+                      ? `${gridCapacity.requiredCapacity} kVA`
+                      : "To be calculated"}
+                  </div>
+                  <div>
+                    <strong>Upgrade Needed:</strong>{" "}
+                    {gridCapacity.upgradeNeeded ? "Yes" : "No"}
+                  </div>
                   {gridCapacity.upgradeNeeded && (
                     <>
-                      <div><strong>Upgrade Type:</strong> {gridCapacity.upgradeType || "Not specified"}</div>
-                      <div><strong>Estimated Cost:</strong> {gridCapacity.estimatedUpgradeCost || "To be quoted"}</div>
+                      <div>
+                        <strong>Upgrade Type:</strong>{" "}
+                        {gridCapacity.upgradeType || "Not specified"}
+                      </div>
+                      <div>
+                        <strong>Estimated Cost:</strong>{" "}
+                        {gridCapacity.estimatedUpgradeCost || "To be quoted"}
+                      </div>
                     </>
                   )}
                 </CardContent>
@@ -1798,10 +2531,24 @@ export default function ProjectWizard() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2 text-sm">
-                  <div><strong>Electrical Standards:</strong> {compliance.electricalStandards.length}/6 items</div>
-                  <div><strong>Safety Requirements:</strong> {compliance.safetyRequirements.length}/6 items</div>
-                  <div><strong>Local Permits:</strong> {compliance.localPermits.length}/6 items</div>
-                  <div><strong>Accessibility:</strong> {compliance.accessibilityCompliance ? "Compliant" : "Needs Review"}</div>
+                  <div>
+                    <strong>Electrical Standards:</strong>{" "}
+                    {compliance.electricalStandards.length}/6 items
+                  </div>
+                  <div>
+                    <strong>Safety Requirements:</strong>{" "}
+                    {compliance.safetyRequirements.length}/6 items
+                  </div>
+                  <div>
+                    <strong>Local Permits:</strong>{" "}
+                    {compliance.localPermits.length}/6 items
+                  </div>
+                  <div>
+                    <strong>Accessibility:</strong>{" "}
+                    {compliance.accessibilityCompliance
+                      ? "Compliant"
+                      : "Needs Review"}
+                  </div>
                 </CardContent>
               </Card>
             </div>
@@ -1831,10 +2578,16 @@ export default function ProjectWizard() {
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <Logo size="lg" />
           <nav className="hidden md:flex items-center space-x-6">
-            <Link to="/dashboard" className="text-sm font-medium hover:text-primary transition-colors">
+            <Link
+              to="/dashboard"
+              className="text-sm font-medium hover:text-primary transition-colors"
+            >
               Dashboard
             </Link>
-            <Link to="/projects" className="text-sm font-medium hover:text-primary transition-colors">
+            <Link
+              to="/projects"
+              className="text-sm font-medium hover:text-primary transition-colors"
+            >
               Projects
             </Link>
           </nav>
@@ -1856,7 +2609,10 @@ export default function ProjectWizard() {
             <div>
               <h1 className="text-3xl font-bold">Project Planning Wizard</h1>
               <div className="flex items-center gap-3">
-                <p className="text-muted-foreground">Step {currentStep} of {totalSteps}: {getStepTitle(currentStep)}</p>
+                <p className="text-muted-foreground">
+                  Step {currentStep} of {totalSteps}:{" "}
+                  {getStepTitle(currentStep)}
+                </p>
                 {isDraftSaving && (
                   <div className="flex items-center gap-1 text-xs text-muted-foreground">
                     <div className="w-3 h-3 border-2 border-primary border-t-transparent rounded-full animate-spin" />
@@ -1883,23 +2639,23 @@ export default function ProjectWizard() {
               )}
             </div>
           </div>
-          
+
           <Progress value={(currentStep / totalSteps) * 100} className="h-2" />
-          
+
           {/* Step indicators */}
           <div className="flex justify-between mt-4">
             {Array.from({ length: totalSteps }, (_, i) => i + 1).map((step) => (
               <div
                 key={step}
                 className={`flex items-center gap-2 text-sm ${
-                  step <= currentStep ? 'text-primary' : 'text-muted-foreground'
+                  step <= currentStep ? "text-primary" : "text-muted-foreground"
                 }`}
               >
                 <div
                   className={`w-8 h-8 rounded-full flex items-center justify-center ${
                     step <= currentStep
-                      ? 'bg-primary text-primary-foreground'
-                      : 'bg-muted text-muted-foreground'
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-muted text-muted-foreground"
                   }`}
                 >
                   {step < currentStep ? (
@@ -1924,17 +2680,21 @@ export default function ProjectWizard() {
               {getStepTitle(currentStep)}
             </CardTitle>
             <CardDescription>
-              {currentStep === 1 && "Understand client needs, project objectives, and specific requirements before technical assessment."}
-              {currentStep === 2 && "Gather essential information about the installation site and project requirements."}
-              {currentStep === 3 && "Select the appropriate charging equipment based on site requirements and usage patterns."}
-              {currentStep === 4 && "Analyze electrical infrastructure capacity and determine upgrade requirements."}
-              {currentStep === 5 && "Ensure compliance with Australian electrical standards and local regulations."}
-              {currentStep === 6 && "Review all project details and create your project plan."}
+              {currentStep === 1 &&
+                "Understand client needs, project objectives, and specific requirements before technical assessment."}
+              {currentStep === 2 &&
+                "Gather essential information about the installation site and project requirements."}
+              {currentStep === 3 &&
+                "Select the appropriate charging equipment based on site requirements and usage patterns."}
+              {currentStep === 4 &&
+                "Analyze electrical infrastructure capacity and determine upgrade requirements."}
+              {currentStep === 5 &&
+                "Ensure compliance with Australian electrical standards and local regulations."}
+              {currentStep === 6 &&
+                "Review all project details and create your project plan."}
             </CardDescription>
           </CardHeader>
-          <CardContent>
-            {renderStepContent()}
-          </CardContent>
+          <CardContent>{renderStepContent()}</CardContent>
         </Card>
 
         {/* Navigation */}
@@ -1948,7 +2708,7 @@ export default function ProjectWizard() {
             <ArrowLeft className="w-4 h-4" />
             Previous
           </Button>
-          
+
           <div className="flex gap-2">
             <Button
               variant="ghost"
@@ -1976,7 +2736,7 @@ export default function ProjectWizard() {
                 </>
               )}
             </Button>
-            
+
             {currentStep < totalSteps ? (
               <Button onClick={nextStep} className="flex items-center gap-2">
                 Next

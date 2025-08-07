@@ -1,16 +1,47 @@
-import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  useMemo,
+} from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
 import { Link, useNavigate } from "react-router-dom";
-import { 
+import {
   PlugZap,
   Plus,
   Calendar,
@@ -46,7 +77,7 @@ import {
   Truck,
   Download,
   Upload,
-  RefreshCw
+  RefreshCw,
 } from "lucide-react";
 import { Logo } from "@/components/ui/logo";
 import { projectService, autoConfigureSupabase } from "@/lib/supabase";
@@ -132,12 +163,14 @@ export default function Projects() {
       contactPerson: "Sarah Johnson",
       phone: "(02) 9876 5432",
       email: "sarah.johnson@westfield.com",
-      siteAddress: "Level 3, Westfield Sydney, Pitt Street Mall, Sydney NSW 2000",
-      description: "Installation of 8x 50kW DC fast chargers in the main car park area",
-      createdAt: "2024-01-15"
+      siteAddress:
+        "Level 3, Westfield Sydney, Pitt Street Mall, Sydney NSW 2000",
+      description:
+        "Installation of 8x 50kW DC fast chargers in the main car park area",
+      createdAt: "2024-01-15",
     },
     {
-      id: "PRJ-002", 
+      id: "PRJ-002",
       name: "Residential Complex - Parramatta",
       client: "Mirvac Properties",
       status: "Quoting",
@@ -146,14 +179,14 @@ export default function Projects() {
       deadline: "2024-02-28",
       location: "Parramatta, NSW",
       type: "Residential AC Charging",
-      latitude: -33.8150,
-      longitude: 151.0000,
+      latitude: -33.815,
+      longitude: 151.0,
       contactPerson: "Michael Chen",
       phone: "(02) 8765 4321",
       email: "m.chen@mirvac.com",
       siteAddress: "123 Church Street, Parramatta NSW 2150",
       description: "22kW AC chargers for resident parking spaces",
-      createdAt: "2024-01-20"
+      createdAt: "2024-01-20",
     },
     {
       id: "PRJ-003",
@@ -171,8 +204,9 @@ export default function Projects() {
       phone: "(03) 9658 9658",
       email: "e.wilson@melbourne.vic.gov.au",
       siteAddress: "Collins Street Car Park, Melbourne VIC 3000",
-      description: "Public charging infrastructure upgrade with 6x 75kW DC chargers",
-      createdAt: "2023-12-10"
+      description:
+        "Public charging infrastructure upgrade with 6x 75kW DC chargers",
+      createdAt: "2023-12-10",
     },
     {
       id: "PRJ-004",
@@ -190,9 +224,10 @@ export default function Projects() {
       phone: "(07) 3123 4567",
       email: "david.kim@auspost.com.au",
       siteAddress: "Australia Post Depot, Eagle Farm QLD 4009",
-      description: "Fleet charging infrastructure for electric delivery vehicles",
-      createdAt: "2024-01-25"
-    }
+      description:
+        "Fleet charging infrastructure for electric delivery vehicles",
+      createdAt: "2024-01-25",
+    },
   ];
 
   // Load projects from various sources
@@ -210,66 +245,87 @@ export default function Projects() {
       if (isConnected) {
         try {
           const supabaseProjects = await projectService.getAllProjects();
-          loadedProjects = supabaseProjects.map(project => ({
-            id: project.id?.slice(0, 8) || 'PRJ-NEW',
+          loadedProjects = supabaseProjects.map((project) => ({
+            id: project.id?.slice(0, 8) || "PRJ-NEW",
             name: project.name,
             client: project.client_name,
             status: project.status,
             progress: project.progress,
-            value: `$${project.estimated_budget_min?.toLocaleString()} - $${project.estimated_budget_max?.toLocaleString()}` || 'TBD',
-            deadline: new Date(project.created_at || Date.now()).toLocaleDateString(),
-            location: project.site_address?.split(',').slice(-2).join(',').trim() || 'TBD',
-            type: project.site_type || 'EV Charging Project',
+            value:
+              `$${project.estimated_budget_min?.toLocaleString()} - $${project.estimated_budget_max?.toLocaleString()}` ||
+              "TBD",
+            deadline: new Date(
+              project.created_at || Date.now(),
+            ).toLocaleDateString(),
+            location:
+              project.site_address?.split(",").slice(-2).join(",").trim() ||
+              "TBD",
+            type: project.site_type || "EV Charging Project",
             siteAddress: project.site_address,
             description: project.notes || project.project_objective,
             createdAt: project.created_at,
             // Add coordinates if available (would come from geocoding service)
             latitude: undefined, // TODO: Geocode addresses
-            longitude: undefined
+            longitude: undefined,
           }));
         } catch (error) {
-          console.error('Error loading projects from Supabase:', error);
+          console.error("Error loading projects from Supabase:", error);
         }
       }
 
       // Load from localStorage and preserve all detailed data
-      const localProjects = JSON.parse(localStorage.getItem('chargeSourceProjects') || '[]');
+      const localProjects = JSON.parse(
+        localStorage.getItem("chargeSourceProjects") || "[]",
+      );
       const formattedLocalProjects = localProjects.map((project: any) => ({
         id: project.id || `PRJ-${Date.now()}`,
-        name: project.projectInfo?.name || project.name || 'Unnamed Project',
-        client: project.projectInfo?.client || project.client_name || 'Unknown Client',
-        status: project.status || 'Planning',
+        name: project.projectInfo?.name || project.name || "Unnamed Project",
+        client:
+          project.projectInfo?.client ||
+          project.client_name ||
+          "Unknown Client",
+        status: project.status || "Planning",
         progress: project.progress || 0,
-        value: project.estimatedBudget || project.estimated_budget || 'TBD',
-        deadline: new Date(project.createdAt || project.created_at || Date.now()).toLocaleDateString(),
-        location: project.projectInfo?.address || project.site_address || 'TBD',
-        type: project.projectInfo?.type || project.site_type || 'EV Charging Project',
+        value: project.estimatedBudget || project.estimated_budget || "TBD",
+        deadline: new Date(
+          project.createdAt || project.created_at || Date.now(),
+        ).toLocaleDateString(),
+        location: project.projectInfo?.address || project.site_address || "TBD",
+        type:
+          project.projectInfo?.type ||
+          project.site_type ||
+          "EV Charging Project",
         siteAddress: project.projectInfo?.address || project.site_address,
-        description: project.projectInfo?.objective || project.project_objective,
+        description:
+          project.projectInfo?.objective || project.project_objective,
         createdAt: project.createdAt || project.created_at,
         timeline: project.timeline,
         // Extract contact details from detailed data if available
-        contactPerson: project.clientRequirements?.contactPersonName || project.contactPerson,
+        contactPerson:
+          project.clientRequirements?.contactPersonName ||
+          project.contactPerson,
         phone: project.clientRequirements?.contactPhone || project.phone,
         email: project.clientRequirements?.contactEmail || project.email,
         // Preserve all detailed wizard data for editing
-        _originalData: project // Store the complete original project data
+        _originalData: project, // Store the complete original project data
       }));
 
       // Load drafts for current user
-      const drafts = JSON.parse(localStorage.getItem('chargeSourceDrafts') || '[]');
+      const drafts = JSON.parse(
+        localStorage.getItem("chargeSourceDrafts") || "[]",
+      );
       const userDrafts = drafts
         .filter((draft: any) => draft.userId === user?.id)
         .map((draft: any) => ({
           id: draft.id,
-          name: draft.draftName || 'Untitled Draft',
-          client: draft.clientRequirements?.contactPersonName || 'Draft Client',
-          status: 'Draft',
+          name: draft.draftName || "Untitled Draft",
+          client: draft.clientRequirements?.contactPersonName || "Draft Client",
+          status: "Draft",
           progress: draft.progress || 0,
-          value: 'In Progress',
+          value: "In Progress",
           deadline: new Date(draft.updatedAt).toLocaleDateString(),
-          location: draft.siteAssessment?.siteAddress || 'TBD',
-          type: 'Draft Project',
+          location: draft.siteAssessment?.siteAddress || "TBD",
+          type: "Draft Project",
           isDraft: true,
           draftStep: draft.currentStep,
           siteAddress: draft.siteAssessment?.siteAddress,
@@ -278,22 +334,27 @@ export default function Projects() {
           phone: draft.clientRequirements?.contactPhone,
           email: draft.clientRequirements?.contactEmail,
           // Preserve complete draft data for editing
-          _originalData: draft
+          _originalData: draft,
         }));
 
       // Combine all projects
-      const allProjects = [...loadedProjects, ...formattedLocalProjects, ...userDrafts];
-      const uniqueProjects = allProjects.filter((project, index, self) =>
-        index === self.findIndex(p => p.id === project.id)
+      const allProjects = [
+        ...loadedProjects,
+        ...formattedLocalProjects,
+        ...userDrafts,
+      ];
+      const uniqueProjects = allProjects.filter(
+        (project, index, self) =>
+          index === self.findIndex((p) => p.id === project.id),
       );
 
       // Use sample projects if no real projects exist
-      const finalProjects = uniqueProjects.length > 0 ? uniqueProjects : sampleProjects;
+      const finalProjects =
+        uniqueProjects.length > 0 ? uniqueProjects : sampleProjects;
       setProjects(finalProjects);
       setFilteredProjects(finalProjects);
-
     } catch (error) {
-      console.error('Error loading projects:', error);
+      console.error("Error loading projects:", error);
       setProjects(sampleProjects);
       setFilteredProjects(sampleProjects);
     } finally {
@@ -303,7 +364,7 @@ export default function Projects() {
 
   // Initialize Google Maps
   const initializeMap = () => {
-    if (typeof window.google === 'undefined' || !mapRef.current) return;
+    if (typeof window.google === "undefined" || !mapRef.current) return;
 
     const map = new window.google.maps.Map(mapRef.current, {
       zoom: 6,
@@ -319,16 +380,16 @@ export default function Projects() {
 
   // Update map markers based on filtered projects
   const updateMapMarkers = () => {
-    if (!mapInstanceRef.current || typeof window.google === 'undefined') return;
+    if (!mapInstanceRef.current || typeof window.google === "undefined") return;
 
     // Clear existing markers
-    markersRef.current.forEach(marker => marker.setMap(null));
+    markersRef.current.forEach((marker) => marker.setMap(null));
     markersRef.current = [];
 
     const bounds = new window.google.maps.LatLngBounds();
     let hasValidCoordinates = false;
 
-    filteredProjects.forEach(project => {
+    filteredProjects.forEach((project) => {
       if (project.latitude && project.longitude) {
         const marker = new window.google.maps.Marker({
           position: { lat: project.latitude, lng: project.longitude },
@@ -337,7 +398,7 @@ export default function Projects() {
           icon: {
             url: getMarkerIcon(project.status),
             scaledSize: new window.google.maps.Size(40, 40),
-          }
+          },
         });
 
         const infoWindow = new window.google.maps.InfoWindow({
@@ -350,10 +411,10 @@ export default function Projects() {
               <p style="margin: 0 0 8px 0; color: #666;"><strong>Value:</strong> ${project.value}</p>
               <button onclick="window.viewProject('${project.id}')" style="background: #3b82f6; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">View Project</button>
             </div>
-          `
+          `,
         });
 
-        marker.addListener('click', () => {
+        marker.addListener("click", () => {
           infoWindow.open(mapInstanceRef.current, marker);
         });
 
@@ -371,26 +432,46 @@ export default function Projects() {
   // Get marker icon based on project status
   const getMarkerIcon = (status: string) => {
     const iconMap: Record<string, string> = {
-      'Completed': 'data:image/svg+xml;base64,' + btoa(`<svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="18" fill="#10b981" stroke="white" stroke-width="2"/><path d="M14 20l4 4 8-8" stroke="white" stroke-width="3" fill="none"/></svg>`),
-      'In Progress': 'data:image/svg+xml;base64,' + btoa(`<svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="18" fill="#3b82f6" stroke="white" stroke-width="2"/><circle cx="20" cy="20" r="6" fill="white"/></svg>`),
-      'Planning': 'data:image/svg+xml;base64,' + btoa(`<svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="18" fill="#f59e0b" stroke="white" stroke-width="2"/><circle cx="20" cy="20" r="6" fill="white"/></svg>`),
-      'Quoting': 'data:image/svg+xml;base64=' + btoa(`<svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="18" fill="#8b5cf6" stroke="white" stroke-width="2"/><text x="20" y="25" text-anchor="middle" fill="white" font-size="20" font-weight="bold">$</text></svg>`),
-      'Draft': 'data:image/svg+xml;base64=' + btoa(`<svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="18" fill="#6b7280" stroke="white" stroke-width="2"/><circle cx="20" cy="20" r="3" fill="white"/></svg>`)
+      Completed:
+        "data:image/svg+xml;base64," +
+        btoa(
+          `<svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="18" fill="#10b981" stroke="white" stroke-width="2"/><path d="M14 20l4 4 8-8" stroke="white" stroke-width="3" fill="none"/></svg>`,
+        ),
+      "In Progress":
+        "data:image/svg+xml;base64," +
+        btoa(
+          `<svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="18" fill="#3b82f6" stroke="white" stroke-width="2"/><circle cx="20" cy="20" r="6" fill="white"/></svg>`,
+        ),
+      Planning:
+        "data:image/svg+xml;base64," +
+        btoa(
+          `<svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="18" fill="#f59e0b" stroke="white" stroke-width="2"/><circle cx="20" cy="20" r="6" fill="white"/></svg>`,
+        ),
+      Quoting:
+        "data:image/svg+xml;base64=" +
+        btoa(
+          `<svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="18" fill="#8b5cf6" stroke="white" stroke-width="2"/><text x="20" y="25" text-anchor="middle" fill="white" font-size="20" font-weight="bold">$</text></svg>`,
+        ),
+      Draft:
+        "data:image/svg+xml;base64=" +
+        btoa(
+          `<svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="18" fill="#6b7280" stroke="white" stroke-width="2"/><circle cx="20" cy="20" r="3" fill="white"/></svg>`,
+        ),
     };
-    return iconMap[status] || iconMap['Planning'];
+    return iconMap[status] || iconMap["Planning"];
   };
 
   // Load Google Maps script
   useEffect(() => {
     const loadGoogleMaps = () => {
-      if (typeof window.google !== 'undefined') {
+      if (typeof window.google !== "undefined") {
         initializeMap();
         return;
       }
 
       window.initMap = initializeMap;
-      
-      const script = document.createElement('script');
+
+      const script = document.createElement("script");
       const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
       script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initMap`;
       script.async = true;
@@ -399,18 +480,20 @@ export default function Projects() {
 
       // Fallback: Initialize with mock coordinates if API key is not valid
       script.onerror = () => {
-        console.warn('Google Maps API failed to load. Using fallback coordinates.');
+        console.warn(
+          "Google Maps API failed to load. Using fallback coordinates.",
+        );
         // Could implement a fallback map solution here
       };
     };
 
-    if (viewMode === 'map') {
+    if (viewMode === "map") {
       loadGoogleMaps();
     }
 
     // Global function for info window buttons
     (window as any).viewProject = (projectId: string) => {
-      const project = projects.find(p => p.id === projectId);
+      const project = projects.find((p) => p.id === projectId);
       if (project) {
         setSelectedProject(project);
       }
@@ -423,7 +506,7 @@ export default function Projects() {
 
   // Update map markers when filtered projects change
   useEffect(() => {
-    if (viewMode === 'map') {
+    if (viewMode === "map") {
       updateMapMarkers();
     }
   }, [filteredProjects, viewMode]);
@@ -442,22 +525,25 @@ export default function Projects() {
     // Search filter
     if (debouncedSearchQuery) {
       const query = debouncedSearchQuery.toLowerCase();
-      filtered = filtered.filter(project =>
-        project.name.toLowerCase().includes(query) ||
-        project.client.toLowerCase().includes(query) ||
-        project.location.toLowerCase().includes(query) ||
-        project.type.toLowerCase().includes(query)
+      filtered = filtered.filter(
+        (project) =>
+          project.name.toLowerCase().includes(query) ||
+          project.client.toLowerCase().includes(query) ||
+          project.location.toLowerCase().includes(query) ||
+          project.type.toLowerCase().includes(query),
       );
     }
 
     // Status filter
     if (statusFilter !== "all") {
-      filtered = filtered.filter(project => project.status === statusFilter);
+      filtered = filtered.filter((project) => project.status === statusFilter);
     }
 
     // Type filter
     if (typeFilter !== "all") {
-      filtered = filtered.filter(project => project.type.includes(typeFilter));
+      filtered = filtered.filter((project) =>
+        project.type.includes(typeFilter),
+      );
     }
 
     // Sort
@@ -500,7 +586,14 @@ export default function Projects() {
     });
 
     return filtered;
-  }, [projects, debouncedSearchQuery, statusFilter, typeFilter, sortBy, sortOrder]);
+  }, [
+    projects,
+    debouncedSearchQuery,
+    statusFilter,
+    typeFilter,
+    sortBy,
+    sortOrder,
+  ]);
 
   // Update filtered projects when memoized result changes
   useEffect(() => {
@@ -509,25 +602,33 @@ export default function Projects() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "Completed": return "bg-green-100 text-green-800 border-green-200";
-      case "In Progress": return "bg-blue-100 text-blue-800 border-blue-200";
-      case "Planning": return "bg-yellow-100 text-yellow-800 border-yellow-200";
-      case "Quoting": return "bg-purple-100 text-purple-800 border-purple-200";
-      case "Draft": return "bg-gray-100 text-gray-800 border-gray-200";
-      default: return "bg-gray-100 text-gray-800 border-gray-200";
+      case "Completed":
+        return "bg-green-100 text-green-800 border-green-200";
+      case "In Progress":
+        return "bg-blue-100 text-blue-800 border-blue-200";
+      case "Planning":
+        return "bg-yellow-100 text-yellow-800 border-yellow-200";
+      case "Quoting":
+        return "bg-purple-100 text-purple-800 border-purple-200";
+      case "Draft":
+        return "bg-gray-100 text-gray-800 border-gray-200";
+      default:
+        return "bg-gray-100 text-gray-800 border-gray-200";
     }
   };
 
   const getTypeIcon = (type: string) => {
     if (type.includes("Residential")) return <Home className="w-4 h-4" />;
-    if (type.includes("Commercial") || type.includes("Retail")) return <Building className="w-4 h-4" />;
-    if (type.includes("Industrial") || type.includes("Fleet")) return <Factory className="w-4 h-4" />;
+    if (type.includes("Commercial") || type.includes("Retail"))
+      return <Building className="w-4 h-4" />;
+    if (type.includes("Industrial") || type.includes("Fleet"))
+      return <Factory className="w-4 h-4" />;
     if (type.includes("Public")) return <Users className="w-4 h-4" />;
     return <Zap className="w-4 h-4" />;
   };
 
   const handleDeleteProject = async (projectId: string) => {
-    if (!confirm('Are you sure you want to delete this project?')) return;
+    if (!confirm("Are you sure you want to delete this project?")) return;
 
     try {
       // Remove from Supabase if connected
@@ -536,19 +637,31 @@ export default function Projects() {
       }
 
       // Remove from localStorage
-      const localProjects = JSON.parse(localStorage.getItem('chargeSourceProjects') || '[]');
-      const filteredLocalProjects = localProjects.filter((p: any) => p.id !== projectId);
-      localStorage.setItem('chargeSourceProjects', JSON.stringify(filteredLocalProjects));
+      const localProjects = JSON.parse(
+        localStorage.getItem("chargeSourceProjects") || "[]",
+      );
+      const filteredLocalProjects = localProjects.filter(
+        (p: any) => p.id !== projectId,
+      );
+      localStorage.setItem(
+        "chargeSourceProjects",
+        JSON.stringify(filteredLocalProjects),
+      );
 
       // Remove from drafts
-      const drafts = JSON.parse(localStorage.getItem('chargeSourceDrafts') || '[]');
+      const drafts = JSON.parse(
+        localStorage.getItem("chargeSourceDrafts") || "[]",
+      );
       const filteredDrafts = drafts.filter((d: any) => d.id !== projectId);
-      localStorage.setItem('chargeSourceDrafts', JSON.stringify(filteredDrafts));
+      localStorage.setItem(
+        "chargeSourceDrafts",
+        JSON.stringify(filteredDrafts),
+      );
 
       // Reload projects
       await loadProjects();
     } catch (error) {
-      console.error('Error deleting project:', error);
+      console.error("Error deleting project:", error);
     }
   };
 
@@ -557,14 +670,16 @@ export default function Projects() {
       ...project,
       id: `PRJ-${Date.now()}`,
       name: `${project.name} (Copy)`,
-      status: 'Planning',
+      status: "Planning",
       progress: 0,
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
     };
 
-    const localProjects = JSON.parse(localStorage.getItem('chargeSourceProjects') || '[]');
+    const localProjects = JSON.parse(
+      localStorage.getItem("chargeSourceProjects") || "[]",
+    );
     localProjects.unshift(duplicatedProject);
-    localStorage.setItem('chargeSourceProjects', JSON.stringify(localProjects));
+    localStorage.setItem("chargeSourceProjects", JSON.stringify(localProjects));
 
     loadProjects();
   };
@@ -589,11 +704,11 @@ export default function Projects() {
 
       // Debug logging for development
       if (import.meta.env.DEV) {
-        console.log('Editing project with original data:', {
+        console.log("Editing project with original data:", {
           hasOriginalData: !!project._originalData,
           clientReq: originalClientReq,
           siteAssess: originalSiteAssess,
-          chargerSel: originalChargerSel
+          chargerSel: originalChargerSel,
         });
       }
 
@@ -606,69 +721,124 @@ export default function Projects() {
         createdAt: now,
         updatedAt: now,
         clientRequirements: {
-          contactPersonName: originalClientReq.contactPersonName || project.contactPerson || project.client || "",
+          contactPersonName:
+            originalClientReq.contactPersonName ||
+            project.contactPerson ||
+            project.client ||
+            "",
           contactTitle: originalClientReq.contactTitle || "",
           contactEmail: originalClientReq.contactEmail || project.email || "",
           contactPhone: originalClientReq.contactPhone || project.phone || "",
-          organizationType: originalClientReq.organizationType ||
-                            (project.type.toLowerCase().includes('residential') ? 'residential' :
-                            project.type.toLowerCase().includes('commercial') || project.type.toLowerCase().includes('retail') ? 'retail' :
-                            project.type.toLowerCase().includes('fleet') ? 'fleet' :
-                            project.type.toLowerCase().includes('public') ? 'government' :
-                            project.type.toLowerCase().includes('office') ? 'office' : 'other'),
-          projectObjective: originalClientReq.projectObjective ||
-                           (project.type.toLowerCase().includes('fleet') ? 'fleet-electrification' :
-                            project.type.toLowerCase().includes('residential') ? 'employee-benefit' :
-                            project.type.toLowerCase().includes('retail') ? 'customer-attraction' : 'future-proofing'),
-          numberOfVehicles: originalClientReq.numberOfVehicles ||
-                           (project.type.toLowerCase().includes('fleet') ? '31-50' : '6-15'),
-          vehicleTypes: originalClientReq.vehicleTypes ||
-                       (project.type.toLowerCase().includes('fleet') ? ['Light Commercial', 'Delivery Vans'] : ['Passenger Cars']),
-          dailyUsagePattern: originalClientReq.dailyUsagePattern ||
-                            (project.type.toLowerCase().includes('residential') ? 'overnight' :
-                             project.type.toLowerCase().includes('office') ? 'business-hours' :
-                             project.type.toLowerCase().includes('retail') ? 'extended-hours' : 'business-hours'),
-          budgetRange: originalClientReq.budgetRange ||
-                      (project.value === 'TBD' ? 'tbd' :
-                       project.value.includes('$') ?
-                       (parseInt(project.value.replace(/[$,]/g, '').split('-')[0]) > 100000 ? '100-250k' : '50-100k') : 'tbd'),
-          projectTimeline: originalClientReq.projectTimeline || 'standard',
+          organizationType:
+            originalClientReq.organizationType ||
+            (project.type.toLowerCase().includes("residential")
+              ? "residential"
+              : project.type.toLowerCase().includes("commercial") ||
+                  project.type.toLowerCase().includes("retail")
+                ? "retail"
+                : project.type.toLowerCase().includes("fleet")
+                  ? "fleet"
+                  : project.type.toLowerCase().includes("public")
+                    ? "government"
+                    : project.type.toLowerCase().includes("office")
+                      ? "office"
+                      : "other"),
+          projectObjective:
+            originalClientReq.projectObjective ||
+            (project.type.toLowerCase().includes("fleet")
+              ? "fleet-electrification"
+              : project.type.toLowerCase().includes("residential")
+                ? "employee-benefit"
+                : project.type.toLowerCase().includes("retail")
+                  ? "customer-attraction"
+                  : "future-proofing"),
+          numberOfVehicles:
+            originalClientReq.numberOfVehicles ||
+            (project.type.toLowerCase().includes("fleet") ? "31-50" : "6-15"),
+          vehicleTypes:
+            originalClientReq.vehicleTypes ||
+            (project.type.toLowerCase().includes("fleet")
+              ? ["Light Commercial", "Delivery Vans"]
+              : ["Passenger Cars"]),
+          dailyUsagePattern:
+            originalClientReq.dailyUsagePattern ||
+            (project.type.toLowerCase().includes("residential")
+              ? "overnight"
+              : project.type.toLowerCase().includes("office")
+                ? "business-hours"
+                : project.type.toLowerCase().includes("retail")
+                  ? "extended-hours"
+                  : "business-hours"),
+          budgetRange:
+            originalClientReq.budgetRange ||
+            (project.value === "TBD"
+              ? "tbd"
+              : project.value.includes("$")
+                ? parseInt(project.value.replace(/[$,]/g, "").split("-")[0]) >
+                  100000
+                  ? "100-250k"
+                  : "50-100k"
+                : "tbd"),
+          projectTimeline: originalClientReq.projectTimeline || "standard",
           sustainabilityGoals: originalClientReq.sustainabilityGoals || [],
-          accessibilityRequirements: originalClientReq.accessibilityRequirements || false,
-          specialRequirements: originalClientReq.specialRequirements || project.description || "",
-          preferredChargerBrands: originalClientReq.preferredChargerBrands || [],
-          paymentModel: originalClientReq.paymentModel || ""
+          accessibilityRequirements:
+            originalClientReq.accessibilityRequirements || false,
+          specialRequirements:
+            originalClientReq.specialRequirements || project.description || "",
+          preferredChargerBrands:
+            originalClientReq.preferredChargerBrands || [],
+          paymentModel: originalClientReq.paymentModel || "",
         },
         siteAssessment: {
           projectName: originalSiteAssess.projectName || project.name,
           clientName: originalSiteAssess.clientName || project.client,
-          siteAddress: originalSiteAssess.siteAddress || project.siteAddress || project.location,
-          siteType: originalSiteAssess.siteType ||
-                   (project.type.toLowerCase().includes('residential') ? 'residential' :
-                    project.type.toLowerCase().includes('commercial') || project.type.toLowerCase().includes('retail') ? 'retail' :
-                    project.type.toLowerCase().includes('fleet') ? 'fleet' :
-                    project.type.toLowerCase().includes('public') ? 'public' :
-                    project.type.toLowerCase().includes('office') ? 'office' : 'commercial'),
+          siteAddress:
+            originalSiteAssess.siteAddress ||
+            project.siteAddress ||
+            project.location,
+          siteType:
+            originalSiteAssess.siteType ||
+            (project.type.toLowerCase().includes("residential")
+              ? "residential"
+              : project.type.toLowerCase().includes("commercial") ||
+                  project.type.toLowerCase().includes("retail")
+                ? "retail"
+                : project.type.toLowerCase().includes("fleet")
+                  ? "fleet"
+                  : project.type.toLowerCase().includes("public")
+                    ? "public"
+                    : project.type.toLowerCase().includes("office")
+                      ? "office"
+                      : "commercial"),
           existingPowerSupply: originalSiteAssess.existingPowerSupply || "",
           availableAmperes: originalSiteAssess.availableAmperes || "",
           estimatedLoad: originalSiteAssess.estimatedLoad || "",
           parkingSpaces: originalSiteAssess.parkingSpaces || "",
           accessRequirements: originalSiteAssess.accessRequirements || "",
           photos: originalSiteAssess.photos || [],
-          additionalNotes: originalSiteAssess.additionalNotes || project.description || ""
+          additionalNotes:
+            originalSiteAssess.additionalNotes || project.description || "",
         },
         chargerSelection: {
-          chargingType: originalChargerSel.chargingType ||
-                       (project.type.toLowerCase().includes('fast') ? 'dc-fast' :
-                        project.type.toLowerCase().includes('residential') ? 'ac-level2' : ''),
-          powerRating: originalChargerSel.powerRating ||
-                      (project.type.toLowerCase().includes('fast') ? '50kw' :
-                       project.type.toLowerCase().includes('residential') ? '7kw' : ''),
+          chargingType:
+            originalChargerSel.chargingType ||
+            (project.type.toLowerCase().includes("fast")
+              ? "dc-fast"
+              : project.type.toLowerCase().includes("residential")
+                ? "ac-level2"
+                : ""),
+          powerRating:
+            originalChargerSel.powerRating ||
+            (project.type.toLowerCase().includes("fast")
+              ? "50kw"
+              : project.type.toLowerCase().includes("residential")
+                ? "7kw"
+                : ""),
           mountingType: originalChargerSel.mountingType || "",
           numberOfChargers: originalChargerSel.numberOfChargers || "",
           connectorTypes: originalChargerSel.connectorTypes || [],
           weatherProtection: originalChargerSel.weatherProtection || false,
-          networkConnectivity: originalChargerSel.networkConnectivity || ""
+          networkConnectivity: originalChargerSel.networkConnectivity || "",
         },
         gridCapacity: {
           currentSupply: originalGridCap.currentSupply || "",
@@ -676,29 +846,35 @@ export default function Projects() {
           upgradeNeeded: originalGridCap.upgradeNeeded || false,
           upgradeType: originalGridCap.upgradeType || "",
           estimatedUpgradeCost: originalGridCap.estimatedUpgradeCost || "",
-          utilityContact: originalGridCap.utilityContact || ""
+          utilityContact: originalGridCap.utilityContact || "",
         },
         compliance: {
           electricalStandards: originalCompliance.electricalStandards || [],
           safetyRequirements: originalCompliance.safetyRequirements || [],
           localPermits: originalCompliance.localPermits || [],
-          environmentalConsiderations: originalCompliance.environmentalConsiderations || [],
-          accessibilityCompliance: originalCompliance.accessibilityCompliance || false
+          environmentalConsiderations:
+            originalCompliance.environmentalConsiderations || [],
+          accessibilityCompliance:
+            originalCompliance.accessibilityCompliance || false,
         },
-        progress: originalProject ? 100 : 33 // If we have original data, show as complete, otherwise start at step 2
+        progress: originalProject ? 100 : 33, // If we have original data, show as complete, otherwise start at step 2
       };
 
       // Save the edit draft
-      const existingDrafts = JSON.parse(localStorage.getItem('chargeSourceDrafts') || '[]');
+      const existingDrafts = JSON.parse(
+        localStorage.getItem("chargeSourceDrafts") || "[]",
+      );
       existingDrafts.unshift(editDraft);
-      localStorage.setItem('chargeSourceDrafts', JSON.stringify(existingDrafts));
+      localStorage.setItem(
+        "chargeSourceDrafts",
+        JSON.stringify(existingDrafts),
+      );
 
       // Navigate to Project Wizard with the edit draft
       navigate(`/projects/new?draft=${editDraftId}`);
-
     } catch (error) {
-      console.error('Error creating edit draft:', error);
-      alert('Error opening project for editing. Please try again.');
+      console.error("Error creating edit draft:", error);
+      alert("Error opening project for editing. Please try again.");
     }
   };
 
@@ -714,13 +890,18 @@ export default function Projects() {
   const renderProjectGrid = () => (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {filteredProjects.map((project) => (
-        <Card key={project.id} className="hover:shadow-lg transition-shadow cursor-pointer">
+        <Card
+          key={project.id}
+          className="hover:shadow-lg transition-shadow cursor-pointer"
+        >
           <CardHeader className="pb-3">
             <div className="flex items-start justify-between">
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-2">
                   {getTypeIcon(project.type)}
-                  <CardTitle className="text-lg truncate">{project.name}</CardTitle>
+                  <CardTitle className="text-lg truncate">
+                    {project.name}
+                  </CardTitle>
                 </div>
                 <div className="text-sm text-muted-foreground space-y-1">
                   <div className="flex items-center gap-1">
@@ -752,17 +933,21 @@ export default function Projects() {
                       </Link>
                     </DropdownMenuItem>
                   ) : (
-                    <DropdownMenuItem onClick={() => handleEditProject(project)}>
+                    <DropdownMenuItem
+                      onClick={() => handleEditProject(project)}
+                    >
                       <Edit className="w-4 h-4 mr-2" />
                       Edit Project
                     </DropdownMenuItem>
                   )}
-                  <DropdownMenuItem onClick={() => handleDuplicateProject(project)}>
+                  <DropdownMenuItem
+                    onClick={() => handleDuplicateProject(project)}
+                  >
                     <Copy className="w-4 h-4 mr-2" />
                     Duplicate
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem 
+                  <DropdownMenuItem
                     onClick={() => handleDeleteProject(project.id)}
                     className="text-red-600 focus:text-red-600"
                   >
@@ -776,12 +961,17 @@ export default function Projects() {
           <CardContent>
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <Badge className={getStatusColor(project.status)} variant="secondary">
-                  {project.isDraft ? `Draft - Step ${project.draftStep}/6` : project.status}
+                <Badge
+                  className={getStatusColor(project.status)}
+                  variant="secondary"
+                >
+                  {project.isDraft
+                    ? `Draft - Step ${project.draftStep}/6`
+                    : project.status}
                 </Badge>
                 <span className="text-sm font-medium">{project.value}</span>
               </div>
-              
+
               <div>
                 <div className="flex items-center justify-between text-sm mb-1">
                   <span>Progress</span>
@@ -819,27 +1009,32 @@ export default function Projects() {
                     {getTypeIcon(project.type)}
                     <h3 className="font-medium">{project.name}</h3>
                   </div>
-                  <p className="text-sm text-muted-foreground">{project.client}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {project.client}
+                  </p>
                 </div>
-                
+
                 <div className="flex items-center gap-2">
-                  <Badge className={getStatusColor(project.status)} variant="secondary">
+                  <Badge
+                    className={getStatusColor(project.status)}
+                    variant="secondary"
+                  >
                     {project.isDraft ? `Draft` : project.status}
                   </Badge>
                 </div>
-                
+
                 <div className="space-y-1">
                   <div className="flex items-center justify-between text-sm">
                     <span>{project.progress}%</span>
                   </div>
                   <Progress value={project.progress} className="h-1.5" />
                 </div>
-                
+
                 <div className="text-sm">
                   <div className="font-medium">{project.value}</div>
                   <div className="text-muted-foreground">{project.type}</div>
                 </div>
-                
+
                 <div className="text-sm text-muted-foreground">
                   <div className="flex items-center gap-1">
                     <MapPin className="w-3 h-3" />
@@ -851,7 +1046,7 @@ export default function Projects() {
                   </div>
                 </div>
               </div>
-              
+
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="sm">
@@ -871,17 +1066,21 @@ export default function Projects() {
                       </Link>
                     </DropdownMenuItem>
                   ) : (
-                    <DropdownMenuItem onClick={() => handleEditProject(project)}>
+                    <DropdownMenuItem
+                      onClick={() => handleEditProject(project)}
+                    >
                       <Edit className="w-4 h-4 mr-2" />
                       Edit Project
                     </DropdownMenuItem>
                   )}
-                  <DropdownMenuItem onClick={() => handleDuplicateProject(project)}>
+                  <DropdownMenuItem
+                    onClick={() => handleDuplicateProject(project)}
+                  >
                     <Copy className="w-4 h-4 mr-2" />
                     Duplicate
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem 
+                  <DropdownMenuItem
                     onClick={() => handleDeleteProject(project.id)}
                     className="text-red-600 focus:text-red-600"
                   >
@@ -906,15 +1105,16 @@ export default function Projects() {
             Project Locations
           </CardTitle>
           <CardDescription>
-            Interactive map showing all project sites. Click on markers for details.
+            Interactive map showing all project sites. Click on markers for
+            details.
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div 
-            ref={mapRef} 
+          <div
+            ref={mapRef}
             className="w-full h-[600px] rounded-lg border bg-muted flex items-center justify-center"
           >
-            {typeof window.google === 'undefined' ? (
+            {typeof window.google === "undefined" ? (
               <div className="text-center">
                 <Map className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
                 <p className="text-muted-foreground">Loading Google Maps...</p>
@@ -938,19 +1138,31 @@ export default function Projects() {
             <Logo size="lg" />
           </div>
           <nav className="hidden md:flex items-center space-x-6">
-            <Link to="/dashboard" className="text-sm font-medium hover:text-primary transition-colors">
+            <Link
+              to="/dashboard"
+              className="text-sm font-medium hover:text-primary transition-colors"
+            >
               Dashboard
             </Link>
             <Link to="/projects" className="text-sm font-medium text-primary">
               Projects
             </Link>
-            <Link to="/quotes" className="text-sm font-medium hover:text-primary transition-colors">
+            <Link
+              to="/quotes"
+              className="text-sm font-medium hover:text-primary transition-colors"
+            >
               Quotes
             </Link>
-            <Link to="/catalogue" className="text-sm font-medium hover:text-primary transition-colors">
+            <Link
+              to="/catalogue"
+              className="text-sm font-medium hover:text-primary transition-colors"
+            >
               Catalogue
             </Link>
-            <Link to="/clients" className="text-sm font-medium hover:text-primary transition-colors">
+            <Link
+              to="/clients"
+              className="text-sm font-medium hover:text-primary transition-colors"
+            >
               Clients
             </Link>
           </nav>
@@ -963,8 +1175,11 @@ export default function Projects() {
             </Button>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="w-8 h-8 rounded-full bg-primary text-primary-foreground hover:bg-primary/90">
-                  {user?.name?.charAt(0) || user?.firstName?.charAt(0) || 'U'}
+                <Button
+                  variant="ghost"
+                  className="w-8 h-8 rounded-full bg-primary text-primary-foreground hover:bg-primary/90"
+                >
+                  {user?.name?.charAt(0) || user?.firstName?.charAt(0) || "U"}
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
@@ -973,7 +1188,10 @@ export default function Projects() {
                   <p className="text-xs text-muted-foreground">{user?.email}</p>
                 </div>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={logout} className="text-red-600 focus:text-red-600">
+                <DropdownMenuItem
+                  onClick={logout}
+                  className="text-red-600 focus:text-red-600"
+                >
                   <LogOut className="w-4 h-4 mr-2" />
                   Sign Out
                 </DropdownMenuItem>
@@ -989,7 +1207,9 @@ export default function Projects() {
           <div>
             <h1 className="text-3xl font-bold mb-2">Project Management</h1>
             <div className="flex items-center gap-3">
-              <p className="text-muted-foreground">Manage all your EV infrastructure projects</p>
+              <p className="text-muted-foreground">
+                Manage all your EV infrastructure projects
+              </p>
               {!loading && (
                 <Badge variant="secondary" className="text-xs">
                   {filteredProjects.length} of {projects.length} projects
@@ -1003,8 +1223,15 @@ export default function Projects() {
             </div>
           </div>
           <div className="flex items-center gap-3 mt-4 md:mt-0">
-            <Button variant="outline" size="sm" onClick={loadProjects} disabled={loading}>
-              <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={loadProjects}
+              disabled={loading}
+            >
+              <RefreshCw
+                className={`w-4 h-4 mr-2 ${loading ? "animate-spin" : ""}`}
+              />
               Refresh
             </Button>
             <Button variant="outline" size="sm">
@@ -1084,9 +1311,15 @@ export default function Projects() {
                 <Button
                   variant="outline"
                   size="icon"
-                  onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
+                  onClick={() =>
+                    setSortOrder(sortOrder === "asc" ? "desc" : "asc")
+                  }
                 >
-                  {sortOrder === "asc" ? <SortAsc className="w-4 h-4" /> : <SortDesc className="w-4 h-4" />}
+                  {sortOrder === "asc" ? (
+                    <SortAsc className="w-4 h-4" />
+                  ) : (
+                    <SortDesc className="w-4 h-4" />
+                  )}
                 </Button>
               </div>
 
@@ -1136,18 +1369,20 @@ export default function Projects() {
                 <FileText className="w-8 h-8 text-muted-foreground" />
               </div>
               <h3 className="font-medium mb-2">
-                {searchQuery || statusFilter !== "all" || typeFilter !== "all" 
-                  ? "No projects match your filters" 
-                  : "No projects yet"
-                }
+                {searchQuery || statusFilter !== "all" || typeFilter !== "all"
+                  ? "No projects match your filters"
+                  : "No projects yet"}
               </h3>
               <p className="text-sm text-muted-foreground mb-4">
                 {searchQuery || statusFilter !== "all" || typeFilter !== "all"
                   ? "Try adjusting your search criteria or filters"
-                  : "Create your first project to get started"
-                }
+                  : "Create your first project to get started"}
               </p>
-              {!(searchQuery || statusFilter !== "all" || typeFilter !== "all") && (
+              {!(
+                searchQuery ||
+                statusFilter !== "all" ||
+                typeFilter !== "all"
+              ) && (
                 <Button asChild>
                   <Link to="/projects/new">
                     <Plus className="w-4 h-4 mr-2" />
@@ -1166,7 +1401,10 @@ export default function Projects() {
         )}
 
         {/* Project Details Dialog */}
-        <Dialog open={!!selectedProject} onOpenChange={() => setSelectedProject(null)}>
+        <Dialog
+          open={!!selectedProject}
+          onOpenChange={() => setSelectedProject(null)}
+        >
           <DialogContent className="max-w-2xl">
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2">
@@ -1182,38 +1420,55 @@ export default function Projects() {
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <Label className="text-sm font-medium">Client</Label>
-                    <p className="text-sm text-muted-foreground">{selectedProject.client}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {selectedProject.client}
+                    </p>
                   </div>
                   <div>
                     <Label className="text-sm font-medium">Status</Label>
-                    <Badge className={getStatusColor(selectedProject.status)} variant="secondary">
-                      {selectedProject.isDraft ? `Draft - Step ${selectedProject.draftStep}/6` : selectedProject.status}
+                    <Badge
+                      className={getStatusColor(selectedProject.status)}
+                      variant="secondary"
+                    >
+                      {selectedProject.isDraft
+                        ? `Draft - Step ${selectedProject.draftStep}/6`
+                        : selectedProject.status}
                     </Badge>
                   </div>
                   <div>
                     <Label className="text-sm font-medium">Project Value</Label>
-                    <p className="text-sm text-muted-foreground">{selectedProject.value}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {selectedProject.value}
+                    </p>
                   </div>
                   <div>
                     <Label className="text-sm font-medium">Deadline</Label>
-                    <p className="text-sm text-muted-foreground">{selectedProject.deadline}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {selectedProject.deadline}
+                    </p>
                   </div>
                 </div>
 
                 <div>
                   <Label className="text-sm font-medium">Site Address</Label>
-                  <p className="text-sm text-muted-foreground">{selectedProject.siteAddress || selectedProject.location}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {selectedProject.siteAddress || selectedProject.location}
+                  </p>
                 </div>
 
                 <div>
                   <Label className="text-sm font-medium">Project Type</Label>
-                  <p className="text-sm text-muted-foreground">{selectedProject.type}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {selectedProject.type}
+                  </p>
                 </div>
 
                 {selectedProject.description && (
                   <div>
                     <Label className="text-sm font-medium">Description</Label>
-                    <p className="text-sm text-muted-foreground">{selectedProject.description}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {selectedProject.description}
+                    </p>
                   </div>
                 )}
 
@@ -1224,20 +1479,29 @@ export default function Projects() {
                       <span>Completion</span>
                       <span>{selectedProject.progress}%</span>
                     </div>
-                    <Progress value={selectedProject.progress} className="h-2" />
+                    <Progress
+                      value={selectedProject.progress}
+                      className="h-2"
+                    />
                   </div>
                 </div>
 
                 {selectedProject.contactPerson && (
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <Label className="text-sm font-medium">Contact Person</Label>
-                      <p className="text-sm text-muted-foreground">{selectedProject.contactPerson}</p>
+                      <Label className="text-sm font-medium">
+                        Contact Person
+                      </Label>
+                      <p className="text-sm text-muted-foreground">
+                        {selectedProject.contactPerson}
+                      </p>
                     </div>
                     {selectedProject.phone && (
                       <div>
                         <Label className="text-sm font-medium">Phone</Label>
-                        <p className="text-sm text-muted-foreground">{selectedProject.phone}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {selectedProject.phone}
+                        </p>
                       </div>
                     )}
                   </div>
@@ -1257,7 +1521,10 @@ export default function Projects() {
                       Edit Project
                     </Button>
                   )}
-                  <Button variant="outline" onClick={() => handleDuplicateProject(selectedProject)}>
+                  <Button
+                    variant="outline"
+                    onClick={() => handleDuplicateProject(selectedProject)}
+                  >
                     <Copy className="w-4 h-4 mr-2" />
                     Duplicate
                   </Button>

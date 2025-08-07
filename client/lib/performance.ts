@@ -1,12 +1,12 @@
 // Performance utilities for ChargeSource app
-import React, { useCallback, useRef, useEffect } from 'react';
+import React, { useCallback, useRef, useEffect } from "react";
 
 /**
  * Debounce hook for preventing excessive API calls or state updates
  */
 export function useDebounce<T extends (...args: any[]) => any>(
   callback: T,
-  delay: number = 300
+  delay: number = 300,
 ): T {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -15,12 +15,12 @@ export function useDebounce<T extends (...args: any[]) => any>(
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
-      
+
       timeoutRef.current = setTimeout(() => {
         callback(...args);
       }, delay);
     }) as T,
-    [callback, delay]
+    [callback, delay],
   );
 }
 
@@ -29,7 +29,7 @@ export function useDebounce<T extends (...args: any[]) => any>(
  */
 export function useThrottle<T extends (...args: any[]) => any>(
   callback: T,
-  delay: number = 1000
+  delay: number = 1000,
 ): T {
   const lastCallRef = useRef<number>(0);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -46,14 +46,14 @@ export function useThrottle<T extends (...args: any[]) => any>(
         if (timeoutRef.current) {
           clearTimeout(timeoutRef.current);
         }
-        
+
         timeoutRef.current = setTimeout(() => {
           lastCallRef.current = Date.now();
           callback(...args);
         }, delay - timeSinceLastCall);
       }
     }) as T,
-    [callback, delay]
+    [callback, delay],
   );
 }
 
@@ -62,7 +62,7 @@ export function useThrottle<T extends (...args: any[]) => any>(
  */
 export function useLocalStorage<T>(
   key: string,
-  defaultValue: T
+  defaultValue: T,
 ): [T, (value: T | ((prev: T) => T)) => void] {
   const getValue = useCallback((): T => {
     try {
@@ -79,23 +79,24 @@ export function useLocalStorage<T>(
     (value: T | ((prev: T) => T)) => {
       try {
         const currentValue = getValue();
-        const newValue = typeof value === 'function' 
-          ? (value as (prev: T) => T)(currentValue) 
-          : value;
-        
+        const newValue =
+          typeof value === "function"
+            ? (value as (prev: T) => T)(currentValue)
+            : value;
+
         localStorage.setItem(key, JSON.stringify(newValue));
-        
+
         // Dispatch custom event for cross-component updates
         window.dispatchEvent(
-          new CustomEvent('localStorageChange', {
-            detail: { key, value: newValue }
-          })
+          new CustomEvent("localStorageChange", {
+            detail: { key, value: newValue },
+          }),
         );
       } catch (error) {
         console.error(`Error setting localStorage key "${key}":`, error);
       }
     },
-    [key, getValue]
+    [key, getValue],
   );
 
   return [getValue(), setValue];
@@ -106,7 +107,7 @@ export function useLocalStorage<T>(
  */
 export function useIntersectionObserver(
   callback: (entry: IntersectionObserverEntry) => void,
-  options: IntersectionObserverInit = {}
+  options: IntersectionObserverInit = {},
 ) {
   const targetRef = useRef<HTMLElement | null>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
@@ -136,13 +137,13 @@ export function useIntersectionObserver(
  */
 export function withErrorBoundary<T extends (...args: any[]) => Promise<any>>(
   asyncFn: T,
-  fallback?: (error: Error) => void
+  fallback?: (error: Error) => void,
 ): T {
   return (async (...args: Parameters<T>) => {
     try {
       return await asyncFn(...args);
     } catch (error) {
-      console.error('Async operation failed:', error);
+      console.error("Async operation failed:", error);
       if (fallback) {
         fallback(error as Error);
       }
@@ -160,7 +161,7 @@ export const arrayUtils = {
    */
   uniqueBy<T>(array: T[], keyFn: (item: T) => string | number): T[] {
     const seen = new Set();
-    return array.filter(item => {
+    return array.filter((item) => {
       const key = keyFn(item);
       if (seen.has(key)) return false;
       seen.add(key);
@@ -174,28 +175,28 @@ export const arrayUtils = {
   async processInChunks<T, R>(
     array: T[],
     processor: (chunk: T[]) => Promise<R[]>,
-    chunkSize: number = 100
+    chunkSize: number = 100,
   ): Promise<R[]> {
     const results: R[] = [];
-    
+
     for (let i = 0; i < array.length; i += chunkSize) {
       const chunk = array.slice(i, i + chunkSize);
       const chunkResults = await processor(chunk);
       results.push(...chunkResults);
-      
+
       // Allow UI to breathe
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await new Promise((resolve) => setTimeout(resolve, 0));
     }
-    
+
     return results;
-  }
+  },
 };
 
 /**
  * Bundle size optimization - lazy load heavy components
  */
 export function createLazyComponent<T extends React.ComponentType<any>>(
-  factory: () => Promise<{ default: T }>
+  factory: () => Promise<{ default: T }>,
 ) {
   return React.lazy(factory);
 }

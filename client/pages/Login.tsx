@@ -1,6 +1,12 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -8,7 +14,17 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Logo } from "@/components/ui/logo";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
-import { Eye, EyeOff, Mail, Lock, Zap, Shield, Users, CheckCircle2, ArrowLeft } from "lucide-react";
+import {
+  Eye,
+  EyeOff,
+  Mail,
+  Lock,
+  Zap,
+  Shield,
+  Users,
+  CheckCircle2,
+  ArrowLeft,
+} from "lucide-react";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -17,16 +33,16 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState("");
-  
+
   const [formData, setFormData] = useState({
     email: "",
-    password: ""
+    password: "",
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
     // Clear error when user starts typing
     if (error) setError("");
@@ -50,10 +66,14 @@ export default function Login() {
       }
 
       // Simulate authentication - In a real app, this would call an API
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      await new Promise((resolve) => setTimeout(resolve, 1500));
 
       // Use the auth hook to login
-      const success = await login(formData.email, formData.password, rememberMe);
+      const success = await login(
+        formData.email,
+        formData.password,
+        rememberMe,
+      );
 
       if (success) {
         // Navigate to dashboard
@@ -61,7 +81,6 @@ export default function Login() {
       } else {
         throw new Error("Login failed");
       }
-
     } catch (error) {
       setError("Invalid email or password. Please try again.");
     } finally {
@@ -92,16 +111,21 @@ export default function Login() {
           <div className="flex justify-center mb-4">
             <Logo size="xl" />
           </div>
-          <h1 className="text-3xl font-bold text-foreground mb-2">Welcome Back</h1>
+          <h1 className="text-3xl font-bold text-foreground mb-2">
+            Welcome Back
+          </h1>
           <p className="text-muted-foreground">
-            Sign in to your ChargeSource account to manage your EV infrastructure projects
+            Sign in to your ChargeSource account to manage your EV
+            infrastructure projects
           </p>
         </div>
 
         {/* Login Card */}
         <Card className="shadow-lg border-primary/10">
           <CardHeader className="space-y-1 pb-6">
-            <CardTitle className="text-2xl font-semibold text-center">Sign In</CardTitle>
+            <CardTitle className="text-2xl font-semibold text-center">
+              Sign In
+            </CardTitle>
             <CardDescription className="text-center">
               Access your contractor dashboard
             </CardDescription>
@@ -150,7 +174,11 @@ export default function Login() {
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-3 top-3 h-4 w-4 text-muted-foreground hover:text-foreground transition-colors"
                   >
-                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    {showPassword ? (
+                      <EyeOff className="h-4 w-4" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
                   </button>
                 </div>
               </div>
@@ -160,21 +188,25 @@ export default function Login() {
                   <Checkbox
                     id="remember"
                     checked={rememberMe}
-                    onCheckedChange={(checked) => setRememberMe(checked as boolean)}
+                    onCheckedChange={(checked) =>
+                      setRememberMe(checked as boolean)
+                    }
                   />
-                  <Label htmlFor="remember" className="text-sm">Remember me</Label>
+                  <Label htmlFor="remember" className="text-sm">
+                    Remember me
+                  </Label>
                 </div>
-                <Link 
-                  to="/forgot-password" 
+                <Link
+                  to="/forgot-password"
                   className="text-sm text-primary hover:underline"
                 >
                   Forgot password?
                 </Link>
               </div>
 
-              <Button 
-                type="submit" 
-                className="w-full h-11" 
+              <Button
+                type="submit"
+                className="w-full h-11"
                 disabled={isLoading}
               >
                 {isLoading ? (
@@ -193,7 +225,9 @@ export default function Login() {
 
             {/* Demo Credentials */}
             <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-              <h4 className="text-sm font-medium text-blue-900 mb-2">Demo Access</h4>
+              <h4 className="text-sm font-medium text-blue-900 mb-2">
+                Demo Access
+              </h4>
               <p className="text-xs text-blue-700 mb-2">
                 Use any email and password to access the demo
               </p>
@@ -206,7 +240,10 @@ export default function Login() {
             <div className="mt-6 text-center">
               <p className="text-sm text-muted-foreground">
                 Don't have an account?{" "}
-                <Link to="/register" className="text-primary hover:underline font-medium">
+                <Link
+                  to="/register"
+                  className="text-primary hover:underline font-medium"
+                >
                   Create your free account
                 </Link>
               </p>
@@ -240,9 +277,13 @@ export default function Login() {
         <div className="mt-8 text-center text-xs text-muted-foreground">
           <p>
             By signing in, you agree to our{" "}
-            <Link to="/terms" className="text-primary hover:underline">Terms of Service</Link>
-            {" "}and{" "}
-            <Link to="/privacy" className="text-primary hover:underline">Privacy Policy</Link>
+            <Link to="/terms" className="text-primary hover:underline">
+              Terms of Service
+            </Link>{" "}
+            and{" "}
+            <Link to="/privacy" className="text-primary hover:underline">
+              Privacy Policy
+            </Link>
           </p>
         </div>
       </div>
