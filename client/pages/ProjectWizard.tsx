@@ -192,6 +192,7 @@ export default function ProjectWizard() {
   const handleSubmit = () => {
     // Here you would save the project data
     console.log("Project Data:", {
+      clientRequirements,
       siteAssessment,
       chargerSelection,
       gridCapacity,
