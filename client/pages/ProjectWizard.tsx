@@ -28,7 +28,9 @@ import {
   Gauge,
   Plug,
   Settings,
-  Users
+  Users,
+  Save,
+  Clock
 } from "lucide-react";
 
 interface ClientRequirements {
