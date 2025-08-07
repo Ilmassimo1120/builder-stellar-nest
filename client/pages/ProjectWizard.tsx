@@ -237,7 +237,7 @@ export default function ProjectWizard() {
                     <SelectItem value="single-phase">Single Phase (240V)</SelectItem>
                     <SelectItem value="three-phase-415v">Three Phase (415V)</SelectItem>
                     <SelectItem value="three-phase-480v">Three Phase (480V)</SelectItem>
-                    <SelectItem value="high-voltage">High Voltage (>1kV)</SelectItem>
+                    <SelectItem value="high-voltage">High Voltage (&gt;1kV)</SelectItem>
                     <SelectItem value="unknown">Unknown - Requires Assessment</SelectItem>
                   </SelectContent>
                 </Select>
