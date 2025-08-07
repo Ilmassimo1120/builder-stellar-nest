@@ -164,6 +164,11 @@ export default function Dashboard() {
     }
   };
 
+  // Load projects on component mount
+  useEffect(() => {
+    loadProjects();
+  }, []);
+
   const recentProjects = projects;
 
   const quickActions = [
