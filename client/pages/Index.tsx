@@ -2,12 +2,12 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
-import { 
-  Zap, 
-  Calculator, 
-  Package, 
-  Users, 
-  Share2, 
+import {
+  Zap,
+  Calculator,
+  Package,
+  Users,
+  Share2,
   PlugZap,
   CheckCircle2,
   ArrowRight,
@@ -19,6 +19,7 @@ import {
   TrendingUp,
   Shield
 } from "lucide-react";
+import { Logo } from "@/components/ui/logo";
 
 export default function Index() {
   const features = [
@@ -72,13 +73,7 @@ export default function Index() {
       {/* Header */}
       <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <PlugZap className="w-8 h-8 text-primary" />
-            <div className="flex flex-col">
-              <span className="text-lg font-bold text-primary">Charge N Go</span>
-              <span className="text-sm text-muted-foreground">ChargeSource Platform</span>
-            </div>
-          </div>
+          <Logo size="md" />
           <nav className="hidden md:flex items-center space-x-6">
             <Link to="/dashboard" className="text-sm font-medium hover:text-primary transition-colors">
               Dashboard
@@ -220,13 +215,7 @@ export default function Index() {
         <div className="container mx-auto">
           <div className="grid md:grid-cols-4 gap-8">
             <div>
-              <div className="flex items-center space-x-3 mb-4">
-                <PlugZap className="w-6 h-6 text-primary" />
-                <div className="flex flex-col">
-                  <span className="text-lg font-bold text-primary">Charge N Go</span>
-                  <span className="text-sm text-muted-foreground">ChargeSource Platform</span>
-                </div>
-              </div>
+              <Logo size="sm" className="mb-4" />
               <p className="text-sm text-muted-foreground mb-4">
                 The leading platform for Australian electrical contractors specializing in EV infrastructure.
               </p>
