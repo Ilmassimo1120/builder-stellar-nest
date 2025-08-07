@@ -41,6 +41,7 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { Link, useNavigate } from "react-router-dom";
+import { quoteService } from "@/lib/quoteService";
 import {
   PlugZap,
   Plus,
