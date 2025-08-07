@@ -680,6 +680,15 @@ export default function Dashboard() {
                                   <Edit className="w-4 h-4 mr-1" />
                                   Edit
                                 </Button>
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => handleCreateQuote(project)}
+                                  className="text-purple-600 hover:text-purple-600 hover:bg-purple-50 border-purple-200"
+                                >
+                                  <Calculator className="w-4 h-4 mr-1" />
+                                  Quote
+                                </Button>
                                 <Button variant="ghost" size="sm">
                                   <MoreHorizontal className="w-4 h-4" />
                                 </Button>
