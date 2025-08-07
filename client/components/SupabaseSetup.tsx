@@ -191,6 +191,26 @@ export function SupabaseSetup({ isConnected, onRetry }: SupabaseSetupProps) {
               <div>Key Status: {import.meta.env.VITE_SUPABASE_ANON_KEY ? 'Set' : 'Not set'}</div>
               <div>Environment: {import.meta.env.MODE}</div>
               <div>Timestamp: {new Date().toISOString()}</div>
+              <Button
+                size="sm"
+                variant="ghost"
+                className="mt-2 text-xs"
+                onClick={() => {
+                  // Scan for MCP-related elements
+                  const allElements = Array.from(document.querySelectorAll('*'));
+                  const mcpElements = allElements.filter(el => {
+                    const text = el.textContent?.toLowerCase() || '';
+                    const attrs = Array.from(el.attributes).map(attr => `${attr.name}="${attr.value}"`).join(' ');
+                    return text.includes('mcp') || attrs.toLowerCase().includes('mcp') ||
+                           text.includes('integration') || attrs.toLowerCase().includes('integration');
+                  });
+
+                  console.log('🔍 Found MCP-related elements:', mcpElements);
+                  alert(`Found ${mcpElements.length} MCP-related elements. Check console for details.`);
+                }}
+              >
+                🔍 Scan for MCP Elements
+              </Button>
             </div>
           </details>
         </div>
