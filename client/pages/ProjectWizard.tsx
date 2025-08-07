@@ -20,6 +20,14 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Logo } from "@/components/ui/logo";
 import { SupabaseSetup } from "@/components/SupabaseSetup";
 import ProjectTemplateSelector from "@/components/ProjectTemplateSelector";
