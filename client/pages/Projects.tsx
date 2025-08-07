@@ -1056,9 +1056,11 @@ export default function Projects() {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                  <DropdownMenuItem onClick={() => setSelectedProject(project)}>
-                    <Eye className="w-4 h-4 mr-2" />
-                    View Details
+                  <DropdownMenuItem asChild>
+                    <Link to={`/projects/${project.id}`}>
+                      <Eye className="w-4 h-4 mr-2" />
+                      View Details
+                    </Link>
                   </DropdownMenuItem>
                   {project.isDraft ? (
                     <DropdownMenuItem asChild>
