@@ -24,15 +24,20 @@ export function Logo({ size = "md", showText = true, className = "" }: LogoProps
     xl: { main: "text-2xl", sub: "text-lg" }
   };
 
-  // Get the text sizes for the valid size
-  const currentTextSize = textSizes[validSize];
+  // Get the text sizes for the valid size with fallback
+  const currentTextSize = textSizes[validSize] || textSizes.md;
+  const currentSizeClass = sizeClasses[validSize] || sizeClasses.md;
 
   return (
     <div className={`flex items-center space-x-3 ${className}`}>
       <img
         src="https://cdn.builder.io/api/v1/image/assets%2Fd8af561546d8452e90f10c66e582c7bd%2F30d900209495466eb21054f3229abe7e?format=webp&width=800"
         alt="Charge N Go"
-        className={`${sizeClasses[validSize]} object-contain`}
+        className={`${currentSizeClass} object-contain`}
+        onError={(e) => {
+          // Fallback to a simple icon if image fails to load
+          e.currentTarget.style.display = 'none';
+        }}
       />
 
       {showText && (
