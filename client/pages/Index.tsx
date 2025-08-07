@@ -1,5 +1,11 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
 import {
@@ -17,7 +23,7 @@ import {
   DollarSign,
   Settings,
   TrendingUp,
-  Shield
+  Shield,
 } from "lucide-react";
 import { Logo } from "@/components/ui/logo";
 
@@ -26,46 +32,98 @@ export default function Index() {
     {
       icon: <Zap className="w-8 h-8 text-primary" />,
       title: "Project Planning Wizard",
-      description: "Site assessment inputs, auto-selection of suitable chargers, grid capacity checks & compliance checklists (AS/NZS 3000).",
-      items: ["Site Assessment Tools", "Auto Charger Selection", "Grid Capacity Analysis", "Compliance Checklists"]
+      description:
+        "Site assessment inputs, auto-selection of suitable chargers, grid capacity checks & compliance checklists (AS/NZS 3000).",
+      items: [
+        "Site Assessment Tools",
+        "Auto Charger Selection",
+        "Grid Capacity Analysis",
+        "Compliance Checklists",
+      ],
     },
     {
       icon: <Calculator className="w-8 h-8 text-secondary" />,
       title: "Smart Quoting Engine (CPQ)",
-      description: "Dynamic quoting with selectable components, auto-calculated costs, templates for recurring projects.",
-      items: ["Dynamic Component Selection", "Auto Cost Calculation", "Project Templates", "PDF Quote Generation"]
+      description:
+        "Dynamic quoting with selectable components, auto-calculated costs, templates for recurring projects.",
+      items: [
+        "Dynamic Component Selection",
+        "Auto Cost Calculation",
+        "Project Templates",
+        "PDF Quote Generation",
+      ],
     },
     {
       icon: <Package className="w-8 h-8 text-accent" />,
       title: "Procurement & Supplier Integration",
-      description: "Product catalogue access, real-time inventory & pricing, one-click quote-to-order conversion.",
-      items: ["Real-time Inventory", "Supplier API Integration", "Order Tracking", "Payment Gateway"]
+      description:
+        "Product catalogue access, real-time inventory & pricing, one-click quote-to-order conversion.",
+      items: [
+        "Real-time Inventory",
+        "Supplier API Integration",
+        "Order Tracking",
+        "Payment Gateway",
+      ],
     },
     {
       icon: <Users className="w-8 h-8 text-primary" />,
       title: "Account & Project Management",
-      description: "Multi-client dashboard, document uploads, permissions & collaboration tools for teams.",
-      items: ["Client Dashboard", "Document Management", "Team Collaboration", "Project Tracking"]
+      description:
+        "Multi-client dashboard, document uploads, permissions & collaboration tools for teams.",
+      items: [
+        "Client Dashboard",
+        "Document Management",
+        "Team Collaboration",
+        "Project Tracking",
+      ],
     },
     {
       icon: <Share2 className="w-8 h-8 text-secondary" />,
       title: "Marketing & Growth",
-      description: "Referral programs, affiliate marketing tools to grow your electrical contracting business.",
-      items: ["Referral System", "Affiliate Marketing", "Lead Generation", "Customer Retention"]
+      description:
+        "Referral programs, affiliate marketing tools to grow your electrical contracting business.",
+      items: [
+        "Referral System",
+        "Affiliate Marketing",
+        "Lead Generation",
+        "Customer Retention",
+      ],
     },
     {
       icon: <Settings className="w-8 h-8 text-accent" />,
       title: "Integration-Ready Modules",
-      description: "MYOB/Xero/QuickBooks integration, CRM integration, training portal, rebate assistant.",
-      items: ["Accounting Integration", "CRM Connectivity", "Training Portal", "Rebate Assistant"]
-    }
+      description:
+        "MYOB/Xero/QuickBooks integration, CRM integration, training portal, rebate assistant.",
+      items: [
+        "Accounting Integration",
+        "CRM Connectivity",
+        "Training Portal",
+        "Rebate Assistant",
+      ],
+    },
   ];
 
   const stats = [
-    { value: "500+", label: "Active Contractors", icon: <Users className="w-5 h-5" /> },
-    { value: "15,000+", label: "Projects Completed", icon: <CheckCircle2 className="w-5 h-5" /> },
-    { value: "$50M+", label: "Revenue Generated", icon: <DollarSign className="w-5 h-5" /> },
-    { value: "50+", label: "Supplier Partners", icon: <Package className="w-5 h-5" /> }
+    {
+      value: "500+",
+      label: "Active Contractors",
+      icon: <Users className="w-5 h-5" />,
+    },
+    {
+      value: "15,000+",
+      label: "Projects Completed",
+      icon: <CheckCircle2 className="w-5 h-5" />,
+    },
+    {
+      value: "$50M+",
+      label: "Revenue Generated",
+      icon: <DollarSign className="w-5 h-5" />,
+    },
+    {
+      value: "50+",
+      label: "Supplier Partners",
+      icon: <Package className="w-5 h-5" />,
+    },
   ];
 
   return (
@@ -75,16 +133,28 @@ export default function Index() {
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <Logo size="xl" />
           <nav className="hidden md:flex items-center space-x-6">
-            <Link to="/dashboard" className="text-sm font-medium hover:text-primary transition-colors">
+            <Link
+              to="/dashboard"
+              className="text-sm font-medium hover:text-primary transition-colors"
+            >
               Dashboard
             </Link>
-            <Link to="/features" className="text-sm font-medium hover:text-primary transition-colors">
+            <Link
+              to="/features"
+              className="text-sm font-medium hover:text-primary transition-colors"
+            >
               Features
             </Link>
-            <Link to="/pricing" className="text-sm font-medium hover:text-primary transition-colors">
+            <Link
+              to="/pricing"
+              className="text-sm font-medium hover:text-primary transition-colors"
+            >
               Pricing
             </Link>
-            <Link to="/support" className="text-sm font-medium hover:text-primary transition-colors">
+            <Link
+              to="/support"
+              className="text-sm font-medium hover:text-primary transition-colors"
+            >
               Support
             </Link>
           </nav>
@@ -113,8 +183,9 @@ export default function Index() {
             Projects
           </h1>
           <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
-            The comprehensive platform for planning, quoting, and procurement of commercial and residential 
-            EV charging solutions. Built specifically for Australian electrical contractors.
+            The comprehensive platform for planning, quoting, and procurement of
+            commercial and residential EV charging solutions. Built specifically
+            for Australian electrical contractors.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
             <Button size="lg" className="text-lg px-8" asChild>
@@ -126,7 +197,7 @@ export default function Index() {
               Watch Demo
             </Button>
           </div>
-          
+
           {/* Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16">
             {stats.map((stat, index) => (
@@ -134,8 +205,12 @@ export default function Index() {
                 <div className="flex items-center justify-center mb-2 text-primary">
                   {stat.icon}
                 </div>
-                <div className="text-2xl md:text-3xl font-bold text-primary">{stat.value}</div>
-                <div className="text-sm text-muted-foreground">{stat.label}</div>
+                <div className="text-2xl md:text-3xl font-bold text-primary">
+                  {stat.value}
+                </div>
+                <div className="text-sm text-muted-foreground">
+                  {stat.label}
+                </div>
               </div>
             ))}
           </div>
@@ -150,14 +225,17 @@ export default function Index() {
               Everything You Need to Scale Your EV Business
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              From initial site assessment to project completion, ChargeSource handles every aspect 
-              of your EV infrastructure projects.
+              From initial site assessment to project completion, ChargeSource
+              handles every aspect of your EV infrastructure projects.
             </p>
           </div>
-          
+
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {features.map((feature, index) => (
-              <Card key={index} className="h-full hover:shadow-lg transition-shadow border-border/50">
+              <Card
+                key={index}
+                className="h-full hover:shadow-lg transition-shadow border-border/50"
+              >
                 <CardHeader>
                   <div className="flex items-center gap-3 mb-2">
                     {feature.icon}
@@ -170,7 +248,10 @@ export default function Index() {
                 <CardContent>
                   <ul className="space-y-2">
                     {feature.items.map((item, itemIndex) => (
-                      <li key={itemIndex} className="flex items-center gap-2 text-sm">
+                      <li
+                        key={itemIndex}
+                        className="flex items-center gap-2 text-sm"
+                      >
                         <CheckCircle2 className="w-4 h-4 text-secondary" />
                         {item}
                       </li>
@@ -192,16 +273,25 @@ export default function Index() {
                 Ready to Transform Your EV Projects?
               </h3>
               <p className="text-xl mb-8 text-primary-foreground/90 max-w-2xl mx-auto">
-                Join hundreds of Australian electrical contractors who are streamlining their 
-                EV infrastructure projects with ChargeSource.
+                Join hundreds of Australian electrical contractors who are
+                streamlining their EV infrastructure projects with ChargeSource.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button size="lg" variant="secondary" className="text-lg px-8" asChild>
+                <Button
+                  size="lg"
+                  variant="secondary"
+                  className="text-lg px-8"
+                  asChild
+                >
                   <Link to="/dashboard">
                     Get Started Free <ArrowRight className="ml-2 w-5 h-5" />
                   </Link>
                 </Button>
-                <Button size="lg" variant="outline" className="text-lg px-8 bg-white/10 border-white/20 text-white hover:bg-white/20">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="text-lg px-8 bg-white/10 border-white/20 text-white hover:bg-white/20"
+                >
                   Schedule Demo
                 </Button>
               </div>
@@ -217,45 +307,130 @@ export default function Index() {
             <div>
               <Logo size="sm" className="mb-4" />
               <p className="text-sm text-muted-foreground mb-4">
-                The leading platform for Australian electrical contractors specializing in EV infrastructure.
+                The leading platform for Australian electrical contractors
+                specializing in EV infrastructure.
               </p>
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <MapPin className="w-4 h-4" />
                 Sydney, Melbourne, Brisbane, Perth
               </div>
             </div>
-            
+
             <div>
               <h4 className="font-semibold mb-4">Product</h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><Link to="/features" className="hover:text-primary transition-colors">Features</Link></li>
-                <li><Link to="/pricing" className="hover:text-primary transition-colors">Pricing</Link></li>
-                <li><Link to="/integrations" className="hover:text-primary transition-colors">Integrations</Link></li>
-                <li><Link to="/api" className="hover:text-primary transition-colors">API</Link></li>
+                <li>
+                  <Link
+                    to="/features"
+                    className="hover:text-primary transition-colors"
+                  >
+                    Features
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/pricing"
+                    className="hover:text-primary transition-colors"
+                  >
+                    Pricing
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/integrations"
+                    className="hover:text-primary transition-colors"
+                  >
+                    Integrations
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/api"
+                    className="hover:text-primary transition-colors"
+                  >
+                    API
+                  </Link>
+                </li>
               </ul>
             </div>
-            
+
             <div>
               <h4 className="font-semibold mb-4">Support</h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><Link to="/help" className="hover:text-primary transition-colors">Help Center</Link></li>
-                <li><Link to="/contact" className="hover:text-primary transition-colors">Contact Us</Link></li>
-                <li><Link to="/training" className="hover:text-primary transition-colors">Training</Link></li>
-                <li><Link to="/compliance" className="hover:text-primary transition-colors">Compliance</Link></li>
+                <li>
+                  <Link
+                    to="/help"
+                    className="hover:text-primary transition-colors"
+                  >
+                    Help Center
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/contact"
+                    className="hover:text-primary transition-colors"
+                  >
+                    Contact Us
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/training"
+                    className="hover:text-primary transition-colors"
+                  >
+                    Training
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/compliance"
+                    className="hover:text-primary transition-colors"
+                  >
+                    Compliance
+                  </Link>
+                </li>
               </ul>
             </div>
-            
+
             <div>
               <h4 className="font-semibold mb-4">Company</h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><Link to="/about" className="hover:text-primary transition-colors">About</Link></li>
-                <li><Link to="/careers" className="hover:text-primary transition-colors">Careers</Link></li>
-                <li><Link to="/privacy" className="hover:text-primary transition-colors">Privacy</Link></li>
-                <li><Link to="/terms" className="hover:text-primary transition-colors">Terms</Link></li>
+                <li>
+                  <Link
+                    to="/about"
+                    className="hover:text-primary transition-colors"
+                  >
+                    About
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/careers"
+                    className="hover:text-primary transition-colors"
+                  >
+                    Careers
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/privacy"
+                    className="hover:text-primary transition-colors"
+                  >
+                    Privacy
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/terms"
+                    className="hover:text-primary transition-colors"
+                  >
+                    Terms
+                  </Link>
+                </li>
               </ul>
             </div>
           </div>
-          
+
           <div className="border-t mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
             <p className="text-sm text-muted-foreground">
               © 2024 Charge N Go Australia. All rights reserved.

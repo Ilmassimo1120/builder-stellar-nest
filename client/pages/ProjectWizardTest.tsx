@@ -1,6 +1,12 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Logo } from "@/components/ui/logo";
 import { Link } from "react-router-dom";
 import { Users, ArrowLeft, ArrowRight } from "lucide-react";
@@ -24,8 +30,10 @@ export default function ProjectWizardTest() {
       </header>
 
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-8">Project Planning Wizard - Test</h1>
-        
+        <h1 className="text-3xl font-bold mb-8">
+          Project Planning Wizard - Test
+        </h1>
+
         <Card className="max-w-4xl mx-auto">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -37,9 +45,15 @@ export default function ProjectWizardTest() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <p>This is a test version of the wizard. The full wizard will include:</p>
+            <p>
+              This is a test version of the wizard. The full wizard will
+              include:
+            </p>
             <ul className="list-disc list-inside mt-4 space-y-2">
-              <li>Client Requirements (Contact info, project objectives, vehicle types)</li>
+              <li>
+                Client Requirements (Contact info, project objectives, vehicle
+                types)
+              </li>
               <li>Site Assessment (Enhanced with client data)</li>
               <li>Charger Selection</li>
               <li>Grid Capacity Analysis</li>
@@ -50,7 +64,11 @@ export default function ProjectWizardTest() {
         </Card>
 
         <div className="flex justify-between mt-8 max-w-4xl mx-auto">
-          <Button variant="outline" disabled className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            disabled
+            className="flex items-center gap-2"
+          >
             <ArrowLeft className="w-4 h-4" />
             Previous
           </Button>

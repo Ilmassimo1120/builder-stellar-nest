@@ -7,24 +7,31 @@ interface LogoProps {
   className?: string;
 }
 
-export function Logo({ size = "md", showText = true, className = "" }: LogoProps) {
+export function Logo({
+  size = "md",
+  showText = true,
+  className = "",
+}: LogoProps) {
   const [imageError, setImageError] = useState(false);
 
   // Ensure size is valid, fallback to "md" if invalid
-  const validSize = (size === "sm" || size === "md" || size === "lg" || size === "xl") ? size : "md";
+  const validSize =
+    size === "sm" || size === "md" || size === "lg" || size === "xl"
+      ? size
+      : "md";
 
   const sizeClasses = {
     sm: "w-6 h-6",
     md: "w-8 h-8",
     lg: "w-12 h-12",
-    xl: "w-16 h-16"
+    xl: "w-16 h-16",
   };
 
   const textSizes = {
     sm: { main: "text-sm", sub: "text-xs" },
     md: { main: "text-lg", sub: "text-sm" },
     lg: { main: "text-xl", sub: "text-base" },
-    xl: { main: "text-2xl", sub: "text-sm" }
+    xl: { main: "text-2xl", sub: "text-sm" },
   };
 
   // Get the text sizes for the valid size with fallback

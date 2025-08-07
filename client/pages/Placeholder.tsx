@@ -1,5 +1,11 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import { PlugZap, ArrowLeft, Construction } from "lucide-react";
 import { Logo } from "@/components/ui/logo";
@@ -10,7 +16,11 @@ interface PlaceholderProps {
   features?: string[];
 }
 
-export default function Placeholder({ title, description, features = [] }: PlaceholderProps) {
+export default function Placeholder({
+  title,
+  description,
+  features = [],
+}: PlaceholderProps) {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -20,19 +30,34 @@ export default function Placeholder({ title, description, features = [] }: Place
             <Logo size="xl" />
           </div>
           <nav className="hidden md:flex items-center space-x-6">
-            <Link to="/dashboard" className="text-sm font-medium hover:text-primary transition-colors">
+            <Link
+              to="/dashboard"
+              className="text-sm font-medium hover:text-primary transition-colors"
+            >
               Dashboard
             </Link>
-            <Link to="/projects" className="text-sm font-medium hover:text-primary transition-colors">
+            <Link
+              to="/projects"
+              className="text-sm font-medium hover:text-primary transition-colors"
+            >
               Projects
             </Link>
-            <Link to="/quotes" className="text-sm font-medium hover:text-primary transition-colors">
+            <Link
+              to="/quotes"
+              className="text-sm font-medium hover:text-primary transition-colors"
+            >
               Quotes
             </Link>
-            <Link to="/catalogue" className="text-sm font-medium hover:text-primary transition-colors">
+            <Link
+              to="/catalogue"
+              className="text-sm font-medium hover:text-primary transition-colors"
+            >
               Catalogue
             </Link>
-            <Link to="/clients" className="text-sm font-medium hover:text-primary transition-colors">
+            <Link
+              to="/clients"
+              className="text-sm font-medium hover:text-primary transition-colors"
+            >
               Clients
             </Link>
           </nav>
@@ -59,7 +84,8 @@ export default function Placeholder({ title, description, features = [] }: Place
             <CardHeader>
               <CardTitle>Coming Soon</CardTitle>
               <CardDescription>
-                This feature is currently in development and will be available soon.
+                This feature is currently in development and will be available
+                soon.
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -68,7 +94,10 @@ export default function Placeholder({ title, description, features = [] }: Place
                   <h3 className="font-medium mb-3">Planned Features:</h3>
                   <ul className="space-y-2">
                     {features.map((feature, index) => (
-                      <li key={index} className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <li
+                        key={index}
+                        className="flex items-center gap-2 text-sm text-muted-foreground"
+                      >
                         <div className="w-1.5 h-1.5 bg-primary rounded-full" />
                         {feature}
                       </li>
@@ -76,7 +105,7 @@ export default function Placeholder({ title, description, features = [] }: Place
                   </ul>
                 </div>
               )}
-              
+
               <div className="flex flex-col sm:flex-row gap-3">
                 <Button asChild>
                   <Link to="/dashboard">
@@ -92,7 +121,13 @@ export default function Placeholder({ title, description, features = [] }: Place
           </Card>
 
           <div className="mt-8 text-sm text-muted-foreground">
-            <p>Want to help shape this feature? <Link to="/contact" className="text-primary hover:underline">Get in touch</Link> with our team.</p>
+            <p>
+              Want to help shape this feature?{" "}
+              <Link to="/contact" className="text-primary hover:underline">
+                Get in touch
+              </Link>{" "}
+              with our team.
+            </p>
           </div>
         </div>
       </div>
