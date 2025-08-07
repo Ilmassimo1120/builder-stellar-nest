@@ -460,6 +460,9 @@ const App = () => (
             {/* Catch-all route */}
             <Route path="*" element={<NotFound />} />
           </Routes>
+
+          {/* AI Assistant - Available throughout the platform */}
+          <AIAssistant />
         </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
