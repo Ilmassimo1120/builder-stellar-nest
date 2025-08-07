@@ -380,7 +380,7 @@ export default function QuoteBuilder() {
               </a>
             </Button>
             <Separator orientation="vertical" className="h-6" />
-            <Logo size="lg" />
+            <Logo size="xl" />
           </div>
           <div className="flex items-center space-x-2">
             <Badge className={getStatusColor(quote.status)} variant="secondary">
