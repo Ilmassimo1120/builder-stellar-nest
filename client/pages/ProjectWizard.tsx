@@ -206,6 +206,258 @@ export default function ProjectWizard() {
       case 1:
         return (
           <div className="space-y-6">
+            <div className="bg-primary/5 border border-primary/20 p-4 rounded-lg">
+              <h3 className="font-medium mb-2 flex items-center gap-2">
+                <Users className="w-4 h-4 text-primary" />
+                Understanding Your EV Charging Needs
+              </h3>
+              <p className="text-sm text-muted-foreground">
+                Let's start by understanding your specific requirements and project goals to tailor the best EV charging solution.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <Label htmlFor="contactPersonName">Primary Contact Name *</Label>
+                <Input
+                  id="contactPersonName"
+                  value={clientRequirements.contactPersonName}
+                  onChange={(e) => setClientRequirements({...clientRequirements, contactPersonName: e.target.value})}
+                  placeholder="e.g., John Smith"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="contactTitle">Title/Position</Label>
+                <Input
+                  id="contactTitle"
+                  value={clientRequirements.contactTitle}
+                  onChange={(e) => setClientRequirements({...clientRequirements, contactTitle: e.target.value})}
+                  placeholder="e.g., Facilities Manager"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <Label htmlFor="contactEmail">Email Address *</Label>
+                <Input
+                  id="contactEmail"
+                  type="email"
+                  value={clientRequirements.contactEmail}
+                  onChange={(e) => setClientRequirements({...clientRequirements, contactEmail: e.target.value})}
+                  placeholder="john.smith@company.com"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="contactPhone">Phone Number</Label>
+                <Input
+                  id="contactPhone"
+                  type="tel"
+                  value={clientRequirements.contactPhone}
+                  onChange={(e) => setClientRequirements({...clientRequirements, contactPhone: e.target.value})}
+                  placeholder="(02) 1234 5678"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <Label htmlFor="organizationType">Organization Type *</Label>
+                <Select value={clientRequirements.organizationType} onValueChange={(value) => setClientRequirements({...clientRequirements, organizationType: value})}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select organization type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="retail">Retail/Shopping Centre</SelectItem>
+                    <SelectItem value="office">Office Building</SelectItem>
+                    <SelectItem value="residential">Residential Complex</SelectItem>
+                    <SelectItem value="hotel">Hotel/Hospitality</SelectItem>
+                    <SelectItem value="government">Government/Public</SelectItem>
+                    <SelectItem value="fleet">Fleet/Logistics</SelectItem>
+                    <SelectItem value="healthcare">Healthcare</SelectItem>
+                    <SelectItem value="education">Education</SelectItem>
+                    <SelectItem value="industrial">Industrial</SelectItem>
+                    <SelectItem value="other">Other</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="projectObjective">Primary Project Objective *</Label>
+                <Select value={clientRequirements.projectObjective} onValueChange={(value) => setClientRequirements({...clientRequirements, projectObjective: value})}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select primary objective" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="employee-benefit">Employee Benefit</SelectItem>
+                    <SelectItem value="customer-attraction">Customer Attraction</SelectItem>
+                    <SelectItem value="fleet-electrification">Fleet Electrification</SelectItem>
+                    <SelectItem value="revenue-generation">Revenue Generation</SelectItem>
+                    <SelectItem value="sustainability-goals">Sustainability Goals</SelectItem>
+                    <SelectItem value="regulatory-compliance">Regulatory Compliance</SelectItem>
+                    <SelectItem value="future-proofing">Future-Proofing</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <Label htmlFor="numberOfVehicles">Expected Number of Vehicles *</Label>
+                <Select value={clientRequirements.numberOfVehicles} onValueChange={(value) => setClientRequirements({...clientRequirements, numberOfVehicles: value})}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select range" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="1-5">1-5 vehicles</SelectItem>
+                    <SelectItem value="6-15">6-15 vehicles</SelectItem>
+                    <SelectItem value="16-30">16-30 vehicles</SelectItem>
+                    <SelectItem value="31-50">31-50 vehicles</SelectItem>
+                    <SelectItem value="51-100">51-100 vehicles</SelectItem>
+                    <SelectItem value="100+">100+ vehicles</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="dailyUsagePattern">Daily Usage Pattern</Label>
+                <Select value={clientRequirements.dailyUsagePattern} onValueChange={(value) => setClientRequirements({...clientRequirements, dailyUsagePattern: value})}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select usage pattern" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="business-hours">Business Hours Only (8am-6pm)</SelectItem>
+                    <SelectItem value="extended-hours">Extended Hours (6am-10pm)</SelectItem>
+                    <SelectItem value="24-7">24/7 Operation</SelectItem>
+                    <SelectItem value="peak-times">Peak Times Only</SelectItem>
+                    <SelectItem value="overnight">Overnight Charging</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label>Vehicle Types (select all that apply)</Label>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                {["Passenger Cars", "Light Commercial", "Buses", "Trucks/Heavy Vehicles", "Motorcycles/Scooters", "Delivery Vans", "Emergency Vehicles", "Other Fleet"].map((vehicleType) => (
+                  <div key={vehicleType} className="flex items-center space-x-2">
+                    <Checkbox
+                      id={vehicleType}
+                      checked={clientRequirements.vehicleTypes.includes(vehicleType)}
+                      onCheckedChange={(checked) => {
+                        if (checked) {
+                          setClientRequirements({
+                            ...clientRequirements,
+                            vehicleTypes: [...clientRequirements.vehicleTypes, vehicleType]
+                          });
+                        } else {
+                          setClientRequirements({
+                            ...clientRequirements,
+                            vehicleTypes: clientRequirements.vehicleTypes.filter(v => v !== vehicleType)
+                          });
+                        }
+                      }}
+                    />
+                    <Label htmlFor={vehicleType} className="text-sm">{vehicleType}</Label>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <Label htmlFor="budgetRange">Estimated Budget Range</Label>
+                <Select value={clientRequirements.budgetRange} onValueChange={(value) => setClientRequirements({...clientRequirements, budgetRange: value})}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select budget range" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="under-25k">Under $25,000</SelectItem>
+                    <SelectItem value="25-50k">$25,000 - $50,000</SelectItem>
+                    <SelectItem value="50-100k">$50,000 - $100,000</SelectItem>
+                    <SelectItem value="100-250k">$100,000 - $250,000</SelectItem>
+                    <SelectItem value="250-500k">$250,000 - $500,000</SelectItem>
+                    <SelectItem value="500k-1m">$500,000 - $1,000,000</SelectItem>
+                    <SelectItem value="over-1m">Over $1,000,000</SelectItem>
+                    <SelectItem value="tbd">To Be Determined</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="projectTimeline">Desired Project Timeline</Label>
+                <Select value={clientRequirements.projectTimeline} onValueChange={(value) => setClientRequirements({...clientRequirements, projectTimeline: value})}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select timeline" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="urgent">Urgent (1-2 months)</SelectItem>
+                    <SelectItem value="fast">Fast Track (3-4 months)</SelectItem>
+                    <SelectItem value="standard">Standard (4-6 months)</SelectItem>
+                    <SelectItem value="flexible">Flexible (6-12 months)</SelectItem>
+                    <SelectItem value="long-term">Long-term Planning (12+ months)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label>Sustainability Goals (select all that apply)</Label>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                {["Carbon Neutral by 2030", "Renewable Energy Integration", "NABERS Rating Improvement", "Green Building Certification", "Corporate ESG Goals", "Government Incentives", "Community Environmental Impact"].map((goal) => (
+                  <div key={goal} className="flex items-center space-x-2">
+                    <Checkbox
+                      id={goal}
+                      checked={clientRequirements.sustainabilityGoals.includes(goal)}
+                      onCheckedChange={(checked) => {
+                        if (checked) {
+                          setClientRequirements({
+                            ...clientRequirements,
+                            sustainabilityGoals: [...clientRequirements.sustainabilityGoals, goal]
+                          });
+                        } else {
+                          setClientRequirements({
+                            ...clientRequirements,
+                            sustainabilityGoals: clientRequirements.sustainabilityGoals.filter(g => g !== goal)
+                          });
+                        }
+                      }}
+                    />
+                    <Label htmlFor={goal} className="text-sm">{goal}</Label>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="accessibilityRequirements"
+                checked={clientRequirements.accessibilityRequirements}
+                onCheckedChange={(checked) => setClientRequirements({...clientRequirements, accessibilityRequirements: checked as boolean})}
+              />
+              <Label htmlFor="accessibilityRequirements">
+                Accessibility requirements for disabled users (DDA compliance)
+              </Label>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="specialRequirements">Special Requirements or Considerations</Label>
+              <Textarea
+                id="specialRequirements"
+                value={clientRequirements.specialRequirements}
+                onChange={(e) => setClientRequirements({...clientRequirements, specialRequirements: e.target.value})}
+                placeholder="Any specific requirements, constraints, or preferences..."
+                rows={3}
+              />
+            </div>
+          </div>
+        );
+
+      case 2:
+        return (
+          <div className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
                 <Label htmlFor="projectName">Project Name *</Label>
