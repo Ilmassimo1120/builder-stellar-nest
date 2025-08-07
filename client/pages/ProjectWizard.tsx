@@ -413,7 +413,8 @@ export default function ProjectWizard() {
       setShowTemplateSelector(false);
     } else if (!draftId && user) {
       // Show template selector for new projects
-      setShowTemplateSelector(true);
+      // Temporarily disabled to test: setShowTemplateSelector(true);
+      setShowTemplateSelector(false);
     }
   }, [user]);
 
