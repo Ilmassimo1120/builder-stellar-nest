@@ -577,8 +577,9 @@ export default function ProjectWizard() {
       await handleLocalStorageSubmit();
 
     } catch (error) {
-      console.error("Error creating project:", error);
-      alert("Failed to create project. Please try again.");
+      console.error("❌ Error creating project:", error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      alert(`❌ Failed to create project.\n\nError: ${errorMessage}\n\nPlease try again or contact support if the problem persists.`);
     } finally {
       setIsSubmitting(false);
     }
