@@ -9,15 +9,16 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Logo } from "@/components/ui/logo";
 import { Link, useNavigate } from "react-router-dom";
-import { 
-  Eye, 
-  EyeOff, 
-  Mail, 
-  Lock, 
-  User, 
-  Building, 
-  Phone, 
-  MapPin, 
+import { useAuth } from "@/hooks/useAuth";
+import {
+  Eye,
+  EyeOff,
+  Mail,
+  Lock,
+  User,
+  Building,
+  Phone,
+  MapPin,
   Zap,
   CheckCircle2,
   Shield,
@@ -26,6 +27,7 @@ import {
 
 export default function Register() {
   const navigate = useNavigate();
+  const { register } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -130,31 +132,15 @@ export default function Register() {
       // Simulate registration - In a real app, this would call an API
       await new Promise(resolve => setTimeout(resolve, 2000));
 
-      // Create user profile
-      const user = {
-        id: `user-${Date.now()}`,
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        email: formData.email,
-        phone: formData.phone,
-        name: `${formData.firstName} ${formData.lastName}`,
-        company: formData.companyName,
-        businessType: formData.businessType,
-        licenseNumber: formData.licenseNumber,
-        yearsExperience: formData.yearsExperience,
-        servicesOffered: formData.servicesOffered,
-        businessAddress: formData.businessAddress,
-        website: formData.website,
-        role: "contractor",
-        registrationDate: new Date().toISOString(),
-        verified: false
-      };
+      // Use the auth hook to register
+      const success = await register(formData);
 
-      // Store user session
-      localStorage.setItem("chargeSourceUser", JSON.stringify(user));
-
-      // Show success and navigate
-      navigate("/dashboard?welcome=true");
+      if (success) {
+        // Show success and navigate
+        navigate("/dashboard?welcome=true");
+      } else {
+        throw new Error("Registration failed");
+      }
 
     } catch (error) {
       setError("Registration failed. Please try again.");
