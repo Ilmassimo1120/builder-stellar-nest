@@ -51,7 +51,6 @@ import {
 import { Logo } from "@/components/ui/logo";
 import { projectService, autoConfigureSupabase } from "@/lib/supabase";
 import { useAuth } from "@/hooks/useAuth";
-import { useDebounce, useLocalStorage } from "@/lib/performance";
 
 // Google Maps integration types
 declare global {
