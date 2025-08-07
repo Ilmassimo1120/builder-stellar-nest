@@ -223,6 +223,40 @@ export default function ProjectWizard() {
     accessibilityCompliance: false,
   });
 
+  // Throttled auto-save function (defined after state variables)
+  const throttledAutoSave = useCallback(() => {
+    const now = Date.now();
+    const timeSinceLastSave = now - lastAutoSaveRef.current;
+    const minInterval = 10000; // 10 seconds minimum between saves
+
+    // Clear any existing timeout
+    if (autoSaveTimeoutRef.current) {
+      clearTimeout(autoSaveTimeoutRef.current);
+    }
+
+    // If enough time has passed, save immediately
+    if (timeSinceLastSave >= minInterval) {
+      if (clientRequirements.contactPersonName || siteAssessment.projectName) {
+        if (import.meta.env.DEV) console.log("Auto-saving draft...");
+        saveDraft(false);
+        lastAutoSaveRef.current = now;
+      }
+    } else {
+      // Otherwise, schedule a save for later
+      const timeToWait = minInterval - timeSinceLastSave;
+      autoSaveTimeoutRef.current = setTimeout(() => {
+        if (
+          clientRequirements.contactPersonName ||
+          siteAssessment.projectName
+        ) {
+          if (import.meta.env.DEV) console.log("Auto-saving draft (delayed)...");
+          saveDraft(false);
+          lastAutoSaveRef.current = Date.now();
+        }
+      }, timeToWait);
+    }
+  }, [clientRequirements.contactPersonName, siteAssessment.projectName]);
+
   // Draft management functions
   const generateDraftName = () => {
     const clientName = clientRequirements.contactPersonName || "New Client";
