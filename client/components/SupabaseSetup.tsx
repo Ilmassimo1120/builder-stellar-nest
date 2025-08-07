@@ -1,11 +1,12 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Database, Zap, CheckCircle2, ArrowRight } from "lucide-react";
+import { Database, Zap, CheckCircle2, ArrowRight, RefreshCw } from "lucide-react";
 
 interface SupabaseSetupProps {
   isConnected: boolean;
-  onRetry: () => void;
+  onRetry: () => Promise<void>;
 }
 
 export function SupabaseSetup({ isConnected, onRetry }: SupabaseSetupProps) {
