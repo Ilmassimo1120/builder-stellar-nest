@@ -44,6 +44,7 @@ import {
   Minimize2,
   Maximize2,
 } from "lucide-react";
+import { useAIContext } from "@/hooks/useAIContext";
 
 interface ChatMessage {
   id: string;
