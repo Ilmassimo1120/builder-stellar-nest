@@ -29,6 +29,9 @@ const App = () => (
           <Route path="/projects" element={<Placeholder title="Project Management" description="Manage all your EV infrastructure projects in one place" features={["Project dashboard", "Site assessment tools", "Progress tracking", "Team collaboration", "Document management"]} />} />
           <Route path="/projects/new" element={<ProjectWizard />} />
 
+          {/* Development/Testing Routes */}
+          <Route path="/test-connection" element={<ConnectionTest />} />
+
           {/* Quoting Routes */}
           <Route path="/quotes" element={<Placeholder title="Smart Quoting Engine" description="Dynamic quoting tool with CPQ capabilities" features={["Component selection", "Auto cost calculation", "Template library", "Margin control", "PDF generation"]} />} />
           <Route path="/quotes/new" element={<Placeholder title="Create Quote" description="Generate professional quotes with our CPQ engine" features={["Dynamic pricing", "Component selection", "Labor calculation", "Material costs", "Customer-facing PDFs"]} />} />
