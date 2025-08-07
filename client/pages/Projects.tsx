@@ -558,15 +558,15 @@ export default function Projects() {
                   {getTypeIcon(project.type)}
                   <CardTitle className="text-lg truncate">{project.name}</CardTitle>
                 </div>
-                <CardDescription className="text-sm">
-                  <div className="flex items-center gap-1 mb-1">
+                <CardDescription className="text-sm space-y-1">
+                  <span className="flex items-center gap-1">
                     <Users className="w-3 h-3" />
                     {project.client}
-                  </div>
-                  <div className="flex items-center gap-1">
+                  </span>
+                  <span className="flex items-center gap-1">
                     <MapPin className="w-3 h-3" />
                     {project.location}
-                  </div>
+                  </span>
                 </CardDescription>
               </div>
               <DropdownMenu>
