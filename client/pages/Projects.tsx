@@ -685,6 +685,26 @@ export default function Projects() {
     loadProjects();
   };
 
+  // Handle creating quotes from projects
+  const handleCreateQuote = (project: Project) => {
+    if (!user) return;
+
+    try {
+      // Create a new quote from the project
+      const newQuote = quoteService.createQuote(project.id);
+      newQuote.createdBy = user.id;
+
+      // Update quote with user information
+      quoteService.updateQuote(newQuote);
+
+      // Navigate to quote builder
+      navigate(`/quotes/${newQuote.id}`);
+    } catch (error) {
+      console.error("Error creating quote:", error);
+      alert("Error creating quote. Please try again.");
+    }
+  };
+
   const handleEditProject = (project: Project) => {
     // Create a draft from the existing project data for editing
     if (!user) return;
