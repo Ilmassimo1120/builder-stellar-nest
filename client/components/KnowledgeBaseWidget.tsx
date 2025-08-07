@@ -299,6 +299,17 @@ export function KnowledgeBaseWidget() {
         </CardDescription>
       </CardHeader>
       <CardContent>
+        {/* Welcome Banner */}
+        <div className="mb-4 p-3 bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-lg">
+          <div className="flex items-center gap-2 mb-1">
+            <CheckCircle2 className="w-4 h-4 text-blue-600" />
+            <span className="font-medium text-blue-900 text-sm">Expert Knowledge at Your Fingertips</span>
+          </div>
+          <p className="text-xs text-blue-700">
+            Access Australian standards, installation guides, and troubleshooting tips from certified EV charging professionals.
+          </p>
+        </div>
+
         <Tabs defaultValue="featured" className="space-y-4">
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="featured" className="text-xs sm:text-sm">Featured</TabsTrigger>
