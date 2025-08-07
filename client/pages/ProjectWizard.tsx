@@ -26,6 +26,7 @@ import ProjectTemplateSelector from "@/components/ProjectTemplateSelector";
 import { Link, useNavigate } from "react-router-dom";
 import { projectService, autoConfigureSupabase } from "@/lib/supabase";
 import { ProjectTemplate, applyTemplate } from "@/lib/projectTemplates";
+import { quoteService } from "@/lib/quoteService";
 import { useAuth } from "@/hooks/useAuth";
 import {
   ArrowLeft,
