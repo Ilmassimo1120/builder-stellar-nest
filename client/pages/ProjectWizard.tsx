@@ -1810,11 +1810,33 @@ export default function ProjectWizard() {
           <div className="flex items-center justify-between mb-4">
             <div>
               <h1 className="text-3xl font-bold">Project Planning Wizard</h1>
-              <p className="text-muted-foreground">Step {currentStep} of {totalSteps}: {getStepTitle(currentStep)}</p>
+              <div className="flex items-center gap-3">
+                <p className="text-muted-foreground">Step {currentStep} of {totalSteps}: {getStepTitle(currentStep)}</p>
+                {isDraftSaving && (
+                  <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                    <div className="w-3 h-3 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                    Auto-saving...
+                  </div>
+                )}
+                {draftSaved && !isDraftSaving && (
+                  <div className="flex items-center gap-1 text-xs text-green-600">
+                    <CheckCircle2 className="w-3 h-3" />
+                    Draft saved
+                  </div>
+                )}
+              </div>
             </div>
-            <Badge variant="outline" className="px-3 py-1">
-              {Math.round((currentStep / totalSteps) * 100)}% Complete
-            </Badge>
+            <div className="flex items-center gap-3">
+              <Badge variant="outline" className="px-3 py-1">
+                {Math.round((currentStep / totalSteps) * 100)}% Complete
+              </Badge>
+              {currentDraftId && (
+                <Badge variant="secondary" className="px-3 py-1 text-xs">
+                  <Clock className="w-3 h-3 mr-1" />
+                  Draft
+                </Badge>
+              )}
+            </div>
           </div>
           
           <Progress value={(currentStep / totalSteps) * 100} className="h-2" />
