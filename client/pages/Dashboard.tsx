@@ -359,7 +359,32 @@ export default function Dashboard() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {recentProjects.map((project, index) => (
+                  {loading ? (
+                    <div className="p-6 text-center">
+                      <div className="flex items-center justify-center space-x-2">
+                        <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                        <span>Loading projects...</span>
+                      </div>
+                    </div>
+                  ) : recentProjects.length === 0 ? (
+                    <div className="p-6 text-center">
+                      <div className="space-y-4">
+                        <div className="w-16 h-16 mx-auto bg-muted rounded-full flex items-center justify-center">
+                          <FileText className="w-8 h-8 text-muted-foreground" />
+                        </div>
+                        <div>
+                          <h3 className="font-medium">No projects yet</h3>
+                          <p className="text-sm text-muted-foreground">Create your first project to get started</p>
+                        </div>
+                        <Button asChild>
+                          <Link to="/projects/new">
+                            <Plus className="w-4 h-4 mr-2" />
+                            Create Project
+                          </Link>
+                        </Button>
+                      </div>
+                    </div>
+                  ) : recentProjects.map((project, index) => (
                     <div key={index} className="p-4 border rounded-lg hover:border-primary transition-colors">
                       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                         <div className="flex-1">
