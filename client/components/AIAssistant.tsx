@@ -640,8 +640,24 @@ Could you please be more specific about what you need help with?`;
                       <Send className="w-4 h-4" />
                     </Button>
                   </div>
-                  <div className="text-xs text-muted-foreground mt-2 text-center">
-                    Specialized for Australian EV charging standards
+                  <div className="text-center mt-2">
+                    <div className="text-xs text-muted-foreground">
+                      Specialized for Australian EV charging standards
+                    </div>
+                    <div className="flex items-center justify-center gap-4 mt-1 text-xs text-muted-foreground">
+                      <div className="flex items-center gap-1">
+                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                        AS/NZS Expert
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                        Installation Guide
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                        Troubleshooting
+                      </div>
+                    </div>
                   </div>
                 </div>
               </>
