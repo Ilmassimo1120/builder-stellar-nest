@@ -34,6 +34,7 @@ interface SiteAssessment {
   siteAddress: string;
   siteType: string;
   existingPowerSupply: string;
+  availableAmperes: string;
   estimatedLoad: string;
   parkingSpaces: string;
   accessRequirements: string;
