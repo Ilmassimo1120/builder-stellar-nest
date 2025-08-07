@@ -10,12 +10,12 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Logo } from "@/components/ui/logo";
 import { Link, useNavigate } from "react-router-dom";
-import { 
-  ArrowLeft, 
-  ArrowRight, 
-  MapPin, 
-  Zap, 
-  Building, 
+import {
+  ArrowLeft,
+  ArrowRight,
+  MapPin,
+  Zap,
+  Building,
   Camera,
   CheckCircle2,
   AlertTriangle,
@@ -25,7 +25,8 @@ import {
   Calculator,
   Gauge,
   Plug,
-  Settings
+  Settings,
+  Users
 } from "lucide-react";
 
 interface ClientRequirements {
