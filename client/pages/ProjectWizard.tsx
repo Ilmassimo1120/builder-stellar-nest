@@ -360,6 +360,10 @@ export default function ProjectWizard() {
       if (currentStep === 1) {
         populateSiteAssessmentFromClientRequirements();
       }
+      // Auto-populate charger selection with recommendations when moving to Step 3
+      if (currentStep === 2) {
+        populateChargerRecommendations();
+      }
       setCurrentStep(currentStep + 1);
     }
   };
