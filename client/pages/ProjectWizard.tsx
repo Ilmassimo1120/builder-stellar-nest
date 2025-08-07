@@ -9,6 +9,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Logo } from "@/components/ui/logo";
+import { SupabaseSetup } from "@/components/SupabaseSetup";
 import { Link, useNavigate } from "react-router-dom";
 import { projectService, autoConfigureSupabase } from "@/lib/supabase";
 import {
@@ -98,6 +99,22 @@ export default function ProjectWizard() {
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [isSupabaseConnected, setIsSupabaseConnected] = useState(false);
   const [connectionError, setConnectionError] = useState<string | null>(null);
+
+  // Function to retry Supabase connection
+  const retryConnection = async () => {
+    try {
+      setConnectionError(null);
+      const isConnected = await autoConfigureSupabase();
+      setIsSupabaseConnected(isConnected);
+      if (!isConnected) {
+        setConnectionError('Database auto-configuration in progress. Projects will be saved locally for now.');
+      }
+    } catch (error) {
+      console.error('Error retrying Supabase connection:', error);
+      setIsSupabaseConnected(false);
+      setConnectionError('Unable to connect to database. Projects will be saved locally.');
+    }
+  };
 
   const [clientRequirements, setClientRequirements] = useState<ClientRequirements>({
     contactPersonName: "",
@@ -1689,20 +1706,13 @@ export default function ProjectWizard() {
           </div>
         </div>
 
-        {/* Connection Status Notice */}
-        {connectionError && (
-          <div className="max-w-4xl mx-auto mb-4">
-            <div className="bg-yellow-50 border border-yellow-200 p-4 rounded-lg">
-              <div className="flex items-center gap-2 mb-2">
-                <AlertTriangle className="w-4 h-4 text-yellow-600" />
-                <h3 className="font-medium text-yellow-800">Database Configuration Notice</h3>
-              </div>
-              <p className="text-sm text-yellow-700">
-                {connectionError} To enable cloud storage, please configure your Supabase environment variables.
-              </p>
-            </div>
-          </div>
-        )}
+        {/* Supabase Setup Section */}
+        <div className="max-w-4xl mx-auto mb-4">
+          <SupabaseSetup
+            isConnected={isSupabaseConnected}
+            onRetry={retryConnection}
+          />
+        </div>
 
         {/* Main Content */}
         <Card className="max-w-4xl mx-auto">
