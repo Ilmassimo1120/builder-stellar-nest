@@ -2624,14 +2624,25 @@ export default function ProjectWizard() {
     }
   };
 
-  // Handle creating a quote from the completed project
+  // Handle creating a quote from the completed project (supports multiple quotes)
   const handleCreateQuote = () => {
     if (!createdProject || !user) return;
 
     try {
+      // Check existing quotes for this project
+      const allQuotes = quoteService.getAllQuotes();
+      const existingQuotes = allQuotes.filter(q => q.projectId === createdProject.id);
+
       // Create a new quote from the project
       const newQuote = quoteService.createQuote(createdProject.id);
       newQuote.createdBy = user.id;
+
+      // This is the first quote from project completion
+      if (existingQuotes.length === 0) {
+        newQuote.title = `${newQuote.title} (Initial Quote)`;
+      } else {
+        newQuote.title = `${newQuote.title} (Quote #${existingQuotes.length + 1})`;
+      }
 
       // Update quote with user information
       quoteService.updateQuote(newQuote);
