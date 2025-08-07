@@ -587,7 +587,14 @@ export default function ProjectWizard() {
           objective: clientRequirements.projectObjective
         },
         estimatedBudget: recommendations.estimatedCost,
-        timeline: recommendations.installationTime
+        timeline: recommendations.installationTime,
+        // Store all the detailed data for future reference
+        clientRequirements,
+        siteAssessment,
+        chargerSelection,
+        gridCapacity,
+        compliance,
+        userId: user?.id
       };
 
       // Save to localStorage
@@ -595,10 +602,17 @@ export default function ProjectWizard() {
       existingProjects.unshift(projectData);
       localStorage.setItem('chargeSourceProjects', JSON.stringify(existingProjects));
 
+      // Remove draft if it exists (project is now complete)
+      if (currentDraftId) {
+        const drafts = JSON.parse(localStorage.getItem('chargeSourceDrafts') || '[]');
+        const filteredDrafts = drafts.filter((d: ProjectDraft) => d.id !== currentDraftId);
+        localStorage.setItem('chargeSourceDrafts', JSON.stringify(filteredDrafts));
+      }
+
       console.log("Project Created Successfully (localStorage):", projectData);
 
       // Show success message and navigate
-      alert(`Project "${projectData.projectInfo.name}" created successfully!\n\nProject ID: ${projectData.id}\nEstimated Cost: ${projectData.estimatedBudget}\nTimeline: ${projectData.timeline}\n\nNote: Saved locally. Connect to Supabase for cloud storage.`);
+      alert(`Project "${projectData.projectInfo.name}" created successfully!\n\nProject ID: ${projectData.id}\nEstimated Cost: ${projectData.estimatedBudget}\nTimeline: ${projectData.timeline}`);
 
       navigate("/dashboard");
     } catch (error) {
