@@ -74,6 +74,38 @@ const App = () => (
               }
             />
 
+            {/* Quote Management Routes */}
+            <Route
+              path="/quotes"
+              element={
+                <ProtectedRoute>
+                  <Quotes />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/quotes/new"
+              element={
+                <ProtectedRoute>
+                  <QuoteBuilder />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/quotes/:quoteId"
+              element={
+                <ProtectedRoute>
+                  <QuoteBuilder />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Client Portal (public access) */}
+            <Route
+              path="/client/quote/:quoteId"
+              element={<ClientPortal />}
+            />
+
             {/* Development/Testing Routes */}
             <Route path="/test-connection" element={<ConnectionTest />} />
 
