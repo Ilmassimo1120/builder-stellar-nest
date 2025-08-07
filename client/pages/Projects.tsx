@@ -587,12 +587,15 @@ export default function Projects() {
       const originalGridCap = originalProject?.gridCapacity || {};
       const originalCompliance = originalProject?.compliance || {};
 
-      console.log('Editing project with original data:', {
-        hasOriginalData: !!project._originalData,
-        clientReq: originalClientReq,
-        siteAssess: originalSiteAssess,
-        chargerSel: originalChargerSel
-      });
+      // Debug logging for development
+      if (import.meta.env.DEV) {
+        console.log('Editing project with original data:', {
+          hasOriginalData: !!project._originalData,
+          clientReq: originalClientReq,
+          siteAssess: originalSiteAssess,
+          chargerSel: originalChargerSel
+        });
+      }
 
       // Convert the project data back to wizard format for editing with better data mapping
       const editDraft = {
