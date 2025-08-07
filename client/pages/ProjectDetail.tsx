@@ -632,7 +632,7 @@ export default function ProjectDetail() {
               </Link>
             </Button>
             <Separator orientation="vertical" className="h-6" />
-            <Logo size="lg" />
+            <Logo size="xl" />
           </div>
           <div className="flex items-center space-x-2">
             <Button variant="outline" size="sm">
