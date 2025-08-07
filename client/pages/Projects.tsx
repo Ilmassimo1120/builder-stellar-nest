@@ -262,7 +262,12 @@ export default function Projects() {
           isDraft: true,
           draftStep: draft.currentStep,
           siteAddress: draft.siteAssessment?.siteAddress,
-          description: draft.clientRequirements?.projectObjective
+          description: draft.clientRequirements?.projectObjective,
+          contactPerson: draft.clientRequirements?.contactPersonName,
+          phone: draft.clientRequirements?.contactPhone,
+          email: draft.clientRequirements?.contactEmail,
+          // Preserve complete draft data for editing
+          _originalData: draft
         }));
 
       // Combine all projects
