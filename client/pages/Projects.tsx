@@ -1561,6 +1561,13 @@ export default function Projects() {
                   )}
                   <Button
                     variant="outline"
+                    onClick={() => handleCreateQuote(selectedProject)}
+                  >
+                    <Calculator className="w-4 h-4 mr-2" />
+                    Create Quote
+                  </Button>
+                  <Button
+                    variant="outline"
                     onClick={() => handleDuplicateProject(selectedProject)}
                   >
                     <Copy className="w-4 h-4 mr-2" />
