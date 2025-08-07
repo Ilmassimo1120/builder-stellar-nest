@@ -9,6 +9,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
 import ProjectWizard from "./pages/ProjectWizard";
+import ConnectionTest from "./pages/ConnectionTest";
 import Placeholder from "./pages/Placeholder";
 import NotFound from "./pages/NotFound";
 
