@@ -546,7 +546,18 @@ export default function Projects() {
       const editDraftId = `edit-${project.id}-${Date.now()}`;
       const now = new Date().toISOString();
 
-      // Convert the project data back to wizard format for editing
+      // Try to load original detailed project data from localStorage
+      const localProjects = JSON.parse(localStorage.getItem('chargeSourceProjects') || '[]');
+      const originalProject = localProjects.find((p: any) => p.id === project.id);
+
+      // Extract detailed data if available from original project
+      const originalClientReq = originalProject?.clientRequirements || {};
+      const originalSiteAssess = originalProject?.siteAssessment || {};
+      const originalChargerSel = originalProject?.chargerSelection || {};
+      const originalGridCap = originalProject?.gridCapacity || {};
+      const originalCompliance = originalProject?.compliance || {};
+
+      // Convert the project data back to wizard format for editing with better data mapping
       const editDraft = {
         id: editDraftId,
         userId: user.id,
@@ -555,67 +566,86 @@ export default function Projects() {
         createdAt: now,
         updatedAt: now,
         clientRequirements: {
-          contactPersonName: project.contactPerson || project.client || "",
-          contactTitle: "",
-          contactEmail: project.email || "",
-          contactPhone: project.phone || "",
-          organizationType: project.type.toLowerCase().includes('residential') ? 'residential' :
-                            project.type.toLowerCase().includes('commercial') ? 'commercial' :
+          contactPersonName: originalClientReq.contactPersonName || project.contactPerson || project.client || "",
+          contactTitle: originalClientReq.contactTitle || "",
+          contactEmail: originalClientReq.contactEmail || project.email || "",
+          contactPhone: originalClientReq.contactPhone || project.phone || "",
+          organizationType: originalClientReq.organizationType ||
+                            (project.type.toLowerCase().includes('residential') ? 'residential' :
+                            project.type.toLowerCase().includes('commercial') || project.type.toLowerCase().includes('retail') ? 'retail' :
                             project.type.toLowerCase().includes('fleet') ? 'fleet' :
-                            project.type.toLowerCase().includes('public') ? 'government' : 'other',
-          projectObjective: project.description || "future-proofing",
-          numberOfVehicles: "6-15", // Default based on project type
-          vehicleTypes: [],
-          dailyUsagePattern: "",
-          budgetRange: project.value === 'TBD' ? 'tbd' : '50-100k',
-          projectTimeline: "standard",
-          sustainabilityGoals: [],
-          accessibilityRequirements: false,
-          specialRequirements: project.description || "",
-          preferredChargerBrands: [],
-          paymentModel: ""
+                            project.type.toLowerCase().includes('public') ? 'government' :
+                            project.type.toLowerCase().includes('office') ? 'office' : 'other'),
+          projectObjective: originalClientReq.projectObjective ||
+                           (project.type.toLowerCase().includes('fleet') ? 'fleet-electrification' :
+                            project.type.toLowerCase().includes('residential') ? 'employee-benefit' :
+                            project.type.toLowerCase().includes('retail') ? 'customer-attraction' : 'future-proofing'),
+          numberOfVehicles: originalClientReq.numberOfVehicles ||
+                           (project.type.toLowerCase().includes('fleet') ? '31-50' : '6-15'),
+          vehicleTypes: originalClientReq.vehicleTypes ||
+                       (project.type.toLowerCase().includes('fleet') ? ['Light Commercial', 'Delivery Vans'] : ['Passenger Cars']),
+          dailyUsagePattern: originalClientReq.dailyUsagePattern ||
+                            (project.type.toLowerCase().includes('residential') ? 'overnight' :
+                             project.type.toLowerCase().includes('office') ? 'business-hours' :
+                             project.type.toLowerCase().includes('retail') ? 'extended-hours' : 'business-hours'),
+          budgetRange: originalClientReq.budgetRange ||
+                      (project.value === 'TBD' ? 'tbd' :
+                       project.value.includes('$') ?
+                       (parseInt(project.value.replace(/[$,]/g, '').split('-')[0]) > 100000 ? '100-250k' : '50-100k') : 'tbd'),
+          projectTimeline: originalClientReq.projectTimeline || 'standard',
+          sustainabilityGoals: originalClientReq.sustainabilityGoals || [],
+          accessibilityRequirements: originalClientReq.accessibilityRequirements || false,
+          specialRequirements: originalClientReq.specialRequirements || project.description || "",
+          preferredChargerBrands: originalClientReq.preferredChargerBrands || [],
+          paymentModel: originalClientReq.paymentModel || ""
         },
         siteAssessment: {
-          projectName: project.name,
-          clientName: project.client,
-          siteAddress: project.siteAddress || project.location,
-          siteType: project.type.toLowerCase().includes('residential') ? 'residential' :
-                    project.type.toLowerCase().includes('commercial') ? 'commercial' :
+          projectName: originalSiteAssess.projectName || project.name,
+          clientName: originalSiteAssess.clientName || project.client,
+          siteAddress: originalSiteAssess.siteAddress || project.siteAddress || project.location,
+          siteType: originalSiteAssess.siteType ||
+                   (project.type.toLowerCase().includes('residential') ? 'residential' :
+                    project.type.toLowerCase().includes('commercial') || project.type.toLowerCase().includes('retail') ? 'retail' :
                     project.type.toLowerCase().includes('fleet') ? 'fleet' :
-                    project.type.toLowerCase().includes('public') ? 'public' : 'commercial',
-          existingPowerSupply: "",
-          availableAmperes: "",
-          estimatedLoad: "",
-          parkingSpaces: "",
-          accessRequirements: "",
-          photos: [],
-          additionalNotes: ""
+                    project.type.toLowerCase().includes('public') ? 'public' :
+                    project.type.toLowerCase().includes('office') ? 'office' : 'commercial'),
+          existingPowerSupply: originalSiteAssess.existingPowerSupply || "",
+          availableAmperes: originalSiteAssess.availableAmperes || "",
+          estimatedLoad: originalSiteAssess.estimatedLoad || "",
+          parkingSpaces: originalSiteAssess.parkingSpaces || "",
+          accessRequirements: originalSiteAssess.accessRequirements || "",
+          photos: originalSiteAssess.photos || [],
+          additionalNotes: originalSiteAssess.additionalNotes || project.description || ""
         },
         chargerSelection: {
-          chargingType: "",
-          powerRating: "",
-          mountingType: "",
-          numberOfChargers: "",
-          connectorTypes: [],
-          weatherProtection: false,
-          networkConnectivity: ""
+          chargingType: originalChargerSel.chargingType ||
+                       (project.type.toLowerCase().includes('fast') ? 'dc-fast' :
+                        project.type.toLowerCase().includes('residential') ? 'ac-level2' : ''),
+          powerRating: originalChargerSel.powerRating ||
+                      (project.type.toLowerCase().includes('fast') ? '50kw' :
+                       project.type.toLowerCase().includes('residential') ? '7kw' : ''),
+          mountingType: originalChargerSel.mountingType || "",
+          numberOfChargers: originalChargerSel.numberOfChargers || "",
+          connectorTypes: originalChargerSel.connectorTypes || [],
+          weatherProtection: originalChargerSel.weatherProtection || false,
+          networkConnectivity: originalChargerSel.networkConnectivity || ""
         },
         gridCapacity: {
-          currentSupply: "",
-          requiredCapacity: "",
-          upgradeNeeded: false,
-          upgradeType: "",
-          estimatedUpgradeCost: "",
-          utilityContact: ""
+          currentSupply: originalGridCap.currentSupply || "",
+          requiredCapacity: originalGridCap.requiredCapacity || "",
+          upgradeNeeded: originalGridCap.upgradeNeeded || false,
+          upgradeType: originalGridCap.upgradeType || "",
+          estimatedUpgradeCost: originalGridCap.estimatedUpgradeCost || "",
+          utilityContact: originalGridCap.utilityContact || ""
         },
         compliance: {
-          electricalStandards: [],
-          safetyRequirements: [],
-          localPermits: [],
-          environmentalConsiderations: [],
-          accessibilityCompliance: false
+          electricalStandards: originalCompliance.electricalStandards || [],
+          safetyRequirements: originalCompliance.safetyRequirements || [],
+          localPermits: originalCompliance.localPermits || [],
+          environmentalConsiderations: originalCompliance.environmentalConsiderations || [],
+          accessibilityCompliance: originalCompliance.accessibilityCompliance || false
         },
-        progress: 33 // Start at site assessment step since basic info is populated
+        progress: originalProject ? 100 : 33 // If we have original data, show as complete, otherwise start at step 2
       };
 
       // Save the edit draft
