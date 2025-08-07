@@ -96,7 +96,7 @@ export function AIAssistant() {
     const message = userMessage.toLowerCase();
     
     // Context-aware responses based on current page
-    const pageContext = currentPage || "dashboard";
+    const pageContext = aiContext.currentPage;
     
     let response = "";
     let suggestions: string[] = [];
