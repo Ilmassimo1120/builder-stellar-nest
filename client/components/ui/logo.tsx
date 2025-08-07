@@ -21,10 +21,12 @@ export function Logo({ size = "md", showText = true, className = "" }: LogoProps
 
   return (
     <div className={`flex items-center space-x-3 ${className}`}>
-      {/* Replace this PlugZap icon with your actual Charge N Go logo */}
-      {/* <img src="/logo-charge-n-go.png" alt="Charge N Go" className={sizeClasses[size]} /> */}
-      <PlugZap className={`${sizeClasses[size]} text-primary`} />
-      
+      <img
+        src="https://cdn.builder.io/api/v1/image/assets%2Fd8af561546d8452e90f10c66e582c7bd%2F30d900209495466eb21054f3229abe7e?format=webp&width=800"
+        alt="Charge N Go"
+        className={`${sizeClasses[size]} object-contain`}
+      />
+
       {showText && (
         <div className="flex flex-col">
           <span className={`${textSizes[size].main} font-bold text-primary`}>
