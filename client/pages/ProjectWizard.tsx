@@ -1128,11 +1128,12 @@ export default function ProjectWizard() {
               {getStepTitle(currentStep)}
             </CardTitle>
             <CardDescription>
-              {currentStep === 1 && "Gather essential information about the installation site and project requirements."}
-              {currentStep === 2 && "Select the appropriate charging equipment based on site requirements and usage patterns."}
-              {currentStep === 3 && "Analyze electrical infrastructure capacity and determine upgrade requirements."}
-              {currentStep === 4 && "Ensure compliance with Australian electrical standards and local regulations."}
-              {currentStep === 5 && "Review all project details and create your project plan."}
+              {currentStep === 1 && "Understand client needs, project objectives, and specific requirements before technical assessment."}
+              {currentStep === 2 && "Gather essential information about the installation site and project requirements."}
+              {currentStep === 3 && "Select the appropriate charging equipment based on site requirements and usage patterns."}
+              {currentStep === 4 && "Analyze electrical infrastructure capacity and determine upgrade requirements."}
+              {currentStep === 5 && "Ensure compliance with Australian electrical standards and local regulations."}
+              {currentStep === 6 && "Review all project details and create your project plan."}
             </CardDescription>
           </CardHeader>
           <CardContent>
