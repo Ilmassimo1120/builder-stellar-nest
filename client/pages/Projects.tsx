@@ -599,7 +599,7 @@ export default function Projects() {
                       </Link>
                     </DropdownMenuItem>
                   ) : (
-                    <DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleEditProject(project)}>
                       <Edit className="w-4 h-4 mr-2" />
                       Edit Project
                     </DropdownMenuItem>
@@ -718,7 +718,7 @@ export default function Projects() {
                       </Link>
                     </DropdownMenuItem>
                   ) : (
-                    <DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleEditProject(project)}>
                       <Edit className="w-4 h-4 mr-2" />
                       Edit Project
                     </DropdownMenuItem>
