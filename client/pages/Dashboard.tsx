@@ -174,8 +174,8 @@ export default function Dashboard() {
           draftStep: draft.currentStep
         }));
 
-      // Combine and deduplicate projects
-      const allProjects = [...loadedProjects, ...formattedLocalProjects];
+      // Combine projects and drafts
+      const allProjects = [...loadedProjects, ...formattedLocalProjects, ...userDrafts];
       const uniqueProjects = allProjects.filter((project, index, self) =>
         index === self.findIndex(p => p.id === project.id)
       );
