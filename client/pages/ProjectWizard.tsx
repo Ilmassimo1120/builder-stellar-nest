@@ -311,7 +311,7 @@ export default function ProjectWizard() {
     }, 30000); // 30 seconds
 
     return () => clearInterval(autoSaveInterval);
-  }, [user, currentStep, clientRequirements, siteAssessment, chargerSelection, gridCapacity, compliance]);
+  }, [user]); // Simplified dependencies to prevent infinite re-renders
 
   // Check for draft from URL params or load existing
   useEffect(() => {
