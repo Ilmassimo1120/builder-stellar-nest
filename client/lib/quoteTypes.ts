@@ -281,6 +281,7 @@ export interface ProjectIntegration {
   siteAssessment: any;
   chargerSelection: any;
   estimatedBudget: string;
+  rawProjectData?: any; // Complete project data from project management system
 }
 
 export interface SupplierIntegration {
