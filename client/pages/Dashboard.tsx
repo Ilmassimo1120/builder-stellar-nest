@@ -328,14 +328,23 @@ export default function Dashboard() {
     }
   };
 
-  // Handle creating quotes from projects
+  // Handle creating quotes from projects (supports multiple quotes per project)
   const handleCreateQuote = (project: any) => {
     if (!user) return;
 
     try {
+      // Check existing quotes for this project
+      const allQuotes = quoteService.getAllQuotes();
+      const existingQuotes = allQuotes.filter(q => q.projectId === project.id);
+
       // Create a new quote from the project
       const newQuote = quoteService.createQuote(project.id);
       newQuote.createdBy = user.id;
+
+      // If this is a comparison quote, add a note to the title
+      if (existingQuotes.length > 0) {
+        newQuote.title = `${newQuote.title} (Quote #${existingQuotes.length + 1})`;
+      }
 
       // Update quote with user information
       quoteService.updateQuote(newQuote);
