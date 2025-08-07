@@ -2803,6 +2803,14 @@ export default function ProjectWizard() {
           </div>
         </div>
       </div>
+
+      {/* Template Selector */}
+      <ProjectTemplateSelector
+        open={showTemplateSelector}
+        onOpenChange={setShowTemplateSelector}
+        onSelectTemplate={handleSelectTemplate}
+        onSkipTemplate={handleSkipTemplate}
+      />
     </div>
   );
 }
