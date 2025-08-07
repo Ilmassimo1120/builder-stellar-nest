@@ -407,6 +407,20 @@ export default function ProjectWizard() {
     }
   };
 
+  const populateChargerRecommendations = () => {
+    // Only auto-populate if no manual selection has been made
+    if (!chargerSelection.chargingType && clientRequirements.organizationType) {
+      const recommendations = getChargerRecommendations();
+
+      setChargerSelection(prev => ({
+        ...prev,
+        chargingType: recommendations.chargingType,
+        powerRating: recommendations.powerRating,
+        numberOfChargers: recommendations.numberOfChargers
+      }));
+    }
+  };
+
   const validateProjectData = () => {
     const errors = [];
 
