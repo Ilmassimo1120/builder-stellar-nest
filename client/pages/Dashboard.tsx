@@ -156,6 +156,24 @@ export default function Dashboard() {
         type: project.projectInfo?.type || project.site_type || 'EV Charging Project'
       }));
 
+      // Load drafts for the current user
+      const drafts = JSON.parse(localStorage.getItem('chargeSourceDrafts') || '[]');
+      const userDrafts = drafts
+        .filter((draft: any) => draft.userId === user?.id)
+        .map((draft: any) => ({
+          id: draft.id,
+          name: draft.draftName || 'Untitled Draft',
+          client: draft.clientRequirements?.contactPersonName || 'Draft Client',
+          status: 'Draft',
+          progress: draft.progress || 0,
+          value: 'In Progress',
+          deadline: new Date(draft.updatedAt).toLocaleDateString(),
+          location: draft.siteAssessment?.siteAddress || 'TBD',
+          type: 'Draft Project',
+          isDraft: true,
+          draftStep: draft.currentStep
+        }));
+
       // Combine and deduplicate projects
       const allProjects = [...loadedProjects, ...formattedLocalProjects];
       const uniqueProjects = allProjects.filter((project, index, self) =>
