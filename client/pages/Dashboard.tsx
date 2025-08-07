@@ -266,6 +266,7 @@ export default function Dashboard() {
       case "In Progress": return "bg-primary text-primary-foreground";
       case "Planning": return "bg-accent text-accent-foreground";
       case "Quoting": return "bg-muted text-muted-foreground";
+      case "Draft": return "bg-orange-100 text-orange-800 border-orange-200";
       default: return "bg-muted text-muted-foreground";
     }
   };
