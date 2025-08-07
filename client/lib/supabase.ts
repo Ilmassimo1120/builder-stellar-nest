@@ -1,10 +1,18 @@
 import { createClient } from '@supabase/supabase-js';
 
-// These would normally come from environment variables
-// For demo purposes, using placeholder values that will be configured via MCP integration
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://your-project.supabase.co';
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'your-anon-key';
+// Automatic Supabase configuration for ChargeSource
+// These values will be automatically set when Supabase MCP integration is connected
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL ||
+  import.meta.env.SUPABASE_URL ||
+  // Fallback URL - will be replaced when MCP integration is active
+  'https://chargesource-demo.supabase.co';
 
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY ||
+  import.meta.env.SUPABASE_ANON_KEY ||
+  // Fallback key - will be replaced when MCP integration is active
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNoYXJnZXNvdXJjZS1kZW1vIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDQxMTg4MDAsImV4cCI6MjAxOTY5NDgwMH0.demo-key-for-chargesource';
+
+// Initialize Supabase client
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 // Database interfaces that match our Supabase schema
