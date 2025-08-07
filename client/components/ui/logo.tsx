@@ -24,7 +24,7 @@ export function Logo({ size = "md", showText = true, className = "" }: LogoProps
     sm: { main: "text-sm", sub: "text-xs" },
     md: { main: "text-lg", sub: "text-sm" },
     lg: { main: "text-xl", sub: "text-base" },
-    xl: { main: "text-2xl", sub: "text-lg" }
+    xl: { main: "text-2xl", sub: "text-sm" }
   };
 
   // Get the text sizes for the valid size with fallback
