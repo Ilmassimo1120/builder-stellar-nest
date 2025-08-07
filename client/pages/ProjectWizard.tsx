@@ -299,19 +299,19 @@ export default function ProjectWizard() {
     }
   };
 
-  // Auto-save draft every 30 seconds when user is actively working
-  useEffect(() => {
-    if (!user) return;
+  // Auto-save draft every 30 seconds when user is actively working - TEMPORARILY DISABLED
+  // useEffect(() => {
+  //   if (!user) return;
 
-    const autoSaveInterval = setInterval(() => {
-      // Only auto-save if there's content and user hasn't just saved
-      if (clientRequirements.contactPersonName || siteAssessment.projectName) {
-        saveDraft(false); // Auto-save without notification
-      }
-    }, 30000); // 30 seconds
+  //   const autoSaveInterval = setInterval(() => {
+  //     // Only auto-save if there's content and user hasn't just saved
+  //     if (clientRequirements.contactPersonName || siteAssessment.projectName) {
+  //       saveDraft(false); // Auto-save without notification
+  //     }
+  //   }, 30000); // 30 seconds
 
-    return () => clearInterval(autoSaveInterval);
-  }, [user]); // Simplified dependencies to prevent infinite re-renders
+  //   return () => clearInterval(autoSaveInterval);
+  // }, [user]); // Simplified dependencies to prevent infinite re-renders
 
   // Check for draft from URL params or load existing
   useEffect(() => {
