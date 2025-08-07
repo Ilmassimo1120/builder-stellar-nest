@@ -28,6 +28,25 @@ import {
   Settings
 } from "lucide-react";
 
+interface ClientRequirements {
+  contactPersonName: string;
+  contactTitle: string;
+  contactEmail: string;
+  contactPhone: string;
+  organizationType: string;
+  projectObjective: string;
+  numberOfVehicles: string;
+  vehicleTypes: string[];
+  dailyUsagePattern: string;
+  budgetRange: string;
+  projectTimeline: string;
+  sustainabilityGoals: string[];
+  accessibilityRequirements: boolean;
+  specialRequirements: string;
+  preferredChargerBrands: string[];
+  paymentModel: string;
+}
+
 interface SiteAssessment {
   projectName: string;
   clientName: string;
