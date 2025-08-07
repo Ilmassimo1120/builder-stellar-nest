@@ -290,9 +290,14 @@ export function KnowledgeBaseWidget() {
             <BookOpen className="w-5 h-5 text-primary" />
             <CardTitle>Knowledge Base</CardTitle>
           </div>
-          <Badge variant="secondary" className="text-xs">
-            {knowledgeBase.length} articles
-          </Badge>
+          <div className="flex items-center gap-2">
+            <Badge variant="secondary" className="text-xs">
+              {knowledgeBase.length} articles
+            </Badge>
+            <Button variant="ghost" size="sm" className="text-xs h-6 px-2">
+              View All
+            </Button>
+          </div>
         </div>
         <CardDescription>
           Quick access to EV charging guides, regulations, and best practices
