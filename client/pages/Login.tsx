@@ -7,10 +7,12 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Logo } from "@/components/ui/logo";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
 import { Eye, EyeOff, Mail, Lock, Zap, Shield, Users, CheckCircle2 } from "lucide-react";
 
 export default function Login() {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
@@ -50,25 +52,15 @@ export default function Login() {
       // Simulate authentication - In a real app, this would call an API
       await new Promise(resolve => setTimeout(resolve, 1500));
 
-      // For demo purposes, accept any email/password combination
-      // Store user session
-      const user = {
-        id: "user-123",
-        email: formData.email,
-        name: formData.email.split("@")[0].replace(/[._]/g, " ").replace(/\b\w/g, l => l.toUpperCase()),
-        company: "Demo Electrical Services",
-        role: "contractor",
-        loginTime: new Date().toISOString()
-      };
+      // Use the auth hook to login
+      const success = await login(formData.email, formData.password, rememberMe);
 
-      // Store in localStorage for session management
-      localStorage.setItem("chargeSourceUser", JSON.stringify(user));
-      if (rememberMe) {
-        localStorage.setItem("chargeSourceRememberMe", "true");
+      if (success) {
+        // Navigate to dashboard
+        navigate("/dashboard");
+      } else {
+        throw new Error("Login failed");
       }
-
-      // Navigate to dashboard
-      navigate("/dashboard");
 
     } catch (error) {
       setError("Invalid email or password. Please try again.");
