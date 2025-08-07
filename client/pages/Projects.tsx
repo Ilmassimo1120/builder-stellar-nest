@@ -539,14 +539,97 @@ export default function Projects() {
   };
 
   const handleEditProject = (project: Project) => {
-    // For now, navigate to a dedicated edit view or show a message
-    // In a full implementation, this could navigate to an edit form
-    alert(`Edit functionality for "${project.name}" is coming soon! For now, you can duplicate the project and modify the copy.`);
+    // Create a draft from the existing project data for editing
+    if (!user) return;
 
-    // TODO: Implement proper edit functionality
-    // This could navigate to:
-    // navigate(`/projects/edit/${project.id}`);
-    // Or open an edit modal, etc.
+    try {
+      const editDraftId = `edit-${project.id}-${Date.now()}`;
+      const now = new Date().toISOString();
+
+      // Convert the project data back to wizard format for editing
+      const editDraft = {
+        id: editDraftId,
+        userId: user.id,
+        draftName: `${project.name} (Editing)`,
+        currentStep: 1,
+        createdAt: now,
+        updatedAt: now,
+        clientRequirements: {
+          contactPersonName: project.contactPerson || project.client || "",
+          contactTitle: "",
+          contactEmail: project.email || "",
+          contactPhone: project.phone || "",
+          organizationType: project.type.toLowerCase().includes('residential') ? 'residential' :
+                            project.type.toLowerCase().includes('commercial') ? 'commercial' :
+                            project.type.toLowerCase().includes('fleet') ? 'fleet' :
+                            project.type.toLowerCase().includes('public') ? 'government' : 'other',
+          projectObjective: project.description || "future-proofing",
+          numberOfVehicles: "6-15", // Default based on project type
+          vehicleTypes: [],
+          dailyUsagePattern: "",
+          budgetRange: project.value === 'TBD' ? 'tbd' : '50-100k',
+          projectTimeline: "standard",
+          sustainabilityGoals: [],
+          accessibilityRequirements: false,
+          specialRequirements: project.description || "",
+          preferredChargerBrands: [],
+          paymentModel: ""
+        },
+        siteAssessment: {
+          projectName: project.name,
+          clientName: project.client,
+          siteAddress: project.siteAddress || project.location,
+          siteType: project.type.toLowerCase().includes('residential') ? 'residential' :
+                    project.type.toLowerCase().includes('commercial') ? 'commercial' :
+                    project.type.toLowerCase().includes('fleet') ? 'fleet' :
+                    project.type.toLowerCase().includes('public') ? 'public' : 'commercial',
+          existingPowerSupply: "",
+          availableAmperes: "",
+          estimatedLoad: "",
+          parkingSpaces: "",
+          accessRequirements: "",
+          photos: [],
+          additionalNotes: ""
+        },
+        chargerSelection: {
+          chargingType: "",
+          powerRating: "",
+          mountingType: "",
+          numberOfChargers: "",
+          connectorTypes: [],
+          weatherProtection: false,
+          networkConnectivity: ""
+        },
+        gridCapacity: {
+          currentSupply: "",
+          requiredCapacity: "",
+          upgradeNeeded: false,
+          upgradeType: "",
+          estimatedUpgradeCost: "",
+          utilityContact: ""
+        },
+        compliance: {
+          electricalStandards: [],
+          safetyRequirements: [],
+          localPermits: [],
+          environmentalConsiderations: [],
+          accessibilityCompliance: false
+        },
+        progress: 33 // Start at site assessment step since basic info is populated
+      };
+
+      // Save the edit draft
+      const existingDrafts = JSON.parse(localStorage.getItem('chargeSourceDrafts') || '[]');
+      existingDrafts.unshift(editDraft);
+      localStorage.setItem('chargeSourceDrafts', JSON.stringify(existingDrafts));
+
+      // Navigate to Project Wizard with the edit draft
+      navigate(`/projects/new?draft=${editDraftId}`);
+
+    } catch (error) {
+      console.error('Error creating edit draft:', error);
+      alert('Error opening project for editing. Please try again.');
+    }
   };
 
   const toggleSort = (field: string) => {
