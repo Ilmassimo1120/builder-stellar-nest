@@ -642,16 +642,166 @@ export default function ProjectWizard() {
         );
 
       case 3:
+        const getChargerRecommendations = () => {
+          const orgType = clientRequirements.organizationType;
+          const vehicleCount = clientRequirements.numberOfVehicles;
+          const usagePattern = clientRequirements.dailyUsagePattern;
+          const budget = clientRequirements.budgetRange;
+
+          let recommendations = {
+            chargingType: "",
+            powerRating: "",
+            numberOfChargers: "",
+            reasoning: "",
+            estimatedCost: "",
+            installationTime: ""
+          };
+
+          // Determine charging type based on organization and usage
+          if (orgType === "fleet" || orgType === "commercial" || orgType === "retail") {
+            if (usagePattern === "24-7" || usagePattern === "peak-times") {
+              recommendations.chargingType = "dc-fast";
+              recommendations.powerRating = "50kw";
+              recommendations.reasoning = "DC fast charging recommended for high-utilization commercial sites with quick turnaround needs.";
+            } else {
+              recommendations.chargingType = "mixed";
+              recommendations.powerRating = "22kw";
+              recommendations.reasoning = "Mixed AC/DC installation offers flexibility for different vehicle types and charging needs.";
+            }
+          } else if (orgType === "residential" || orgType === "office") {
+            recommendations.chargingType = "ac-level2";
+            recommendations.powerRating = "7kw";
+            recommendations.reasoning = "AC Level 2 charging ideal for longer dwell times typical in residential and office environments.";
+          } else {
+            recommendations.chargingType = "mixed";
+            recommendations.powerRating = "22kw";
+            recommendations.reasoning = "Mixed installation provides versatility for diverse user needs.";
+          }
+
+          // Estimate number of chargers based on vehicle count
+          if (vehicleCount === "1-5") {
+            recommendations.numberOfChargers = "2";
+          } else if (vehicleCount === "6-15") {
+            recommendations.numberOfChargers = "4";
+          } else if (vehicleCount === "16-30") {
+            recommendations.numberOfChargers = "8";
+          } else if (vehicleCount === "31-50") {
+            recommendations.numberOfChargers = "12";
+          } else if (vehicleCount === "51-100") {
+            recommendations.numberOfChargers = "20";
+          } else {
+            recommendations.numberOfChargers = "30";
+          }
+
+          // Estimate cost and installation time
+          const chargerCount = parseInt(recommendations.numberOfChargers);
+          if (recommendations.chargingType === "dc-fast") {
+            recommendations.estimatedCost = `$${(chargerCount * 45000).toLocaleString()} - $${(chargerCount * 65000).toLocaleString()}`;
+            recommendations.installationTime = "8-12 weeks";
+          } else if (recommendations.chargingType === "mixed") {
+            recommendations.estimatedCost = `$${(chargerCount * 25000).toLocaleString()} - $${(chargerCount * 35000).toLocaleString()}`;
+            recommendations.installationTime = "6-10 weeks";
+          } else {
+            recommendations.estimatedCost = `$${(chargerCount * 8000).toLocaleString()} - $${(chargerCount * 15000).toLocaleString()}`;
+            recommendations.installationTime = "4-6 weeks";
+          }
+
+          return recommendations;
+        };
+
+        const recommendations = getChargerRecommendations();
+
         return (
           <div className="space-y-6">
-            <div className="bg-muted/30 p-4 rounded-lg">
-              <h3 className="font-medium mb-2 flex items-center gap-2">
-                <Zap className="w-4 h-4 text-primary" />
-                Recommended Configuration
+            {/* Enhanced Recommendations Section */}
+            <div className="bg-gradient-to-r from-primary/5 to-secondary/5 border border-primary/20 p-6 rounded-lg">
+              <h3 className="font-medium mb-3 flex items-center gap-2">
+                <Zap className="w-5 h-5 text-primary" />
+                AI-Powered Charger Recommendations
               </h3>
-              <p className="text-sm text-muted-foreground">
-                Based on your site assessment, we recommend DC fast charging for commercial sites with high utilization.
-              </p>
+              <div className="grid md:grid-cols-2 gap-4 mb-4">
+                <div className="space-y-2">
+                  <p className="text-sm font-medium text-primary">Recommended Configuration:</p>
+                  <p className="text-sm text-muted-foreground">{recommendations.reasoning}</p>
+                  <div className="flex items-center gap-4 text-sm">
+                    <span className="font-medium">Type: {recommendations.chargingType.replace('-', ' ').toUpperCase()}</span>
+                    <span className="font-medium">Power: {recommendations.powerRating}</span>
+                    <span className="font-medium">Quantity: {recommendations.numberOfChargers} units</span>
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <p className="text-sm font-medium text-secondary">Project Estimates:</p>
+                  <div className="space-y-1 text-sm text-muted-foreground">
+                    <p><strong>Estimated Cost:</strong> {recommendations.estimatedCost}</p>
+                    <p><strong>Installation Time:</strong> {recommendations.installationTime}</p>
+                    <p><strong>Based on:</strong> {clientRequirements.organizationType} • {clientRequirements.numberOfVehicles} vehicles</p>
+                  </div>
+                </div>
+              </div>
+              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                <CheckCircle2 className="w-4 h-4 text-secondary" />
+                Recommendations based on your client requirements and industry best practices
+              </div>
+            </div>
+
+            {/* Charger Type Comparison */}
+            <div className="grid md:grid-cols-3 gap-4">
+              <Card className={`cursor-pointer transition-all hover:shadow-md ${chargerSelection.chargingType === 'ac-level2' ? 'border-primary bg-primary/5' : ''}`}>
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-sm flex items-center gap-2">
+                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                      <Zap className="w-4 h-4 text-blue-600" />
+                    </div>
+                    AC Level 2
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2 text-xs">
+                  <p><strong>Power:</strong> 7-22kW</p>
+                  <p><strong>Charging Time:</strong> 4-8 hours</p>
+                  <p><strong>Best For:</strong> Overnight, workplace</p>
+                  <p><strong>Cost:</strong> $8,000-$15,000 per unit</p>
+                  <p className="text-green-600"><strong>✓ Lower installation cost</strong></p>
+                  <p className="text-green-600"><strong>✓ Suitable for long dwell times</strong></p>
+                </CardContent>
+              </Card>
+
+              <Card className={`cursor-pointer transition-all hover:shadow-md ${chargerSelection.chargingType === 'dc-fast' ? 'border-primary bg-primary/5' : ''}`}>
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-sm flex items-center gap-2">
+                    <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center">
+                      <Zap className="w-4 h-4 text-red-600" />
+                    </div>
+                    DC Fast Charging
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2 text-xs">
+                  <p><strong>Power:</strong> 50-150kW</p>
+                  <p><strong>Charging Time:</strong> 20-60 minutes</p>
+                  <p><strong>Best For:</strong> Commercial, high-turnover</p>
+                  <p><strong>Cost:</strong> $45,000-$65,000 per unit</p>
+                  <p className="text-green-600"><strong>✓ Rapid charging</strong></p>
+                  <p className="text-green-600"><strong>✓ High vehicle throughput</strong></p>
+                </CardContent>
+              </Card>
+
+              <Card className={`cursor-pointer transition-all hover:shadow-md ${chargerSelection.chargingType === 'mixed' ? 'border-primary bg-primary/5' : ''}`}>
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-sm flex items-center gap-2">
+                    <div className="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center">
+                      <Zap className="w-4 h-4 text-yellow-600" />
+                    </div>
+                    Mixed Installation
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2 text-xs">
+                  <p><strong>Power:</strong> 7kW-150kW</p>
+                  <p><strong>Charging Time:</strong> Variable</p>
+                  <p><strong>Best For:</strong> Diverse user needs</p>
+                  <p><strong>Cost:</strong> $25,000-$35,000 avg per unit</p>
+                  <p className="text-green-600"><strong>✓ Maximum flexibility</strong></p>
+                  <p className="text-green-600"><strong>✓ Future-proof solution</strong></p>
+                </CardContent>
+              </Card>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
