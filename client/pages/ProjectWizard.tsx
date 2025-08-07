@@ -369,26 +369,8 @@ export default function ProjectWizard() {
 
   const nextStep = () => {
     console.log('NextStep clicked - currentStep:', currentStep, 'totalSteps:', totalSteps);
-    try {
-      if (currentStep < totalSteps) {
-        console.log('Moving to next step...');
-        // Auto-populate site assessment when moving from client requirements to site assessment
-        if (currentStep === 1) {
-          console.log('Populating site assessment from client requirements');
-          populateSiteAssessmentFromClientRequirements();
-        }
-        // Auto-populate charger selection with recommendations when moving to Step 3
-        if (currentStep === 2) {
-          console.log('Populating charger recommendations');
-          populateChargerRecommendations();
-        }
-        console.log('Setting current step to:', currentStep + 1);
-        setCurrentStep(currentStep + 1);
-      } else {
-        console.log('Cannot advance - already at last step');
-      }
-    } catch (error) {
-      console.error('Error in nextStep:', error);
+    if (currentStep < totalSteps) {
+      setCurrentStep(currentStep + 1);
     }
   };
 
