@@ -79,6 +79,7 @@ import {
   Download,
   Upload,
   RefreshCw,
+  Calculator,
 } from "lucide-react";
 import { Logo } from "@/components/ui/logo";
 import { projectService, autoConfigureSupabase } from "@/lib/supabase";
