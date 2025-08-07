@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -30,9 +31,15 @@ import {
   ArrowUpRight
 } from "lucide-react";
 import { Logo } from "@/components/ui/logo";
+import { projectService, checkSupabaseConnection } from "@/lib/supabase";
 
 export default function Dashboard() {
-  const recentProjects = [
+  const [projects, setProjects] = useState<any[]>([]);
+  const [isSupabaseConnected, setIsSupabaseConnected] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  // Sample fallback projects for when no real projects exist
+  const sampleProjects = [
     {
       id: "PRJ-001",
       name: "Westfield Shopping Centre - EV Hub",
@@ -78,6 +85,74 @@ export default function Dashboard() {
       type: "Fleet DC Charging"
     }
   ];
+
+  // Load projects on component mount
+  useEffect(() => {
+    const loadProjects = async () => {
+      try {
+        setLoading(true);
+
+        // Check Supabase connection
+        const isConnected = await checkSupabaseConnection();
+        setIsSupabaseConnected(isConnected);
+
+        let loadedProjects = [];
+
+        if (isConnected) {
+          // Load from Supabase
+          try {
+            const supabaseProjects = await projectService.getAllProjects();
+            loadedProjects = supabaseProjects.map(project => ({
+              id: project.id?.slice(0, 8) || 'PRJ-NEW',
+              name: project.name,
+              client: project.client_name,
+              status: project.status,
+              progress: project.progress,
+              value: `$${project.estimated_budget_min?.toLocaleString()} - $${project.estimated_budget_max?.toLocaleString()}` || 'TBD',
+              deadline: new Date(project.created_at || Date.now()).toLocaleDateString(),
+              location: project.site_address?.split(',').slice(-2).join(',').trim() || 'TBD',
+              type: project.site_type || 'EV Charging Project'
+            }));
+          } catch (error) {
+            console.error('Error loading projects from Supabase:', error);
+          }
+        }
+
+        // Load from localStorage as fallback or additional
+        const localProjects = JSON.parse(localStorage.getItem('chargeSourceProjects') || '[]');
+        const formattedLocalProjects = localProjects.map((project: any) => ({
+          id: project.id || `PRJ-${Date.now()}`,
+          name: project.projectInfo?.name || project.name || 'Unnamed Project',
+          client: project.projectInfo?.client || project.client_name || 'Unknown Client',
+          status: project.status || 'Planning',
+          progress: project.progress || 0,
+          value: project.estimatedBudget || project.estimated_budget || 'TBD',
+          deadline: new Date(project.createdAt || project.created_at || Date.now()).toLocaleDateString(),
+          location: project.projectInfo?.address || project.site_address || 'TBD',
+          type: project.projectInfo?.type || project.site_type || 'EV Charging Project'
+        }));
+
+        // Combine and deduplicate projects
+        const allProjects = [...loadedProjects, ...formattedLocalProjects];
+        const uniqueProjects = allProjects.filter((project, index, self) =>
+          index === self.findIndex(p => p.id === project.id)
+        );
+
+        // Use sample projects if no real projects exist
+        setProjects(uniqueProjects.length > 0 ? uniqueProjects : sampleProjects);
+
+      } catch (error) {
+        console.error('Error loading projects:', error);
+        setProjects(sampleProjects);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadProjects();
+  }, []);
+
+  const recentProjects = projects;
 
   const quickActions = [
     {
