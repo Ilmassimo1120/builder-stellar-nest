@@ -628,8 +628,15 @@ export default function ProjectWizard() {
       console.log("Project Created Successfully (localStorage):", projectData);
 
       // Show success message and navigate
-      alert(`Project "${projectData.projectInfo.name}" created successfully!\n\nProject ID: ${projectData.id}\nEstimated Cost: ${projectData.estimatedBudget}\nTimeline: ${projectData.timeline}`);
+      console.log('✅ Project created successfully in localStorage:', projectData);
 
+      const successMessage = `🎉 Project "${projectData.projectInfo.name}" created successfully!\n\n` +
+                            `📋 Project ID: ${projectData.id}\n` +
+                            `💰 Estimated Cost: ${projectData.estimatedBudget}\n` +
+                            `⏱️ Timeline: ${projectData.timeline}\n\n` +
+                            `💾 Saved locally`;
+
+      alert(successMessage);
       navigate("/dashboard");
     } catch (error) {
       console.error("Error creating project with localStorage:", error);
