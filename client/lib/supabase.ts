@@ -252,14 +252,67 @@ export const projectService = {
   }
 };
 
-// Check if Supabase is properly configured
-export const checkSupabaseConnection = async () => {
+// Initialize Supabase database schema if needed
+export const initializeSupabaseSchema = async () => {
   try {
-    const { data, error } = await supabase.from('projects').select('count').limit(1);
-    if (error) throw error;
+    // Check if projects table exists by trying to select from it
+    const { error } = await supabase.from('projects').select('count').limit(1);
+
+    if (error && error.message.includes('relation "projects" does not exist')) {
+      console.log('Initializing Supabase schema for ChargeSource...');
+
+      // Since we can't run DDL through the client, we'll rely on the MCP integration
+      // or manual schema setup. For now, we'll just return false to use localStorage
+      console.warn('Database schema not initialized. Please connect Supabase MCP integration or run schema manually.');
+      return false;
+    }
+
     return true;
   } catch (error) {
-    console.warn('Supabase connection not configured. Please set up your environment variables.');
+    console.warn('Error checking database schema:', error);
+    return false;
+  }
+};
+
+// Check if Supabase is properly configured and schema is ready
+export const checkSupabaseConnection = async () => {
+  try {
+    // First check if we can connect to Supabase
+    const { data, error } = await supabase.from('projects').select('count').limit(1);
+
+    if (error) {
+      if (error.message.includes('relation "projects" does not exist')) {
+        console.log('Supabase connected but schema not initialized. Using localStorage fallback.');
+        return false;
+      }
+      throw error;
+    }
+
+    console.log('✅ Supabase connection successful');
+    return true;
+  } catch (error) {
+    console.warn('Supabase connection failed, using localStorage fallback:', error);
+    return false;
+  }
+};
+
+// Auto-configure Supabase for ChargeSource
+export const autoConfigureSupabase = async () => {
+  console.log('🚀 Auto-configuring Supabase for ChargeSource...');
+
+  try {
+    // Check connection first
+    const isConnected = await checkSupabaseConnection();
+
+    if (isConnected) {
+      console.log('✅ Supabase auto-configuration successful');
+      return true;
+    } else {
+      console.log('⚠️ Supabase not available, using localStorage fallback');
+      return false;
+    }
+  } catch (error) {
+    console.error('❌ Supabase auto-configuration failed:', error);
     return false;
   }
 };
