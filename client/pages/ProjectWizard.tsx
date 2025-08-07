@@ -155,22 +155,24 @@ export default function ProjectWizard() {
 
   const getStepTitle = (step: number) => {
     switch (step) {
-      case 1: return "Site Assessment";
-      case 2: return "Charger Selection";
-      case 3: return "Grid Capacity Analysis";
-      case 4: return "Compliance Checklist";
-      case 5: return "Project Summary";
+      case 1: return "Client Requirements";
+      case 2: return "Site Assessment";
+      case 3: return "Charger Selection";
+      case 4: return "Grid Capacity Analysis";
+      case 5: return "Compliance Checklist";
+      case 6: return "Project Summary";
       default: return "Project Planning";
     }
   };
 
   const getStepIcon = (step: number) => {
     switch (step) {
-      case 1: return <MapPin className="w-5 h-5" />;
-      case 2: return <Plug className="w-5 h-5" />;
-      case 3: return <Gauge className="w-5 h-5" />;
-      case 4: return <Shield className="w-5 h-5" />;
-      case 5: return <FileText className="w-5 h-5" />;
+      case 1: return <Users className="w-5 h-5" />;
+      case 2: return <MapPin className="w-5 h-5" />;
+      case 3: return <Plug className="w-5 h-5" />;
+      case 4: return <Gauge className="w-5 h-5" />;
+      case 5: return <Shield className="w-5 h-5" />;
+      case 6: return <FileText className="w-5 h-5" />;
       default: return <Settings className="w-5 h-5" />;
     }
   };
