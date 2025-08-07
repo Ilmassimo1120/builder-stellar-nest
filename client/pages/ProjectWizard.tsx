@@ -394,10 +394,11 @@ export default function ProjectWizard() {
     };
   }, [user, throttledAutoSave, currentStep]);
 
-  // Check for draft from URL params or load existing
+  // Check for draft from URL params, load existing, or show template selector
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const draftId = urlParams.get("draft");
+    const template = urlParams.get("template");
 
     if (draftId && user) {
       getDraftById(draftId).then((draft) => {
@@ -405,6 +406,13 @@ export default function ProjectWizard() {
           loadDraft(draft);
         }
       });
+    } else if (template) {
+      // Load specific template from URL
+      // This allows direct linking to templates
+      setShowTemplateSelector(false);
+    } else if (!draftId && user) {
+      // Show template selector for new projects
+      setShowTemplateSelector(true);
     }
   }, [user]);
 
