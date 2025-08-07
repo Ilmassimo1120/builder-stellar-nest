@@ -148,6 +148,8 @@ export default function ProjectWizard() {
   const [selectedTemplate, setSelectedTemplate] =
     useState<ProjectTemplate | null>(null);
   const [connectionError, setConnectionError] = useState<string | null>(null);
+  const [showSuccessDialog, setShowSuccessDialog] = useState(false);
+  const [createdProject, setCreatedProject] = useState<any>(null);
 
   // Auto-save throttling refs
   const lastAutoSaveRef = useRef<number>(0);
