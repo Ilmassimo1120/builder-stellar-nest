@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import { PlugZap, ArrowLeft, Construction } from "lucide-react";
+import { Logo } from "@/components/ui/logo";
 
 interface PlaceholderProps {
   title: string;
@@ -16,13 +17,7 @@ export default function Placeholder({ title, description, features = [] }: Place
       <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <div className="flex items-center space-x-3">
-              <PlugZap className="w-8 h-8 text-primary" />
-              <div className="flex flex-col">
-                <span className="text-lg font-bold text-primary">Charge N Go</span>
-                <span className="text-sm text-muted-foreground">ChargeSource Platform</span>
-              </div>
-            </div>
+            <Logo size="md" />
           </div>
           <nav className="hidden md:flex items-center space-x-6">
             <Link to="/dashboard" className="text-sm font-medium hover:text-primary transition-colors">
