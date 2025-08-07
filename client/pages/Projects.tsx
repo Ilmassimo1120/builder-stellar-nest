@@ -433,8 +433,7 @@ export default function Projects() {
     loadProjects();
   }, []);
 
-  // Debounced search to improve performance
-  const debouncedSearchQuery = useDebounce(searchQuery, 300);
+  // Debounced search implemented above with useState and useEffect
 
   // Memoized filtering and sorting function
   const filteredAndSortedProjects = useMemo(() => {
