@@ -135,6 +135,8 @@ export default function ProjectWizard() {
   const [isDraftSaving, setIsDraftSaving] = useState(false);
   const [draftSaved, setDraftSaved] = useState(false);
   const [currentDraftId, setCurrentDraftId] = useState<string | null>(null);
+  const [showTemplateSelector, setShowTemplateSelector] = useState(false);
+  const [selectedTemplate, setSelectedTemplate] = useState<ProjectTemplate | null>(null);
 
   // Auto-save throttling refs
   const lastAutoSaveRef = useRef<number>(0);
