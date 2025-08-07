@@ -334,19 +334,20 @@ export default function ProjectWizard() {
     }
   };
 
-  // Auto-save draft every 30 seconds when user is actively working - TEMPORARILY DISABLED
-  // useEffect(() => {
-  //   if (!user) return;
+  // Auto-save with proper throttling when content changes
+  useEffect(() => {
+    if (!user) return;
 
-  //   const autoSaveInterval = setInterval(() => {
-  //     // Only auto-save if there's content and user hasn't just saved
-  //     if (clientRequirements.contactPersonName || siteAssessment.projectName) {
-  //       saveDraft(false); // Auto-save without notification
-  //     }
-  //   }, 30000); // 30 seconds
+    // Trigger throttled auto-save when content changes
+    throttledAutoSave();
 
-  //   return () => clearInterval(autoSaveInterval);
-  // }, [user]); // Simplified dependencies to prevent infinite re-renders
+    // Cleanup function
+    return () => {
+      if (autoSaveTimeoutRef.current) {
+        clearTimeout(autoSaveTimeoutRef.current);
+      }
+    };
+  }, [user, throttledAutoSave, currentStep]);
 
   // Check for draft from URL params or load existing
   useEffect(() => {
