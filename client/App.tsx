@@ -101,10 +101,7 @@ const App = () => (
             />
 
             {/* Client Portal (public access) */}
-            <Route
-              path="/client/quote/:quoteId"
-              element={<ClientPortal />}
-            />
+            <Route path="/client/quote/:quoteId" element={<ClientPortal />} />
 
             {/* Development/Testing Routes */}
             <Route path="/test-connection" element={<ConnectionTest />} />

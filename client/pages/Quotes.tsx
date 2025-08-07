@@ -77,7 +77,7 @@ export default function Quotes() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
-  
+
   const [quotes, setQuotes] = useState<Quote[]>([]);
   const [filteredQuotes, setFilteredQuotes] = useState<Quote[]>([]);
   const [templates, setTemplates] = useState<QuoteTemplate[]>([]);
@@ -109,7 +109,7 @@ export default function Quotes() {
           quote.quoteNumber.toLowerCase().includes(query) ||
           quote.clientInfo.name.toLowerCase().includes(query) ||
           quote.clientInfo.company.toLowerCase().includes(query) ||
-          quote.title.toLowerCase().includes(query)
+          quote.title.toLowerCase().includes(query),
       );
     }
 
@@ -166,7 +166,7 @@ export default function Quotes() {
       const allQuotes = quoteService.getAllQuotes();
       setQuotes(allQuotes);
     } catch (error) {
-      console.error('Error loading quotes:', error);
+      console.error("Error loading quotes:", error);
       toast({
         title: "Error",
         description: "Failed to load quotes. Please try again.",
@@ -182,7 +182,7 @@ export default function Quotes() {
       const allTemplates = quoteService.getAllTemplates();
       setTemplates(allTemplates);
     } catch (error) {
-      console.error('Error loading templates:', error);
+      console.error("Error loading templates:", error);
     }
   };
 
@@ -191,46 +191,46 @@ export default function Quotes() {
       const quoteAnalytics = quoteService.getQuoteAnalytics();
       setAnalytics(quoteAnalytics);
     } catch (error) {
-      console.error('Error loading analytics:', error);
+      console.error("Error loading analytics:", error);
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'draft':
-        return 'bg-gray-100 text-gray-800 border-gray-200';
-      case 'pending_review':
-        return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      case 'sent':
-        return 'bg-blue-100 text-blue-800 border-blue-200';
-      case 'viewed':
-        return 'bg-purple-100 text-purple-800 border-purple-200';
-      case 'accepted':
-        return 'bg-green-100 text-green-800 border-green-200';
-      case 'rejected':
-        return 'bg-red-100 text-red-800 border-red-200';
-      case 'expired':
-        return 'bg-orange-100 text-orange-800 border-orange-200';
+      case "draft":
+        return "bg-gray-100 text-gray-800 border-gray-200";
+      case "pending_review":
+        return "bg-yellow-100 text-yellow-800 border-yellow-200";
+      case "sent":
+        return "bg-blue-100 text-blue-800 border-blue-200";
+      case "viewed":
+        return "bg-purple-100 text-purple-800 border-purple-200";
+      case "accepted":
+        return "bg-green-100 text-green-800 border-green-200";
+      case "rejected":
+        return "bg-red-100 text-red-800 border-red-200";
+      case "expired":
+        return "bg-orange-100 text-orange-800 border-orange-200";
       default:
-        return 'bg-gray-100 text-gray-800 border-gray-200';
+        return "bg-gray-100 text-gray-800 border-gray-200";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'draft':
+      case "draft":
         return <Edit className="w-4 h-4" />;
-      case 'pending_review':
+      case "pending_review":
         return <Clock className="w-4 h-4" />;
-      case 'sent':
+      case "sent":
         return <Send className="w-4 h-4" />;
-      case 'viewed':
+      case "viewed":
         return <Eye className="w-4 h-4" />;
-      case 'accepted':
+      case "accepted":
         return <CheckCircle2 className="w-4 h-4" />;
-      case 'rejected':
+      case "rejected":
         return <AlertCircle className="w-4 h-4" />;
-      case 'expired':
+      case "expired":
         return <Clock className="w-4 h-4" />;
       default:
         return <FileText className="w-4 h-4" />;
@@ -238,7 +238,7 @@ export default function Quotes() {
   };
 
   const handleDeleteQuote = async (quoteId: string) => {
-    if (!confirm('Are you sure you want to delete this quote?')) return;
+    if (!confirm("Are you sure you want to delete this quote?")) return;
 
     try {
       const success = quoteService.deleteQuote(quoteId);
@@ -370,7 +370,8 @@ export default function Quotes() {
           <div>
             <h1 className="text-3xl font-bold mb-2">Smart Quoting Engine</h1>
             <p className="text-muted-foreground">
-              Create professional quotes with intelligent pricing and product selection
+              Create professional quotes with intelligent pricing and product
+              selection
             </p>
           </div>
           <div className="flex items-center gap-3 mt-4 md:mt-0">
@@ -407,11 +408,15 @@ export default function Quotes() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Total Quotes</CardTitle>
+                <CardTitle className="text-sm font-medium">
+                  Total Quotes
+                </CardTitle>
                 <FileText className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{analytics.totalQuotes}</div>
+                <div className="text-2xl font-bold">
+                  {analytics.totalQuotes}
+                </div>
                 <p className="text-xs text-muted-foreground">
                   +12% from last month
                 </p>
@@ -419,7 +424,9 @@ export default function Quotes() {
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Total Value</CardTitle>
+                <CardTitle className="text-sm font-medium">
+                  Total Value
+                </CardTitle>
                 <DollarSign className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
@@ -433,7 +440,9 @@ export default function Quotes() {
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Conversion Rate</CardTitle>
+                <CardTitle className="text-sm font-medium">
+                  Conversion Rate
+                </CardTitle>
                 <TrendingUp className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
@@ -447,7 +456,9 @@ export default function Quotes() {
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Avg Quote Value</CardTitle>
+                <CardTitle className="text-sm font-medium">
+                  Avg Quote Value
+                </CardTitle>
                 <Calculator className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
@@ -488,7 +499,9 @@ export default function Quotes() {
                   <SelectContent>
                     <SelectItem value="all">All Status</SelectItem>
                     <SelectItem value="draft">Draft</SelectItem>
-                    <SelectItem value="pending_review">Pending Review</SelectItem>
+                    <SelectItem value="pending_review">
+                      Pending Review
+                    </SelectItem>
                     <SelectItem value="sent">Sent</SelectItem>
                     <SelectItem value="viewed">Viewed</SelectItem>
                     <SelectItem value="accepted">Accepted</SelectItem>
@@ -555,7 +568,10 @@ export default function Quotes() {
               </p>
               {!(searchQuery || statusFilter !== "all") && (
                 <div className="flex items-center justify-center gap-2">
-                  <Button variant="outline" onClick={() => setShowTemplateSelector(true)}>
+                  <Button
+                    variant="outline"
+                    onClick={() => setShowTemplateSelector(true)}
+                  >
                     <FileText className="w-4 h-4 mr-2" />
                     Use Template
                   </Button>
@@ -572,7 +588,10 @@ export default function Quotes() {
         ) : (
           <div className="space-y-4">
             {filteredQuotes.map((quote) => (
-              <Card key={quote.id} className="hover:shadow-md transition-shadow">
+              <Card
+                key={quote.id}
+                className="hover:shadow-md transition-shadow"
+              >
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div className="flex-1 grid grid-cols-1 md:grid-cols-6 gap-4 items-center">
@@ -592,8 +611,11 @@ export default function Quotes() {
                       </div>
 
                       <div className="flex items-center gap-2">
-                        <Badge className={getStatusColor(quote.status)} variant="secondary">
-                          {quote.status.replace('_', ' ')}
+                        <Badge
+                          className={getStatusColor(quote.status)}
+                          variant="secondary"
+                        >
+                          {quote.status.replace("_", " ")}
                         </Badge>
                       </div>
 
@@ -607,8 +629,12 @@ export default function Quotes() {
                       </div>
 
                       <div className="text-sm">
-                        <div className="font-medium">{quote.clientInfo.contactPerson}</div>
-                        <div className="text-muted-foreground">{quote.clientInfo.email}</div>
+                        <div className="font-medium">
+                          {quote.clientInfo.contactPerson}
+                        </div>
+                        <div className="text-muted-foreground">
+                          {quote.clientInfo.email}
+                        </div>
                       </div>
 
                       <div className="text-sm text-muted-foreground">
@@ -618,7 +644,8 @@ export default function Quotes() {
                         </div>
                         <div className="flex items-center gap-1">
                           <Clock className="w-3 h-3" />
-                          Valid until {new Date(quote.validUntil).toLocaleDateString()}
+                          Valid until{" "}
+                          {new Date(quote.validUntil).toLocaleDateString()}
                         </div>
                       </div>
                     </div>
@@ -636,7 +663,9 @@ export default function Quotes() {
                             View & Edit
                           </Link>
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleDuplicateQuote(quote.id)}>
+                        <DropdownMenuItem
+                          onClick={() => handleDuplicateQuote(quote.id)}
+                        >
                           <Copy className="w-4 h-4 mr-2" />
                           Duplicate
                         </DropdownMenuItem>
@@ -666,7 +695,10 @@ export default function Quotes() {
         )}
 
         {/* Template Selector Dialog */}
-        <Dialog open={showTemplateSelector} onOpenChange={setShowTemplateSelector}>
+        <Dialog
+          open={showTemplateSelector}
+          onOpenChange={setShowTemplateSelector}
+        >
           <DialogContent className="max-w-4xl">
             <DialogHeader>
               <DialogTitle>Choose a Quote Template</DialogTitle>
@@ -705,13 +737,14 @@ export default function Quotes() {
               ))}
             </div>
             <div className="flex justify-end gap-2">
-              <Button variant="outline" onClick={() => setShowTemplateSelector(false)}>
+              <Button
+                variant="outline"
+                onClick={() => setShowTemplateSelector(false)}
+              >
                 Cancel
               </Button>
               <Button asChild>
-                <Link to="/quotes/new">
-                  Create Blank Quote
-                </Link>
+                <Link to="/quotes/new">Create Blank Quote</Link>
               </Button>
             </div>
           </DialogContent>

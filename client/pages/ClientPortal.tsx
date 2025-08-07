@@ -50,11 +50,13 @@ export default function ClientPortal() {
   const { quoteId } = useParams<{ quoteId: string }>();
   const [searchParams] = useSearchParams();
   const { toast } = useToast();
-  
+
   const [quote, setQuote] = useState<Quote | null>(null);
   const [loading, setLoading] = useState(true);
   const [showDecisionDialog, setShowDecisionDialog] = useState(false);
-  const [decisionType, setDecisionType] = useState<'accepted' | 'rejected' | null>(null);
+  const [decisionType, setDecisionType] = useState<
+    "accepted" | "rejected" | null
+  >(null);
   const [decisionComments, setDecisionComments] = useState("");
   const [newComment, setNewComment] = useState("");
   const [submittingDecision, setSubmittingDecision] = useState(false);
@@ -76,25 +78,27 @@ export default function ClientPortal() {
   const loadQuote = async () => {
     try {
       setLoading(true);
-      
+
       // In a real implementation, this would validate the access token
       // For now, we'll just load the quote directly
       const quoteData = quoteService.getQuote(quoteId!);
-      
+
       if (quoteData) {
         setQuote(quoteData);
       } else {
         toast({
           title: "Quote not found",
-          description: "The quote you're looking for doesn't exist or has expired.",
+          description:
+            "The quote you're looking for doesn't exist or has expired.",
           variant: "destructive",
         });
       }
     } catch (error) {
-      console.error('Error loading quote:', error);
+      console.error("Error loading quote:", error);
       toast({
         title: "Error",
-        description: "Failed to load quote. Please check the link and try again.",
+        description:
+          "Failed to load quote. Please check the link and try again.",
         variant: "destructive",
       });
     } finally {
@@ -109,7 +113,7 @@ export default function ClientPortal() {
     const viewData = {
       id: `view-${Date.now()}`,
       viewedAt: new Date().toISOString(),
-      ipAddress: '0.0.0.0', // Would be actual IP in production
+      ipAddress: "0.0.0.0", // Would be actual IP in production
       userAgent: navigator.userAgent,
     };
 
@@ -117,13 +121,13 @@ export default function ClientPortal() {
     const updatedQuote = {
       ...quote,
       clientViews: [...quote.clientViews, viewData],
-      status: quote.status === 'sent' ? 'viewed' : quote.status,
+      status: quote.status === "sent" ? "viewed" : quote.status,
     };
 
     quoteService.updateQuote(updatedQuote);
   };
 
-  const handleDecision = (decision: 'accepted' | 'rejected') => {
+  const handleDecision = (decision: "accepted" | "rejected") => {
     setDecisionType(decision);
     setShowDecisionDialog(true);
   };
@@ -142,7 +146,7 @@ export default function ClientPortal() {
       };
 
       let updatedQuote;
-      if (decisionType === 'accepted') {
+      if (decisionType === "accepted") {
         updatedQuote = quoteService.acceptQuote(quote.id, clientDecision);
       } else {
         updatedQuote = quoteService.rejectQuote(quote.id, clientDecision);
@@ -152,10 +156,11 @@ export default function ClientPortal() {
         setQuote(updatedQuote);
         setShowDecisionDialog(false);
         setDecisionComments("");
-        
+
         toast({
-          title: decisionType === 'accepted' ? "Quote Accepted" : "Quote Rejected",
-          description: `Thank you for your ${decisionType === 'accepted' ? 'acceptance' : 'feedback'}. We'll be in touch soon.`,
+          title:
+            decisionType === "accepted" ? "Quote Accepted" : "Quote Rejected",
+          description: `Thank you for your ${decisionType === "accepted" ? "acceptance" : "feedback"}. We'll be in touch soon.`,
         });
       }
     } catch (error) {
@@ -174,8 +179,8 @@ export default function ClientPortal() {
 
     const comment: QuoteComment = {
       id: `comment-${Date.now()}`,
-      userId: 'client',
-      userName: quote.clientInfo.contactPerson || 'Client',
+      userId: "client",
+      userName: quote.clientInfo.contactPerson || "Client",
       message: newComment,
       timestamp: new Date().toISOString(),
       isInternal: false,
@@ -198,13 +203,13 @@ export default function ClientPortal() {
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case 'charger':
+      case "charger":
         return <Zap className="w-4 h-4" />;
-      case 'installation':
+      case "installation":
         return <Settings className="w-4 h-4" />;
-      case 'accessory':
+      case "accessory":
         return <Package className="w-4 h-4" />;
-      case 'service':
+      case "service":
         return <Users className="w-4 h-4" />;
       default:
         return <FileText className="w-4 h-4" />;
@@ -216,7 +221,7 @@ export default function ClientPortal() {
   };
 
   const canMakeDecision = (quote: Quote) => {
-    return ['sent', 'viewed'].includes(quote.status) && !isQuoteExpired(quote);
+    return ["sent", "viewed"].includes(quote.status) && !isQuoteExpired(quote);
   };
 
   if (loading) {
@@ -242,7 +247,8 @@ export default function ClientPortal() {
             <AlertCircle className="w-16 h-16 text-yellow-500 mx-auto mb-4" />
             <h2 className="text-2xl font-semibold mb-2">Access Required</h2>
             <p className="text-muted-foreground mb-4">
-              This quote requires a valid access link. Please check your email for the correct link.
+              This quote requires a valid access link. Please check your email
+              for the correct link.
             </p>
           </div>
         </div>
@@ -292,48 +298,55 @@ export default function ClientPortal() {
               <div className="text-3xl font-bold mb-1">
                 ${quote.totals.total.toLocaleString()}
               </div>
-              <div className="text-sm text-muted-foreground">
-                GST Included
-              </div>
+              <div className="text-sm text-muted-foreground">GST Included</div>
             </div>
           </div>
 
           {/* Status Banner */}
-          {quote.status === 'accepted' && (
+          {quote.status === "accepted" && (
             <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="w-5 h-5 text-green-600" />
-                <span className="font-medium text-green-800">Quote Accepted</span>
+                <span className="font-medium text-green-800">
+                  Quote Accepted
+                </span>
               </div>
               <p className="text-green-700 mt-2">
-                Thank you for accepting this quote. Our team will contact you soon to proceed with the project.
+                Thank you for accepting this quote. Our team will contact you
+                soon to proceed with the project.
               </p>
             </div>
           )}
 
-          {quote.status === 'rejected' && (
+          {quote.status === "rejected" && (
             <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
               <div className="flex items-center gap-2">
                 <XCircle className="w-5 h-5 text-red-600" />
                 <span className="font-medium text-red-800">Quote Declined</span>
               </div>
               <p className="text-red-700 mt-2">
-                We understand this quote didn't meet your requirements. Please feel free to contact us to discuss alternatives.
+                We understand this quote didn't meet your requirements. Please
+                feel free to contact us to discuss alternatives.
               </p>
             </div>
           )}
 
-          {isQuoteExpired(quote) && quote.status !== 'accepted' && quote.status !== 'rejected' && (
-            <div className="bg-orange-50 border border-orange-200 rounded-lg p-4 mb-6">
-              <div className="flex items-center gap-2">
-                <AlertCircle className="w-5 h-5 text-orange-600" />
-                <span className="font-medium text-orange-800">Quote Expired</span>
+          {isQuoteExpired(quote) &&
+            quote.status !== "accepted" &&
+            quote.status !== "rejected" && (
+              <div className="bg-orange-50 border border-orange-200 rounded-lg p-4 mb-6">
+                <div className="flex items-center gap-2">
+                  <AlertCircle className="w-5 h-5 text-orange-600" />
+                  <span className="font-medium text-orange-800">
+                    Quote Expired
+                  </span>
+                </div>
+                <p className="text-orange-700 mt-2">
+                  This quote has expired. Please contact us for an updated
+                  quote.
+                </p>
               </div>
-              <p className="text-orange-700 mt-2">
-                This quote has expired. Please contact us for an updated quote.
-              </p>
-            </div>
-          )}
+            )}
         </div>
 
         {/* Quote Content */}
@@ -351,20 +364,28 @@ export default function ClientPortal() {
                   </div>
                 )}
                 {quote.description && (
-                  <div className="text-muted-foreground">{quote.description}</div>
+                  <div className="text-muted-foreground">
+                    {quote.description}
+                  </div>
                 )}
                 {quote.projectData && (
                   <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
                     {quote.projectData.siteAddress && (
                       <div>
-                        <Label className="text-sm font-medium">Site Address</Label>
-                        <p className="text-sm text-muted-foreground">{quote.projectData.siteAddress}</p>
+                        <Label className="text-sm font-medium">
+                          Site Address
+                        </Label>
+                        <p className="text-sm text-muted-foreground">
+                          {quote.projectData.siteAddress}
+                        </p>
                       </div>
                     )}
                     {quote.projectData.siteType && (
                       <div>
                         <Label className="text-sm font-medium">Site Type</Label>
-                        <p className="text-sm text-muted-foreground">{quote.projectData.siteType}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {quote.projectData.siteType}
+                        </p>
                       </div>
                     )}
                   </div>
@@ -398,25 +419,34 @@ export default function ClientPortal() {
                                 {item.description}
                               </p>
                             )}
-                            {item.specifications && Object.keys(item.specifications).length > 0 && (
-                              <div className="mt-2 space-y-1">
-                                <p className="text-xs font-medium text-muted-foreground">Specifications:</p>
-                                <div className="grid grid-cols-2 gap-2 text-xs text-muted-foreground">
-                                  {Object.entries(item.specifications).map(([key, value]) => (
-                                    <div key={key}>
-                                      <span className="font-medium">{key}:</span> {String(value)}
-                                    </div>
-                                  ))}
+                            {item.specifications &&
+                              Object.keys(item.specifications).length > 0 && (
+                                <div className="mt-2 space-y-1">
+                                  <p className="text-xs font-medium text-muted-foreground">
+                                    Specifications:
+                                  </p>
+                                  <div className="grid grid-cols-2 gap-2 text-xs text-muted-foreground">
+                                    {Object.entries(item.specifications).map(
+                                      ([key, value]) => (
+                                        <div key={key}>
+                                          <span className="font-medium">
+                                            {key}:
+                                          </span>{" "}
+                                          {String(value)}
+                                        </div>
+                                      ),
+                                    )}
+                                  </div>
                                 </div>
-                              </div>
-                            )}
+                              )}
                           </div>
                           <div className="text-right">
                             <div className="font-medium">
                               ${item.totalPrice.toLocaleString()}
                             </div>
                             <div className="text-sm text-muted-foreground">
-                              {item.quantity} × ${item.unitPrice.toLocaleString()}
+                              {item.quantity} × $
+                              {item.unitPrice.toLocaleString()}
                             </div>
                           </div>
                         </div>
@@ -469,24 +499,31 @@ export default function ClientPortal() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <Label className="text-sm font-medium">Payment Terms</Label>
-                  <p className="text-sm text-muted-foreground">{quote.settings.paymentTerms}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {quote.settings.paymentTerms}
+                  </p>
                 </div>
                 <div>
                   <Label className="text-sm font-medium">Warranty</Label>
-                  <p className="text-sm text-muted-foreground">{quote.settings.warranty}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {quote.settings.warranty}
+                  </p>
                 </div>
                 <div>
                   <Label className="text-sm font-medium">Delivery Terms</Label>
-                  <p className="text-sm text-muted-foreground">{quote.settings.deliveryTerms}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {quote.settings.deliveryTerms}
+                  </p>
                 </div>
                 <div>
                   <Label className="text-sm font-medium">Quote Validity</Label>
                   <p className="text-sm text-muted-foreground">
-                    {quote.settings.validityDays} days from {new Date(quote.createdAt).toLocaleDateString()}
+                    {quote.settings.validityDays} days from{" "}
+                    {new Date(quote.createdAt).toLocaleDateString()}
                   </p>
                 </div>
               </div>
-              
+
               {quote.settings.terms && (
                 <div>
                   <Label className="text-sm font-medium">General Terms</Label>
@@ -498,7 +535,9 @@ export default function ClientPortal() {
 
               {quote.settings.notes && (
                 <div>
-                  <Label className="text-sm font-medium">Additional Notes</Label>
+                  <Label className="text-sm font-medium">
+                    Additional Notes
+                  </Label>
                   <div className="text-sm text-muted-foreground mt-2 whitespace-pre-line">
                     {quote.settings.notes}
                   </div>
@@ -517,19 +556,23 @@ export default function ClientPortal() {
             </CardHeader>
             <CardContent>
               {/* Existing Comments */}
-              {quote.comments.filter(c => !c.isInternal).length > 0 && (
+              {quote.comments.filter((c) => !c.isInternal).length > 0 && (
                 <div className="space-y-4 mb-6">
-                  {quote.comments.filter(c => !c.isInternal).map((comment) => (
-                    <div key={comment.id} className="p-4 bg-muted rounded-lg">
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="font-medium">{comment.userName}</span>
-                        <span className="text-xs text-muted-foreground">
-                          {new Date(comment.timestamp).toLocaleDateString()}
-                        </span>
+                  {quote.comments
+                    .filter((c) => !c.isInternal)
+                    .map((comment) => (
+                      <div key={comment.id} className="p-4 bg-muted rounded-lg">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="font-medium">
+                            {comment.userName}
+                          </span>
+                          <span className="text-xs text-muted-foreground">
+                            {new Date(comment.timestamp).toLocaleDateString()}
+                          </span>
+                        </div>
+                        <p className="text-sm">{comment.message}</p>
                       </div>
-                      <p className="text-sm">{comment.message}</p>
-                    </div>
-                  ))}
+                    ))}
                 </div>
               )}
 
@@ -561,20 +604,20 @@ export default function ClientPortal() {
                   <Download className="w-4 h-4 mr-2" />
                   Download PDF
                 </Button>
-                
+
                 {canMakeDecision(quote) && (
                   <>
                     <Button
                       variant="outline"
                       className="flex-1 sm:flex-none border-red-200 text-red-600 hover:bg-red-50"
-                      onClick={() => handleDecision('rejected')}
+                      onClick={() => handleDecision("rejected")}
                     >
                       <XCircle className="w-4 h-4 mr-2" />
                       Decline Quote
                     </Button>
                     <Button
                       className="flex-1 sm:flex-none bg-green-600 hover:bg-green-700"
-                      onClick={() => handleDecision('accepted')}
+                      onClick={() => handleDecision("accepted")}
                     >
                       <CheckCircle2 className="w-4 h-4 mr-2" />
                       Accept Quote
@@ -582,14 +625,15 @@ export default function ClientPortal() {
                   </>
                 )}
 
-                {!canMakeDecision(quote) && quote.status !== 'accepted' && quote.status !== 'rejected' && (
-                  <div className="text-center text-muted-foreground">
-                    {isQuoteExpired(quote) 
-                      ? "This quote has expired. Please contact us for an updated quote."
-                      : "Quote decision already submitted."
-                    }
-                  </div>
-                )}
+                {!canMakeDecision(quote) &&
+                  quote.status !== "accepted" &&
+                  quote.status !== "rejected" && (
+                    <div className="text-center text-muted-foreground">
+                      {isQuoteExpired(quote)
+                        ? "This quote has expired. Please contact us for an updated quote."
+                        : "Quote decision already submitted."}
+                    </div>
+                  )}
               </div>
             </CardContent>
           </Card>
@@ -600,50 +644,61 @@ export default function ClientPortal() {
           <DialogContent>
             <DialogHeader>
               <DialogTitle>
-                {decisionType === 'accepted' ? 'Accept Quote' : 'Decline Quote'}
+                {decisionType === "accepted" ? "Accept Quote" : "Decline Quote"}
               </DialogTitle>
               <DialogDescription>
-                {decisionType === 'accepted' 
-                  ? 'By accepting this quote, you agree to proceed with the project as outlined.'
-                  : 'Please let us know why you\'re declining this quote so we can better serve you in the future.'
-                }
+                {decisionType === "accepted"
+                  ? "By accepting this quote, you agree to proceed with the project as outlined."
+                  : "Please let us know why you're declining this quote so we can better serve you in the future."}
               </DialogDescription>
             </DialogHeader>
             <div className="space-y-4">
               <div>
                 <Label htmlFor="decisionComments">
-                  {decisionType === 'accepted' ? 'Additional comments (optional)' : 'Reason for declining'}
+                  {decisionType === "accepted"
+                    ? "Additional comments (optional)"
+                    : "Reason for declining"}
                 </Label>
                 <Textarea
                   id="decisionComments"
                   value={decisionComments}
                   onChange={(e) => setDecisionComments(e.target.value)}
                   placeholder={
-                    decisionType === 'accepted' 
-                      ? 'Any additional notes or requirements...'
-                      : 'Please tell us why this quote doesn\'t meet your needs...'
+                    decisionType === "accepted"
+                      ? "Any additional notes or requirements..."
+                      : "Please tell us why this quote doesn't meet your needs..."
                   }
                   rows={3}
                 />
               </div>
             </div>
             <DialogFooter>
-              <Button variant="outline" onClick={() => setShowDecisionDialog(false)}>
+              <Button
+                variant="outline"
+                onClick={() => setShowDecisionDialog(false)}
+              >
                 Cancel
               </Button>
               <Button
                 onClick={submitDecision}
-                disabled={submittingDecision || (decisionType === 'rejected' && !decisionComments.trim())}
-                className={decisionType === 'accepted' ? 'bg-green-600 hover:bg-green-700' : ''}
+                disabled={
+                  submittingDecision ||
+                  (decisionType === "rejected" && !decisionComments.trim())
+                }
+                className={
+                  decisionType === "accepted"
+                    ? "bg-green-600 hover:bg-green-700"
+                    : ""
+                }
               >
                 {submittingDecision ? (
                   <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
-                ) : decisionType === 'accepted' ? (
+                ) : decisionType === "accepted" ? (
                   <CheckCircle2 className="w-4 h-4 mr-2" />
                 ) : (
                   <XCircle className="w-4 h-4 mr-2" />
                 )}
-                {decisionType === 'accepted' ? 'Accept Quote' : 'Decline Quote'}
+                {decisionType === "accepted" ? "Accept Quote" : "Decline Quote"}
               </Button>
             </DialogFooter>
           </DialogContent>

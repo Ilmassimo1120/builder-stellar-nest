@@ -693,7 +693,9 @@ export default function Projects() {
     try {
       // Check existing quotes for this project
       const allQuotes = quoteService.getAllQuotes();
-      const existingQuotes = allQuotes.filter(q => q.projectId === project.id);
+      const existingQuotes = allQuotes.filter(
+        (q) => q.projectId === project.id,
+      );
 
       // Create a new quote from the project
       const newQuote = quoteService.createQuote(project.id);
@@ -974,9 +976,7 @@ export default function Projects() {
                       Edit Project
                     </DropdownMenuItem>
                   )}
-                  <DropdownMenuItem
-                    onClick={() => handleCreateQuote(project)}
-                  >
+                  <DropdownMenuItem onClick={() => handleCreateQuote(project)}>
                     <Calculator className="w-4 h-4 mr-2" />
                     Create Quote
                   </DropdownMenuItem>
@@ -1115,9 +1115,7 @@ export default function Projects() {
                       Edit Project
                     </DropdownMenuItem>
                   )}
-                  <DropdownMenuItem
-                    onClick={() => handleCreateQuote(project)}
-                  >
+                  <DropdownMenuItem onClick={() => handleCreateQuote(project)}>
                     <Calculator className="w-4 h-4 mr-2" />
                     Create Quote
                   </DropdownMenuItem>

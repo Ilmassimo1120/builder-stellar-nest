@@ -1,12 +1,18 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Link, useNavigate } from "react-router-dom";
 import { quoteService } from "@/lib/quoteService";
-import { 
+import {
   PlugZap,
   Plus,
   Calendar,
@@ -31,13 +37,19 @@ import {
   Calculator,
   ArrowUpRight,
   User,
-  LogOut
+  LogOut,
 } from "lucide-react";
 import { Logo } from "@/components/ui/logo";
 import { SupabaseSetup } from "@/components/SupabaseSetup";
 import { projectService, autoConfigureSupabase } from "@/lib/supabase";
 import { useAuth } from "@/hooks/useAuth";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
 
 export default function Dashboard() {
   const { user, logout } = useAuth();
@@ -49,18 +61,18 @@ export default function Dashboard() {
   // Function to retry Supabase connection
   const retryConnection = async (): Promise<void> => {
     try {
-      console.log('🔄 Retrying Supabase connection...');
+      console.log("🔄 Retrying Supabase connection...");
       const isConnected = await autoConfigureSupabase();
       setIsSupabaseConnected(isConnected);
       if (isConnected) {
-        console.log('✅ Connection successful, reloading projects...');
+        console.log("✅ Connection successful, reloading projects...");
         // Reload projects if connection is successful
         await loadProjects();
       } else {
-        console.log('⚠️ Connection still not available');
+        console.log("⚠️ Connection still not available");
       }
     } catch (error) {
-      console.error('❌ Error retrying Supabase connection:', error);
+      console.error("❌ Error retrying Supabase connection:", error);
       setIsSupabaseConnected(false);
     }
   };
@@ -76,10 +88,10 @@ export default function Dashboard() {
       value: "$245,000",
       deadline: "2024-03-15",
       location: "Sydney, NSW",
-      type: "Commercial DC Fast Charging"
+      type: "Commercial DC Fast Charging",
     },
     {
-      id: "PRJ-002", 
+      id: "PRJ-002",
       name: "Residential Complex - Parramatta",
       client: "Mirvac Properties",
       status: "Quoting",
@@ -87,7 +99,7 @@ export default function Dashboard() {
       value: "$89,500",
       deadline: "2024-02-28",
       location: "Parramatta, NSW",
-      type: "Residential AC Charging"
+      type: "Residential AC Charging",
     },
     {
       id: "PRJ-003",
@@ -98,7 +110,7 @@ export default function Dashboard() {
       value: "$156,000",
       deadline: "2024-01-30",
       location: "Melbourne, VIC",
-      type: "Public DC Charging"
+      type: "Public DC Charging",
     },
     {
       id: "PRJ-004",
@@ -109,8 +121,8 @@ export default function Dashboard() {
       value: "$320,000",
       deadline: "2024-04-20",
       location: "Brisbane, QLD",
-      type: "Fleet DC Charging"
-    }
+      type: "Fleet DC Charging",
+    },
   ];
 
   // Extract loadProjects function so it can be called from retryConnection
@@ -128,65 +140,87 @@ export default function Dashboard() {
         // Load from Supabase
         try {
           const supabaseProjects = await projectService.getAllProjects();
-          loadedProjects = supabaseProjects.map(project => ({
-            id: project.id?.slice(0, 8) || 'PRJ-NEW',
+          loadedProjects = supabaseProjects.map((project) => ({
+            id: project.id?.slice(0, 8) || "PRJ-NEW",
             name: project.name,
             client: project.client_name,
             status: project.status,
             progress: project.progress,
-            value: `$${project.estimated_budget_min?.toLocaleString()} - $${project.estimated_budget_max?.toLocaleString()}` || 'TBD',
-            deadline: new Date(project.created_at || Date.now()).toLocaleDateString(),
-            location: project.site_address?.split(',').slice(-2).join(',').trim() || 'TBD',
-            type: project.site_type || 'EV Charging Project'
+            value:
+              `$${project.estimated_budget_min?.toLocaleString()} - $${project.estimated_budget_max?.toLocaleString()}` ||
+              "TBD",
+            deadline: new Date(
+              project.created_at || Date.now(),
+            ).toLocaleDateString(),
+            location:
+              project.site_address?.split(",").slice(-2).join(",").trim() ||
+              "TBD",
+            type: project.site_type || "EV Charging Project",
           }));
         } catch (error) {
-          console.error('Error loading projects from Supabase:', error);
+          console.error("Error loading projects from Supabase:", error);
         }
       }
 
       // Load from localStorage as fallback or additional
-      const localProjects = JSON.parse(localStorage.getItem('chargeSourceProjects') || '[]');
+      const localProjects = JSON.parse(
+        localStorage.getItem("chargeSourceProjects") || "[]",
+      );
       const formattedLocalProjects = localProjects.map((project: any) => ({
         id: project.id || `PRJ-${Date.now()}`,
-        name: project.projectInfo?.name || project.name || 'Unnamed Project',
-        client: project.projectInfo?.client || project.client_name || 'Unknown Client',
-        status: project.status || 'Planning',
+        name: project.projectInfo?.name || project.name || "Unnamed Project",
+        client:
+          project.projectInfo?.client ||
+          project.client_name ||
+          "Unknown Client",
+        status: project.status || "Planning",
         progress: project.progress || 0,
-        value: project.estimatedBudget || project.estimated_budget || 'TBD',
-        deadline: new Date(project.createdAt || project.created_at || Date.now()).toLocaleDateString(),
-        location: project.projectInfo?.address || project.site_address || 'TBD',
-        type: project.projectInfo?.type || project.site_type || 'EV Charging Project'
+        value: project.estimatedBudget || project.estimated_budget || "TBD",
+        deadline: new Date(
+          project.createdAt || project.created_at || Date.now(),
+        ).toLocaleDateString(),
+        location: project.projectInfo?.address || project.site_address || "TBD",
+        type:
+          project.projectInfo?.type ||
+          project.site_type ||
+          "EV Charging Project",
       }));
 
       // Load drafts for the current user
-      const drafts = JSON.parse(localStorage.getItem('chargeSourceDrafts') || '[]');
+      const drafts = JSON.parse(
+        localStorage.getItem("chargeSourceDrafts") || "[]",
+      );
       const userDrafts = drafts
         .filter((draft: any) => draft.userId === user?.id)
         .map((draft: any) => ({
           id: draft.id,
-          name: draft.draftName || 'Untitled Draft',
-          client: draft.clientRequirements?.contactPersonName || 'Draft Client',
-          status: 'Draft',
+          name: draft.draftName || "Untitled Draft",
+          client: draft.clientRequirements?.contactPersonName || "Draft Client",
+          status: "Draft",
           progress: draft.progress || 0,
-          value: 'In Progress',
+          value: "In Progress",
           deadline: new Date(draft.updatedAt).toLocaleDateString(),
-          location: draft.siteAssessment?.siteAddress || 'TBD',
-          type: 'Draft Project',
+          location: draft.siteAssessment?.siteAddress || "TBD",
+          type: "Draft Project",
           isDraft: true,
-          draftStep: draft.currentStep
+          draftStep: draft.currentStep,
         }));
 
       // Combine projects and drafts
-      const allProjects = [...loadedProjects, ...formattedLocalProjects, ...userDrafts];
-      const uniqueProjects = allProjects.filter((project, index, self) =>
-        index === self.findIndex(p => p.id === project.id)
+      const allProjects = [
+        ...loadedProjects,
+        ...formattedLocalProjects,
+        ...userDrafts,
+      ];
+      const uniqueProjects = allProjects.filter(
+        (project, index, self) =>
+          index === self.findIndex((p) => p.id === project.id),
       );
 
       // Use sample projects if no real projects exist
       setProjects(uniqueProjects.length > 0 ? uniqueProjects : sampleProjects);
-
     } catch (error) {
-      console.error('Error loading projects:', error);
+      console.error("Error loading projects:", error);
       setProjects(sampleProjects);
     } finally {
       setLoading(false);
@@ -261,19 +295,26 @@ export default function Dashboard() {
                   : "future-proofing"),
           numberOfVehicles: originalClientReq.numberOfVehicles || "6-15",
           vehicleTypes: originalClientReq.vehicleTypes || ["Passenger Cars"],
-          dailyUsagePattern: originalClientReq.dailyUsagePattern || "business-hours",
+          dailyUsagePattern:
+            originalClientReq.dailyUsagePattern || "business-hours",
           budgetRange: originalClientReq.budgetRange || "tbd",
           projectTimeline: originalClientReq.projectTimeline || "standard",
           sustainabilityGoals: originalClientReq.sustainabilityGoals || [],
-          accessibilityRequirements: originalClientReq.accessibilityRequirements || false,
-          specialRequirements: originalClientReq.specialRequirements || project.description || "",
-          preferredChargerBrands: originalClientReq.preferredChargerBrands || [],
+          accessibilityRequirements:
+            originalClientReq.accessibilityRequirements || false,
+          specialRequirements:
+            originalClientReq.specialRequirements || project.description || "",
+          preferredChargerBrands:
+            originalClientReq.preferredChargerBrands || [],
           paymentModel: originalClientReq.paymentModel || "",
         },
         siteAssessment: {
           projectName: originalSiteAssess.projectName || project.name,
           clientName: originalSiteAssess.clientName || project.client,
-          siteAddress: originalSiteAssess.siteAddress || project.siteAddress || project.location,
+          siteAddress:
+            originalSiteAssess.siteAddress ||
+            project.siteAddress ||
+            project.location,
           siteType: originalSiteAssess.siteType || "commercial",
           existingPowerSupply: originalSiteAssess.existingPowerSupply || "",
           availableAmperes: originalSiteAssess.availableAmperes || "",
@@ -281,7 +322,8 @@ export default function Dashboard() {
           parkingSpaces: originalSiteAssess.parkingSpaces || "",
           accessRequirements: originalSiteAssess.accessRequirements || "",
           photos: originalSiteAssess.photos || [],
-          additionalNotes: originalSiteAssess.additionalNotes || project.description || "",
+          additionalNotes:
+            originalSiteAssess.additionalNotes || project.description || "",
         },
         chargerSelection: {
           chargingType: originalChargerSel.chargingType || "",
@@ -304,8 +346,10 @@ export default function Dashboard() {
           electricalStandards: originalCompliance.electricalStandards || [],
           safetyRequirements: originalCompliance.safetyRequirements || [],
           localPermits: originalCompliance.localPermits || [],
-          environmentalConsiderations: originalCompliance.environmentalConsiderations || [],
-          accessibilityCompliance: originalCompliance.accessibilityCompliance || false,
+          environmentalConsiderations:
+            originalCompliance.environmentalConsiderations || [],
+          accessibilityCompliance:
+            originalCompliance.accessibilityCompliance || false,
         },
         progress: originalProject ? 100 : 33,
       };
@@ -335,7 +379,9 @@ export default function Dashboard() {
     try {
       // Check existing quotes for this project
       const allQuotes = quoteService.getAllQuotes();
-      const existingQuotes = allQuotes.filter(q => q.projectId === project.id);
+      const existingQuotes = allQuotes.filter(
+        (q) => q.projectId === project.id,
+      );
 
       // Create a new quote from the project
       const newQuote = quoteService.createQuote(project.id);
@@ -363,29 +409,29 @@ export default function Dashboard() {
       description: "Start project planning wizard",
       icon: <Plus className="w-6 h-6" />,
       color: "bg-primary",
-      href: "/projects/new"
+      href: "/projects/new",
     },
     {
       title: "Create Quote",
       description: "Generate quote with CPQ engine",
       icon: <Calculator className="w-6 h-6" />,
       color: "bg-secondary",
-      href: "/quotes/new"
+      href: "/quotes/new",
     },
     {
       title: "Browse Catalogue",
       description: "View products & inventory",
       icon: <Package className="w-6 h-6" />,
       color: "bg-accent",
-      href: "/catalogue"
+      href: "/catalogue",
     },
     {
       title: "Upload Documents",
       description: "Add drawings, photos, invoices",
       icon: <FileText className="w-6 h-6" />,
       color: "bg-muted",
-      href: "/documents"
-    }
+      href: "/documents",
+    },
   ];
 
   const stats = [
@@ -394,39 +440,45 @@ export default function Dashboard() {
       value: "12",
       change: "+2 this month",
       trend: "up",
-      icon: <Zap className="w-5 h-5" />
+      icon: <Zap className="w-5 h-5" />,
     },
     {
       title: "Total Revenue",
       value: "$1.2M",
       change: "+15% this quarter",
-      trend: "up", 
-      icon: <DollarSign className="w-5 h-5" />
+      trend: "up",
+      icon: <DollarSign className="w-5 h-5" />,
     },
     {
       title: "Pending Quotes",
       value: "8",
       change: "3 expiring soon",
       trend: "neutral",
-      icon: <FileText className="w-5 h-5" />
+      icon: <FileText className="w-5 h-5" />,
     },
     {
       title: "Avg. Project Value",
       value: "$98K",
       change: "+$12K from last month",
       trend: "up",
-      icon: <TrendingUp className="w-5 h-5" />
-    }
+      icon: <TrendingUp className="w-5 h-5" />,
+    },
   ];
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "Completed": return "bg-secondary text-secondary-foreground";
-      case "In Progress": return "bg-primary text-primary-foreground";
-      case "Planning": return "bg-accent text-accent-foreground";
-      case "Quoting": return "bg-muted text-muted-foreground";
-      case "Draft": return "bg-orange-100 text-orange-800 border-orange-200";
-      default: return "bg-muted text-muted-foreground";
+      case "Completed":
+        return "bg-secondary text-secondary-foreground";
+      case "In Progress":
+        return "bg-primary text-primary-foreground";
+      case "Planning":
+        return "bg-accent text-accent-foreground";
+      case "Quoting":
+        return "bg-muted text-muted-foreground";
+      case "Draft":
+        return "bg-orange-100 text-orange-800 border-orange-200";
+      default:
+        return "bg-muted text-muted-foreground";
     }
   };
 
@@ -442,16 +494,28 @@ export default function Dashboard() {
             <Link to="/dashboard" className="text-sm font-medium text-primary">
               Dashboard
             </Link>
-            <Link to="/projects" className="text-sm font-medium hover:text-primary transition-colors">
+            <Link
+              to="/projects"
+              className="text-sm font-medium hover:text-primary transition-colors"
+            >
               Projects
             </Link>
-            <Link to="/quotes" className="text-sm font-medium hover:text-primary transition-colors">
+            <Link
+              to="/quotes"
+              className="text-sm font-medium hover:text-primary transition-colors"
+            >
               Quotes
             </Link>
-            <Link to="/catalogue" className="text-sm font-medium hover:text-primary transition-colors">
+            <Link
+              to="/catalogue"
+              className="text-sm font-medium hover:text-primary transition-colors"
+            >
               Catalogue
             </Link>
-            <Link to="/clients" className="text-sm font-medium hover:text-primary transition-colors">
+            <Link
+              to="/clients"
+              className="text-sm font-medium hover:text-primary transition-colors"
+            >
               Clients
             </Link>
           </nav>
@@ -464,15 +528,20 @@ export default function Dashboard() {
             </Button>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="w-8 h-8 rounded-full bg-primary text-primary-foreground hover:bg-primary/90">
-                  {user?.name?.charAt(0) || user?.firstName?.charAt(0) || 'U'}
+                <Button
+                  variant="ghost"
+                  className="w-8 h-8 rounded-full bg-primary text-primary-foreground hover:bg-primary/90"
+                >
+                  {user?.name?.charAt(0) || user?.firstName?.charAt(0) || "U"}
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <div className="px-2 py-1.5">
                   <p className="text-sm font-medium">{user?.name}</p>
                   <p className="text-xs text-muted-foreground">{user?.email}</p>
-                  <p className="text-xs text-muted-foreground">{user?.company}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {user?.company}
+                  </p>
                 </div>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
@@ -482,7 +551,10 @@ export default function Dashboard() {
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={logout} className="text-red-600 focus:text-red-600">
+                <DropdownMenuItem
+                  onClick={logout}
+                  className="text-red-600 focus:text-red-600"
+                >
                   <LogOut className="w-4 h-4 mr-2" />
                   Sign Out
                 </DropdownMenuItem>
@@ -498,7 +570,10 @@ export default function Dashboard() {
           <div>
             <h1 className="text-3xl font-bold mb-2">Dashboard</h1>
             <div className="flex items-center gap-3">
-              <p className="text-muted-foreground">Welcome back, {user?.name || user?.firstName || 'User'}. Here's your EV project overview.</p>
+              <p className="text-muted-foreground">
+                Welcome back, {user?.name || user?.firstName || "User"}. Here's
+                your EV project overview.
+              </p>
               {!loading && (
                 <Badge variant="secondary" className="text-xs">
                   {isSupabaseConnected ? "☁️ Cloud Storage" : "💾 Ready to Use"}
@@ -529,15 +604,17 @@ export default function Dashboard() {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-muted-foreground">{stat.title}</p>
+                    <p className="text-sm font-medium text-muted-foreground">
+                      {stat.title}
+                    </p>
                     <p className="text-2xl font-bold">{stat.value}</p>
-                    <p className={`text-xs mt-1 ${stat.trend === 'up' ? 'text-secondary' : 'text-muted-foreground'}`}>
+                    <p
+                      className={`text-xs mt-1 ${stat.trend === "up" ? "text-secondary" : "text-muted-foreground"}`}
+                    >
                       {stat.change}
                     </p>
                   </div>
-                  <div className="text-primary">
-                    {stat.icon}
-                  </div>
+                  <div className="text-primary">{stat.icon}</div>
                 </div>
               </CardContent>
             </Card>
@@ -555,11 +632,15 @@ export default function Dashboard() {
               {quickActions.map((action, index) => (
                 <Link key={index} to={action.href}>
                   <div className="p-4 rounded-lg border hover:border-primary transition-colors cursor-pointer group">
-                    <div className={`w-12 h-12 rounded-lg ${action.color} text-white flex items-center justify-center mb-3 group-hover:scale-105 transition-transform`}>
+                    <div
+                      className={`w-12 h-12 rounded-lg ${action.color} text-white flex items-center justify-center mb-3 group-hover:scale-105 transition-transform`}
+                    >
                       {action.icon}
                     </div>
                     <h3 className="font-medium mb-1">{action.title}</h3>
-                    <p className="text-sm text-muted-foreground">{action.description}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {action.description}
+                    </p>
                   </div>
                 </Link>
               ))}
@@ -580,7 +661,9 @@ export default function Dashboard() {
               <CardHeader className="flex flex-row items-center justify-between">
                 <div>
                   <CardTitle>Recent Projects</CardTitle>
-                  <CardDescription>Your latest EV infrastructure projects</CardDescription>
+                  <CardDescription>
+                    Your latest EV infrastructure projects
+                  </CardDescription>
                 </div>
                 <div className="flex items-center gap-2">
                   <Button variant="outline" size="sm">
@@ -610,7 +693,9 @@ export default function Dashboard() {
                         </div>
                         <div>
                           <h3 className="font-medium">No projects yet</h3>
-                          <p className="text-sm text-muted-foreground">Create your first project to get started</p>
+                          <p className="text-sm text-muted-foreground">
+                            Create your first project to get started
+                          </p>
                         </div>
                         <Button asChild>
                           <Link to="/projects/new">
@@ -620,114 +705,140 @@ export default function Dashboard() {
                         </Button>
                       </div>
                     </div>
-                  ) : recentProjects.map((project, index) => (
-                    <div key={index} className="p-4 border rounded-lg hover:border-primary transition-colors">
-                      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-3 mb-2">
-                            <h3 className="font-medium">{project.name}</h3>
-                            <Badge className={getStatusColor(project.status)} variant="secondary">
-                              {project.isDraft ? `Draft - Step ${project.draftStep}/6` : project.status}
-                            </Badge>
-                          </div>
-                          <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-sm text-muted-foreground">
-                            <div className="flex items-center gap-1">
-                              <Users className="w-4 h-4" />
-                              {project.client}
+                  ) : (
+                    recentProjects.map((project, index) => (
+                      <div
+                        key={index}
+                        className="p-4 border rounded-lg hover:border-primary transition-colors"
+                      >
+                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-3 mb-2">
+                              <h3 className="font-medium">{project.name}</h3>
+                              <Badge
+                                className={getStatusColor(project.status)}
+                                variant="secondary"
+                              >
+                                {project.isDraft
+                                  ? `Draft - Step ${project.draftStep}/6`
+                                  : project.status}
+                              </Badge>
                             </div>
-                            <div className="flex items-center gap-1">
-                              <MapPin className="w-4 h-4" />
-                              {project.location}
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-sm text-muted-foreground">
+                              <div className="flex items-center gap-1">
+                                <Users className="w-4 h-4" />
+                                {project.client}
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <MapPin className="w-4 h-4" />
+                                {project.location}
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <Calendar className="w-4 h-4" />
+                                {project.deadline}
+                              </div>
                             </div>
-                            <div className="flex items-center gap-1">
-                              <Calendar className="w-4 h-4" />
-                              {project.deadline}
+                            <div className="mt-3">
+                              <div className="flex items-center justify-between text-sm mb-1">
+                                <span>Progress</span>
+                                <span>{project.progress}%</span>
+                              </div>
+                              <Progress
+                                value={project.progress}
+                                className="h-2"
+                              />
                             </div>
                           </div>
-                          <div className="mt-3">
-                            <div className="flex items-center justify-between text-sm mb-1">
-                              <span>Progress</span>
-                              <span>{project.progress}%</span>
+                          <div className="flex items-center gap-4">
+                            <div className="text-right">
+                              <div className="font-medium">{project.value}</div>
+                              <div className="text-sm text-muted-foreground">
+                                {project.type}
+                              </div>
                             </div>
-                            <Progress value={project.progress} className="h-2" />
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-4">
-                          <div className="text-right">
-                            <div className="font-medium">{project.value}</div>
-                            <div className="text-sm text-muted-foreground">{project.type}</div>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            {project.isDraft ? (
-                              <>
-                                <Button
-                                  variant="ghost"
-                                  size="sm"
-                                  asChild
-                                  className="text-primary hover:text-primary"
-                                >
-                                  <Link to={`/projects/new?draft=${project.id}`}>
+                            <div className="flex items-center gap-2">
+                              {project.isDraft ? (
+                                <>
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    asChild
+                                    className="text-primary hover:text-primary"
+                                  >
+                                    <Link
+                                      to={`/projects/new?draft=${project.id}`}
+                                    >
+                                      <Edit className="w-4 h-4 mr-1" />
+                                      Resume Draft
+                                    </Link>
+                                  </Button>
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => {
+                                      if (confirm("Delete this draft?")) {
+                                        const drafts = JSON.parse(
+                                          localStorage.getItem(
+                                            "chargeSourceDrafts",
+                                          ) || "[]",
+                                        );
+                                        const filteredDrafts = drafts.filter(
+                                          (d: any) => d.id !== project.id,
+                                        );
+                                        localStorage.setItem(
+                                          "chargeSourceDrafts",
+                                          JSON.stringify(filteredDrafts),
+                                        );
+                                        loadProjects(); // Reload projects
+                                      }
+                                    }}
+                                    className="text-red-600 hover:text-red-600"
+                                  >
+                                    <MoreHorizontal className="w-4 h-4" />
+                                  </Button>
+                                </>
+                              ) : (
+                                <>
+                                  <Button
+                                    variant="outline"
+                                    size="sm"
+                                    asChild
+                                    className="text-blue-600 hover:text-blue-600 hover:bg-blue-50 border-blue-200"
+                                  >
+                                    <Link to={`/projects/${project.id}`}>
+                                      <Eye className="w-4 h-4 mr-1" />
+                                      View
+                                    </Link>
+                                  </Button>
+                                  <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => handleEditProject(project)}
+                                    className="text-green-600 hover:text-green-600 hover:bg-green-50 border-green-200"
+                                  >
                                     <Edit className="w-4 h-4 mr-1" />
-                                    Resume Draft
-                                  </Link>
-                                </Button>
-                                <Button
-                                  variant="ghost"
-                                  size="sm"
-                                  onClick={() => {
-                                    if (confirm('Delete this draft?')) {
-                                      const drafts = JSON.parse(localStorage.getItem('chargeSourceDrafts') || '[]');
-                                      const filteredDrafts = drafts.filter((d: any) => d.id !== project.id);
-                                      localStorage.setItem('chargeSourceDrafts', JSON.stringify(filteredDrafts));
-                                      loadProjects(); // Reload projects
-                                    }
-                                  }}
-                                  className="text-red-600 hover:text-red-600"
-                                >
-                                  <MoreHorizontal className="w-4 h-4" />
-                                </Button>
-                              </>
-                            ) : (
-                              <>
-                                <Button
-                                  variant="outline"
-                                  size="sm"
-                                  asChild
-                                  className="text-blue-600 hover:text-blue-600 hover:bg-blue-50 border-blue-200"
-                                >
-                                  <Link to={`/projects/${project.id}`}>
-                                    <Eye className="w-4 h-4 mr-1" />
-                                    View
-                                  </Link>
-                                </Button>
-                                <Button
-                                  variant="outline"
-                                  size="sm"
-                                  onClick={() => handleEditProject(project)}
-                                  className="text-green-600 hover:text-green-600 hover:bg-green-50 border-green-200"
-                                >
-                                  <Edit className="w-4 h-4 mr-1" />
-                                  Edit
-                                </Button>
-                                <Button
-                                  variant="outline"
-                                  size="sm"
-                                  onClick={() => handleCreateQuote(project)}
-                                  className="text-purple-600 hover:text-purple-600 hover:bg-purple-50 border-purple-200"
-                                >
-                                  <Calculator className="w-4 h-4 mr-1" />
-                                  Quote
-                                </Button>
-                                <Button variant="ghost" size="sm">
-                                  <MoreHorizontal className="w-4 h-4" />
-                                </Button>
-                              </>
-                            )}
+                                    Edit
+                                  </Button>
+                                  <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => handleCreateQuote(project)}
+                                    className="text-purple-600 hover:text-purple-600 hover:bg-purple-50 border-purple-200"
+                                  >
+                                    <Calculator className="w-4 h-4 mr-1" />
+                                    Quote
+                                  </Button>
+                                  <Button variant="ghost" size="sm">
+                                    <MoreHorizontal className="w-4 h-4" />
+                                  </Button>
+                                </>
+                              )}
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    ))
+                  )}
                 </div>
               </CardContent>
             </Card>
@@ -742,15 +853,18 @@ export default function Dashboard() {
                 </CardHeader>
                 <CardContent>
                   <div className="h-48 flex items-center justify-center text-muted-foreground">
-                    Revenue chart placeholder - Connect to data visualization library
+                    Revenue chart placeholder - Connect to data visualization
+                    library
                   </div>
                 </CardContent>
               </Card>
-              
+
               <Card>
                 <CardHeader>
                   <CardTitle>Project Types</CardTitle>
-                  <CardDescription>Distribution by charging type</CardDescription>
+                  <CardDescription>
+                    Distribution by charging type
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
@@ -779,22 +893,51 @@ export default function Dashboard() {
             <Card>
               <CardHeader>
                 <CardTitle>Recent Activity</CardTitle>
-                <CardDescription>Latest updates across your projects</CardDescription>
+                <CardDescription>
+                  Latest updates across your projects
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
                   {[
-                    { icon: <CheckCircle2 className="w-4 h-4 text-secondary" />, text: "Quote approved for Westfield Shopping Centre project", time: "2 hours ago" },
-                    { icon: <Clock className="w-4 h-4 text-primary" />, text: "Site assessment scheduled for Parramatta Residential Complex", time: "4 hours ago" },
-                    { icon: <Package className="w-4 h-4 text-accent" />, text: "Equipment delivered to Melbourne Council project", time: "1 day ago" },
-                    { icon: <AlertCircle className="w-4 h-4 text-destructive" />, text: "Compliance review required for Fleet Depot project", time: "2 days ago" },
-                    { icon: <DollarSign className="w-4 h-4 text-secondary" />, text: "Payment received for completed Council Car Park project", time: "3 days ago" }
+                    {
+                      icon: <CheckCircle2 className="w-4 h-4 text-secondary" />,
+                      text: "Quote approved for Westfield Shopping Centre project",
+                      time: "2 hours ago",
+                    },
+                    {
+                      icon: <Clock className="w-4 h-4 text-primary" />,
+                      text: "Site assessment scheduled for Parramatta Residential Complex",
+                      time: "4 hours ago",
+                    },
+                    {
+                      icon: <Package className="w-4 h-4 text-accent" />,
+                      text: "Equipment delivered to Melbourne Council project",
+                      time: "1 day ago",
+                    },
+                    {
+                      icon: (
+                        <AlertCircle className="w-4 h-4 text-destructive" />
+                      ),
+                      text: "Compliance review required for Fleet Depot project",
+                      time: "2 days ago",
+                    },
+                    {
+                      icon: <DollarSign className="w-4 h-4 text-secondary" />,
+                      text: "Payment received for completed Council Car Park project",
+                      time: "3 days ago",
+                    },
                   ].map((activity, index) => (
-                    <div key={index} className="flex items-start gap-3 p-3 rounded-lg hover:bg-muted/30 transition-colors">
+                    <div
+                      key={index}
+                      className="flex items-start gap-3 p-3 rounded-lg hover:bg-muted/30 transition-colors"
+                    >
                       {activity.icon}
                       <div className="flex-1">
                         <p className="text-sm">{activity.text}</p>
-                        <p className="text-xs text-muted-foreground mt-1">{activity.time}</p>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          {activity.time}
+                        </p>
                       </div>
                     </div>
                   ))}

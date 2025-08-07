@@ -2,7 +2,7 @@
 // This implementation uses browser's print functionality as a fallback
 // In production, you'd integrate with a PDF library like jsPDF or PDFKit
 
-import { Quote } from './quoteTypes';
+import { Quote } from "./quoteTypes";
 
 export interface PDFOptions {
   includeHeader?: boolean;
@@ -20,23 +20,28 @@ class PDFGenerator {
     includeSpecifications: true,
   };
 
-  async generateQuotePDF(quote: Quote, options: PDFOptions = {}): Promise<void> {
+  async generateQuotePDF(
+    quote: Quote,
+    options: PDFOptions = {},
+  ): Promise<void> {
     const finalOptions = { ...this.defaultOptions, ...options };
-    
+
     try {
       // Create a new window with the quote content
-      const printWindow = window.open('', '_blank');
+      const printWindow = window.open("", "_blank");
       if (!printWindow) {
-        throw new Error('Failed to open print window. Please allow popups for this site.');
+        throw new Error(
+          "Failed to open print window. Please allow popups for this site.",
+        );
       }
 
       // Generate HTML content for PDF
       const htmlContent = this.generateQuoteHTML(quote, finalOptions);
-      
+
       // Write content to new window
       printWindow.document.write(htmlContent);
       printWindow.document.close();
-      
+
       // Wait for content to load, then print
       printWindow.onload = () => {
         setTimeout(() => {
@@ -44,19 +49,18 @@ class PDFGenerator {
           printWindow.close();
         }, 250);
       };
-      
     } catch (error) {
-      console.error('PDF generation failed:', error);
-      throw new Error('Failed to generate PDF. Please try again.');
+      console.error("PDF generation failed:", error);
+      throw new Error("Failed to generate PDF. Please try again.");
     }
   }
 
   private generateQuoteHTML(quote: Quote, options: PDFOptions): string {
     const styles = this.getPDFStyles();
-    const header = options.includeHeader ? this.generateHeader(quote) : '';
-    const footer = options.includeFooter ? this.generateFooter(quote) : '';
+    const header = options.includeHeader ? this.generateHeader(quote) : "";
+    const footer = options.includeFooter ? this.generateFooter(quote) : "";
     const content = this.generateContent(quote, options);
-    
+
     return `
       <!DOCTYPE html>
       <html>
@@ -66,7 +70,7 @@ class PDFGenerator {
           <style>${styles}</style>
         </head>
         <body>
-          ${options.watermark ? `<div class="watermark">${options.watermark}</div>` : ''}
+          ${options.watermark ? `<div class="watermark">${options.watermark}</div>` : ""}
           <div class="page">
             ${header}
             ${content}
@@ -370,7 +374,7 @@ class PDFGenerator {
   }
 
   private generateContent(quote: Quote, options: PDFOptions): string {
-    let content = '';
+    let content = "";
 
     // Client Information
     content += `
@@ -384,8 +388,8 @@ class PDFGenerator {
             <p>${quote.clientInfo.phone}</p>
           </div>
           <div class="client-details">
-            ${quote.clientInfo.address ? `<p style="white-space: pre-line;">${quote.clientInfo.address}</p>` : ''}
-            ${quote.clientInfo.abn ? `<p>ABN: ${quote.clientInfo.abn}</p>` : ''}
+            ${quote.clientInfo.address ? `<p style="white-space: pre-line;">${quote.clientInfo.address}</p>` : ""}
+            ${quote.clientInfo.abn ? `<p>ABN: ${quote.clientInfo.abn}</p>` : ""}
           </div>
         </div>
       </div>
@@ -396,8 +400,8 @@ class PDFGenerator {
       content += `
         <div class="project-section">
           <div class="section-title">Project Details</div>
-          ${quote.title ? `<div class="project-title">${quote.title}</div>` : ''}
-          ${quote.description ? `<div class="project-description">${quote.description}</div>` : ''}
+          ${quote.title ? `<div class="project-title">${quote.title}</div>` : ""}
+          ${quote.description ? `<div class="project-description">${quote.description}</div>` : ""}
         </div>
       `;
     }
@@ -419,14 +423,14 @@ class PDFGenerator {
             <tbody>
       `;
 
-      quote.lineItems.forEach(item => {
+      quote.lineItems.forEach((item) => {
         content += `
           <tr>
             <td>
               <div class="item-name">${item.name}</div>
-              ${item.description ? `<div class="item-description">${item.description}</div>` : ''}
-              ${options.includeSpecifications && item.specifications ? this.generateSpecifications(item.specifications) : ''}
-              ${item.isOptional ? '<span class="badge">Optional</span>' : ''}
+              ${item.description ? `<div class="item-description">${item.description}</div>` : ""}
+              ${options.includeSpecifications && item.specifications ? this.generateSpecifications(item.specifications) : ""}
+              ${item.isOptional ? '<span class="badge">Optional</span>' : ""}
             </td>
             <td class="text-center">${item.quantity}</td>
             <td class="text-right">$${item.unitPrice.toLocaleString()}</td>
@@ -526,8 +530,8 @@ class PDFGenerator {
   private generateSpecifications(specs: Record<string, any>): string {
     const specItems = Object.entries(specs)
       .map(([key, value]) => `${key}: ${value}`)
-      .join(' • ');
-    
+      .join(" • ");
+
     return `<div class="item-specs">${specItems}</div>`;
   }
 
@@ -542,22 +546,29 @@ class PDFGenerator {
   }
 
   // Alternative method using jsPDF (if library is available)
-  async generateAdvancedPDF(quote: Quote, options: PDFOptions = {}): Promise<void> {
+  async generateAdvancedPDF(
+    quote: Quote,
+    options: PDFOptions = {},
+  ): Promise<void> {
     // This would use a library like jsPDF for more advanced PDF generation
     // Implementation would depend on the chosen PDF library
-    throw new Error('Advanced PDF generation not implemented. Please use generateQuotePDF() instead.');
+    throw new Error(
+      "Advanced PDF generation not implemented. Please use generateQuotePDF() instead.",
+    );
   }
 
   // Email integration for sending quotes
   generateEmailShareLink(quote: Quote): string {
     const baseUrl = window.location.origin;
     const clientPortalUrl = `${baseUrl}/client/quote/${quote.id}?token=${this.generateAccessToken(quote)}`;
-    
-    const subject = encodeURIComponent(`Quote ${quote.quoteNumber} - ${quote.title || 'EV Charging Project'}`);
+
+    const subject = encodeURIComponent(
+      `Quote ${quote.quoteNumber} - ${quote.title || "EV Charging Project"}`,
+    );
     const body = encodeURIComponent(`
 Dear ${quote.clientInfo.contactPerson},
 
-Please find your quote for ${quote.title || 'EV Charging Project'} at the link below:
+Please find your quote for ${quote.title || "EV Charging Project"} at the link below:
 
 ${clientPortalUrl}
 
@@ -583,7 +594,7 @@ hello@chargesource.com.au
     // In a real implementation, this would generate a secure, time-limited access token
     // For now, we'll use a simple token based on quote ID and creation date
     const tokenData = `${quote.id}-${quote.createdAt}`;
-    return btoa(tokenData).replace(/[/+=]/g, '');
+    return btoa(tokenData).replace(/[/+=]/g, "");
   }
 }
 

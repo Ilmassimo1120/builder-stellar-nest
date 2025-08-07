@@ -779,7 +779,7 @@ export default function ProjectWizard() {
           setCreatedProject({
             ...project,
             recommendations,
-            storageType: 'cloud'
+            storageType: "cloud",
           });
           setShowSuccessDialog(true);
           return;
@@ -875,7 +875,7 @@ export default function ProjectWizard() {
       setCreatedProject({
         ...projectData,
         name: projectData.projectInfo.name,
-        storageType: 'local'
+        storageType: "local",
       });
       setShowSuccessDialog(true);
     } catch (error) {
@@ -2631,7 +2631,9 @@ export default function ProjectWizard() {
     try {
       // Check existing quotes for this project
       const allQuotes = quoteService.getAllQuotes();
-      const existingQuotes = allQuotes.filter(q => q.projectId === createdProject.id);
+      const existingQuotes = allQuotes.filter(
+        (q) => q.projectId === createdProject.id,
+      );
 
       // Create a new quote from the project
       const newQuote = quoteService.createQuote(createdProject.id);
@@ -2886,7 +2888,8 @@ export default function ProjectWizard() {
               Project Created Successfully!
             </DialogTitle>
             <DialogDescription className="text-base">
-              Your EV infrastructure project has been created and is ready for development.
+              Your EV infrastructure project has been created and is ready for
+              development.
             </DialogDescription>
           </DialogHeader>
 
@@ -2904,13 +2907,17 @@ export default function ProjectWizard() {
                 <div>
                   <span className="font-medium">Estimated Cost:</span>
                   <p className="text-muted-foreground">
-                    {createdProject.recommendations?.estimatedCost || createdProject.estimatedBudget || 'TBD'}
+                    {createdProject.recommendations?.estimatedCost ||
+                      createdProject.estimatedBudget ||
+                      "TBD"}
                   </p>
                 </div>
                 <div>
                   <span className="font-medium">Timeline:</span>
                   <p className="text-muted-foreground">
-                    {createdProject.recommendations?.installationTime || createdProject.timeline || 'TBD'}
+                    {createdProject.recommendations?.installationTime ||
+                      createdProject.timeline ||
+                      "TBD"}
                   </p>
                 </div>
               </div>
@@ -2918,7 +2925,9 @@ export default function ProjectWizard() {
               <div className="flex items-center gap-2 p-3 bg-green-50 rounded-lg border border-green-200">
                 <CheckCircle2 className="w-5 h-5 text-green-600" />
                 <span className="text-sm text-green-800">
-                  {createdProject.storageType === 'cloud' ? '✅ Saved to cloud storage' : '💾 Saved locally'}
+                  {createdProject.storageType === "cloud"
+                    ? "✅ Saved to cloud storage"
+                    : "💾 Saved locally"}
                 </span>
               </div>
             </div>
@@ -2928,7 +2937,10 @@ export default function ProjectWizard() {
             <Button variant="outline" onClick={handleGoToDashboard}>
               Go to Dashboard
             </Button>
-            <Button onClick={handleCreateQuote} className="bg-purple-600 hover:bg-purple-700">
+            <Button
+              onClick={handleCreateQuote}
+              className="bg-purple-600 hover:bg-purple-700"
+            >
               <Calculator className="w-4 h-4 mr-2" />
               Create Quote
             </Button>

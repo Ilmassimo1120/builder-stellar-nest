@@ -2,7 +2,7 @@
 
 export interface QuoteLineItem {
   id: string;
-  type: 'charger' | 'accessory' | 'installation' | 'service' | 'custom';
+  type: "charger" | "accessory" | "installation" | "service" | "custom";
   productId?: string; // For future Product Catalogue integration
   name: string;
   description: string;
@@ -12,7 +12,7 @@ export interface QuoteLineItem {
   totalPrice: number;
   markup: number; // Markup percentage
   cost: number; // Base cost before markup
-  unit: 'each' | 'hour' | 'meter' | 'sqm' | 'linear_meter';
+  unit: "each" | "hour" | "meter" | "sqm" | "linear_meter";
   specifications?: Record<string, any>;
   supplierInfo?: {
     supplierId?: string;
@@ -29,7 +29,7 @@ export interface QuoteTotals {
   gst: number;
   gstRate: number; // 10% for Australia
   discount: number;
-  discountType: 'percentage' | 'fixed';
+  discountType: "percentage" | "fixed";
   total: number;
   totalExGst: number;
 }
@@ -60,31 +60,38 @@ export interface Quote {
   projectId?: string; // Links to project management system
   templateId?: string; // For quote templates
   version: number;
-  status: 'draft' | 'pending_review' | 'sent' | 'viewed' | 'accepted' | 'rejected' | 'expired';
-  
+  status:
+    | "draft"
+    | "pending_review"
+    | "sent"
+    | "viewed"
+    | "accepted"
+    | "rejected"
+    | "expired";
+
   // Client information
   clientInfo: ClientInfo;
-  
+
   // Quote content
   title: string;
   description: string;
   lineItems: QuoteLineItem[];
   totals: QuoteTotals;
-  
+
   // Settings and terms
   settings: QuoteSettings;
-  
+
   // Dates
   createdAt: string;
   updatedAt: string;
   sentAt?: string;
   validUntil: string;
   acceptedAt?: string;
-  
+
   // User information
   createdBy: string;
   assignedTo?: string;
-  
+
   // Integration data
   projectData?: {
     siteAddress?: string;
@@ -92,14 +99,14 @@ export interface Quote {
     projectName?: string;
     estimatedInstallDate?: string;
   };
-  
+
   // Client interaction
   clientViews: QuoteView[];
   comments: QuoteComment[];
-  
+
   // File attachments
   attachments: QuoteAttachment[];
-  
+
   // Approval workflow
   approvals: QuoteApproval[];
   requiresApproval: boolean;
@@ -136,7 +143,7 @@ export interface QuoteApproval {
   id: string;
   approverUserId: string;
   approverName: string;
-  status: 'pending' | 'approved' | 'rejected';
+  status: "pending" | "approved" | "rejected";
   notes?: string;
   timestamp: string;
 }
@@ -147,7 +154,7 @@ export interface QuoteTemplate {
   description: string;
   category: string;
   isDefault: boolean;
-  lineItems: Omit<QuoteLineItem, 'id' | 'totalPrice'>[];
+  lineItems: Omit<QuoteLineItem, "id" | "totalPrice">[];
   settings: QuoteSettings;
   createdBy: string;
   createdAt: string;
@@ -169,10 +176,10 @@ export interface QuoteBuilderState {
 export interface PricingRule {
   id: string;
   name: string;
-  type: 'volume_discount' | 'early_payment' | 'loyalty' | 'seasonal' | 'custom';
+  type: "volume_discount" | "early_payment" | "loyalty" | "seasonal" | "custom";
   condition: string;
   discount: number;
-  discountType: 'percentage' | 'fixed';
+  discountType: "percentage" | "fixed";
   startDate?: string;
   endDate?: string;
   isActive: boolean;
@@ -239,7 +246,7 @@ export interface ClientPortalAccess {
 
 export interface ClientDecision {
   quoteId: string;
-  decision: 'accepted' | 'rejected';
+  decision: "accepted" | "rejected";
   timestamp: string;
   signature?: string;
   comments?: string;
@@ -298,7 +305,7 @@ export interface SupplierIntegration {
 export interface PDFTemplate {
   id: string;
   name: string;
-  type: 'quote' | 'invoice' | 'proposal';
+  type: "quote" | "invoice" | "proposal";
   template: string; // HTML template
   styles: string; // CSS styles
   variables: string[]; // Available template variables
@@ -334,7 +341,7 @@ export interface EmailTemplate {
 export interface QuoteWorkflow {
   id: string;
   name: string;
-  trigger: 'quote_created' | 'quote_sent' | 'quote_viewed' | 'quote_expired';
+  trigger: "quote_created" | "quote_sent" | "quote_viewed" | "quote_expired";
   conditions: WorkflowCondition[];
   actions: WorkflowAction[];
   isActive: boolean;
@@ -342,12 +349,12 @@ export interface QuoteWorkflow {
 
 export interface WorkflowCondition {
   field: string;
-  operator: 'equals' | 'greater_than' | 'less_than' | 'contains';
+  operator: "equals" | "greater_than" | "less_than" | "contains";
   value: any;
 }
 
 export interface WorkflowAction {
-  type: 'send_email' | 'create_task' | 'update_status' | 'send_notification';
+  type: "send_email" | "create_task" | "update_status" | "send_notification";
   parameters: Record<string, any>;
 }
 
@@ -355,45 +362,45 @@ export interface WorkflowAction {
 export const createEmptyQuote = (projectId?: string): Quote => {
   const now = new Date().toISOString();
   const quoteNumber = `QT-${Date.now()}`;
-  
+
   return {
     id: `quote-${Date.now()}`,
     quoteNumber,
     projectId,
     version: 1,
-    status: 'draft',
+    status: "draft",
     clientInfo: {
-      name: '',
-      contactPerson: '',
-      email: '',
-      phone: '',
-      address: '',
-      company: '',
+      name: "",
+      contactPerson: "",
+      email: "",
+      phone: "",
+      address: "",
+      company: "",
     },
-    title: '',
-    description: '',
+    title: "",
+    description: "",
     lineItems: [],
     totals: {
       subtotal: 0,
       gst: 0,
       gstRate: 10,
       discount: 0,
-      discountType: 'percentage',
+      discountType: "percentage",
       total: 0,
       totalExGst: 0,
     },
     settings: {
       validityDays: 30,
-      terms: 'Payment is due within 30 days of invoice date.',
-      notes: '',
-      paymentTerms: '30 days net',
-      warranty: '12 months parts and labour warranty',
-      deliveryTerms: 'Standard delivery 5-10 business days',
+      terms: "Payment is due within 30 days of invoice date.",
+      notes: "",
+      paymentTerms: "30 days net",
+      warranty: "12 months parts and labour warranty",
+      deliveryTerms: "Standard delivery 5-10 business days",
     },
     createdAt: now,
     updatedAt: now,
     validUntil: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
-    createdBy: '',
+    createdBy: "",
     clientViews: [],
     comments: [],
     attachments: [],
@@ -402,20 +409,24 @@ export const createEmptyQuote = (projectId?: string): Quote => {
   };
 };
 
-export const calculateQuoteTotals = (lineItems: QuoteLineItem[], discount: number = 0, discountType: 'percentage' | 'fixed' = 'percentage'): QuoteTotals => {
+export const calculateQuoteTotals = (
+  lineItems: QuoteLineItem[],
+  discount: number = 0,
+  discountType: "percentage" | "fixed" = "percentage",
+): QuoteTotals => {
   const subtotal = lineItems.reduce((sum, item) => sum + item.totalPrice, 0);
-  
+
   let discountAmount = 0;
-  if (discountType === 'percentage') {
+  if (discountType === "percentage") {
     discountAmount = subtotal * (discount / 100);
   } else {
     discountAmount = discount;
   }
-  
+
   const totalExGst = subtotal - discountAmount;
   const gst = totalExGst * 0.1; // 10% GST for Australia
   const total = totalExGst + gst;
-  
+
   return {
     subtotal,
     gst,
@@ -430,7 +441,7 @@ export const calculateQuoteTotals = (lineItems: QuoteLineItem[], discount: numbe
 export const generateQuoteNumber = (): string => {
   const now = new Date();
   const year = now.getFullYear().toString().slice(-2);
-  const month = (now.getMonth() + 1).toString().padStart(2, '0');
+  const month = (now.getMonth() + 1).toString().padStart(2, "0");
   const timestamp = Date.now().toString().slice(-6);
   return `QT${year}${month}-${timestamp}`;
 };
