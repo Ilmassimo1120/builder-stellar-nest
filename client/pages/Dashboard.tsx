@@ -627,7 +627,7 @@ export default function Dashboard() {
                             <div className="font-medium">{project.value}</div>
                             <div className="text-sm text-muted-foreground">{project.type}</div>
                           </div>
-                          <div className="flex items-center gap-1">
+                          <div className="flex items-center gap-2">
                             {project.isDraft ? (
                               <>
                                 <Button
