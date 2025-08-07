@@ -74,6 +74,21 @@ export default function Login() {
       <div className="w-full max-w-lg">
         {/* Header */}
         <div className="text-center mb-8">
+          {/* Back to Landing Page Button */}
+          <div className="flex justify-start mb-4">
+            <Button
+              variant="ghost"
+              size="sm"
+              asChild
+              className="text-muted-foreground hover:text-primary"
+            >
+              <Link to="/" className="flex items-center gap-2">
+                <ArrowLeft className="w-4 h-4" />
+                Back to Landing Page
+              </Link>
+            </Button>
+          </div>
+
           <div className="flex justify-center mb-4">
             <Logo size="xl" />
           </div>
