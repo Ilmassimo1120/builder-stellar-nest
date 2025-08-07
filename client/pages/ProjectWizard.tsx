@@ -2667,6 +2667,11 @@ export default function ProjectWizard() {
               </div>
             </div>
             <div className="flex items-center gap-3">
+              {selectedTemplate && (
+                <Badge variant="secondary" className="px-3 py-1">
+                  Template: {selectedTemplate.name}
+                </Badge>
+              )}
               <Badge variant="outline" className="px-3 py-1">
                 {Math.round((currentStep / totalSteps) * 100)}% Complete
               </Badge>
