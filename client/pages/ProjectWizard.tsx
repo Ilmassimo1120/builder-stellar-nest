@@ -259,7 +259,9 @@ export default function ProjectWizard() {
         userId: user.id,
         draftName: generateDraftName(),
         currentStep,
-        createdAt: currentDraftId ? now : now, // Simplified to avoid async issues
+        createdAt: currentDraftId ?
+          (JSON.parse(localStorage.getItem('chargeSourceDrafts') || '[]')
+            .find((d: any) => d.id === draftId)?.createdAt || now) : now,
         updatedAt: now,
         clientRequirements,
         siteAssessment,
