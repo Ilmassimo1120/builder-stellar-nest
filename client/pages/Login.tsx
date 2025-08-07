@@ -8,7 +8,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Logo } from "@/components/ui/logo";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
-import { Eye, EyeOff, Mail, Lock, Zap, Shield, Users, CheckCircle2 } from "lucide-react";
+import { Eye, EyeOff, Mail, Lock, Zap, Shield, Users, CheckCircle2, ArrowLeft } from "lucide-react";
 
 export default function Login() {
   const navigate = useNavigate();
