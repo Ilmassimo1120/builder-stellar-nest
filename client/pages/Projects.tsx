@@ -83,6 +83,7 @@ interface Project {
   email?: string;
   siteAddress?: string;
   description?: string;
+  _originalData?: any; // Store complete original project data for editing
 }
 
 export default function Projects() {
