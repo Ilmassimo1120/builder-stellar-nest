@@ -179,6 +179,10 @@ export default function ProjectWizard() {
 
   const nextStep = () => {
     if (currentStep < totalSteps) {
+      // Auto-populate site assessment when moving from client requirements to site assessment
+      if (currentStep === 1) {
+        populateSiteAssessmentFromClientRequirements();
+      }
       setCurrentStep(currentStep + 1);
     }
   };
