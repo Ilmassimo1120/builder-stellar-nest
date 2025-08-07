@@ -10,6 +10,7 @@ import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
 import Projects from "./pages/Projects";
 import ProjectWizard from "./pages/ProjectWizard";
+import ProjectDetail from "./pages/ProjectDetail";
 import ConnectionTest from "./pages/ConnectionTest";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
