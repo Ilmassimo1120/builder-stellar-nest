@@ -136,7 +136,8 @@ export default function ProjectWizard() {
   const [draftSaved, setDraftSaved] = useState(false);
   const [currentDraftId, setCurrentDraftId] = useState<string | null>(null);
   const [showTemplateSelector, setShowTemplateSelector] = useState(false);
-  const [selectedTemplate, setSelectedTemplate] = useState<ProjectTemplate | null>(null);
+  const [selectedTemplate, setSelectedTemplate] =
+    useState<ProjectTemplate | null>(null);
   const [connectionError, setConnectionError] = useState<string | null>(null);
 
   // Auto-save throttling refs
@@ -254,7 +255,8 @@ export default function ProjectWizard() {
           clientRequirements.contactPersonName ||
           siteAssessment.projectName
         ) {
-          if (import.meta.env.DEV) console.log("Auto-saving draft (delayed)...");
+          if (import.meta.env.DEV)
+            console.log("Auto-saving draft (delayed)...");
           saveDraft(false);
           lastAutoSaveRef.current = Date.now();
         }
@@ -448,7 +450,7 @@ export default function ProjectWizard() {
 
     // Auto-populate project name if not set
     if (!templateData.siteAssessment.projectName) {
-      setSiteAssessment(prev => ({
+      setSiteAssessment((prev) => ({
         ...prev,
         projectName: `${template.name} Project`,
       }));

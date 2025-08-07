@@ -74,7 +74,8 @@ export const projectTemplates: ProjectTemplate[] = [
     id: "residential-apartment",
     name: "Residential Apartment Complex",
     category: "Residential",
-    description: "Multi-unit residential charging solution with visitor and resident parking",
+    description:
+      "Multi-unit residential charging solution with visitor and resident parking",
     icon: "building",
     estimatedDuration: "8-12 weeks",
     costRange: "$45,000 - $85,000",
@@ -88,7 +89,10 @@ export const projectTemplates: ProjectTemplate[] = [
       dailyUsagePattern: "overnight",
       budgetRange: "50-100k",
       projectTimeline: "standard",
-      sustainabilityGoals: ["Green Building Certification", "Corporate ESG Goals"],
+      sustainabilityGoals: [
+        "Green Building Certification",
+        "Corporate ESG Goals",
+      ],
       accessibilityRequirements: true,
     },
     siteAssessment: {
@@ -171,7 +175,8 @@ export const projectTemplates: ProjectTemplate[] = [
     id: "commercial-office",
     name: "Commercial Office Building",
     category: "Commercial",
-    description: "Workplace charging for employees and visitors with smart management",
+    description:
+      "Workplace charging for employees and visitors with smart management",
     icon: "building2",
     estimatedDuration: "6-10 weeks",
     costRange: "$35,000 - $75,000",
@@ -268,7 +273,8 @@ export const projectTemplates: ProjectTemplate[] = [
     id: "retail-shopping",
     name: "Retail Shopping Centre",
     category: "Retail",
-    description: "Customer-focused fast charging with revenue generation potential",
+    description:
+      "Customer-focused fast charging with revenue generation potential",
     icon: "store",
     estimatedDuration: "10-16 weeks",
     costRange: "$150,000 - $300,000",
@@ -282,7 +288,10 @@ export const projectTemplates: ProjectTemplate[] = [
       dailyUsagePattern: "extended-hours",
       budgetRange: "250-500k",
       projectTimeline: "standard",
-      sustainabilityGoals: ["Carbon Neutral by 2030", "Green Building Certification"],
+      sustainabilityGoals: [
+        "Carbon Neutral by 2030",
+        "Green Building Certification",
+      ],
       accessibilityRequirements: true,
     },
     siteAssessment: {
@@ -305,9 +314,20 @@ export const projectTemplates: ProjectTemplate[] = [
     },
     compliance: {
       electricalStandards: ["AS/NZS 3000", "AS/NZS 61851", "AS/NZS 62196"],
-      safetyRequirements: ["Emergency Stop", "Fire Safety Systems", "CCTV Monitoring"],
-      localPermits: ["Development Approval", "Building Permit", "Electrical Work Permit"],
-      environmentalConsiderations: ["Traffic Impact Assessment", "Noise Assessment"],
+      safetyRequirements: [
+        "Emergency Stop",
+        "Fire Safety Systems",
+        "CCTV Monitoring",
+      ],
+      localPermits: [
+        "Development Approval",
+        "Building Permit",
+        "Electrical Work Permit",
+      ],
+      environmentalConsiderations: [
+        "Traffic Impact Assessment",
+        "Noise Assessment",
+      ],
       accessibilityCompliance: true,
     },
     milestones: [
@@ -377,7 +397,8 @@ export const projectTemplates: ProjectTemplate[] = [
     id: "fleet-depot",
     name: "Fleet Depot Charging",
     category: "Fleet",
-    description: "High-capacity charging for commercial vehicle fleets with depot management",
+    description:
+      "High-capacity charging for commercial vehicle fleets with depot management",
     icon: "truck",
     estimatedDuration: "12-20 weeks",
     costRange: "$200,000 - $500,000",
@@ -387,7 +408,11 @@ export const projectTemplates: ProjectTemplate[] = [
       organizationType: "fleet",
       projectObjective: "fleet-electrification",
       numberOfVehicles: "51-100",
-      vehicleTypes: ["Light Commercial", "Delivery Vans", "Trucks/Heavy Vehicles"],
+      vehicleTypes: [
+        "Light Commercial",
+        "Delivery Vans",
+        "Trucks/Heavy Vehicles",
+      ],
       dailyUsagePattern: "overnight",
       budgetRange: "250-500k",
       projectTimeline: "flexible",
@@ -414,7 +439,11 @@ export const projectTemplates: ProjectTemplate[] = [
     },
     compliance: {
       electricalStandards: ["AS/NZS 3000", "AS/NZS 61851"],
-      safetyRequirements: ["Emergency Stop", "Isolation Switches", "Load Management"],
+      safetyRequirements: [
+        "Emergency Stop",
+        "Isolation Switches",
+        "Load Management",
+      ],
       localPermits: ["Industrial Development Permit", "Electrical Work Permit"],
       environmentalConsiderations: ["Environmental Management Plan"],
       accessibilityCompliance: false,
@@ -474,7 +503,8 @@ export const projectTemplates: ProjectTemplate[] = [
     id: "public-council",
     name: "Public Council Facility",
     category: "Public",
-    description: "Community charging infrastructure for public spaces and civic buildings",
+    description:
+      "Community charging infrastructure for public spaces and civic buildings",
     icon: "landmark",
     estimatedDuration: "14-22 weeks",
     costRange: "$100,000 - $200,000",
@@ -488,7 +518,10 @@ export const projectTemplates: ProjectTemplate[] = [
       dailyUsagePattern: "extended-hours",
       budgetRange: "100-250k",
       projectTimeline: "flexible",
-      sustainabilityGoals: ["Carbon Neutral by 2030", "Community Environmental Impact"],
+      sustainabilityGoals: [
+        "Carbon Neutral by 2030",
+        "Community Environmental Impact",
+      ],
       accessibilityRequirements: true,
     },
     siteAssessment: {
@@ -513,7 +546,10 @@ export const projectTemplates: ProjectTemplate[] = [
       electricalStandards: ["AS/NZS 3000", "AS/NZS 61851"],
       safetyRequirements: ["Public Safety Standards", "Emergency Stop", "CCTV"],
       localPermits: ["Council Resolution", "Public Works Permit"],
-      environmentalConsiderations: ["Community Impact Assessment", "Heritage Considerations"],
+      environmentalConsiderations: [
+        "Community Impact Assessment",
+        "Heritage Considerations",
+      ],
       accessibilityCompliance: true,
     },
     milestones: [
@@ -565,7 +601,8 @@ export const projectTemplates: ProjectTemplate[] = [
     id: "hospitality-hotel",
     name: "Hotel & Hospitality",
     category: "Hospitality",
-    description: "Guest charging services with premium amenities and valet integration",
+    description:
+      "Guest charging services with premium amenities and valet integration",
     icon: "bed",
     estimatedDuration: "8-14 weeks",
     costRange: "$60,000 - $120,000",
@@ -579,7 +616,10 @@ export const projectTemplates: ProjectTemplate[] = [
       dailyUsagePattern: "24-7",
       budgetRange: "50-100k",
       projectTimeline: "standard",
-      sustainabilityGoals: ["Green Building Certification", "Corporate ESG Goals"],
+      sustainabilityGoals: [
+        "Green Building Certification",
+        "Corporate ESG Goals",
+      ],
       accessibilityRequirements: true,
     },
     siteAssessment: {
@@ -663,23 +703,49 @@ export const projectTemplates: ProjectTemplate[] = [
 // Template categories for filtering
 export const templateCategories = [
   { id: "all", name: "All Templates", count: projectTemplates.length },
-  { id: "residential", name: "Residential", count: projectTemplates.filter(t => t.category === "Residential").length },
-  { id: "commercial", name: "Commercial", count: projectTemplates.filter(t => t.category === "Commercial").length },
-  { id: "retail", name: "Retail", count: projectTemplates.filter(t => t.category === "Retail").length },
-  { id: "fleet", name: "Fleet", count: projectTemplates.filter(t => t.category === "Fleet").length },
-  { id: "public", name: "Public", count: projectTemplates.filter(t => t.category === "Public").length },
-  { id: "hospitality", name: "Hospitality", count: projectTemplates.filter(t => t.category === "Hospitality").length },
+  {
+    id: "residential",
+    name: "Residential",
+    count: projectTemplates.filter((t) => t.category === "Residential").length,
+  },
+  {
+    id: "commercial",
+    name: "Commercial",
+    count: projectTemplates.filter((t) => t.category === "Commercial").length,
+  },
+  {
+    id: "retail",
+    name: "Retail",
+    count: projectTemplates.filter((t) => t.category === "Retail").length,
+  },
+  {
+    id: "fleet",
+    name: "Fleet",
+    count: projectTemplates.filter((t) => t.category === "Fleet").length,
+  },
+  {
+    id: "public",
+    name: "Public",
+    count: projectTemplates.filter((t) => t.category === "Public").length,
+  },
+  {
+    id: "hospitality",
+    name: "Hospitality",
+    count: projectTemplates.filter((t) => t.category === "Hospitality").length,
+  },
 ];
 
 // Get template by ID
 export const getTemplateById = (id: string): ProjectTemplate | undefined => {
-  return projectTemplates.find(template => template.id === id);
+  return projectTemplates.find((template) => template.id === id);
 };
 
 // Get templates by category
 export const getTemplatesByCategory = (category: string): ProjectTemplate[] => {
   if (category === "all") return projectTemplates;
-  return projectTemplates.filter(template => template.category.toLowerCase() === category.toLowerCase());
+  return projectTemplates.filter(
+    (template) => template.category.toLowerCase() === category.toLowerCase(),
+  );
 };
 
 // Get most popular templates
@@ -704,8 +770,10 @@ export const applyTemplate = (template: ProjectTemplate) => {
       dailyUsagePattern: template.clientRequirements.dailyUsagePattern || "",
       budgetRange: template.clientRequirements.budgetRange || "",
       projectTimeline: template.clientRequirements.projectTimeline || "",
-      sustainabilityGoals: template.clientRequirements.sustainabilityGoals || [],
-      accessibilityRequirements: template.clientRequirements.accessibilityRequirements || false,
+      sustainabilityGoals:
+        template.clientRequirements.sustainabilityGoals || [],
+      accessibilityRequirements:
+        template.clientRequirements.accessibilityRequirements || false,
       specialRequirements: "",
       preferredChargerBrands: [],
       paymentModel: "",
@@ -744,8 +812,10 @@ export const applyTemplate = (template: ProjectTemplate) => {
       electricalStandards: template.compliance.electricalStandards || [],
       safetyRequirements: template.compliance.safetyRequirements || [],
       localPermits: template.compliance.localPermits || [],
-      environmentalConsiderations: template.compliance.environmentalConsiderations || [],
-      accessibilityCompliance: template.compliance.accessibilityCompliance || false,
+      environmentalConsiderations:
+        template.compliance.environmentalConsiderations || [],
+      accessibilityCompliance:
+        template.compliance.accessibilityCompliance || false,
     },
     templateId: template.id,
     templateName: template.name,

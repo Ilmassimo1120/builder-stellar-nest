@@ -96,7 +96,8 @@ export default function ProjectTemplateSelector({
 }: ProjectTemplateSelectorProps) {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedTemplate, setSelectedTemplate] = useState<ProjectTemplate | null>(null);
+  const [selectedTemplate, setSelectedTemplate] =
+    useState<ProjectTemplate | null>(null);
   const [showTemplateDetails, setShowTemplateDetails] = useState(false);
 
   // Filter templates based on category and search
@@ -132,9 +133,12 @@ export default function ProjectTemplateSelector({
       <Dialog open={open && !showTemplateDetails} onOpenChange={onOpenChange}>
         <DialogContent className="max-w-6xl h-[90vh] p-0">
           <DialogHeader className="p-6 pb-0">
-            <DialogTitle className="text-2xl">Choose a Project Template</DialogTitle>
+            <DialogTitle className="text-2xl">
+              Choose a Project Template
+            </DialogTitle>
             <DialogDescription>
-              Start with a pre-configured template to streamline your project setup, or skip to create a custom project from scratch.
+              Start with a pre-configured template to streamline your project
+              setup, or skip to create a custom project from scratch.
             </DialogDescription>
           </DialogHeader>
 
@@ -143,7 +147,9 @@ export default function ProjectTemplateSelector({
             <div className="mb-6">
               <div className="flex items-center gap-2 mb-4">
                 <Star className="w-5 h-5 text-yellow-500" />
-                <h3 className="text-lg font-semibold">Most Popular Templates</h3>
+                <h3 className="text-lg font-semibold">
+                  Most Popular Templates
+                </h3>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {popularTemplates.map((template) => (
@@ -158,12 +164,19 @@ export default function ProjectTemplateSelector({
                           {getTemplateIcon(template.icon)}
                         </div>
                         <div className="flex-1">
-                          <CardTitle className="text-base">{template.name}</CardTitle>
+                          <CardTitle className="text-base">
+                            {template.name}
+                          </CardTitle>
                           <div className="flex items-center gap-2 mt-1">
                             <Badge variant="outline" className="text-xs">
                               {template.category}
                             </Badge>
-                            <Badge className={getComplexityColor(template.complexity)} variant="secondary">
+                            <Badge
+                              className={getComplexityColor(
+                                template.complexity,
+                              )}
+                              variant="secondary"
+                            >
                               {template.complexity}
                             </Badge>
                           </div>
@@ -208,7 +221,10 @@ export default function ProjectTemplateSelector({
                 </div>
               </div>
               <div className="w-48">
-                <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                <Select
+                  value={selectedCategory}
+                  onValueChange={setSelectedCategory}
+                >
                   <SelectTrigger>
                     <SelectValue placeholder="Category" />
                   </SelectTrigger>
@@ -260,7 +276,12 @@ export default function ProjectTemplateSelector({
                         <div className="space-y-1 text-xs text-muted-foreground">
                           <div className="flex items-center justify-between">
                             <span>{template.estimatedDuration}</span>
-                            <Badge className={getComplexityColor(template.complexity)} variant="secondary">
+                            <Badge
+                              className={getComplexityColor(
+                                template.complexity,
+                              )}
+                              variant="secondary"
+                            >
                               {template.complexity}
                             </Badge>
                           </div>
@@ -302,13 +323,22 @@ export default function ProjectTemplateSelector({
                     {getTemplateIcon(selectedTemplate.icon)}
                   </div>
                   <div className="flex-1">
-                    <DialogTitle className="text-2xl">{selectedTemplate.name}</DialogTitle>
+                    <DialogTitle className="text-2xl">
+                      {selectedTemplate.name}
+                    </DialogTitle>
                     <DialogDescription className="mt-2">
                       {selectedTemplate.description}
                     </DialogDescription>
                     <div className="flex items-center gap-3 mt-3">
-                      <Badge variant="outline">{selectedTemplate.category}</Badge>
-                      <Badge className={getComplexityColor(selectedTemplate.complexity)} variant="secondary">
+                      <Badge variant="outline">
+                        {selectedTemplate.category}
+                      </Badge>
+                      <Badge
+                        className={getComplexityColor(
+                          selectedTemplate.complexity,
+                        )}
+                        variant="secondary"
+                      >
                         {selectedTemplate.complexity} Complexity
                       </Badge>
                       <div className="flex items-center gap-1 text-sm text-muted-foreground">
@@ -330,25 +360,38 @@ export default function ProjectTemplateSelector({
                           <Clock className="w-4 h-4 text-primary" />
                           <span className="text-sm font-medium">Duration</span>
                         </div>
-                        <p className="text-lg font-semibold">{selectedTemplate.estimatedDuration}</p>
+                        <p className="text-lg font-semibold">
+                          {selectedTemplate.estimatedDuration}
+                        </p>
                       </CardContent>
                     </Card>
                     <Card>
                       <CardContent className="p-4">
                         <div className="flex items-center gap-2 mb-2">
                           <DollarSign className="w-4 h-4 text-primary" />
-                          <span className="text-sm font-medium">Cost Range</span>
+                          <span className="text-sm font-medium">
+                            Cost Range
+                          </span>
                         </div>
-                        <p className="text-lg font-semibold">{selectedTemplate.costRange}</p>
+                        <p className="text-lg font-semibold">
+                          {selectedTemplate.costRange}
+                        </p>
                       </CardContent>
                     </Card>
                     <Card>
                       <CardContent className="p-4">
                         <div className="flex items-center gap-2 mb-2">
                           <BarChart3 className="w-4 h-4 text-primary" />
-                          <span className="text-sm font-medium">Complexity</span>
+                          <span className="text-sm font-medium">
+                            Complexity
+                          </span>
                         </div>
-                        <Badge className={getComplexityColor(selectedTemplate.complexity)} variant="secondary">
+                        <Badge
+                          className={getComplexityColor(
+                            selectedTemplate.complexity,
+                          )}
+                          variant="secondary"
+                        >
                           {selectedTemplate.complexity}
                         </Badge>
                       </CardContent>
@@ -358,9 +401,12 @@ export default function ProjectTemplateSelector({
                   {/* Pre-configured Settings */}
                   <Card>
                     <CardHeader>
-                      <CardTitle className="text-lg">Pre-configured Settings</CardTitle>
+                      <CardTitle className="text-lg">
+                        Pre-configured Settings
+                      </CardTitle>
                       <CardDescription>
-                        This template will automatically configure the following settings for your project
+                        This template will automatically configure the following
+                        settings for your project
                       </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
@@ -371,10 +417,34 @@ export default function ProjectTemplateSelector({
                             Client Requirements
                           </h4>
                           <ul className="text-sm text-muted-foreground space-y-1">
-                            <li>• Organization: {selectedTemplate.clientRequirements.organizationType}</li>
-                            <li>• Objective: {selectedTemplate.clientRequirements.projectObjective}</li>
-                            <li>• Vehicles: {selectedTemplate.clientRequirements.numberOfVehicles}</li>
-                            <li>• Usage: {selectedTemplate.clientRequirements.dailyUsagePattern}</li>
+                            <li>
+                              • Organization:{" "}
+                              {
+                                selectedTemplate.clientRequirements
+                                  .organizationType
+                              }
+                            </li>
+                            <li>
+                              • Objective:{" "}
+                              {
+                                selectedTemplate.clientRequirements
+                                  .projectObjective
+                              }
+                            </li>
+                            <li>
+                              • Vehicles:{" "}
+                              {
+                                selectedTemplate.clientRequirements
+                                  .numberOfVehicles
+                              }
+                            </li>
+                            <li>
+                              • Usage:{" "}
+                              {
+                                selectedTemplate.clientRequirements
+                                  .dailyUsagePattern
+                              }
+                            </li>
                           </ul>
                         </div>
                         <div>
@@ -383,10 +453,25 @@ export default function ProjectTemplateSelector({
                             Charging Configuration
                           </h4>
                           <ul className="text-sm text-muted-foreground space-y-1">
-                            <li>• Type: {selectedTemplate.chargerSelection.chargingType}</li>
-                            <li>• Power: {selectedTemplate.chargerSelection.powerRating}</li>
-                            <li>• Quantity: {selectedTemplate.chargerSelection.numberOfChargers}</li>
-                            <li>• Mounting: {selectedTemplate.chargerSelection.mountingType}</li>
+                            <li>
+                              • Type:{" "}
+                              {selectedTemplate.chargerSelection.chargingType}
+                            </li>
+                            <li>
+                              • Power:{" "}
+                              {selectedTemplate.chargerSelection.powerRating}
+                            </li>
+                            <li>
+                              • Quantity:{" "}
+                              {
+                                selectedTemplate.chargerSelection
+                                  .numberOfChargers
+                              }
+                            </li>
+                            <li>
+                              • Mounting:{" "}
+                              {selectedTemplate.chargerSelection.mountingType}
+                            </li>
                           </ul>
                         </div>
                         <div>
@@ -395,9 +480,21 @@ export default function ProjectTemplateSelector({
                             Site Assessment
                           </h4>
                           <ul className="text-sm text-muted-foreground space-y-1">
-                            <li>• Site Type: {selectedTemplate.siteAssessment.siteType}</li>
-                            <li>• Power Supply: {selectedTemplate.siteAssessment.existingPowerSupply}</li>
-                            <li>• Parking Spaces: {selectedTemplate.siteAssessment.parkingSpaces}</li>
+                            <li>
+                              • Site Type:{" "}
+                              {selectedTemplate.siteAssessment.siteType}
+                            </li>
+                            <li>
+                              • Power Supply:{" "}
+                              {
+                                selectedTemplate.siteAssessment
+                                  .existingPowerSupply
+                              }
+                            </li>
+                            <li>
+                              • Parking Spaces:{" "}
+                              {selectedTemplate.siteAssessment.parkingSpaces}
+                            </li>
                           </ul>
                         </div>
                         <div>
@@ -406,9 +503,25 @@ export default function ProjectTemplateSelector({
                             Compliance
                           </h4>
                           <ul className="text-sm text-muted-foreground space-y-1">
-                            <li>• Standards: {selectedTemplate.compliance.electricalStandards?.slice(0, 2).join(", ")}</li>
-                            <li>• Permits: {selectedTemplate.compliance.localPermits?.slice(0, 2).join(", ")}</li>
-                            <li>• Accessibility: {selectedTemplate.compliance.accessibilityCompliance ? "Required" : "Not Required"}</li>
+                            <li>
+                              • Standards:{" "}
+                              {selectedTemplate.compliance.electricalStandards
+                                ?.slice(0, 2)
+                                .join(", ")}
+                            </li>
+                            <li>
+                              • Permits:{" "}
+                              {selectedTemplate.compliance.localPermits
+                                ?.slice(0, 2)
+                                .join(", ")}
+                            </li>
+                            <li>
+                              • Accessibility:{" "}
+                              {selectedTemplate.compliance
+                                .accessibilityCompliance
+                                ? "Required"
+                                : "Not Required"}
+                            </li>
                           </ul>
                         </div>
                       </div>
@@ -418,7 +531,9 @@ export default function ProjectTemplateSelector({
                   {/* Milestones Timeline */}
                   <Card>
                     <CardHeader>
-                      <CardTitle className="text-lg">Project Timeline</CardTitle>
+                      <CardTitle className="text-lg">
+                        Project Timeline
+                      </CardTitle>
                       <CardDescription>
                         Key milestones and phases for this type of project
                       </CardDescription>
@@ -432,7 +547,9 @@ export default function ProjectTemplateSelector({
                             </div>
                             <div className="flex-1">
                               <div className="flex items-center justify-between">
-                                <h4 className="font-medium">{milestone.title}</h4>
+                                <h4 className="font-medium">
+                                  {milestone.title}
+                                </h4>
                                 <span className="text-xs text-muted-foreground">
                                   Day {milestone.duration}
                                 </span>
@@ -470,16 +587,20 @@ export default function ProjectTemplateSelector({
                   {/* Considerations */}
                   <Card>
                     <CardHeader>
-                      <CardTitle className="text-lg">Important Considerations</CardTitle>
+                      <CardTitle className="text-lg">
+                        Important Considerations
+                      </CardTitle>
                     </CardHeader>
                     <CardContent>
                       <ul className="space-y-2">
-                        {selectedTemplate.considerations.map((consideration, index) => (
-                          <li key={index} className="flex items-start gap-2">
-                            <div className="w-2 h-2 rounded-full bg-yellow-500 mt-2 flex-shrink-0" />
-                            <span className="text-sm">{consideration}</span>
-                          </li>
-                        ))}
+                        {selectedTemplate.considerations.map(
+                          (consideration, index) => (
+                            <li key={index} className="flex items-start gap-2">
+                              <div className="w-2 h-2 rounded-full bg-yellow-500 mt-2 flex-shrink-0" />
+                              <span className="text-sm">{consideration}</span>
+                            </li>
+                          ),
+                        )}
                       </ul>
                     </CardContent>
                   </Card>
@@ -487,7 +608,10 @@ export default function ProjectTemplateSelector({
               </ScrollArea>
 
               <DialogFooter className="px-6 py-4 border-t">
-                <Button variant="outline" onClick={() => setShowTemplateDetails(false)}>
+                <Button
+                  variant="outline"
+                  onClick={() => setShowTemplateDetails(false)}
+                >
                   Back to Templates
                 </Button>
                 <Button onClick={handleConfirmTemplate}>

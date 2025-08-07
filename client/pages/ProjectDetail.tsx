@@ -189,21 +189,64 @@ export default function ProjectDetail() {
       // Transform project data to include collaboration features
       const enhancedProject: Project = {
         id: foundProject.id,
-        name: foundProject.projectInfo?.name || foundProject.name || "Unknown Project",
-        client: foundProject.projectInfo?.client || foundProject.client_name || foundProject.client || "Unknown Client",
+        name:
+          foundProject.projectInfo?.name ||
+          foundProject.name ||
+          "Unknown Project",
+        client:
+          foundProject.projectInfo?.client ||
+          foundProject.client_name ||
+          foundProject.client ||
+          "Unknown Client",
         status: foundProject.status || "Planning",
         progress: foundProject.progress || 0,
-        value: foundProject.estimatedBudget || foundProject.estimated_budget || foundProject.value || "TBD",
-        deadline: foundProject.deadline || new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toLocaleDateString(),
-        location: foundProject.projectInfo?.address || foundProject.site_address || foundProject.location || "TBD",
-        type: foundProject.projectInfo?.type || foundProject.site_type || foundProject.type || "EV Charging Project",
-        description: foundProject.projectInfo?.objective || foundProject.project_objective || foundProject.description || "",
-        createdAt: foundProject.createdAt || foundProject.created_at || new Date().toISOString(),
-        updatedAt: foundProject.updatedAt || foundProject.updated_at || new Date().toISOString(),
-        contactPerson: foundProject.clientRequirements?.contactPersonName || foundProject.contactPerson || "",
-        phone: foundProject.clientRequirements?.contactPhone || foundProject.phone || "",
-        email: foundProject.clientRequirements?.contactEmail || foundProject.email || "",
-        siteAddress: foundProject.siteAssessment?.siteAddress || foundProject.site_address || "",
+        value:
+          foundProject.estimatedBudget ||
+          foundProject.estimated_budget ||
+          foundProject.value ||
+          "TBD",
+        deadline:
+          foundProject.deadline ||
+          new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toLocaleDateString(),
+        location:
+          foundProject.projectInfo?.address ||
+          foundProject.site_address ||
+          foundProject.location ||
+          "TBD",
+        type:
+          foundProject.projectInfo?.type ||
+          foundProject.site_type ||
+          foundProject.type ||
+          "EV Charging Project",
+        description:
+          foundProject.projectInfo?.objective ||
+          foundProject.project_objective ||
+          foundProject.description ||
+          "",
+        createdAt:
+          foundProject.createdAt ||
+          foundProject.created_at ||
+          new Date().toISOString(),
+        updatedAt:
+          foundProject.updatedAt ||
+          foundProject.updated_at ||
+          new Date().toISOString(),
+        contactPerson:
+          foundProject.clientRequirements?.contactPersonName ||
+          foundProject.contactPerson ||
+          "",
+        phone:
+          foundProject.clientRequirements?.contactPhone ||
+          foundProject.phone ||
+          "",
+        email:
+          foundProject.clientRequirements?.contactEmail ||
+          foundProject.email ||
+          "",
+        siteAddress:
+          foundProject.siteAssessment?.siteAddress ||
+          foundProject.site_address ||
+          "",
         milestones: foundProject.milestones || createDefaultMilestones(),
         comments: foundProject.comments || createMockComments(),
         teamMembers: foundProject.teamMembers || createMockTeamMembers(),
@@ -228,10 +271,13 @@ export default function ProjectDetail() {
     status: "In Progress",
     progress: 45,
     value: "$125,000",
-    deadline: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000).toLocaleDateString(),
+    deadline: new Date(
+      Date.now() + 60 * 24 * 60 * 60 * 1000,
+    ).toLocaleDateString(),
     location: "Sydney, NSW",
     type: "Commercial DC Fast Charging",
-    description: "Installation of DC fast charging infrastructure for commercial use",
+    description:
+      "Installation of DC fast charging infrastructure for commercial use",
     createdAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
     updatedAt: new Date().toISOString(),
   });
@@ -244,7 +290,9 @@ export default function ProjectDetail() {
       status: "completed",
       dueDate: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString(),
       assignee: "Technical Team",
-      completedDate: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
+      completedDate: new Date(
+        Date.now() - 10 * 24 * 60 * 60 * 1000,
+      ).toISOString(),
     },
     {
       id: "milestone-2",
@@ -288,7 +336,8 @@ export default function ProjectDetail() {
       id: "comment-1",
       userId: "user-1",
       userName: "Sarah Wilson",
-      message: "Initial site survey completed. Electrical capacity looks good for the planned installation.",
+      message:
+        "Initial site survey completed. Electrical capacity looks good for the planned installation.",
       timestamp: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
       type: "comment",
     },
@@ -296,7 +345,8 @@ export default function ProjectDetail() {
       id: "comment-2",
       userId: "user-2",
       userName: "Mike Chen",
-      message: "Permit applications have been submitted to the local council. Expecting approval within 10 business days.",
+      message:
+        "Permit applications have been submitted to the local council. Expecting approval within 10 business days.",
       timestamp: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
       type: "status-update",
     },
@@ -304,7 +354,8 @@ export default function ProjectDetail() {
       id: "comment-3",
       userId: "user-3",
       userName: "Emma Davis",
-      message: "Client has confirmed final charger specifications. Proceeding with equipment ordering.",
+      message:
+        "Client has confirmed final charger specifications. Proceeding with equipment ordering.",
       timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
       type: "milestone",
     },
@@ -419,7 +470,8 @@ export default function ProjectDetail() {
         ? {
             ...milestone,
             status: status as any,
-            completedDate: status === "completed" ? new Date().toISOString() : undefined,
+            completedDate:
+              status === "completed" ? new Date().toISOString() : undefined,
           }
         : milestone,
     );
@@ -465,7 +517,9 @@ export default function ProjectDetail() {
       title: newMilestone.title,
       description: newMilestone.description,
       status: "pending",
-      dueDate: newMilestone.dueDate || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+      dueDate:
+        newMilestone.dueDate ||
+        new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
       assignee: newMilestone.assignee,
     };
 
@@ -506,16 +560,23 @@ export default function ProjectDetail() {
 
   const updateProjectInStorage = (updatedProject: Project) => {
     // Update in localStorage projects
-    const localProjects = JSON.parse(localStorage.getItem("chargeSourceProjects") || "[]");
-    const projectIndex = localProjects.findIndex((p: any) => p.id === updatedProject.id);
-    
+    const localProjects = JSON.parse(
+      localStorage.getItem("chargeSourceProjects") || "[]",
+    );
+    const projectIndex = localProjects.findIndex(
+      (p: any) => p.id === updatedProject.id,
+    );
+
     if (projectIndex >= 0) {
       localProjects[projectIndex] = {
         ...localProjects[projectIndex],
         ...updatedProject,
         updatedAt: new Date().toISOString(),
       };
-      localStorage.setItem("chargeSourceProjects", JSON.stringify(localProjects));
+      localStorage.setItem(
+        "chargeSourceProjects",
+        JSON.stringify(localProjects),
+      );
     }
   };
 
@@ -526,7 +587,9 @@ export default function ProjectDetail() {
           <div className="flex items-center justify-center py-12">
             <div className="text-center">
               <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-              <p className="text-muted-foreground">Loading project details...</p>
+              <p className="text-muted-foreground">
+                Loading project details...
+              </p>
             </div>
           </div>
         </div>
@@ -613,7 +676,10 @@ export default function ProjectDetail() {
             </div>
             <div className="text-right">
               <div className="text-2xl font-bold mb-1">{project.value}</div>
-              <Badge className={getStatusColor(project.status)} variant="secondary">
+              <Badge
+                className={getStatusColor(project.status)}
+                variant="secondary"
+              >
                 {project.status}
               </Badge>
             </div>
@@ -624,26 +690,49 @@ export default function ProjectDetail() {
             <CardContent className="p-6">
               <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                 <div>
-                  <div className="text-sm text-muted-foreground mb-1">Overall Progress</div>
+                  <div className="text-sm text-muted-foreground mb-1">
+                    Overall Progress
+                  </div>
                   <div className="flex items-center gap-2">
                     <Progress value={project.progress} className="flex-1" />
-                    <span className="text-sm font-medium">{project.progress}%</span>
+                    <span className="text-sm font-medium">
+                      {project.progress}%
+                    </span>
                   </div>
                 </div>
                 <div>
-                  <div className="text-sm text-muted-foreground mb-1">Milestones</div>
+                  <div className="text-sm text-muted-foreground mb-1">
+                    Milestones
+                  </div>
                   <div className="text-lg font-semibold">
-                    {project.milestones.filter(m => m.status === "completed").length} / {project.milestones.length}
+                    {
+                      project.milestones.filter((m) => m.status === "completed")
+                        .length
+                    }{" "}
+                    / {project.milestones.length}
                   </div>
                 </div>
                 <div>
-                  <div className="text-sm text-muted-foreground mb-1">Team Members</div>
-                  <div className="text-lg font-semibold">{project.teamMembers.length}</div>
+                  <div className="text-sm text-muted-foreground mb-1">
+                    Team Members
+                  </div>
+                  <div className="text-lg font-semibold">
+                    {project.teamMembers.length}
+                  </div>
                 </div>
                 <div>
-                  <div className="text-sm text-muted-foreground mb-1">Days Remaining</div>
+                  <div className="text-sm text-muted-foreground mb-1">
+                    Days Remaining
+                  </div>
                   <div className="text-lg font-semibold">
-                    {Math.max(0, Math.ceil((new Date(project.deadline).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)))}
+                    {Math.max(
+                      0,
+                      Math.ceil(
+                        (new Date(project.deadline).getTime() -
+                          new Date().getTime()) /
+                          (1000 * 60 * 60 * 24),
+                      ),
+                    )}
                   </div>
                 </div>
               </div>
@@ -652,7 +741,11 @@ export default function ProjectDetail() {
         </div>
 
         {/* Main Content Tabs */}
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+        <Tabs
+          value={activeTab}
+          onValueChange={setActiveTab}
+          className="space-y-6"
+        >
           <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="timeline">Timeline</TabsTrigger>
@@ -673,29 +766,47 @@ export default function ProjectDetail() {
                   <CardContent className="space-y-4">
                     {project.description && (
                       <div>
-                        <Label className="text-sm font-medium">Description</Label>
-                        <p className="text-sm text-muted-foreground mt-1">{project.description}</p>
+                        <Label className="text-sm font-medium">
+                          Description
+                        </Label>
+                        <p className="text-sm text-muted-foreground mt-1">
+                          {project.description}
+                        </p>
                       </div>
                     )}
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <Label className="text-sm font-medium">Project Type</Label>
-                        <p className="text-sm text-muted-foreground mt-1">{project.type}</p>
+                        <Label className="text-sm font-medium">
+                          Project Type
+                        </Label>
+                        <p className="text-sm text-muted-foreground mt-1">
+                          {project.type}
+                        </p>
                       </div>
                       <div>
-                        <Label className="text-sm font-medium">Site Address</Label>
-                        <p className="text-sm text-muted-foreground mt-1">{project.siteAddress || project.location}</p>
+                        <Label className="text-sm font-medium">
+                          Site Address
+                        </Label>
+                        <p className="text-sm text-muted-foreground mt-1">
+                          {project.siteAddress || project.location}
+                        </p>
                       </div>
                       {project.contactPerson && (
                         <div>
-                          <Label className="text-sm font-medium">Contact Person</Label>
-                          <p className="text-sm text-muted-foreground mt-1">{project.contactPerson}</p>
+                          <Label className="text-sm font-medium">
+                            Contact Person
+                          </Label>
+                          <p className="text-sm text-muted-foreground mt-1">
+                            {project.contactPerson}
+                          </p>
                         </div>
                       )}
                       {project.phone && (
                         <div>
                           <Label className="text-sm font-medium">Phone</Label>
-                          <p className="text-sm text-muted-foreground mt-1">{project.phone}</p>
+                          <p className="text-sm text-muted-foreground mt-1">
+                            {project.phone}
+                          </p>
                         </div>
                       )}
                     </div>
@@ -706,23 +817,34 @@ export default function ProjectDetail() {
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between">
                     <CardTitle>Recent Milestones</CardTitle>
-                    <Button variant="outline" size="sm" onClick={() => setActiveTab("timeline")}>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setActiveTab("timeline")}
+                    >
                       View All
                     </Button>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-3">
                       {project.milestones.slice(0, 3).map((milestone) => (
-                        <div key={milestone.id} className="flex items-center gap-3 p-3 border rounded-lg">
+                        <div
+                          key={milestone.id}
+                          className="flex items-center gap-3 p-3 border rounded-lg"
+                        >
                           {getMilestoneIcon(milestone.status)}
                           <div className="flex-1">
                             <div className="font-medium">{milestone.title}</div>
                             <div className="text-sm text-muted-foreground">
-                              Due {new Date(milestone.dueDate).toLocaleDateString()}
+                              Due{" "}
+                              {new Date(milestone.dueDate).toLocaleDateString()}
                               {milestone.assignee && ` • ${milestone.assignee}`}
                             </div>
                           </div>
-                          <Badge className={getStatusColor(milestone.status)} variant="secondary">
+                          <Badge
+                            className={getStatusColor(milestone.status)}
+                            variant="secondary"
+                          >
                             {milestone.status}
                           </Badge>
                         </div>
@@ -741,27 +863,40 @@ export default function ProjectDetail() {
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div>
-                      <Label className="text-sm font-medium">Current Status</Label>
-                      <Select value={project.status} onValueChange={handleStatusUpdate}>
+                      <Label className="text-sm font-medium">
+                        Current Status
+                      </Label>
+                      <Select
+                        value={project.status}
+                        onValueChange={handleStatusUpdate}
+                      >
                         <SelectTrigger className="mt-1">
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="Planning">Planning</SelectItem>
-                          <SelectItem value="Site Assessment">Site Assessment</SelectItem>
+                          <SelectItem value="Site Assessment">
+                            Site Assessment
+                          </SelectItem>
                           <SelectItem value="Permits">Permits</SelectItem>
-                          <SelectItem value="In Progress">In Progress</SelectItem>
+                          <SelectItem value="In Progress">
+                            In Progress
+                          </SelectItem>
                           <SelectItem value="Testing">Testing</SelectItem>
                           <SelectItem value="Completed">Completed</SelectItem>
                           <SelectItem value="On Hold">On Hold</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
-                    
+
                     <div>
-                      <Label className="text-sm font-medium">Last Updated</Label>
+                      <Label className="text-sm font-medium">
+                        Last Updated
+                      </Label>
                       <p className="text-sm text-muted-foreground mt-1">
-                        {new Date(project.updatedAt).toLocaleDateString()} by {project.statusHistory[project.statusHistory.length - 1]?.updatedBy || "System"}
+                        {new Date(project.updatedAt).toLocaleDateString()} by{" "}
+                        {project.statusHistory[project.statusHistory.length - 1]
+                          ?.updatedBy || "System"}
                       </p>
                     </div>
                   </CardContent>
@@ -771,26 +906,44 @@ export default function ProjectDetail() {
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between">
                     <CardTitle>Team</CardTitle>
-                    <Button variant="outline" size="sm" onClick={() => setActiveTab("team")}>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setActiveTab("team")}
+                    >
                       Manage
                     </Button>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-3">
                       {project.teamMembers.slice(0, 3).map((member) => (
-                        <div key={member.id} className="flex items-center gap-3">
+                        <div
+                          key={member.id}
+                          className="flex items-center gap-3"
+                        >
                           <Avatar className="w-8 h-8">
                             <AvatarImage src={member.avatar} />
-                            <AvatarFallback>{member.name.charAt(0)}</AvatarFallback>
+                            <AvatarFallback>
+                              {member.name.charAt(0)}
+                            </AvatarFallback>
                           </Avatar>
                           <div className="flex-1">
-                            <div className="text-sm font-medium">{member.name}</div>
-                            <div className="text-xs text-muted-foreground">{member.role}</div>
+                            <div className="text-sm font-medium">
+                              {member.name}
+                            </div>
+                            <div className="text-xs text-muted-foreground">
+                              {member.role}
+                            </div>
                           </div>
-                          <div className={`w-2 h-2 rounded-full ${
-                            member.status === "active" ? "bg-green-500" :
-                            member.status === "away" ? "bg-yellow-500" : "bg-gray-400"
-                          }`} />
+                          <div
+                            className={`w-2 h-2 rounded-full ${
+                              member.status === "active"
+                                ? "bg-green-500"
+                                : member.status === "away"
+                                  ? "bg-yellow-500"
+                                  : "bg-gray-400"
+                            }`}
+                          />
                         </div>
                       ))}
                       {project.teamMembers.length > 3 && (
@@ -809,7 +962,10 @@ export default function ProjectDetail() {
           <TabsContent value="timeline" className="space-y-6">
             <div className="flex items-center justify-between">
               <h2 className="text-2xl font-semibold">Project Timeline</h2>
-              <Dialog open={isAddingMilestone} onOpenChange={setIsAddingMilestone}>
+              <Dialog
+                open={isAddingMilestone}
+                onOpenChange={setIsAddingMilestone}
+              >
                 <DialogTrigger asChild>
                   <Button>
                     <Plus className="w-4 h-4 mr-2" />
@@ -829,7 +985,12 @@ export default function ProjectDetail() {
                       <Input
                         id="milestone-title"
                         value={newMilestone.title}
-                        onChange={(e) => setNewMilestone({ ...newMilestone, title: e.target.value })}
+                        onChange={(e) =>
+                          setNewMilestone({
+                            ...newMilestone,
+                            title: e.target.value,
+                          })
+                        }
                         placeholder="Milestone title"
                       />
                     </div>
@@ -838,7 +999,12 @@ export default function ProjectDetail() {
                       <Textarea
                         id="milestone-description"
                         value={newMilestone.description}
-                        onChange={(e) => setNewMilestone({ ...newMilestone, description: e.target.value })}
+                        onChange={(e) =>
+                          setNewMilestone({
+                            ...newMilestone,
+                            description: e.target.value,
+                          })
+                        }
                         placeholder="Milestone description"
                       />
                     </div>
@@ -848,12 +1014,22 @@ export default function ProjectDetail() {
                         id="milestone-due"
                         type="date"
                         value={newMilestone.dueDate}
-                        onChange={(e) => setNewMilestone({ ...newMilestone, dueDate: e.target.value })}
+                        onChange={(e) =>
+                          setNewMilestone({
+                            ...newMilestone,
+                            dueDate: e.target.value,
+                          })
+                        }
                       />
                     </div>
                     <div>
                       <Label htmlFor="milestone-assignee">Assignee</Label>
-                      <Select value={newMilestone.assignee} onValueChange={(value) => setNewMilestone({ ...newMilestone, assignee: value })}>
+                      <Select
+                        value={newMilestone.assignee}
+                        onValueChange={(value) =>
+                          setNewMilestone({ ...newMilestone, assignee: value })
+                        }
+                      >
                         <SelectTrigger>
                           <SelectValue placeholder="Select assignee" />
                         </SelectTrigger>
@@ -868,7 +1044,10 @@ export default function ProjectDetail() {
                     </div>
                   </div>
                   <DialogFooter>
-                    <Button variant="outline" onClick={() => setIsAddingMilestone(false)}>
+                    <Button
+                      variant="outline"
+                      onClick={() => setIsAddingMilestone(false)}
+                    >
                       Cancel
                     </Button>
                     <Button onClick={handleAddMilestone}>Add Milestone</Button>
@@ -896,28 +1075,49 @@ export default function ProjectDetail() {
                               {milestone.description}
                             </p>
                             <div className="flex items-center gap-4 mt-2 text-xs text-muted-foreground">
-                              <span>Due: {new Date(milestone.dueDate).toLocaleDateString()}</span>
-                              {milestone.assignee && <span>Assigned to: {milestone.assignee}</span>}
+                              <span>
+                                Due:{" "}
+                                {new Date(
+                                  milestone.dueDate,
+                                ).toLocaleDateString()}
+                              </span>
+                              {milestone.assignee && (
+                                <span>Assigned to: {milestone.assignee}</span>
+                              )}
                               {milestone.completedDate && (
-                                <span>Completed: {new Date(milestone.completedDate).toLocaleDateString()}</span>
+                                <span>
+                                  Completed:{" "}
+                                  {new Date(
+                                    milestone.completedDate,
+                                  ).toLocaleDateString()}
+                                </span>
                               )}
                             </div>
                           </div>
                           <div className="flex items-center gap-2">
-                            <Badge className={getStatusColor(milestone.status)} variant="secondary">
+                            <Badge
+                              className={getStatusColor(milestone.status)}
+                              variant="secondary"
+                            >
                               {milestone.status}
                             </Badge>
                             <Select
                               value={milestone.status}
-                              onValueChange={(status) => handleMilestoneUpdate(milestone.id, status)}
+                              onValueChange={(status) =>
+                                handleMilestoneUpdate(milestone.id, status)
+                              }
                             >
                               <SelectTrigger className="w-32">
                                 <SelectValue />
                               </SelectTrigger>
                               <SelectContent>
                                 <SelectItem value="pending">Pending</SelectItem>
-                                <SelectItem value="in-progress">In Progress</SelectItem>
-                                <SelectItem value="completed">Completed</SelectItem>
+                                <SelectItem value="in-progress">
+                                  In Progress
+                                </SelectItem>
+                                <SelectItem value="completed">
+                                  Completed
+                                </SelectItem>
                                 <SelectItem value="overdue">Overdue</SelectItem>
                               </SelectContent>
                             </Select>
@@ -935,7 +1135,10 @@ export default function ProjectDetail() {
           <TabsContent value="team" className="space-y-6">
             <div className="flex items-center justify-between">
               <h2 className="text-2xl font-semibold">Team Management</h2>
-              <Dialog open={isAddingTeamMember} onOpenChange={setIsAddingTeamMember}>
+              <Dialog
+                open={isAddingTeamMember}
+                onOpenChange={setIsAddingTeamMember}
+              >
                 <DialogTrigger asChild>
                   <Button>
                     <UserPlus className="w-4 h-4 mr-2" />
@@ -955,7 +1158,12 @@ export default function ProjectDetail() {
                       <Input
                         id="member-name"
                         value={newTeamMember.name}
-                        onChange={(e) => setNewTeamMember({ ...newTeamMember, name: e.target.value })}
+                        onChange={(e) =>
+                          setNewTeamMember({
+                            ...newTeamMember,
+                            name: e.target.value,
+                          })
+                        }
                         placeholder="Full name"
                       />
                     </div>
@@ -965,29 +1173,54 @@ export default function ProjectDetail() {
                         id="member-email"
                         type="email"
                         value={newTeamMember.email}
-                        onChange={(e) => setNewTeamMember({ ...newTeamMember, email: e.target.value })}
+                        onChange={(e) =>
+                          setNewTeamMember({
+                            ...newTeamMember,
+                            email: e.target.value,
+                          })
+                        }
                         placeholder="email@example.com"
                       />
                     </div>
                     <div>
                       <Label htmlFor="member-role">Role</Label>
-                      <Select value={newTeamMember.role} onValueChange={(value) => setNewTeamMember({ ...newTeamMember, role: value })}>
+                      <Select
+                        value={newTeamMember.role}
+                        onValueChange={(value) =>
+                          setNewTeamMember({ ...newTeamMember, role: value })
+                        }
+                      >
                         <SelectTrigger>
                           <SelectValue placeholder="Select role" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="Project Manager">Project Manager</SelectItem>
-                          <SelectItem value="Electrical Engineer">Electrical Engineer</SelectItem>
-                          <SelectItem value="Installation Coordinator">Installation Coordinator</SelectItem>
-                          <SelectItem value="Compliance Officer">Compliance Officer</SelectItem>
-                          <SelectItem value="Client Liaison">Client Liaison</SelectItem>
-                          <SelectItem value="Team Member">Team Member</SelectItem>
+                          <SelectItem value="Project Manager">
+                            Project Manager
+                          </SelectItem>
+                          <SelectItem value="Electrical Engineer">
+                            Electrical Engineer
+                          </SelectItem>
+                          <SelectItem value="Installation Coordinator">
+                            Installation Coordinator
+                          </SelectItem>
+                          <SelectItem value="Compliance Officer">
+                            Compliance Officer
+                          </SelectItem>
+                          <SelectItem value="Client Liaison">
+                            Client Liaison
+                          </SelectItem>
+                          <SelectItem value="Team Member">
+                            Team Member
+                          </SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
                   </div>
                   <DialogFooter>
-                    <Button variant="outline" onClick={() => setIsAddingTeamMember(false)}>
+                    <Button
+                      variant="outline"
+                      onClick={() => setIsAddingTeamMember(false)}
+                    >
                       Cancel
                     </Button>
                     <Button onClick={handleAddTeamMember}>Add Member</Button>
@@ -1007,14 +1240,23 @@ export default function ProjectDetail() {
                       </Avatar>
                       <div className="flex-1">
                         <div className="font-medium">{member.name}</div>
-                        <div className="text-sm text-muted-foreground">{member.role}</div>
-                        <div className="text-xs text-muted-foreground">{member.email}</div>
+                        <div className="text-sm text-muted-foreground">
+                          {member.role}
+                        </div>
+                        <div className="text-xs text-muted-foreground">
+                          {member.email}
+                        </div>
                       </div>
                       <div className="flex flex-col items-end gap-1">
-                        <div className={`w-3 h-3 rounded-full ${
-                          member.status === "active" ? "bg-green-500" :
-                          member.status === "away" ? "bg-yellow-500" : "bg-gray-400"
-                        }`} />
+                        <div
+                          className={`w-3 h-3 rounded-full ${
+                            member.status === "active"
+                              ? "bg-green-500"
+                              : member.status === "away"
+                                ? "bg-yellow-500"
+                                : "bg-gray-400"
+                          }`}
+                        />
                         <span className="text-xs text-muted-foreground capitalize">
                           {member.status}
                         </span>
@@ -1045,19 +1287,27 @@ export default function ProjectDetail() {
                           <div key={comment.id} className="flex gap-3">
                             <Avatar className="w-8 h-8">
                               <AvatarImage src={comment.userAvatar} />
-                              <AvatarFallback>{comment.userName.charAt(0)}</AvatarFallback>
+                              <AvatarFallback>
+                                {comment.userName.charAt(0)}
+                              </AvatarFallback>
                             </Avatar>
                             <div className="flex-1">
                               <div className="flex items-center gap-2 mb-1">
-                                <span className="text-sm font-medium">{comment.userName}</span>
+                                <span className="text-sm font-medium">
+                                  {comment.userName}
+                                </span>
                                 <span className="text-xs text-muted-foreground">
-                                  {new Date(comment.timestamp).toLocaleDateString()}
+                                  {new Date(
+                                    comment.timestamp,
+                                  ).toLocaleDateString()}
                                 </span>
                                 <Badge variant="outline" className="text-xs">
                                   {comment.type}
                                 </Badge>
                               </div>
-                              <p className="text-sm text-muted-foreground">{comment.message}</p>
+                              <p className="text-sm text-muted-foreground">
+                                {comment.message}
+                              </p>
                             </div>
                           </div>
                         ))}
@@ -1105,7 +1355,8 @@ export default function ProjectDetail() {
                   <FileText className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
                   <h3 className="text-lg font-medium mb-2">No Documents Yet</h3>
                   <p className="text-muted-foreground mb-4">
-                    Upload project documents, permits, and files to keep everything organized.
+                    Upload project documents, permits, and files to keep
+                    everything organized.
                   </p>
                   <Button>
                     <Upload className="w-4 h-4 mr-2" />
