@@ -328,6 +328,26 @@ export default function Dashboard() {
     }
   };
 
+  // Handle creating quotes from projects
+  const handleCreateQuote = (project: any) => {
+    if (!user) return;
+
+    try {
+      // Create a new quote from the project
+      const newQuote = quoteService.createQuote(project.id);
+      newQuote.createdBy = user.id;
+
+      // Update quote with user information
+      quoteService.updateQuote(newQuote);
+
+      // Navigate to quote builder
+      navigate(`/quotes/${newQuote.id}`);
+    } catch (error) {
+      console.error("Error creating quote:", error);
+      alert("Error creating quote. Please try again.");
+    }
+  };
+
   const quickActions = [
     {
       title: "New Project",
