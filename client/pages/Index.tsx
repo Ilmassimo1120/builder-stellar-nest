@@ -74,7 +74,10 @@ export default function Index() {
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <PlugZap className="w-8 h-8 text-primary" />
-            <span className="text-xl font-bold">ChargePro Australia</span>
+            <div className="flex flex-col">
+              <span className="text-xl font-bold">ChargeSource</span>
+              <span className="text-xs text-muted-foreground">Powered By Charge N Go Australia</span>
+            </div>
           </div>
           <nav className="hidden md:flex items-center space-x-6">
             <Link to="/dashboard" className="text-sm font-medium hover:text-primary transition-colors">
@@ -219,7 +222,10 @@ export default function Index() {
             <div>
               <div className="flex items-center space-x-2 mb-4">
                 <PlugZap className="w-6 h-6 text-primary" />
-                <span className="text-lg font-bold">ChargePro Australia</span>
+                <div className="flex flex-col">
+                  <span className="text-lg font-bold">ChargeSource</span>
+                  <span className="text-xs text-muted-foreground">Powered By Charge N Go Australia</span>
+                </div>
               </div>
               <p className="text-sm text-muted-foreground mb-4">
                 The leading platform for Australian electrical contractors specializing in EV infrastructure.
@@ -263,7 +269,7 @@ export default function Index() {
           
           <div className="border-t mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
             <p className="text-sm text-muted-foreground">
-              © 2024 ChargePro Australia. All rights reserved.
+              © 2024 ChargeSource. All rights reserved.
             </p>
             <div className="flex items-center gap-4 text-sm text-muted-foreground mt-4 md:mt-0">
               <span>🇦🇺 Made in Australia</span>
