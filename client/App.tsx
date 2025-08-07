@@ -52,25 +52,25 @@ const App = () => (
           <Route path="/support" element={<Placeholder title="Support Center" description="Get help with your EV infrastructure projects" features={["Help documentation", "Technical support", "Live chat", "Ticket system", "FAQ database"]} />} />
 
           {/* Business Pages */}
-          <Route path="/features" element={<Placeholder title="Features" description="Comprehensive overview of ChargePro capabilities" features={["Feature comparison", "Use cases", "Benefits overview", "ROI calculator", "Demo videos"]} />} />
+          <Route path="/features" element={<Placeholder title="Features" description="Comprehensive overview of ChargeSource capabilities" features={["Feature comparison", "Use cases", "Benefits overview", "ROI calculator", "Demo videos"]} />} />
           <Route path="/pricing" element={<Placeholder title="Pricing Plans" description="Choose the right plan for your electrical contracting business" features={["Plan comparison", "Feature breakdown", "Custom pricing", "Enterprise options", "Free trial"]} />} />
 
           {/* Auth & Account */}
-          <Route path="/login" element={<Placeholder title="Sign In" description="Access your ChargePro account" features={["Secure authentication", "Single sign-on", "Password recovery", "Two-factor auth", "Account security"]} />} />
+          <Route path="/login" element={<Placeholder title="Sign In" description="Access your ChargeSource account" features={["Secure authentication", "Single sign-on", "Password recovery", "Two-factor auth", "Account security"]} />} />
           <Route path="/settings" element={<Placeholder title="Account Settings" description="Manage your account and preferences" features={["Profile management", "Team settings", "Billing information", "Notification preferences", "Security settings"]} />} />
 
           {/* Legal & Info */}
-          <Route path="/about" element={<Placeholder title="About ChargePro" description="Learn about our mission to electrify Australia's infrastructure" />} />
+          <Route path="/about" element={<Placeholder title="About ChargeSource" description="Learn about our mission to electrify Australia's infrastructure" />} />
           <Route path="/contact" element={<Placeholder title="Contact Us" description="Get in touch with our team for support or sales inquiries" />} />
           <Route path="/privacy" element={<Placeholder title="Privacy Policy" description="How we protect and handle your data" />} />
-          <Route path="/terms" element={<Placeholder title="Terms of Service" description="Terms and conditions for using ChargePro" />} />
+          <Route path="/terms" element={<Placeholder title="Terms of Service" description="Terms and conditions for using ChargeSource" />} />
 
           {/* Compliance & Help */}
           <Route path="/compliance" element={<Placeholder title="Compliance Center" description="AS/NZS 3000 and regulatory compliance resources" features={["Compliance checklists", "Regulation updates", "Certification tracking", "Audit trails", "Documentation"]} />} />
           <Route path="/help" element={<Placeholder title="Help Center" description="Find answers and get support" features={["Search documentation", "Video tutorials", "FAQ section", "Contact support", "Community forum"]} />} />
 
           {/* API & Developer */}
-          <Route path="/api" element={<Placeholder title="API Documentation" description="Integrate ChargePro with your existing systems" features={["REST API", "Webhooks", "SDK libraries", "Code examples", "Rate limits"]} />} />
+          <Route path="/api" element={<Placeholder title="API Documentation" description="Integrate ChargeSource with your existing systems" features={["REST API", "Webhooks", "SDK libraries", "Code examples", "Rate limits"]} />} />
 
           {/* Future Features */}
           <Route path="/monitoring" element={<Placeholder title="Site Monitoring" description="Real-time monitoring and load management (coming soon)" features={["Real-time monitoring", "Load management", "Performance analytics", "Alerts & notifications", "Remote diagnostics"]} />} />
