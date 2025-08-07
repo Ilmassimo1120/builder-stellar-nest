@@ -294,8 +294,8 @@ export default function Dashboard() {
             <div className="flex items-center gap-3">
               <p className="text-muted-foreground">Welcome back, John. Here's your EV project overview.</p>
               {!loading && (
-                <Badge variant={isSupabaseConnected ? "secondary" : "outline"} className="text-xs">
-                  {isSupabaseConnected ? "🟢 Cloud Connected" : "🟡 Local Storage"}
+                <Badge variant="secondary" className="text-xs">
+                  {isSupabaseConnected ? "☁️ Cloud Storage" : "💾 Ready to Use"}
                 </Badge>
               )}
             </div>
