@@ -24,18 +24,43 @@ export function SupabaseSetup({ isConnected, onRetry }: SupabaseSetupProps) {
   };
 
   const handleOpenMCP = () => {
-    // This will trigger the MCP popover action link
-    const event = new CustomEvent('openMCPPopover');
-    window.dispatchEvent(event);
+    console.log('🔗 Attempting to open MCP popover...');
 
-    // Fallback: try to trigger via hash navigation
-    window.location.hash = 'open-mcp-popover';
-
-    // Additional fallback: try to click any existing MCP trigger
-    const mcpTrigger = document.querySelector('[data-mcp-trigger]') as HTMLElement;
-    if (mcpTrigger) {
-      mcpTrigger.click();
+    // Method 1: Try the documented action link format
+    try {
+      const link = document.createElement('a');
+      link.href = '#open-mcp-popover';
+      link.click();
+      console.log('✅ Triggered MCP popover via action link');
+    } catch (error) {
+      console.log('❌ Action link method failed:', error);
     }
+
+    // Method 2: Try to find and click MCP-related buttons
+    try {
+      const mcpButtons = document.querySelectorAll('button, [role="button"]');
+      mcpButtons.forEach((button) => {
+        const text = button.textContent?.toLowerCase();
+        if (text?.includes('mcp') || text?.includes('integration') || text?.includes('popover')) {
+          (button as HTMLElement).click();
+          console.log('✅ Found and clicked MCP button');
+        }
+      });
+    } catch (error) {
+      console.log('❌ Button search method failed:', error);
+    }
+
+    // Method 3: Custom event dispatch
+    try {
+      window.dispatchEvent(new CustomEvent('openMCPPopover'));
+      window.dispatchEvent(new CustomEvent('open-mcp-popover'));
+      console.log('✅ Dispatched custom events');
+    } catch (error) {
+      console.log('❌ Custom event method failed:', error);
+    }
+
+    // Method 4: Show instructions to user
+    alert('To connect Supabase:\\n\\n1. Look for an "MCP" or "Integrations" button in the UI\\n2. Click it to open the MCP popover\\n3. Find and connect to "Supabase"\\n4. Come back and click "Check Connection Again"');
   };
 
   if (isConnected) {
