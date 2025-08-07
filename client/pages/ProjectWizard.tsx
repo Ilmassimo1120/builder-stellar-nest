@@ -91,7 +91,7 @@ interface Compliance {
 export default function ProjectWizard() {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(1);
-  const totalSteps = 5;
+  const totalSteps = 6;
 
   const [siteAssessment, setSiteAssessment] = useState<SiteAssessment>({
     projectName: "",
