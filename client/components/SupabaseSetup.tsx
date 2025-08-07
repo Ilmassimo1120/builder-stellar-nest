@@ -122,6 +122,42 @@ export function SupabaseSetup({ isConnected, onRetry }: SupabaseSetupProps) {
           </a>
           <Button
             variant="outline"
+            className="bg-gray-100 hover:bg-gray-200"
+            onClick={() => {
+              // Try multiple methods for MCP popover
+              console.log('🔗 Trying alternative MCP trigger...');
+
+              // Method 1: Try to click any button with "MCP" in its text
+              const allButtons = Array.from(document.querySelectorAll('button, [role="button"], a'));
+              const mcpButton = allButtons.find(btn =>
+                btn.textContent?.toLowerCase().includes('mcp') ||
+                btn.getAttribute('aria-label')?.toLowerCase().includes('mcp') ||
+                btn.getAttribute('title')?.toLowerCase().includes('mcp')
+              );
+
+              if (mcpButton) {
+                (mcpButton as HTMLElement).click();
+                console.log('✅ Found and clicked MCP button');
+                return;
+              }
+
+              // Method 2: Try to trigger via data attributes
+              const mcpTriggers = document.querySelectorAll('[data-mcp], [data-mcp-trigger], [data-testid*="mcp"]');
+              if (mcpTriggers.length > 0) {
+                (mcpTriggers[0] as HTMLElement).click();
+                console.log('✅ Found and clicked MCP trigger');
+                return;
+              }
+
+              // Fallback
+              handleOpenMCP();
+            }}
+          >
+            <Zap className="w-4 h-4 mr-2" />
+            Alternative MCP Trigger
+          </Button>
+          <Button
+            variant="outline"
             onClick={handleRetry}
             disabled={isRetrying}
           >
