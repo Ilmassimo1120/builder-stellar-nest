@@ -64,20 +64,7 @@ export function AIAssistant() {
   const aiContext = useAIContext();
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
-  const [messages, setMessages] = useState<ChatMessage[]>([
-    {
-      id: "welcome",
-      type: "assistant",
-      content: "👋 Hi! I'm your EV charging specialist assistant. I can help you with:\n\n• Installation guides and regulations\n• Project planning and quoting\n• Troubleshooting issues\n• Platform navigation\n• Australian standards compliance\n\nWhat would you like to know?",
-      timestamp: new Date(),
-      suggestions: [
-        "How do I install a 22kW AC charger?",
-        "What are the latest Australian standards?",
-        "Help me create a new project",
-        "Troubleshoot charging issues"
-      ]
-    }
-  ]);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputMessage, setInputMessage] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
