@@ -237,6 +237,10 @@ export default function Projects() {
         description: project.projectInfo?.objective || project.project_objective,
         createdAt: project.createdAt || project.created_at,
         timeline: project.timeline,
+        // Extract contact details from detailed data if available
+        contactPerson: project.clientRequirements?.contactPersonName || project.contactPerson,
+        phone: project.clientRequirements?.contactPhone || project.phone,
+        email: project.clientRequirements?.contactEmail || project.email,
         // Preserve all detailed wizard data for editing
         _originalData: project // Store the complete original project data
       }));
