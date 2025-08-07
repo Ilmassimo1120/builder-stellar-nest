@@ -83,16 +83,30 @@ export function SupabaseSetup({ isConnected, onRetry }: SupabaseSetupProps) {
         </div>
         
         <div className="flex flex-col sm:flex-row gap-3 pt-2">
-          <Button 
+          <Button
             className="bg-blue-600 hover:bg-blue-700"
-            onClick={() => window.open('#open-mcp-popover', '_self')}
+            onClick={handleOpenMCP}
           >
             <Zap className="w-4 h-4 mr-2" />
             Open MCP popover
             <ArrowRight className="w-4 h-4 ml-2" />
           </Button>
-          <Button variant="outline" onClick={onRetry}>
-            Check Connection Again
+          <Button
+            variant="outline"
+            onClick={handleRetry}
+            disabled={isRetrying}
+          >
+            {isRetrying ? (
+              <>
+                <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                Checking...
+              </>
+            ) : (
+              <>
+                <RefreshCw className="w-4 h-4 mr-2" />
+                Check Connection Again
+              </>
+            )}
           </Button>
         </div>
 
