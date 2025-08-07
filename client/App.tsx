@@ -25,13 +25,28 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+        <AuthProvider>
+          <Routes>
+            <Route path="/" element={<Index />} />
+
+            {/* Authentication Routes */}
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+
+            {/* Protected Routes */}
+            <Route path="/dashboard" element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            } />
 
           {/* Project Management Routes */}
           <Route path="/projects" element={<Placeholder title="Project Management" description="Manage all your EV infrastructure projects in one place" features={["Project dashboard", "Site assessment tools", "Progress tracking", "Team collaboration", "Document management"]} />} />
-          <Route path="/projects/new" element={<ProjectWizard />} />
+          <Route path="/projects/new" element={
+            <ProtectedRoute>
+              <ProjectWizard />
+            </ProtectedRoute>
+          } />
 
           {/* Development/Testing Routes */}
           <Route path="/test-connection" element={<ConnectionTest />} />
@@ -64,8 +79,7 @@ const App = () => (
           <Route path="/features" element={<Placeholder title="Features" description="Comprehensive overview of ChargeSource capabilities" features={["Feature comparison", "Use cases", "Benefits overview", "ROI calculator", "Demo videos"]} />} />
           <Route path="/pricing" element={<Placeholder title="Pricing Plans" description="Choose the right plan for your electrical contracting business" features={["Plan comparison", "Feature breakdown", "Custom pricing", "Enterprise options", "Free trial"]} />} />
 
-          {/* Auth & Account */}
-          <Route path="/login" element={<Placeholder title="Sign In" description="Access your ChargeSource account" features={["Secure authentication", "Single sign-on", "Password recovery", "Two-factor auth", "Account security"]} />} />
+          {/* Auth & Account - login route moved to top */}
           <Route path="/settings" element={<Placeholder title="Account Settings" description="Manage your account and preferences" features={["Profile management", "Team settings", "Billing information", "Notification preferences", "Security settings"]} />} />
 
           {/* Legal & Info */}
@@ -88,6 +102,7 @@ const App = () => (
           {/* Catch-all route */}
           <Route path="*" element={<NotFound />} />
         </Routes>
+        </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
