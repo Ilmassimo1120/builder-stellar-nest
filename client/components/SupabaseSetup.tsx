@@ -137,10 +137,23 @@ export function SupabaseSetup({ isConnected, onRetry }: SupabaseSetupProps) {
 
         <Alert>
           <AlertDescription className="text-sm">
-            💡 <strong>No setup required!</strong> Once connected, the database schema will be created automatically 
+            💡 <strong>No setup required!</strong> Once connected, the database schema will be created automatically
             and your app will start saving to the cloud immediately.
           </AlertDescription>
         </Alert>
+
+        {/* Debug Information */}
+        <div className="text-xs text-blue-600 bg-blue-100 p-2 rounded">
+          <details>
+            <summary className="cursor-pointer">🔧 Debug Info (click to expand)</summary>
+            <div className="mt-2 space-y-1">
+              <div>Current URL: {import.meta.env.VITE_SUPABASE_URL || 'Not set'}</div>
+              <div>Key Status: {import.meta.env.VITE_SUPABASE_ANON_KEY ? 'Set' : 'Not set'}</div>
+              <div>Environment: {import.meta.env.MODE}</div>
+              <div>Timestamp: {new Date().toISOString()}</div>
+            </div>
+          </details>
+        </div>
       </CardContent>
     </Card>
   );
