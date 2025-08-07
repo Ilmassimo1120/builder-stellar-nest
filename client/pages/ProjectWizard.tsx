@@ -2865,6 +2865,65 @@ export default function ProjectWizard() {
         onSelectTemplate={handleSelectTemplate}
         onSkipTemplate={handleSkipTemplate}
       />
+
+      {/* Success Dialog */}
+      <Dialog open={showSuccessDialog} onOpenChange={setShowSuccessDialog}>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 text-green-600">
+              <CheckCircle2 className="w-6 h-6" />
+              Project Created Successfully!
+            </DialogTitle>
+            <DialogDescription className="text-base">
+              Your EV infrastructure project has been created and is ready for development.
+            </DialogDescription>
+          </DialogHeader>
+
+          {createdProject && (
+            <div className="space-y-4 py-4">
+              <div className="grid grid-cols-2 gap-4 text-sm">
+                <div>
+                  <span className="font-medium">Project Name:</span>
+                  <p className="text-muted-foreground">{createdProject.name}</p>
+                </div>
+                <div>
+                  <span className="font-medium">Project ID:</span>
+                  <p className="text-muted-foreground">{createdProject.id}</p>
+                </div>
+                <div>
+                  <span className="font-medium">Estimated Cost:</span>
+                  <p className="text-muted-foreground">
+                    {createdProject.recommendations?.estimatedCost || createdProject.estimatedBudget || 'TBD'}
+                  </p>
+                </div>
+                <div>
+                  <span className="font-medium">Timeline:</span>
+                  <p className="text-muted-foreground">
+                    {createdProject.recommendations?.installationTime || createdProject.timeline || 'TBD'}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2 p-3 bg-green-50 rounded-lg border border-green-200">
+                <CheckCircle2 className="w-5 h-5 text-green-600" />
+                <span className="text-sm text-green-800">
+                  {createdProject.storageType === 'cloud' ? '✅ Saved to cloud storage' : '💾 Saved locally'}
+                </span>
+              </div>
+            </div>
+          )}
+
+          <DialogFooter className="gap-2">
+            <Button variant="outline" onClick={handleGoToDashboard}>
+              Go to Dashboard
+            </Button>
+            <Button onClick={handleCreateQuote} className="bg-purple-600 hover:bg-purple-700">
+              <Calculator className="w-4 h-4 mr-2" />
+              Create Quote
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
