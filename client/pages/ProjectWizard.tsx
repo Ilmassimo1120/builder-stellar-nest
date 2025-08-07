@@ -93,6 +93,25 @@ export default function ProjectWizard() {
   const [currentStep, setCurrentStep] = useState(1);
   const totalSteps = 6;
 
+  const [clientRequirements, setClientRequirements] = useState<ClientRequirements>({
+    contactPersonName: "",
+    contactTitle: "",
+    contactEmail: "",
+    contactPhone: "",
+    organizationType: "",
+    projectObjective: "",
+    numberOfVehicles: "",
+    vehicleTypes: [],
+    dailyUsagePattern: "",
+    budgetRange: "",
+    projectTimeline: "",
+    sustainabilityGoals: [],
+    accessibilityRequirements: false,
+    specialRequirements: "",
+    preferredChargerBrands: [],
+    paymentModel: ""
+  });
+
   const [siteAssessment, setSiteAssessment] = useState<SiteAssessment>({
     projectName: "",
     clientName: "",
