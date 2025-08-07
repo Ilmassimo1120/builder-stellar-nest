@@ -1106,6 +1106,12 @@ export default function Projects() {
                     </DropdownMenuItem>
                   )}
                   <DropdownMenuItem
+                    onClick={() => handleCreateQuote(project)}
+                  >
+                    <Calculator className="w-4 h-4 mr-2" />
+                    Create Quote
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
                     onClick={() => handleDuplicateProject(project)}
                   >
                     <Copy className="w-4 h-4 mr-2" />
