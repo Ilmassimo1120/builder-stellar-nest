@@ -301,9 +301,9 @@ export function KnowledgeBaseWidget() {
       <CardContent>
         <Tabs defaultValue="featured" className="space-y-4">
           <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="featured">Featured</TabsTrigger>
-            <TabsTrigger value="browse">Browse All</TabsTrigger>
-            <TabsTrigger value="search">Search</TabsTrigger>
+            <TabsTrigger value="featured" className="text-xs sm:text-sm">Featured</TabsTrigger>
+            <TabsTrigger value="browse" className="text-xs sm:text-sm">Browse</TabsTrigger>
+            <TabsTrigger value="search" className="text-xs sm:text-sm">Search</TabsTrigger>
           </TabsList>
 
           <TabsContent value="featured" className="space-y-3">
