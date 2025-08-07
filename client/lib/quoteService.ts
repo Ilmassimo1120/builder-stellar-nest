@@ -300,15 +300,33 @@ class QuoteService {
       // Load from existing project management system
       const projects = JSON.parse(localStorage.getItem('chargeSourceProjects') || '[]');
       const project = projects.find((p: any) => p.id === projectId);
-      
+
       if (project) {
         return {
           projectId,
-          projectName: project.projectInfo?.name || project.name,
+          projectName: project.name || project.projectInfo?.name,
           clientRequirements: project.clientRequirements,
           siteAssessment: project.siteAssessment,
           chargerSelection: project.chargerSelection,
           estimatedBudget: project.estimatedBudget,
+          // Include raw project data for comprehensive integration
+          rawProjectData: project,
+        };
+      }
+
+      // Also check project drafts if not found in main projects
+      const drafts = JSON.parse(localStorage.getItem('chargeSourceProjectDrafts') || '[]');
+      const draft = drafts.find((d: any) => d.id === projectId);
+
+      if (draft) {
+        return {
+          projectId,
+          projectName: draft.siteAssessment?.projectName || draft.draftName,
+          clientRequirements: draft.clientRequirements,
+          siteAssessment: draft.siteAssessment,
+          chargerSelection: draft.chargerSelection,
+          estimatedBudget: draft.estimatedBudget,
+          rawProjectData: draft,
         };
       }
     } catch (error) {
@@ -318,24 +336,39 @@ class QuoteService {
   }
 
   integrateProjectData(quote: Quote, projectData: ProjectIntegration): Quote {
-    // Update client information from project
-    if (projectData.clientRequirements) {
+    const rawProject = projectData.rawProjectData;
+
+    // Update client information from project - comprehensive integration
+    if (projectData.clientRequirements || rawProject) {
+      const clientReq = projectData.clientRequirements || {};
+
       quote.clientInfo = {
-        ...quote.clientInfo,
-        name: projectData.clientRequirements.contactPersonName || quote.clientInfo.name,
-        contactPerson: projectData.clientRequirements.contactPersonName || quote.clientInfo.contactPerson,
-        email: projectData.clientRequirements.contactEmail || quote.clientInfo.email,
-        phone: projectData.clientRequirements.contactPhone || quote.clientInfo.phone,
-        company: projectData.clientRequirements.contactPersonName || quote.clientInfo.company,
+        id: projectData.projectId,
+        name: clientReq.contactPersonName || rawProject?.client_name || rawProject?.client || '',
+        contactPerson: clientReq.contactPersonName || rawProject?.contactPerson || rawProject?.contact_person_name || '',
+        email: clientReq.contactEmail || rawProject?.contact_email || rawProject?.email || '',
+        phone: clientReq.contactPhone || rawProject?.contact_phone || rawProject?.phone || '',
+        address: projectData.siteAssessment?.siteAddress || rawProject?.site_address || rawProject?.siteAddress || rawProject?.location || '',
+        company: rawProject?.client_name || clientReq.organizationType || rawProject?.organization_type || rawProject?.company || '',
+        abn: rawProject?.abn || '',
       };
     }
 
+    // Update project information - comprehensive integration
+    quote.title = projectData.projectName || rawProject?.name || rawProject?.project_name || quote.title;
+    quote.description = rawProject?.notes || rawProject?.description || projectData.siteAssessment?.additionalNotes || clientReq?.specialRequirements || quote.description;
+
     // Update project data
     quote.projectData = {
+      projectId: projectData.projectId,
       projectName: projectData.projectName,
-      siteAddress: projectData.siteAssessment?.siteAddress,
-      siteType: projectData.siteAssessment?.siteType,
+      siteAddress: projectData.siteAssessment?.siteAddress || rawProject?.site_address || rawProject?.location,
+      siteType: projectData.siteAssessment?.siteType || rawProject?.site_type,
+      projectObjective: projectData.clientRequirements?.projectObjective || rawProject?.project_objective,
     };
+
+    // Set project ID for reference
+    quote.projectId = projectData.projectId;
 
     // Auto-generate line items from charger selection
     if (projectData.chargerSelection) {
