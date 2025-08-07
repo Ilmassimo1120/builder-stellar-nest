@@ -1705,11 +1705,11 @@ export default function ProjectWizard() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2 text-sm">
-                  <div><strong>Type:</strong> {chargerSelection.chargingType || "Not specified"}</div>
+                  <div><strong>Type:</strong> {chargerSelection.chargingType ? chargerSelection.chargingType.replace('-', ' ').toUpperCase() : "Not specified"}</div>
                   <div><strong>Power Rating:</strong> {chargerSelection.powerRating || "Not specified"}</div>
                   <div><strong>Number of Chargers:</strong> {chargerSelection.numberOfChargers || "Not specified"}</div>
-                  <div><strong>Mounting:</strong> {chargerSelection.mountingType || "Not specified"}</div>
-                  <div><strong>Connectors:</strong> {chargerSelection.connectorTypes.join(", ") || "None selected"}</div>
+                  <div><strong>Mounting:</strong> {chargerSelection.mountingType ? chargerSelection.mountingType.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase()) : "Not specified"}</div>
+                  <div><strong>Connectors:</strong> {chargerSelection.connectorTypes.length > 0 ? chargerSelection.connectorTypes.join(", ") : "None selected"}</div>
                 </CardContent>
               </Card>
 
