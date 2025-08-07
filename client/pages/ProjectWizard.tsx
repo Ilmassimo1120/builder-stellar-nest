@@ -189,6 +189,39 @@ export default function ProjectWizard() {
     }
   };
 
+  const populateSiteAssessmentFromClientRequirements = () => {
+    // Auto-populate client name if available
+    if (clientRequirements.contactPersonName && !siteAssessment.clientName) {
+      setSiteAssessment(prev => ({
+        ...prev,
+        clientName: clientRequirements.contactPersonName
+      }));
+    }
+
+    // Suggest site type based on organization type
+    if (clientRequirements.organizationType && !siteAssessment.siteType) {
+      const siteTypeMapping: Record<string, string> = {
+        'retail': 'retail',
+        'office': 'office',
+        'residential': 'residential',
+        'hotel': 'commercial',
+        'government': 'public',
+        'fleet': 'fleet',
+        'healthcare': 'commercial',
+        'education': 'public',
+        'industrial': 'industrial'
+      };
+
+      const suggestedSiteType = siteTypeMapping[clientRequirements.organizationType];
+      if (suggestedSiteType) {
+        setSiteAssessment(prev => ({
+          ...prev,
+          siteType: suggestedSiteType
+        }));
+      }
+    }
+  };
+
   const handleSubmit = () => {
     // Here you would save the project data
     console.log("Project Data:", {
