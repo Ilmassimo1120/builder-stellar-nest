@@ -111,12 +111,16 @@ interface ProjectDraft {
 
 export default function ProjectWizard() {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [currentStep, setCurrentStep] = useState(1);
   const totalSteps = 6;
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [isSupabaseConnected, setIsSupabaseConnected] = useState(false);
   const [showCloudUpgrade, setShowCloudUpgrade] = useState(false);
+  const [isDraftSaving, setIsDraftSaving] = useState(false);
+  const [draftSaved, setDraftSaved] = useState(false);
+  const [currentDraftId, setCurrentDraftId] = useState<string | null>(null);
 
   // Function to retry Supabase connection
   const retryConnection = async (): Promise<void> => {
