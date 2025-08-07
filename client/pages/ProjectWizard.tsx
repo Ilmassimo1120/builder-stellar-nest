@@ -159,23 +159,23 @@ export default function ProjectWizard() {
     accessibilityCompliance: false
   });
 
-  // Check Supabase connection on component mount
+  // Auto-configure Supabase connection on component mount
   useEffect(() => {
-    const checkConnection = async () => {
+    const setupConnection = async () => {
       try {
-        const isConnected = await checkSupabaseConnection();
+        const isConnected = await autoConfigureSupabase();
         setIsSupabaseConnected(isConnected);
         if (!isConnected) {
-          setConnectionError('Supabase not configured. Projects will be saved locally.');
+          setConnectionError('Database auto-configuration in progress. Projects will be saved locally for now.');
         }
       } catch (error) {
-        console.error('Error checking Supabase connection:', error);
+        console.error('Error auto-configuring Supabase:', error);
         setIsSupabaseConnected(false);
         setConnectionError('Unable to connect to database. Projects will be saved locally.');
       }
     };
 
-    checkConnection();
+    setupConnection();
   }, []);
 
   const getStepTitle = (step: number) => {
