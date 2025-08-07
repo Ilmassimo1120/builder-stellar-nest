@@ -1,0 +1,415 @@
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Link } from "react-router-dom";
+import { 
+  PlugZap,
+  Plus,
+  Calendar,
+  DollarSign,
+  TrendingUp,
+  AlertCircle,
+  CheckCircle2,
+  Clock,
+  Users,
+  Package,
+  FileText,
+  Settings,
+  Bell,
+  Search,
+  Filter,
+  Download,
+  Eye,
+  Edit,
+  MoreHorizontal,
+  MapPin,
+  Zap,
+  Calculator,
+  ArrowUpRight
+} from "lucide-react";
+
+export default function Dashboard() {
+  const recentProjects = [
+    {
+      id: "PRJ-001",
+      name: "Westfield Shopping Centre - EV Hub",
+      client: "Westfield Group",
+      status: "In Progress",
+      progress: 65,
+      value: "$245,000",
+      deadline: "2024-03-15",
+      location: "Sydney, NSW",
+      type: "Commercial DC Fast Charging"
+    },
+    {
+      id: "PRJ-002", 
+      name: "Residential Complex - Parramatta",
+      client: "Mirvac Properties",
+      status: "Quoting",
+      progress: 25,
+      value: "$89,500",
+      deadline: "2024-02-28",
+      location: "Parramatta, NSW",
+      type: "Residential AC Charging"
+    },
+    {
+      id: "PRJ-003",
+      name: "Council Car Park Upgrade",
+      client: "City of Melbourne",
+      status: "Completed",
+      progress: 100,
+      value: "$156,000",
+      deadline: "2024-01-30",
+      location: "Melbourne, VIC",
+      type: "Public DC Charging"
+    },
+    {
+      id: "PRJ-004",
+      name: "Fleet Depot - Australia Post",
+      client: "Australia Post",
+      status: "Planning",
+      progress: 15,
+      value: "$320,000",
+      deadline: "2024-04-20",
+      location: "Brisbane, QLD",
+      type: "Fleet DC Charging"
+    }
+  ];
+
+  const quickActions = [
+    {
+      title: "New Project",
+      description: "Start project planning wizard",
+      icon: <Plus className="w-6 h-6" />,
+      color: "bg-primary",
+      href: "/projects/new"
+    },
+    {
+      title: "Create Quote",
+      description: "Generate quote with CPQ engine",
+      icon: <Calculator className="w-6 h-6" />,
+      color: "bg-secondary",
+      href: "/quotes/new"
+    },
+    {
+      title: "Browse Catalogue",
+      description: "View products & inventory",
+      icon: <Package className="w-6 h-6" />,
+      color: "bg-accent",
+      href: "/catalogue"
+    },
+    {
+      title: "Upload Documents",
+      description: "Add drawings, photos, invoices",
+      icon: <FileText className="w-6 h-6" />,
+      color: "bg-muted",
+      href: "/documents"
+    }
+  ];
+
+  const stats = [
+    {
+      title: "Active Projects",
+      value: "12",
+      change: "+2 this month",
+      trend: "up",
+      icon: <Zap className="w-5 h-5" />
+    },
+    {
+      title: "Total Revenue",
+      value: "$1.2M",
+      change: "+15% this quarter",
+      trend: "up", 
+      icon: <DollarSign className="w-5 h-5" />
+    },
+    {
+      title: "Pending Quotes",
+      value: "8",
+      change: "3 expiring soon",
+      trend: "neutral",
+      icon: <FileText className="w-5 h-5" />
+    },
+    {
+      title: "Avg. Project Value",
+      value: "$98K",
+      change: "+$12K from last month",
+      trend: "up",
+      icon: <TrendingUp className="w-5 h-5" />
+    }
+  ];
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case "Completed": return "bg-secondary text-secondary-foreground";
+      case "In Progress": return "bg-primary text-primary-foreground";
+      case "Planning": return "bg-accent text-accent-foreground";
+      case "Quoting": return "bg-muted text-muted-foreground";
+      default: return "bg-muted text-muted-foreground";
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
+        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
+          <div className="flex items-center space-x-2">
+            <PlugZap className="w-8 h-8 text-primary" />
+            <span className="text-xl font-bold">ChargePro Australia</span>
+          </div>
+          <nav className="hidden md:flex items-center space-x-6">
+            <Link to="/dashboard" className="text-sm font-medium text-primary">
+              Dashboard
+            </Link>
+            <Link to="/projects" className="text-sm font-medium hover:text-primary transition-colors">
+              Projects
+            </Link>
+            <Link to="/quotes" className="text-sm font-medium hover:text-primary transition-colors">
+              Quotes
+            </Link>
+            <Link to="/catalogue" className="text-sm font-medium hover:text-primary transition-colors">
+              Catalogue
+            </Link>
+            <Link to="/clients" className="text-sm font-medium hover:text-primary transition-colors">
+              Clients
+            </Link>
+          </nav>
+          <div className="flex items-center space-x-3">
+            <Button variant="ghost" size="icon">
+              <Bell className="w-5 h-5" />
+            </Button>
+            <Button variant="ghost" size="icon">
+              <Settings className="w-5 h-5" />
+            </Button>
+            <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-primary-foreground text-sm font-medium">
+              JD
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div className="container mx-auto px-4 py-8">
+        {/* Page Header */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+          <div>
+            <h1 className="text-3xl font-bold mb-2">Dashboard</h1>
+            <p className="text-muted-foreground">Welcome back, John. Here's your EV project overview.</p>
+          </div>
+          <div className="flex items-center gap-3 mt-4 md:mt-0">
+            <Button variant="outline" size="sm">
+              <Download className="w-4 h-4 mr-2" />
+              Export Report
+            </Button>
+            <Button size="sm">
+              <Plus className="w-4 h-4 mr-2" />
+              New Project
+            </Button>
+          </div>
+        </div>
+
+        {/* Stats Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          {stats.map((stat, index) => (
+            <Card key={index}>
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-muted-foreground">{stat.title}</p>
+                    <p className="text-2xl font-bold">{stat.value}</p>
+                    <p className={`text-xs mt-1 ${stat.trend === 'up' ? 'text-secondary' : 'text-muted-foreground'}`}>
+                      {stat.change}
+                    </p>
+                  </div>
+                  <div className="text-primary">
+                    {stat.icon}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        {/* Quick Actions */}
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle>Quick Actions</CardTitle>
+            <CardDescription>Common tasks and shortcuts</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {quickActions.map((action, index) => (
+                <Link key={index} to={action.href}>
+                  <div className="p-4 rounded-lg border hover:border-primary transition-colors cursor-pointer group">
+                    <div className={`w-12 h-12 rounded-lg ${action.color} text-white flex items-center justify-center mb-3 group-hover:scale-105 transition-transform`}>
+                      {action.icon}
+                    </div>
+                    <h3 className="font-medium mb-1">{action.title}</h3>
+                    <p className="text-sm text-muted-foreground">{action.description}</p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Main Content Tabs */}
+        <Tabs defaultValue="projects" className="space-y-6">
+          <TabsList className="grid w-full grid-cols-3 lg:w-[400px]">
+            <TabsTrigger value="projects">Recent Projects</TabsTrigger>
+            <TabsTrigger value="analytics">Analytics</TabsTrigger>
+            <TabsTrigger value="activity">Activity Feed</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="projects" className="space-y-6">
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between">
+                <div>
+                  <CardTitle>Recent Projects</CardTitle>
+                  <CardDescription>Your latest EV infrastructure projects</CardDescription>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Button variant="outline" size="sm">
+                    <Filter className="w-4 h-4 mr-2" />
+                    Filter
+                  </Button>
+                  <Button variant="outline" size="sm">
+                    <Search className="w-4 h-4 mr-2" />
+                    Search
+                  </Button>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {recentProjects.map((project, index) => (
+                    <div key={index} className="p-4 border rounded-lg hover:border-primary transition-colors">
+                      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-3 mb-2">
+                            <h3 className="font-medium">{project.name}</h3>
+                            <Badge className={getStatusColor(project.status)} variant="secondary">
+                              {project.status}
+                            </Badge>
+                          </div>
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-sm text-muted-foreground">
+                            <div className="flex items-center gap-1">
+                              <Users className="w-4 h-4" />
+                              {project.client}
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <MapPin className="w-4 h-4" />
+                              {project.location}
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <Calendar className="w-4 h-4" />
+                              {project.deadline}
+                            </div>
+                          </div>
+                          <div className="mt-3">
+                            <div className="flex items-center justify-between text-sm mb-1">
+                              <span>Progress</span>
+                              <span>{project.progress}%</span>
+                            </div>
+                            <Progress value={project.progress} className="h-2" />
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-4">
+                          <div className="text-right">
+                            <div className="font-medium">{project.value}</div>
+                            <div className="text-sm text-muted-foreground">{project.type}</div>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <Button variant="ghost" size="sm">
+                              <Eye className="w-4 h-4" />
+                            </Button>
+                            <Button variant="ghost" size="sm">
+                              <Edit className="w-4 h-4" />
+                            </Button>
+                            <Button variant="ghost" size="sm">
+                              <MoreHorizontal className="w-4 h-4" />
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="analytics" className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Revenue Growth</CardTitle>
+                  <CardDescription>Monthly revenue trend</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="h-48 flex items-center justify-center text-muted-foreground">
+                    Revenue chart placeholder - Connect to data visualization library
+                  </div>
+                </CardContent>
+              </Card>
+              
+              <Card>
+                <CardHeader>
+                  <CardTitle>Project Types</CardTitle>
+                  <CardDescription>Distribution by charging type</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm">Commercial DC Fast</span>
+                      <span className="text-sm font-medium">45%</span>
+                    </div>
+                    <Progress value={45} />
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm">Residential AC</span>
+                      <span className="text-sm font-medium">30%</span>
+                    </div>
+                    <Progress value={30} />
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm">Public DC</span>
+                      <span className="text-sm font-medium">25%</span>
+                    </div>
+                    <Progress value={25} />
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="activity" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Recent Activity</CardTitle>
+                <CardDescription>Latest updates across your projects</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {[
+                    { icon: <CheckCircle2 className="w-4 h-4 text-secondary" />, text: "Quote approved for Westfield Shopping Centre project", time: "2 hours ago" },
+                    { icon: <Clock className="w-4 h-4 text-primary" />, text: "Site assessment scheduled for Parramatta Residential Complex", time: "4 hours ago" },
+                    { icon: <Package className="w-4 h-4 text-accent" />, text: "Equipment delivered to Melbourne Council project", time: "1 day ago" },
+                    { icon: <AlertCircle className="w-4 h-4 text-destructive" />, text: "Compliance review required for Fleet Depot project", time: "2 days ago" },
+                    { icon: <DollarSign className="w-4 h-4 text-secondary" />, text: "Payment received for completed Council Car Park project", time: "3 days ago" }
+                  ].map((activity, index) => (
+                    <div key={index} className="flex items-start gap-3 p-3 rounded-lg hover:bg-muted/30 transition-colors">
+                      {activity.icon}
+                      <div className="flex-1">
+                        <p className="text-sm">{activity.text}</p>
+                        <p className="text-xs text-muted-foreground mt-1">{activity.time}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
+      </div>
+    </div>
+  );
+}
