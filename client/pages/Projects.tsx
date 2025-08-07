@@ -220,7 +220,7 @@ export default function Projects() {
         }
       }
 
-      // Load from localStorage
+      // Load from localStorage and preserve all detailed data
       const localProjects = JSON.parse(localStorage.getItem('chargeSourceProjects') || '[]');
       const formattedLocalProjects = localProjects.map((project: any) => ({
         id: project.id || `PRJ-${Date.now()}`,
@@ -235,7 +235,9 @@ export default function Projects() {
         siteAddress: project.projectInfo?.address || project.site_address,
         description: project.projectInfo?.objective || project.project_objective,
         createdAt: project.createdAt || project.created_at,
-        timeline: project.timeline
+        timeline: project.timeline,
+        // Preserve all detailed wizard data for editing
+        _originalData: project // Store the complete original project data
       }));
 
       // Load drafts for current user
