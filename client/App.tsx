@@ -21,6 +21,7 @@ import Placeholder from "./pages/Placeholder";
 import NotFound from "./pages/NotFound";
 import { AuthProvider } from "./hooks/useAuth";
 import { ProtectedRoute } from "./components/ProtectedRoute";
+import { AIAssistant } from "./components/AIAssistant";
 
 const queryClient = new QueryClient();
 
