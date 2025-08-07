@@ -261,7 +261,7 @@ export default function ClientPortal() {
       {/* Header */}
       <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-          <Logo size="lg" />
+          <Logo size="xl" />
           <div className="flex items-center gap-4">
             <Badge variant="outline" className="flex items-center gap-1">
               <Eye className="w-3 h-3" />
