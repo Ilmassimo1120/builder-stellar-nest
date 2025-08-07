@@ -467,7 +467,7 @@ export default function Dashboard() {
                           <div className="flex items-center gap-3 mb-2">
                             <h3 className="font-medium">{project.name}</h3>
                             <Badge className={getStatusColor(project.status)} variant="secondary">
-                              {project.status}
+                              {project.isDraft ? `Draft - Step ${project.draftStep}/6` : project.status}
                             </Badge>
                           </div>
                           <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-sm text-muted-foreground">
