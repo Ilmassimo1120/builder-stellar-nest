@@ -498,15 +498,48 @@ export default function Dashboard() {
                             <div className="text-sm text-muted-foreground">{project.type}</div>
                           </div>
                           <div className="flex items-center gap-1">
-                            <Button variant="ghost" size="sm">
-                              <Eye className="w-4 h-4" />
-                            </Button>
-                            <Button variant="ghost" size="sm">
-                              <Edit className="w-4 h-4" />
-                            </Button>
-                            <Button variant="ghost" size="sm">
-                              <MoreHorizontal className="w-4 h-4" />
-                            </Button>
+                            {project.isDraft ? (
+                              <>
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  asChild
+                                  className="text-primary hover:text-primary"
+                                >
+                                  <Link to={`/projects/new?draft=${project.id}`}>
+                                    <Edit className="w-4 h-4 mr-1" />
+                                    Resume Draft
+                                  </Link>
+                                </Button>
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => {
+                                    if (confirm('Delete this draft?')) {
+                                      const drafts = JSON.parse(localStorage.getItem('chargeSourceDrafts') || '[]');
+                                      const filteredDrafts = drafts.filter((d: any) => d.id !== project.id);
+                                      localStorage.setItem('chargeSourceDrafts', JSON.stringify(filteredDrafts));
+                                      loadProjects(); // Reload projects
+                                    }
+                                  }}
+                                  className="text-red-600 hover:text-red-600"
+                                >
+                                  <MoreHorizontal className="w-4 h-4" />
+                                </Button>
+                              </>
+                            ) : (
+                              <>
+                                <Button variant="ghost" size="sm">
+                                  <Eye className="w-4 h-4" />
+                                </Button>
+                                <Button variant="ghost" size="sm">
+                                  <Edit className="w-4 h-4" />
+                                </Button>
+                                <Button variant="ghost" size="sm">
+                                  <MoreHorizontal className="w-4 h-4" />
+                                </Button>
+                              </>
+                            )}
                           </div>
                         </div>
                       </div>
