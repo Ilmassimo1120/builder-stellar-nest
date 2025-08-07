@@ -2624,6 +2624,33 @@ export default function ProjectWizard() {
     }
   };
 
+  // Handle creating a quote from the completed project
+  const handleCreateQuote = () => {
+    if (!createdProject || !user) return;
+
+    try {
+      // Create a new quote from the project
+      const newQuote = quoteService.createQuote(createdProject.id);
+      newQuote.createdBy = user.id;
+
+      // Update quote with user information
+      quoteService.updateQuote(newQuote);
+
+      // Close success dialog and navigate to quote builder
+      setShowSuccessDialog(false);
+      navigate(`/quotes/${newQuote.id}`);
+    } catch (error) {
+      console.error("Error creating quote:", error);
+      alert("Error creating quote. Please try again.");
+    }
+  };
+
+  // Handle closing success dialog and going to dashboard
+  const handleGoToDashboard = () => {
+    setShowSuccessDialog(false);
+    navigate("/dashboard");
+  };
+
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
