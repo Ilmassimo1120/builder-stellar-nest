@@ -40,6 +40,7 @@ import {
   LogOut,
 } from "lucide-react";
 import { Logo } from "@/components/ui/logo";
+import { KnowledgeBaseWidget } from "@/components/KnowledgeBaseWidget";
 import { SupabaseSetup } from "@/components/SupabaseSetup";
 import { projectService, autoConfigureSupabase } from "@/lib/supabase";
 import { useAuth } from "@/hooks/useAuth";
