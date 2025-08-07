@@ -7,9 +7,12 @@ interface LogoProps {
 }
 
 export function Logo({ size = "md", showText = true, className = "" }: LogoProps) {
+  // Ensure size is valid, fallback to "md" if invalid
+  const validSize = (size === "sm" || size === "md" || size === "lg") ? size : "md";
+
   const sizeClasses = {
     sm: "w-6 h-6",
-    md: "w-8 h-8", 
+    md: "w-8 h-8",
     lg: "w-12 h-12"
   };
 
@@ -19,20 +22,23 @@ export function Logo({ size = "md", showText = true, className = "" }: LogoProps
     lg: { main: "text-xl", sub: "text-base" }
   };
 
+  // Get the text sizes for the valid size
+  const currentTextSize = textSizes[validSize];
+
   return (
     <div className={`flex items-center space-x-3 ${className}`}>
       <img
         src="https://cdn.builder.io/api/v1/image/assets%2Fd8af561546d8452e90f10c66e582c7bd%2F30d900209495466eb21054f3229abe7e?format=webp&width=800"
         alt="Charge N Go"
-        className={`${sizeClasses[size]} object-contain`}
+        className={`${sizeClasses[validSize]} object-contain`}
       />
 
       {showText && (
         <div className="flex flex-col">
-          <span className={`${textSizes[size].main} font-bold`}>
+          <span className={`${currentTextSize.main} font-bold`}>
             ChargeSource
           </span>
-          <span className={`${textSizes[size].sub} text-muted-foreground`}>
+          <span className={`${currentTextSize.sub} text-muted-foreground`}>
             Powered By Charge N Go Australia
           </span>
         </div>
