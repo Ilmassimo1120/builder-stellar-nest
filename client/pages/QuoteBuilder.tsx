@@ -49,6 +49,8 @@ import {
   Home,
   Building,
   Zap,
+  MapPin,
+  Target,
 } from "lucide-react";
 import { Quote, QuoteLineItem, QuoteTemplate, ProductCatalogueItem } from "@/lib/quoteTypes";
 import { quoteService } from "@/lib/quoteService";
