@@ -77,6 +77,20 @@ export function AIAssistant() {
     scrollToBottom();
   }, [messages]);
 
+  // Set context-aware welcome message
+  useEffect(() => {
+    if (messages.length === 0) {
+      const welcomeMessage: ChatMessage = {
+        id: "welcome",
+        type: "assistant",
+        content: `👋 Hi! I'm your specialized EV charging assistant. I see you're on the **${aiContext.pageTitle}** page.\n\nI can help you with:\n\n• Installation guides and Australian standards\n• Project planning and quoting\n• Troubleshooting and technical support\n• Platform navigation and features\n• Best practices for ${aiContext.userRole === 'client' ? 'understanding quotes' : 'electrical contractors'}\n\nWhat would you like to know?`,
+        timestamp: new Date(),
+        suggestions: aiContext.suggestions
+      };
+      setMessages([welcomeMessage]);
+    }
+  }, [aiContext, messages.length]);
+
   // AI Response System
   const getAIResponse = async (userMessage: string): Promise<ChatMessage> => {
     const message = userMessage.toLowerCase();
