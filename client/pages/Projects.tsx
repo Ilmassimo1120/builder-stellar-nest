@@ -534,8 +534,19 @@ export default function Projects() {
     const localProjects = JSON.parse(localStorage.getItem('chargeSourceProjects') || '[]');
     localProjects.unshift(duplicatedProject);
     localStorage.setItem('chargeSourceProjects', JSON.stringify(localProjects));
-    
+
     loadProjects();
+  };
+
+  const handleEditProject = (project: Project) => {
+    // For now, navigate to a dedicated edit view or show a message
+    // In a full implementation, this could navigate to an edit form
+    alert(`Edit functionality for "${project.name}" is coming soon! For now, you can duplicate the project and modify the copy.`);
+
+    // TODO: Implement proper edit functionality
+    // This could navigate to:
+    // navigate(`/projects/edit/${project.id}`);
+    // Or open an edit modal, etc.
   };
 
   const toggleSort = (field: string) => {
