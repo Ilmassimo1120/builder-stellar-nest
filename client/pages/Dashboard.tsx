@@ -199,6 +199,134 @@ export default function Dashboard() {
 
   const recentProjects = projects;
 
+  // Handle editing projects by creating a draft
+  const handleEditProject = (project: any) => {
+    // Create a draft from the existing project data for editing
+    if (!user) return;
+
+    try {
+      const editDraftId = `edit-${project.id}-${Date.now()}`;
+      const now = new Date().toISOString();
+
+      // Use preserved original detailed project data
+      const originalProject = project._originalData || {};
+
+      // Extract detailed data if available from original project
+      const originalClientReq = originalProject?.clientRequirements || {};
+      const originalSiteAssess = originalProject?.siteAssessment || {};
+      const originalChargerSel = originalProject?.chargerSelection || {};
+      const originalGridCap = originalProject?.gridCapacity || {};
+      const originalCompliance = originalProject?.compliance || {};
+
+      // Convert the project data back to wizard format for editing
+      const editDraft = {
+        id: editDraftId,
+        userId: user.id,
+        draftName: `${project.name} (Editing)`,
+        currentStep: 1,
+        createdAt: now,
+        updatedAt: now,
+        clientRequirements: {
+          contactPersonName:
+            originalClientReq.contactPersonName ||
+            project.contactPerson ||
+            project.client ||
+            "",
+          contactTitle: originalClientReq.contactTitle || "",
+          contactEmail: originalClientReq.contactEmail || project.email || "",
+          contactPhone: originalClientReq.contactPhone || project.phone || "",
+          organizationType:
+            originalClientReq.organizationType ||
+            (project.type?.toLowerCase().includes("residential")
+              ? "residential"
+              : project.type?.toLowerCase().includes("commercial") ||
+                  project.type?.toLowerCase().includes("retail")
+                ? "retail"
+                : project.type?.toLowerCase().includes("fleet")
+                  ? "fleet"
+                  : project.type?.toLowerCase().includes("public")
+                    ? "government"
+                    : project.type?.toLowerCase().includes("office")
+                      ? "office"
+                      : "other"),
+          projectObjective:
+            originalClientReq.projectObjective ||
+            (project.type?.toLowerCase().includes("fleet")
+              ? "fleet-electrification"
+              : project.type?.toLowerCase().includes("residential")
+                ? "employee-benefit"
+                : project.type?.toLowerCase().includes("retail")
+                  ? "customer-attraction"
+                  : "future-proofing"),
+          numberOfVehicles: originalClientReq.numberOfVehicles || "6-15",
+          vehicleTypes: originalClientReq.vehicleTypes || ["Passenger Cars"],
+          dailyUsagePattern: originalClientReq.dailyUsagePattern || "business-hours",
+          budgetRange: originalClientReq.budgetRange || "tbd",
+          projectTimeline: originalClientReq.projectTimeline || "standard",
+          sustainabilityGoals: originalClientReq.sustainabilityGoals || [],
+          accessibilityRequirements: originalClientReq.accessibilityRequirements || false,
+          specialRequirements: originalClientReq.specialRequirements || project.description || "",
+          preferredChargerBrands: originalClientReq.preferredChargerBrands || [],
+          paymentModel: originalClientReq.paymentModel || "",
+        },
+        siteAssessment: {
+          projectName: originalSiteAssess.projectName || project.name,
+          clientName: originalSiteAssess.clientName || project.client,
+          siteAddress: originalSiteAssess.siteAddress || project.siteAddress || project.location,
+          siteType: originalSiteAssess.siteType || "commercial",
+          existingPowerSupply: originalSiteAssess.existingPowerSupply || "",
+          availableAmperes: originalSiteAssess.availableAmperes || "",
+          estimatedLoad: originalSiteAssess.estimatedLoad || "",
+          parkingSpaces: originalSiteAssess.parkingSpaces || "",
+          accessRequirements: originalSiteAssess.accessRequirements || "",
+          photos: originalSiteAssess.photos || [],
+          additionalNotes: originalSiteAssess.additionalNotes || project.description || "",
+        },
+        chargerSelection: {
+          chargingType: originalChargerSel.chargingType || "",
+          powerRating: originalChargerSel.powerRating || "",
+          mountingType: originalChargerSel.mountingType || "",
+          numberOfChargers: originalChargerSel.numberOfChargers || "",
+          connectorTypes: originalChargerSel.connectorTypes || [],
+          weatherProtection: originalChargerSel.weatherProtection || false,
+          networkConnectivity: originalChargerSel.networkConnectivity || "",
+        },
+        gridCapacity: {
+          currentSupply: originalGridCap.currentSupply || "",
+          requiredCapacity: originalGridCap.requiredCapacity || "",
+          upgradeNeeded: originalGridCap.upgradeNeeded || false,
+          upgradeType: originalGridCap.upgradeType || "",
+          estimatedUpgradeCost: originalGridCap.estimatedUpgradeCost || "",
+          utilityContact: originalGridCap.utilityContact || "",
+        },
+        compliance: {
+          electricalStandards: originalCompliance.electricalStandards || [],
+          safetyRequirements: originalCompliance.safetyRequirements || [],
+          localPermits: originalCompliance.localPermits || [],
+          environmentalConsiderations: originalCompliance.environmentalConsiderations || [],
+          accessibilityCompliance: originalCompliance.accessibilityCompliance || false,
+        },
+        progress: originalProject ? 100 : 33,
+      };
+
+      // Save the edit draft
+      const existingDrafts = JSON.parse(
+        localStorage.getItem("chargeSourceDrafts") || "[]",
+      );
+      existingDrafts.unshift(editDraft);
+      localStorage.setItem(
+        "chargeSourceDrafts",
+        JSON.stringify(existingDrafts),
+      );
+
+      // Navigate to Project Wizard with the edit draft
+      navigate(`/projects/new?draft=${editDraftId}`);
+    } catch (error) {
+      console.error("Error creating edit draft:", error);
+      alert("Error opening project for editing. Please try again.");
+    }
+  };
+
   const quickActions = [
     {
       title: "New Project",
