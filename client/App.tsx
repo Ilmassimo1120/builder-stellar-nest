@@ -8,7 +8,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
-import ProjectWizardTest from "./pages/ProjectWizardTest";
+import ProjectWizard from "./pages/ProjectWizard";
 import Placeholder from "./pages/Placeholder";
 import NotFound from "./pages/NotFound";
 
@@ -26,7 +26,7 @@ const App = () => (
 
           {/* Project Management Routes */}
           <Route path="/projects" element={<Placeholder title="Project Management" description="Manage all your EV infrastructure projects in one place" features={["Project dashboard", "Site assessment tools", "Progress tracking", "Team collaboration", "Document management"]} />} />
-          <Route path="/projects/new" element={<ProjectWizardTest />} />
+          <Route path="/projects/new" element={<ProjectWizard />} />
 
           {/* Quoting Routes */}
           <Route path="/quotes" element={<Placeholder title="Smart Quoting Engine" description="Dynamic quoting tool with CPQ capabilities" features={["Component selection", "Auto cost calculation", "Template library", "Margin control", "PDF generation"]} />} />
