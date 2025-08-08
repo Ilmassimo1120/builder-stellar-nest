@@ -153,19 +153,7 @@ const App = () => (
             {/* Procurement Routes */}
             <Route
               path="/catalogue"
-              element={
-                <Placeholder
-                  title="Product Catalogue"
-                  description="Browse and manage EV charging equipment and components"
-                  features={[
-                    "Real-time inventory",
-                    "Supplier pricing",
-                    "Product specifications",
-                    "Compatibility checks",
-                    "Order management",
-                  ]}
-                />
-              }
+              element={<Catalogue />}
             />
             <Route
               path="/procurement"
