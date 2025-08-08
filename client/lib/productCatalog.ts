@@ -545,7 +545,7 @@ class ProductCatalogService {
     return subcategories;
   }
 
-  getProducts(filter?: ProductFilter): ProductCatalogueItem[] {
+  getProducts(filter?: ProductFilter & { userId?: string }): ProductCatalogueItem[] {
     let filteredProducts = [...this.products];
 
     if (filter) {
