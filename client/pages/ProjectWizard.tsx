@@ -2778,7 +2778,9 @@ export default function ProjectWizard() {
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h1 className="text-3xl font-bold">Project Planning Wizard</h1>
+              <h1 className="text-3xl font-bold">
+                {isEditMode ? "Edit Project" : "Project Planning Wizard"}
+              </h1>
               <div className="flex items-center gap-3">
                 <p className="text-muted-foreground">
                   Step {currentStep} of {totalSteps}:{" "}
