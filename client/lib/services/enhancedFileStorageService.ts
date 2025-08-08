@@ -257,6 +257,13 @@ class EnhancedFileStorageService {
    */
   async searchFiles(filters: SearchFilters = {}): Promise<FileAsset[]> {
     try {
+      // Check if user is authenticated
+      const { data: { user }, error: authError } = await supabase.auth.getUser();
+      if (authError || !user) {
+        console.log('No authenticated user found for search');
+        return []; // Return empty array if not authenticated
+      }
+
       let query = supabase
         .from('file_assets')
         .select('*');
