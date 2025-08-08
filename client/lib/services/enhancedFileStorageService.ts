@@ -605,6 +605,21 @@ class EnhancedFileStorageService {
     categoryBreakdown: Record<string, { files: number; size: number }>;
   }> {
     try {
+      // Check if user is authenticated
+      const { data: { user }, error: authError } = await supabase.auth.getUser();
+      if (authError || !user) {
+        console.log('No authenticated user found for storage usage');
+        return {
+          totalFiles: 0,
+          totalSize: 0,
+          bucketBreakdown: this.buckets.reduce((acc, bucket) => {
+            acc[bucket] = { files: 0, size: 0 };
+            return acc;
+          }, {} as Record<BucketName, { files: number; size: number }>),
+          categoryBreakdown: {}
+        };
+      }
+
       const { data, error } = await supabase
         .from('file_assets')
         .select('bucket_name, category, file_size')
