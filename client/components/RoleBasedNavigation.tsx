@@ -261,13 +261,6 @@ export function RoleQuickActions() {
         </Button>
       </PermissionGate>
 
-      <PermissionGate permission="projects.create">
-        <Button variant="outline" size="sm" asChild>
-          <Link to="/projects/new">
-            <Zap className="w-4 h-4 mr-2" />
-          </Link>
-        </Button>
-      </PermissionGate>
 
       <RoleGate roles={[UserRole.ADMIN, UserRole.GLOBAL_ADMIN]}>
         <Button variant="outline" size="sm" asChild>
