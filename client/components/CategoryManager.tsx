@@ -277,6 +277,142 @@ export default function CategoryManager({
     }
   };
 
+  // Category drag handlers
+  const handleCategoryDragStart = (e: React.DragEvent, categoryId: string) => {
+    setDraggedCategory(categoryId);
+    e.dataTransfer.effectAllowed = 'move';
+  };
+
+  const handleCategoryDragOver = (e: React.DragEvent, categoryId: string) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    setDragOverCategory(categoryId);
+  };
+
+  const handleCategoryDragLeave = () => {
+    setDragOverCategory(null);
+  };
+
+  const handleCategoryDrop = (e: React.DragEvent, targetCategoryId: string) => {
+    e.preventDefault();
+    setDragOverCategory(null);
+
+    if (draggedCategory && draggedCategory !== targetCategoryId) {
+      const newOrder = [...categories];
+      const draggedIndex = newOrder.findIndex(cat => cat.id === draggedCategory);
+      const targetIndex = newOrder.findIndex(cat => cat.id === targetCategoryId);
+
+      if (draggedIndex !== -1 && targetIndex !== -1) {
+        const [draggedItem] = newOrder.splice(draggedIndex, 1);
+        newOrder.splice(targetIndex, 0, draggedItem);
+
+        categoryService.reorderCategories(newOrder.map(cat => cat.id));
+        refreshCategories();
+
+        toast({
+          title: "Success",
+          description: "Category order updated successfully",
+        });
+      }
+    }
+
+    setDraggedCategory(null);
+  };
+
+  const handleMoveCategoryUp = (categoryId: string) => {
+    if (categoryService.moveCategoryUp(categoryId)) {
+      refreshCategories();
+      toast({
+        title: "Success",
+        description: "Category moved up successfully",
+      });
+    }
+  };
+
+  const handleMoveCategoryDown = (categoryId: string) => {
+    if (categoryService.moveCategoryDown(categoryId)) {
+      refreshCategories();
+      toast({
+        title: "Success",
+        description: "Category moved down successfully",
+      });
+    }
+  };
+
+  // Subcategory drag handlers
+  const handleSubcategoryDragStart = (e: React.DragEvent, subcategoryId: string) => {
+    setDraggedSubcategory(subcategoryId);
+    e.dataTransfer.effectAllowed = 'move';
+  };
+
+  const handleSubcategoryDragOver = (e: React.DragEvent, subcategoryId: string) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    setDragOverSubcategory(subcategoryId);
+  };
+
+  const handleSubcategoryDragLeave = () => {
+    setDragOverSubcategory(null);
+  };
+
+  const handleSubcategoryDrop = (e: React.DragEvent, targetSubcategoryId: string) => {
+    e.preventDefault();
+    setDragOverSubcategory(null);
+
+    if (draggedSubcategory && draggedSubcategory !== targetSubcategoryId && selectedCategory) {
+      const newOrder = [...selectedCategory.subcategories];
+      const draggedIndex = newOrder.findIndex(sub => sub.id === draggedSubcategory);
+      const targetIndex = newOrder.findIndex(sub => sub.id === targetSubcategoryId);
+
+      if (draggedIndex !== -1 && targetIndex !== -1) {
+        const [draggedItem] = newOrder.splice(draggedIndex, 1);
+        newOrder.splice(targetIndex, 0, draggedItem);
+
+        categoryService.reorderSubcategories(selectedCategory.id, newOrder.map(sub => sub.id));
+        refreshCategories();
+
+        // Update selected category
+        const updatedCategory = categoryService.getCategory(selectedCategory.id);
+        if (updatedCategory) setSelectedCategory(updatedCategory);
+
+        toast({
+          title: "Success",
+          description: "Subcategory order updated successfully",
+        });
+      }
+    }
+
+    setDraggedSubcategory(null);
+  };
+
+  const handleMoveSubcategoryUp = (subcategoryId: string) => {
+    if (categoryService.moveSubcategoryUp(subcategoryId)) {
+      refreshCategories();
+      if (selectedCategory) {
+        const updatedCategory = categoryService.getCategory(selectedCategory.id);
+        if (updatedCategory) setSelectedCategory(updatedCategory);
+      }
+      toast({
+        title: "Success",
+        description: "Subcategory moved up successfully",
+      });
+    }
+  };
+
+  const handleMoveSubcategoryDown = (subcategoryId: string) => {
+    if (categoryService.moveSubcategoryDown(subcategoryId)) {
+      refreshCategories();
+      if (selectedCategory) {
+        const updatedCategory = categoryService.getCategory(selectedCategory.id);
+        if (updatedCategory) setSelectedCategory(updatedCategory);
+      }
+      toast({
+        title: "Success",
+        description: "Subcategory moved down successfully",
+      });
+    }
+  };
+
   if (!isOpen) return null;
 
   return (
