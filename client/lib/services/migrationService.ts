@@ -37,13 +37,20 @@ class MigrationService {
 
       const userId = user.id || user.user_id || Date.now().toString();
 
+      const errors: string[] = [];
+
       // Migrate projects
       const projects = this.getLocalStorageData("chargeSourceProjects");
       if (projects && projects.length > 0) {
         console.log(`Migrating ${projects.length} projects...`);
         for (const project of projects) {
-          await this.migrateProject(project, userId);
-          migratedItems++;
+          try {
+            await this.migrateProject(project, userId);
+            migratedItems++;
+          } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : String(error);
+            errors.push(`Project: ${errorMessage}`);
+          }
         }
       }
 
@@ -52,8 +59,13 @@ class MigrationService {
       if (drafts && drafts.length > 0) {
         console.log(`Migrating ${drafts.length} project drafts...`);
         for (const draft of drafts) {
-          await this.migrateProjectDraft(draft, userId);
-          migratedItems++;
+          try {
+            await this.migrateProjectDraft(draft, userId);
+            migratedItems++;
+          } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : String(error);
+            errors.push(`Draft: ${errorMessage}`);
+          }
         }
       }
 
@@ -62,8 +74,13 @@ class MigrationService {
       if (quotes && quotes.length > 0) {
         console.log(`Migrating ${quotes.length} quotes...`);
         for (const quote of quotes) {
-          await this.migrateQuote(quote, userId);
-          migratedItems++;
+          try {
+            await this.migrateQuote(quote, userId);
+            migratedItems++;
+          } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : String(error);
+            errors.push(`Quote: ${errorMessage}`);
+          }
         }
       }
 
