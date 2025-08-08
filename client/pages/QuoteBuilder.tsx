@@ -69,6 +69,7 @@ export default function QuoteBuilder() {
 
   const [quote, setQuote] = useState<Quote | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [activeTab, setActiveTab] = useState("details");
   const [selectedLineItem, setSelectedLineItem] = useState<string | null>(null);
