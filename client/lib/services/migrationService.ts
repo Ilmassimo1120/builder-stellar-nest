@@ -35,12 +35,14 @@ class MigrationService {
 
       let migratedItems = 0;
 
+      const userId = user.id || user.user_id || Date.now().toString();
+
       // Migrate projects
       const projects = this.getLocalStorageData("chargeSourceProjects");
       if (projects && projects.length > 0) {
         console.log(`Migrating ${projects.length} projects...`);
         for (const project of projects) {
-          await this.migrateProject(project, user.id);
+          await this.migrateProject(project, userId);
           migratedItems++;
         }
       }
@@ -50,7 +52,7 @@ class MigrationService {
       if (drafts && drafts.length > 0) {
         console.log(`Migrating ${drafts.length} project drafts...`);
         for (const draft of drafts) {
-          await this.migrateProjectDraft(draft, user.id);
+          await this.migrateProjectDraft(draft, userId);
           migratedItems++;
         }
       }
