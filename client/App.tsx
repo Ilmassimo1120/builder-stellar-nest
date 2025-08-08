@@ -157,6 +157,10 @@ const App = () => (
               element={<Catalogue />}
             />
             <Route
+              path="/admin/catalogue"
+              element={<AdminCatalogue />}
+            />
+            <Route
               path="/procurement"
               element={
                 <Placeholder
