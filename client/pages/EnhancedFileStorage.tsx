@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { 
+import {
   HardDrive, Upload, FolderOpen, Settings, BarChart3, Shield,
   Database, Users, FileText, Video, Image, Clock, CheckCircle,
-  AlertTriangle, XCircle, Archive, TrendingUp, Activity
+  AlertTriangle, XCircle, Archive, TrendingUp, Activity, ArrowLeft, Home
 } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription } from '@/components/ui/alert';
