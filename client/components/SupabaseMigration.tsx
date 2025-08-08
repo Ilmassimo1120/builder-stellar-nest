@@ -51,6 +51,7 @@ interface MigrationModalProps {
 
 function MigrationModal({ isOpen, onClose, onSuccess }: MigrationModalProps) {
   const { toast } = useToast();
+  const { user } = useAuth();
   const [migrating, setMigrating] = useState(false);
   const [progress, setProgress] = useState(0);
   const [currentStep, setCurrentStep] = useState("");
