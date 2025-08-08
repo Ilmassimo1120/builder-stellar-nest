@@ -374,6 +374,19 @@ export default function QuoteBuilder() {
             <div className="text-center">
               <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
               <p className="text-muted-foreground">Loading quote builder...</p>
+              {error && (
+                <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+                  <p className="text-red-800 text-sm">{error}</p>
+                  <Button
+                    onClick={() => window.location.reload()}
+                    variant="outline"
+                    size="sm"
+                    className="mt-2"
+                  >
+                    Refresh Page
+                  </Button>
+                </div>
+              )}
             </div>
           </div>
         </div>
