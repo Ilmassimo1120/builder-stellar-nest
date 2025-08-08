@@ -45,6 +45,9 @@ import { KnowledgeBaseWidget } from "@/components/KnowledgeBaseWidget";
 import { SupabaseSetup } from "@/components/SupabaseSetup";
 import { projectService, autoConfigureSupabase } from "@/lib/supabase";
 import { useAuth } from "@/hooks/useAuth";
+import RoleBasedNavigation, { RoleQuickActions } from "@/components/RoleBasedNavigation";
+import UserRoleIndicator, { PermissionGate, RoleGate } from "@/components/UserRoleIndicator";
+import { UserRole } from "@/lib/rbac";
 import {
   DropdownMenu,
   DropdownMenuContent,
