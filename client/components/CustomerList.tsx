@@ -196,7 +196,7 @@ export function CustomerList({
             onClick={handleSync}
             disabled={syncing}
           >
-            <Sync className={cn("w-4 h-4 mr-2", syncing && "animate-spin")} />
+            <RefreshCw className={cn("w-4 h-4 mr-2", syncing && "animate-spin")} />
             Sync
           </Button>
           <Dialog open={showCreateForm} onOpenChange={setShowCreateForm}>
