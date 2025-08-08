@@ -288,9 +288,11 @@ class EnhancedFileStorageService {
             console.warn("Supabase auth failed:", userError.message);
           }
         } catch (error) {
-          console.log(
-            "Network error during auth check, operating in offline mode",
-          );
+          const errorMessage = this.formatError(error, "Auth check failed");
+          console.log("Network error during auth check:", errorMessage);
+          if (errorMessage.includes("Failed to fetch") || errorMessage.includes("CORS")) {
+            console.warn("⚠️ CORS or network connectivity issue detected during authentication");
+          }
         }
       }
 
