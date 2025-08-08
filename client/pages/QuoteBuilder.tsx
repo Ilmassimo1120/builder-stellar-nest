@@ -164,7 +164,7 @@ export default function QuoteBuilder() {
     }, 10000); // 10 second timeout
 
     return () => clearTimeout(timeoutId);
-  }, [quoteId, searchParams, navigate, user, toast, loading]);
+  }, [isNewQuote, quoteId, searchParams, navigate, user, toast, loading]);
 
   // Auto-save functionality
   const autoSave = useCallback(() => {
