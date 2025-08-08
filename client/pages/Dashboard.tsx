@@ -251,7 +251,8 @@ export default function Dashboard() {
       // Use sample projects if no real projects exist
       setProjects(uniqueProjects.length > 0 ? uniqueProjects : sampleProjects);
     } catch (error) {
-      console.error("Error loading projects:", error);
+      console.log("⚠️ Error in loadProjects, using sample data:");
+      console.log("Error details:", error instanceof Error ? error.message : String(error));
       setProjects(sampleProjects);
     } finally {
       setLoading(false);
