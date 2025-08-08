@@ -25,8 +25,7 @@ export default function ConnectionStatus() {
       console.log("🔄 ConnectionStatus: Starting connection check...");
 
       // Force reset the autoInit state
-      (autoInit as any).initialized = false;
-      (autoInit as any).supabaseConnected = false;
+      autoInit.reset();
 
       const connected = await autoInit.initialize();
       console.log(
@@ -40,7 +39,8 @@ export default function ConnectionStatus() {
 
       setIsConnected(finalState);
     } catch (error) {
-      console.error("❌ ConnectionStatus: Connection check failed:", error);
+      console.log("⚠️ ConnectionStatus: Connection check failed, using local mode");
+      console.log("Error details:", error instanceof Error ? error.message : String(error));
       setIsConnected(false);
     } finally {
       setIsLoading(false);
