@@ -1,7 +1,13 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { User as SupabaseUser, Session } from '@supabase/supabase-js';
-import { supabase, getUserProfile } from '@/lib/supabase';
-import { UserRole, rbacService } from '@/lib/rbac';
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
+import { User as SupabaseUser, Session } from "@supabase/supabase-js";
+import { supabase, getUserProfile } from "@/lib/supabase";
+import { UserRole, rbacService } from "@/lib/rbac";
 
 export interface User {
   id: string;
@@ -26,7 +32,11 @@ interface SupabaseAuthContextType {
   session: Session | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  login: (email: string, password: string, rememberMe?: boolean) => Promise<boolean>;
+  login: (
+    email: string,
+    password: string,
+    rememberMe?: boolean,
+  ) => Promise<boolean>;
   register: (userData: RegisterData) => Promise<boolean>;
   logout: () => Promise<void>;
   updateUser: (userData: Partial<User>) => Promise<void>;
@@ -56,7 +66,9 @@ interface RegisterData {
   website?: string;
 }
 
-const SupabaseAuthContext = createContext<SupabaseAuthContextType | undefined>(undefined);
+const SupabaseAuthContext = createContext<SupabaseAuthContextType | undefined>(
+  undefined,
+);
 
 export function SupabaseAuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
@@ -80,7 +92,7 @@ export function SupabaseAuthProvider({ children }: { children: ReactNode }) {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (event, session) => {
       setSession(session);
-      
+
       if (session?.user) {
         await loadUserProfile(session.user);
       } else {
@@ -95,38 +107,39 @@ export function SupabaseAuthProvider({ children }: { children: ReactNode }) {
   const loadUserProfile = async (supabaseUser: SupabaseUser) => {
     try {
       const profile = await getUserProfile(supabaseUser.id);
-      
+
       const userData: User = {
         id: supabaseUser.id,
-        email: supabaseUser.email || '',
+        email: supabaseUser.email || "",
         role: profile.role as UserRole,
-        firstName: profile.first_name || '',
-        lastName: profile.last_name || '',
-        name: profile.first_name && profile.last_name 
-          ? `${profile.first_name} ${profile.last_name}` 
-          : profile.email?.split('@')[0] || 'User',
-        phone: profile.phone || '',
-        company: profile.company || '',
-        department: profile.department || '',
-        businessAddress: profile.business_address || '',
-        website: profile.website || '',
+        firstName: profile.first_name || "",
+        lastName: profile.last_name || "",
+        name:
+          profile.first_name && profile.last_name
+            ? `${profile.first_name} ${profile.last_name}`
+            : profile.email?.split("@")[0] || "User",
+        phone: profile.phone || "",
+        company: profile.company || "",
+        department: profile.department || "",
+        businessAddress: profile.business_address || "",
+        website: profile.website || "",
         verified: profile.verified || false,
         permissions: rbacService.getRolePermissions(profile.role as UserRole),
         registrationDate: profile.created_at,
-        loginTime: new Date().toISOString()
+        loginTime: new Date().toISOString(),
       };
 
       setUser(userData);
     } catch (error) {
-      console.error('Error loading user profile:', error);
+      console.error("Error loading user profile:", error);
       // If profile doesn't exist, create a basic one
       const basicUser: User = {
         id: supabaseUser.id,
-        email: supabaseUser.email || '',
+        email: supabaseUser.email || "",
         role: UserRole.USER,
-        name: supabaseUser.email?.split('@')[0] || 'User',
+        name: supabaseUser.email?.split("@")[0] || "User",
         permissions: rbacService.getRolePermissions(UserRole.USER),
-        loginTime: new Date().toISOString()
+        loginTime: new Date().toISOString(),
       };
       setUser(basicUser);
     } finally {
@@ -134,7 +147,11 @@ export function SupabaseAuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const login = async (email: string, password: string, rememberMe = false): Promise<boolean> => {
+  const login = async (
+    email: string,
+    password: string,
+    rememberMe = false,
+  ): Promise<boolean> => {
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
@@ -146,7 +163,7 @@ export function SupabaseAuthProvider({ children }: { children: ReactNode }) {
       // Session will be set automatically by the auth state change listener
       return true;
     } catch (error) {
-      console.error('Login error:', error);
+      console.error("Login error:", error);
       return false;
     }
   };
@@ -164,9 +181,9 @@ export function SupabaseAuthProvider({ children }: { children: ReactNode }) {
             company: userData.company,
             phone: userData.phone,
             business_address: userData.businessAddress,
-            website: userData.website
-          }
-        }
+            website: userData.website,
+          },
+        },
       });
 
       if (error) throw error;
@@ -176,7 +193,7 @@ export function SupabaseAuthProvider({ children }: { children: ReactNode }) {
 
       return true;
     } catch (error) {
-      console.error('Registration error:', error);
+      console.error("Registration error:", error);
       return false;
     }
   };
@@ -185,11 +202,11 @@ export function SupabaseAuthProvider({ children }: { children: ReactNode }) {
     try {
       const { error } = await supabase.auth.signOut();
       if (error) throw error;
-      
+
       setUser(null);
       setSession(null);
     } catch (error) {
-      console.error('Logout error:', error);
+      console.error("Logout error:", error);
     }
   };
 
@@ -199,7 +216,7 @@ export function SupabaseAuthProvider({ children }: { children: ReactNode }) {
     try {
       // Update Supabase user profile
       const { error } = await supabase
-        .from('users')
+        .from("users")
         .update({
           first_name: userData.firstName,
           last_name: userData.lastName,
@@ -207,9 +224,9 @@ export function SupabaseAuthProvider({ children }: { children: ReactNode }) {
           department: userData.department,
           phone: userData.phone,
           business_address: userData.businessAddress,
-          website: userData.website
+          website: userData.website,
         })
-        .eq('id', user.id);
+        .eq("id", user.id);
 
       if (error) throw error;
 
@@ -217,14 +234,15 @@ export function SupabaseAuthProvider({ children }: { children: ReactNode }) {
       const updatedUser = {
         ...user,
         ...userData,
-        name: userData.firstName && userData.lastName 
-          ? `${userData.firstName} ${userData.lastName}` 
-          : user.name
+        name:
+          userData.firstName && userData.lastName
+            ? `${userData.firstName} ${userData.lastName}`
+            : user.name,
       };
-      
+
       setUser(updatedUser);
     } catch (error) {
-      console.error('Update user error:', error);
+      console.error("Update user error:", error);
       throw error;
     }
   };
@@ -237,7 +255,7 @@ export function SupabaseAuthProvider({ children }: { children: ReactNode }) {
 
       if (error) throw error;
     } catch (error) {
-      console.error('Reset password error:', error);
+      console.error("Reset password error:", error);
       throw error;
     }
   };
@@ -256,11 +274,14 @@ export function SupabaseAuthProvider({ children }: { children: ReactNode }) {
   };
 
   const canAccessResource = (resource: string, action: string): boolean => {
-    return user ? rbacService.canAccessResource(user.role, resource, action) : false;
+    return user
+      ? rbacService.canAccessResource(user.role, resource, action)
+      : false;
   };
 
   // Role checking convenience properties
-  const isAdmin = user?.role === UserRole.ADMIN || user?.role === UserRole.GLOBAL_ADMIN;
+  const isAdmin =
+    user?.role === UserRole.ADMIN || user?.role === UserRole.GLOBAL_ADMIN;
   const isGlobalAdmin = user?.role === UserRole.GLOBAL_ADMIN;
   const isSales = user?.role === UserRole.SALES;
   const isPartner = user?.role === UserRole.PARTNER;
@@ -282,7 +303,7 @@ export function SupabaseAuthProvider({ children }: { children: ReactNode }) {
     isAdmin,
     isGlobalAdmin,
     isSales,
-    isPartner
+    isPartner,
   };
 
   return (
@@ -295,7 +316,9 @@ export function SupabaseAuthProvider({ children }: { children: ReactNode }) {
 export function useSupabaseAuth() {
   const context = useContext(SupabaseAuthContext);
   if (context === undefined) {
-    throw new Error('useSupabaseAuth must be used within a SupabaseAuthProvider');
+    throw new Error(
+      "useSupabaseAuth must be used within a SupabaseAuthProvider",
+    );
   }
   return context;
 }
@@ -303,13 +326,13 @@ export function useSupabaseAuth() {
 // Hook for protected routes
 export function useRequireSupabaseAuth() {
   const auth = useSupabaseAuth();
-  
+
   useEffect(() => {
     if (!auth.isLoading && !auth.isAuthenticated) {
       // Redirect to login if not authenticated
-      window.location.href = '/login';
+      window.location.href = "/login";
     }
   }, [auth.isAuthenticated, auth.isLoading]);
-  
+
   return auth;
 }

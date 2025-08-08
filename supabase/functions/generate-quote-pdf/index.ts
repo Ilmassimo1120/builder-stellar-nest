@@ -1,102 +1,93 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-}
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers":
+    "authorization, x-client-info, apikey, content-type",
+};
 
 interface QuoteData {
-  id: string
-  quoteNumber: string
-  title: string
-  clientInfo: any
-  lineItems: any[]
-  totals: any
-  settings: any
-  validUntil: string
+  id: string;
+  quoteNumber: string;
+  title: string;
+  clientInfo: any;
+  lineItems: any[];
+  totals: any;
+  settings: any;
+  validUntil: string;
 }
 
 serve(async (req) => {
   // Handle CORS preflight requests
-  if (req.method === 'OPTIONS') {
-    return new Response('ok', { headers: corsHeaders })
+  if (req.method === "OPTIONS") {
+    return new Response("ok", { headers: corsHeaders });
   }
 
   try {
     // Create Supabase client
     const supabaseClient = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_ANON_KEY') ?? '',
+      Deno.env.get("SUPABASE_URL") ?? "",
+      Deno.env.get("SUPABASE_ANON_KEY") ?? "",
       {
         global: {
-          headers: { Authorization: req.headers.get('Authorization')! },
+          headers: { Authorization: req.headers.get("Authorization")! },
         },
-      }
-    )
+      },
+    );
 
     // Get user from auth token
     const {
       data: { user },
       error: userError,
-    } = await supabaseClient.auth.getUser()
+    } = await supabaseClient.auth.getUser();
 
     if (userError || !user) {
-      return new Response(
-        JSON.stringify({ error: 'Unauthorized' }),
-        {
-          status: 401,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        }
-      )
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
 
-    const { quoteId } = await req.json()
+    const { quoteId } = await req.json();
 
     // Fetch quote data from Supabase
     const { data: quote, error: quoteError } = await supabaseClient
-      .from('quotes')
-      .select('*')
-      .eq('id', quoteId)
-      .single()
+      .from("quotes")
+      .select("*")
+      .eq("id", quoteId)
+      .single();
 
     if (quoteError || !quote) {
-      return new Response(
-        JSON.stringify({ error: 'Quote not found' }),
-        {
-          status: 404,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        }
-      )
+      return new Response(JSON.stringify({ error: "Quote not found" }), {
+        status: 404,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
 
     // Generate PDF using Puppeteer or similar
     // For now, return a placeholder response
-    const pdfData = await generatePDF(quote)
+    const pdfData = await generatePDF(quote);
 
     return new Response(pdfData, {
       headers: {
         ...corsHeaders,
-        'Content-Type': 'application/pdf',
-        'Content-Disposition': `attachment; filename="quote-${quote.quote_number}.pdf"`,
+        "Content-Type": "application/pdf",
+        "Content-Disposition": `attachment; filename="quote-${quote.quote_number}.pdf"`,
       },
-    })
-
+    });
   } catch (error) {
-    return new Response(
-      JSON.stringify({ error: error.message }),
-      {
-        status: 500,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      }
-    )
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 500,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
   }
-})
+});
 
 async function generatePDF(quote: any): Promise<Uint8Array> {
   // This is a simplified PDF generation
   // In production, you'd use libraries like jsPDF, Puppeteer, or PDFKit
-  
+
   const htmlContent = `
     <!DOCTYPE html>
     <html>
@@ -139,7 +130,9 @@ async function generatePDF(quote: any): Promise<Uint8Array> {
                 </tr>
             </thead>
             <tbody>
-                ${quote.line_items.map((item: any) => `
+                ${quote.line_items
+                  .map(
+                    (item: any) => `
                     <tr>
                         <td>
                             <strong>${item.name}</strong>
@@ -149,7 +142,9 @@ async function generatePDF(quote: any): Promise<Uint8Array> {
                         <td>$${item.unitPrice.toLocaleString()}</td>
                         <td>$${item.totalPrice.toLocaleString()}</td>
                     </tr>
-                `).join('')}
+                `,
+                  )
+                  .join("")}
             </tbody>
         </table>
         
@@ -159,17 +154,21 @@ async function generatePDF(quote: any): Promise<Uint8Array> {
             <p class="total">Total: $${quote.totals.total.toLocaleString()}</p>
         </div>
         
-        ${quote.settings.terms ? `
+        ${
+          quote.settings.terms
+            ? `
             <div style="margin-top: 40px;">
                 <h3>Terms & Conditions</h3>
                 <p>${quote.settings.terms}</p>
             </div>
-        ` : ''}
+        `
+            : ""
+        }
     </body>
     </html>
-  `
+  `;
 
   // For demo purposes, return HTML as bytes
   // In production, convert HTML to PDF using Puppeteer
-  return new TextEncoder().encode(htmlContent)
+  return new TextEncoder().encode(htmlContent);
 }

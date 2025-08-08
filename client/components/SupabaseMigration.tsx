@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { 
+import React, { useState, useEffect } from "react";
+import {
   Database,
   Cloud,
   ArrowRight,
@@ -10,16 +10,16 @@ import {
   FileText,
   Package,
   Building,
-  Zap
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
+  Zap,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -27,12 +27,12 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Separator } from '@/components/ui/separator';
-import { useToast } from '@/hooks/use-toast';
-import { migrationService } from '@/lib/services/migrationService';
+} from "@/components/ui/dialog";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Separator } from "@/components/ui/separator";
+import { useToast } from "@/hooks/use-toast";
+import { migrationService } from "@/lib/services/migrationService";
 
 interface MigrationStats {
   connected: boolean;
@@ -52,35 +52,35 @@ function MigrationModal({ isOpen, onClose, onSuccess }: MigrationModalProps) {
   const { toast } = useToast();
   const [migrating, setMigrating] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [currentStep, setCurrentStep] = useState('');
+  const [currentStep, setCurrentStep] = useState("");
 
   const handleMigration = async () => {
     setMigrating(true);
     setProgress(0);
-    setCurrentStep('Starting migration...');
+    setCurrentStep("Starting migration...");
 
     try {
       // Simulate progress updates
       const steps = [
-        'Connecting to Supabase...',
-        'Migrating projects...',
-        'Migrating quotes...',
-        'Migrating products...',
-        'Migrating settings...',
-        'Finalizing migration...'
+        "Connecting to Supabase...",
+        "Migrating projects...",
+        "Migrating quotes...",
+        "Migrating products...",
+        "Migrating settings...",
+        "Finalizing migration...",
       ];
 
       for (let i = 0; i < steps.length; i++) {
         setCurrentStep(steps[i]);
-        setProgress((i + 1) / steps.length * 90); // Leave 10% for completion
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        setProgress(((i + 1) / steps.length) * 90); // Leave 10% for completion
+        await new Promise((resolve) => setTimeout(resolve, 1000));
       }
 
       // Perform actual migration
       const result = await migrationService.migrateLocalStorageToSupabase();
-      
+
       setProgress(100);
-      setCurrentStep('Migration completed!');
+      setCurrentStep("Migration completed!");
 
       if (result.success) {
         toast({
@@ -91,18 +91,18 @@ function MigrationModal({ isOpen, onClose, onSuccess }: MigrationModalProps) {
       } else {
         throw new Error(result.message);
       }
-
     } catch (error) {
       toast({
         title: "Migration Failed",
-        description: error instanceof Error ? error.message : 'Unknown error occurred',
+        description:
+          error instanceof Error ? error.message : "Unknown error occurred",
         variant: "destructive",
       });
     } finally {
       setMigrating(false);
       setTimeout(() => {
         setProgress(0);
-        setCurrentStep('');
+        setCurrentStep("");
         onClose();
       }, 2000);
     }
@@ -117,7 +117,8 @@ function MigrationModal({ isOpen, onClose, onSuccess }: MigrationModalProps) {
             Migrate to Supabase
           </DialogTitle>
           <DialogDescription>
-            Move your local data to the cloud for better reliability and collaboration
+            Move your local data to the cloud for better reliability and
+            collaboration
           </DialogDescription>
         </DialogHeader>
 
@@ -132,7 +133,9 @@ function MigrationModal({ isOpen, onClose, onSuccess }: MigrationModalProps) {
           )}
 
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-            <h3 className="font-medium text-blue-900 mb-2">Migration Benefits</h3>
+            <h3 className="font-medium text-blue-900 mb-2">
+              Migration Benefits
+            </h3>
             <ul className="text-sm text-blue-800 space-y-1">
               <li>• Cloud backup and sync</li>
               <li>• Real-time collaboration</li>
@@ -147,7 +150,8 @@ function MigrationModal({ isOpen, onClose, onSuccess }: MigrationModalProps) {
               <div>
                 <h4 className="font-medium text-amber-900">Important</h4>
                 <p className="text-sm text-amber-800">
-                  Your local data will remain as backup. The migration is safe and reversible.
+                  Your local data will remain as backup. The migration is safe
+                  and reversible.
                 </p>
               </div>
             </div>
@@ -192,7 +196,7 @@ export default function SupabaseMigration() {
     userCount: 0,
     projectCount: 0,
     quoteCount: 0,
-    productCount: 0
+    productCount: 0,
   });
   const [migrationNeeded, setMigrationNeeded] = useState(false);
   const [showMigrationModal, setShowMigrationModal] = useState(false);
@@ -207,13 +211,13 @@ export default function SupabaseMigration() {
     try {
       const [supabaseStats, needsMigration] = await Promise.all([
         migrationService.getSupabaseStatus(),
-        migrationService.checkMigrationNeeded()
+        migrationService.checkMigrationNeeded(),
       ]);
 
       setStats(supabaseStats);
       setMigrationNeeded(needsMigration);
     } catch (error) {
-      console.error('Error checking migration status:', error);
+      console.error("Error checking migration status:", error);
     } finally {
       setLoading(false);
     }
@@ -230,7 +234,9 @@ export default function SupabaseMigration() {
         <CardContent className="p-6">
           <div className="flex items-center justify-center">
             <RefreshCw className="w-6 h-6 animate-spin text-muted-foreground" />
-            <span className="ml-2 text-muted-foreground">Checking Supabase status...</span>
+            <span className="ml-2 text-muted-foreground">
+              Checking Supabase status...
+            </span>
           </div>
         </CardContent>
       </Card>
@@ -251,7 +257,7 @@ export default function SupabaseMigration() {
                 Cloud database and real-time features powered by Supabase
               </CardDescription>
             </div>
-            <Badge 
+            <Badge
               variant={stats.connected ? "default" : "secondary"}
               className={stats.connected ? "bg-green-100 text-green-800" : ""}
             >
@@ -316,22 +322,19 @@ export default function SupabaseMigration() {
                       Upgrade to Cloud Storage
                     </h3>
                     <p className="text-blue-800 mb-4">
-                      You have local data that can be migrated to Supabase for better reliability, 
-                      real-time sync, and collaboration features.
+                      You have local data that can be migrated to Supabase for
+                      better reliability, real-time sync, and collaboration
+                      features.
                     </p>
                     <div className="flex items-center gap-3">
-                      <Button 
+                      <Button
                         onClick={() => setShowMigrationModal(true)}
                         className="bg-blue-600 hover:bg-blue-700"
                       >
                         <Zap className="w-4 h-4 mr-2" />
                         Migrate to Cloud
                       </Button>
-                      <Button 
-                        variant="outline" 
-                        onClick={checkStatus}
-                        size="sm"
-                      >
+                      <Button variant="outline" onClick={checkStatus} size="sm">
                         <RefreshCw className="w-4 h-4 mr-2" />
                         Refresh Status
                       </Button>

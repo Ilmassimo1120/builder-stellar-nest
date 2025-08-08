@@ -65,26 +65,31 @@ npm run dev
 The platform uses the following main tables:
 
 ### Users Table
+
 - Stores user profiles and roles
 - Integrated with Supabase Auth
 - Supports 5 role levels: Global Admin, Admin, Sales, Partner, User
 
 ### Projects Table
+
 - Project management data
 - Client requirements and site assessments
 - Progress tracking and budget estimates
 
 ### Quotes Table
+
 - Quote generation and management
 - Line items and pricing calculations
 - Status tracking and client interactions
 
 ### Products Table
+
 - Product catalog with specifications
 - Pricing and inventory management
 - Supplier information and documents
 
 ### Global Settings Table
+
 - System-wide configuration
 - Business rules and pricing settings
 - Feature toggles and integrations
@@ -104,11 +109,13 @@ The database uses Row Level Security to ensure users can only access their own d
 The platform includes several Edge Functions for server-side logic:
 
 ### generate-quote-pdf
+
 - Converts quotes to PDF documents
 - Handles professional formatting and styling
 - Requires authentication
 
 ### calculate-quote-totals
+
 - Performs complex pricing calculations
 - Applies volume discounts and business rules
 - Ensures accurate totals and taxes
@@ -132,6 +139,7 @@ The platform includes an automatic migration system:
 4. **Validation**: Ensures data integrity during transfer
 
 To trigger migration:
+
 1. Log in to the platform
 2. Go to Dashboard
 3. Look for the "Migrate to Cloud" prompt
@@ -205,6 +213,7 @@ VITE_SUPABASE_ANON_KEY=your-production-anon-key
 ### Database Backups
 
 Supabase automatically backs up your database:
+
 - **Point-in-time recovery**: Available for 7 days (Pro plan)
 - **Manual backups**: Can be triggered from dashboard
 - **Export options**: SQL dumps available
@@ -212,6 +221,7 @@ Supabase automatically backs up your database:
 ### Monitoring
 
 Monitor your application through:
+
 - **Supabase Dashboard**: Database metrics and logs
 - **Edge Function Logs**: Server-side function monitoring
 - **API Analytics**: Request patterns and performance
@@ -221,16 +231,19 @@ Monitor your application through:
 ### Common Issues
 
 **Migration Fails**
+
 - Check internet connection
 - Verify Supabase credentials
 - Ensure database permissions are correct
 
 **RLS Policies Blocking Access**
+
 - Verify user role is set correctly
 - Check if policies match your use case
 - Use service role key for admin operations
 
 **Edge Functions Not Working**
+
 - Check function deployment status
 - Verify environment variables
 - Review function logs for errors
