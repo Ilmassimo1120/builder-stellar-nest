@@ -108,19 +108,34 @@ class FileStorageService {
       // Generate secure file path
       const filePath = this.generateFilePath(upload.file.name, upload.category, user.id);
 
-      // Upload file to storage
-      const { data: uploadData, error: uploadError } = await supabase.storage
-        .from(this.bucketName)
-        .upload(filePath, upload.file, {
-          cacheControl: '3600',
-          upsert: false,
-          metadata: {
-            ...upload.metadata,
-            originalName: upload.file.name,
-            uploadedBy: user.id,
-            category: upload.category
-          }
-        });
+      // Get auth token for edge function
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+
+      if (sessionError || !session?.access_token) {
+        throw new Error("Authentication required for file upload. Please log in.");
+      }
+
+      // Create form data for edge function
+      const formData = new FormData();
+      formData.append('file', upload.file);
+
+      // Call secure upload edge function
+      const response = await fetch(`${supabase.supabaseUrl}/functions/v1/secure-file-upload`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${session.access_token}`,
+        },
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Upload failed: ${errorText}`);
+      }
+
+      const uploadResult = await response.json();
+      const uploadData = { path: uploadResult.path };
+      const uploadError = null;
 
       if (uploadError) {
         throw new Error(`Upload failed: ${uploadError.message}`);
