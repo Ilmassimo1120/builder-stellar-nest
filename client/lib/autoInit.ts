@@ -98,6 +98,13 @@ class AutoInitializationService {
   isInitialized() {
     return this.initialized;
   }
+
+  // Reset state for debugging/testing
+  reset() {
+    this.initialized = false;
+    this.supabaseConnected = false;
+    console.log("🔄 AutoInit state reset");
+  }
 }
 
 export const autoInit = new AutoInitializationService();
