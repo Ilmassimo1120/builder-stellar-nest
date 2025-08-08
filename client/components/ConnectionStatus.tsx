@@ -24,10 +24,19 @@ export default function ConnectionStatus() {
   const checkConnection = async () => {
     try {
       console.log("🔄 ConnectionStatus: Starting connection check...");
+
+      // Force reset the autoInit state
+      (autoInit as any).initialized = false;
+      (autoInit as any).supabaseConnected = false;
+
       const connected = await autoInit.initialize();
       console.log("🔄 ConnectionStatus: autoInit.initialize() returned:", connected);
-      console.log("🔄 ConnectionStatus: autoInit.isSupabaseConnected():", autoInit.isSupabaseConnected());
-      setIsConnected(connected);
+
+      // Double check the state
+      const finalState = autoInit.isSupabaseConnected();
+      console.log("🔄 ConnectionStatus: final state:", finalState);
+
+      setIsConnected(finalState);
     } catch (error) {
       console.error("❌ ConnectionStatus: Connection check failed:", error);
       setIsConnected(false);
