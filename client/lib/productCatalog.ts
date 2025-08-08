@@ -527,17 +527,11 @@ class ProductCatalogService {
 
   // Public methods
   getCategories(): ProductCategory[] {
-    return [...this.categories];
+    return categoryService.getCategories();
   }
 
   getSubcategories(categoryId?: string): ProductSubcategory[] {
-    if (categoryId) {
-      return (
-        this.categories.find((cat) => cat.id === categoryId)?.subcategories ||
-        []
-      );
-    }
-    return this.categories.flatMap((cat) => cat.subcategories);
+    return categoryService.getSubcategories(categoryId);
   }
 
   getProducts(filter?: ProductFilter): ProductCatalogueItem[] {
