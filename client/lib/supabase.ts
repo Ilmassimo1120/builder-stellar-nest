@@ -427,7 +427,7 @@ export const initializeSupabase = async () => {
     console.log("🔧 Environment VITE_SUPABASE_ANON_KEY present:", !!import.meta.env.VITE_SUPABASE_ANON_KEY);
 
     // Test basic HTTP connectivity first
-    console.log("��� Testing basic HTTP connectivity to Supabase...");
+    console.log("🌐 Testing basic HTTP connectivity to Supabase...");
     try {
       const controller = new AbortController();
       setTimeout(() => controller.abort(), 5000); // 5 second timeout
@@ -497,6 +497,7 @@ let isSupabaseConnected = false;
 // Initialize on module load
 initializeSupabase().then(connected => {
   isSupabaseConnected = connected;
+  console.log("🔄 Module load initialization complete:", connected);
 });
 
 export const isConnectedToSupabase = () => isSupabaseConnected;
