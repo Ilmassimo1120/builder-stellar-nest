@@ -679,13 +679,18 @@ class QuoteService {
     productId: string,
     quantity: number = 1,
   ): Quote | null {
-    const product = productCatalog.getProducts().find(
-      (p) => p.id === productId,
-    );
+    console.log('addProductToQuote called:', { quoteId, productId, quantity });
+
+    const allProducts = productCatalog.getProducts();
+    console.log('Available products:', allProducts.length, allProducts.map(p => ({ id: p.id, name: p.name })));
+
+    const product = allProducts.find((p) => p.id === productId);
     if (!product) {
-      console.error(`Product not found: ${productId}`);
+      console.error(`Product not found: ${productId}. Available product IDs:`, allProducts.map(p => p.id));
       return null;
     }
+
+    console.log('Found product:', product);
 
     const lineItem: Omit<QuoteLineItem, "id" | "totalPrice"> = {
       type: "charger",
@@ -707,7 +712,10 @@ class QuoteService {
       },
     };
 
-    return this.addLineItem(quoteId, lineItem);
+    console.log('Creating line item:', lineItem);
+    const result = this.addLineItem(quoteId, lineItem);
+    console.log('addLineItem result:', result);
+    return result;
   }
 
   // Quote workflow and status management
