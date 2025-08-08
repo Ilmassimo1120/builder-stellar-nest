@@ -144,7 +144,18 @@ export default function QuoteBuilder() {
     };
 
     loadQuote();
-  }, [quoteId, searchParams, navigate, user, toast]);
+
+    // Add a timeout to prevent infinite loading
+    const timeoutId = setTimeout(() => {
+      if (loading) {
+        console.error("Quote loading timed out");
+        setError("Loading timed out. Please refresh the page.");
+        setLoading(false);
+      }
+    }, 10000); // 10 second timeout
+
+    return () => clearTimeout(timeoutId);
+  }, [quoteId, searchParams, navigate, user, toast, loading]);
 
   // Auto-save functionality
   const autoSave = useCallback(() => {
