@@ -43,7 +43,7 @@ import {
   Check,
   X,
   AlertTriangle,
-  Sync,
+  RefreshCw,
   Database,
   Cloud,
   Link as LinkIcon,
