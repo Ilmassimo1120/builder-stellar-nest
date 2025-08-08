@@ -52,10 +52,21 @@ export default function ConnectionStatus() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Database className="w-5 h-5" />
-          ChargeSource Cloud Status
-        </CardTitle>
+        <div className="flex items-center justify-between">
+          <CardTitle className="flex items-center gap-2">
+            <Database className="w-5 h-5" />
+            ChargeSource Cloud Status
+          </CardTitle>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={forceRecheck}
+            disabled={isLoading}
+          >
+            <RefreshCw className={`w-4 h-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
+            {isLoading ? 'Checking...' : 'Refresh'}
+          </Button>
+        </div>
       </CardHeader>
       <CardContent>
         <div className="flex items-center justify-between">
