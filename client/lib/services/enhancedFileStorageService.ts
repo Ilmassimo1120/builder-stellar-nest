@@ -642,19 +642,37 @@ class EnhancedFileStorageService {
     categoryBreakdown: Record<string, { files: number; size: number }>;
   }> {
     try {
-      // Check if user is authenticated
-      const { data: { user }, error: authError } = await supabase.auth.getUser();
-      if (authError || !user) {
-        console.log('No authenticated user found for storage usage');
-        return {
-          totalFiles: 0,
-          totalSize: 0,
-          bucketBreakdown: this.buckets.reduce((acc, bucket) => {
-            acc[bucket] = { files: 0, size: 0 };
-            return acc;
-          }, {} as Record<BucketName, { files: number; size: number }>),
-          categoryBreakdown: {}
-        };
+      // Check authentication using local auth system first
+      let user = null;
+
+      // Try local auth first
+      try {
+        const storedUser = localStorage.getItem('chargeSourceUser');
+        if (storedUser) {
+          const userData = JSON.parse(storedUser);
+          user = { id: userData.id, email: userData.email };
+        }
+      } catch (error) {
+        console.warn('Local auth check failed for storage usage:', error);
+      }
+
+      // Fallback to Supabase auth if no local user
+      if (!user) {
+        const { data: { user: authUser }, error: authError } = await supabase.auth.getUser();
+        if (authError || !authUser) {
+          console.log('No authenticated user found for storage usage');
+          return {
+            totalFiles: 0,
+            totalSize: 0,
+            bucketBreakdown: this.buckets.reduce((acc, bucket) => {
+              acc[bucket] = { files: 0, size: 0 };
+              return acc;
+            }, {} as Record<BucketName, { files: number; size: number }>),
+            categoryBreakdown: {}
+          };
+        } else {
+          user = authUser;
+        }
       }
 
       const { data, error } = await supabase
