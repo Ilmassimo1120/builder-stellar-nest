@@ -74,6 +74,14 @@ const App = () => (
                 </ProtectedRoute>
               }
             />
+            <Route
+              path="/projects/:projectId/edit"
+              element={
+                <ProtectedRoute>
+                  <ProjectWizard />
+                </ProtectedRoute>
+              }
+            />
 
             {/* Quote Management Routes */}
             <Route
