@@ -34,6 +34,18 @@ export default function AdminCatalogue() {
   const inactiveProducts = products.filter((p) => !p.isActive);
   const lowStockProducts = products.filter((p) => p.inventory.available <= 5);
 
+  // Listen for category changes
+  useEffect(() => {
+    const handleCategoriesChanged = () => {
+      setRefreshKey(prev => prev + 1);
+    };
+
+    window.addEventListener('categoriesChanged', handleCategoriesChanged);
+    return () => {
+      window.removeEventListener('categoriesChanged', handleCategoriesChanged);
+    };
+  }, []);
+
   // Admin role check
   if (user?.role !== "admin" && user?.role !== "global_admin") {
     return (
