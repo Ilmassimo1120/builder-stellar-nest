@@ -234,6 +234,9 @@ export default function Login() {
               <div className="text-xs text-blue-600 space-y-1">
                 <div>📧 Email: demo@contractor.com.au</div>
                 <div>🔑 Password: demo123</div>
+                <div className="pt-2 text-red-600 font-medium">Admin Access:</div>
+                <div>📧 Email: admin@chargesource.com.au</div>
+                <div>🔑 Password: admin123</div>
               </div>
             </div>
 
