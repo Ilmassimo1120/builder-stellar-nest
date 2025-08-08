@@ -207,7 +207,7 @@ class EnhancedFileStorageService {
         request.metadata.category
       );
 
-      // Upload to Supabase Storage
+      // Check if storage bucket exists and upload to Supabase Storage
       const { data: uploadData, error: uploadError } = await supabase.storage
         .from(request.bucket)
         .upload(filePath, request.file, {
@@ -216,6 +216,13 @@ class EnhancedFileStorageService {
         });
 
       if (uploadError) {
+        // Provide more helpful error messages for common issues
+        if (uploadError.message.includes('not found') || uploadError.message.includes('bucket')) {
+          throw new Error(`Storage bucket '${request.bucket}' not found. Please create the bucket in Supabase dashboard first.`);
+        }
+        if (uploadError.message.includes('permission') || uploadError.message.includes('unauthorized')) {
+          throw new Error(`Permission denied. Please check storage bucket permissions for '${request.bucket}'.`);
+        }
         throw new Error(`Upload failed: ${uploadError.message}`);
       }
 
