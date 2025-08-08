@@ -11,6 +11,54 @@ import { supabase } from "@/lib/supabase";
 export default function FileStorageDebug() {
   const [results, setResults] = useState<any>({});
   const [loading, setLoading] = useState(false);
+  const [bucketStatus, setBucketStatus] = useState<any>(null);
+  const [initializingBuckets, setInitializingBuckets] = useState(false);
+
+  useEffect(() => {
+    checkBucketStatus();
+  }, []);
+
+  const checkBucketStatus = async () => {
+    try {
+      const status = await bucketInitService.getBucketStatus();
+      setBucketStatus(status);
+    } catch (error) {
+      console.error("Error checking bucket status:", error);
+    }
+  };
+
+  const initializeBuckets = async () => {
+    setInitializingBuckets(true);
+    try {
+      const result = await bucketInitService.initializeBuckets();
+      console.log("Bucket initialization result:", result);
+
+      // Refresh bucket status
+      await checkBucketStatus();
+
+      // Show result in debug output
+      setResults((prev: any) => ({
+        ...prev,
+        bucketInit: {
+          success: result.success,
+          message: `Created: ${result.created.length}, Existing: ${result.existing.length}, Errors: ${result.errors.length}`,
+          data: result
+        }
+      }));
+    } catch (error) {
+      console.error("Bucket initialization failed:", error);
+      setResults((prev: any) => ({
+        ...prev,
+        bucketInit: {
+          success: false,
+          message: error instanceof Error ? error.message : "Unknown error",
+          error
+        }
+      }));
+    } finally {
+      setInitializingBuckets(false);
+    }
+  };
 
   const runTests = async () => {
     setLoading(true);
