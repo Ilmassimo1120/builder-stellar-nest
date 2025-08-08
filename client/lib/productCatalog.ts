@@ -611,7 +611,19 @@ class ProductCatalogService {
       }
     }
 
-    return filteredProducts.filter((p) => p.isActive);
+    const activeProducts = filteredProducts.filter((p) => p.isActive);
+
+    // Apply user preferences for product ordering if userId provided
+    if (filter?.userId && (filter?.category || filter?.subcategory)) {
+      return userPreferencesService.applyProductOrder(
+        filter.userId,
+        filter.category || '',
+        filter.subcategory,
+        activeProducts
+      );
+    }
+
+    return activeProducts;
   }
 
   getProduct(productId: string): ProductCatalogueItem | null {
