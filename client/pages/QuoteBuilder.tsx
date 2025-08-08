@@ -86,6 +86,8 @@ export default function QuoteBuilder() {
   >([]);
   const [showTemplateSelector, setShowTemplateSelector] = useState(false);
   const [showProductCatalogue, setShowProductCatalogue] = useState(false);
+  const [showProductComparison, setShowProductComparison] = useState(false);
+  const [comparisonProducts, setComparisonProducts] = useState<string[]>([]);
 
   // Load quote data
   useEffect(() => {
