@@ -31,7 +31,7 @@ import {
 import { Logo } from "@/components/ui/logo";
 import { SupabaseSetup } from "@/components/SupabaseSetup";
 import ProjectTemplateSelector from "@/components/ProjectTemplateSelector";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { projectService, autoConfigureSupabase } from "@/lib/supabase";
 import { ProjectTemplate, applyTemplate } from "@/lib/projectTemplates";
 import { quoteService } from "@/lib/quoteService";
