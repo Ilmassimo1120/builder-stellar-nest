@@ -464,21 +464,27 @@ export const isConnectedToSupabase = () => isSupabaseConnected;
 // Connection testing functions
 export const checkSupabaseConnection = async (): Promise<boolean> => {
   try {
-    // Try function first
-    let { data, error } = await supabase.rpc("health_check");
-
-    if (error) {
-      // Try table method as fallback
-      const result = await supabase.from("health_status").select("*").limit(1);
-      return !result.error;
+    // Skip connection check if we know we're offline
+    if (typeof navigator !== 'undefined' && !navigator.onLine) {
+      return false;
     }
 
-    return true;
+    // Simple timeout-based connection check
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 3000); // 3 second timeout
+
+    const response = await fetch(`${supabaseUrl}/health`, {
+      method: 'HEAD',
+      signal: controller.signal,
+      headers: {
+        'apikey': supabaseAnonKey,
+      },
+    });
+
+    clearTimeout(timeoutId);
+    return response.ok || response.status === 404; // 404 means Supabase is reachable
   } catch (error) {
-    console.error(
-      "Supabase connection test failed:",
-      error instanceof Error ? error.message : String(error),
-    );
+    console.log("Connection check failed:", error instanceof Error ? error.message : String(error));
     return false;
   }
 };
