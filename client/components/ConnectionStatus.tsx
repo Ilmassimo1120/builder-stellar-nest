@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle, Cloud, Database, Wifi } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { CheckCircle, Cloud, Database, Wifi, RefreshCw } from "lucide-react";
 import { autoInit } from "@/lib/autoInit";
 
 export default function ConnectionStatus() {
