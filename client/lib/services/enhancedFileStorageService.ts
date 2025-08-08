@@ -294,11 +294,29 @@ class EnhancedFileStorageService {
    */
   async searchFiles(filters: SearchFilters = {}): Promise<FileAsset[]> {
     try {
-      // Check if user is authenticated
-      const { data: { user }, error: authError } = await supabase.auth.getUser();
-      if (authError || !user) {
-        console.log('No authenticated user found for search');
-        return []; // Return empty array if not authenticated
+      // Check authentication using local auth system first
+      let user = null;
+
+      // Try local auth first
+      try {
+        const storedUser = localStorage.getItem('chargeSourceUser');
+        if (storedUser) {
+          const userData = JSON.parse(storedUser);
+          user = { id: userData.id, email: userData.email };
+        }
+      } catch (error) {
+        console.warn('Local auth check failed for search:', error);
+      }
+
+      // Fallback to Supabase auth if no local user
+      if (!user) {
+        const { data: { user: authUser }, error: authError } = await supabase.auth.getUser();
+        if (authError || !authUser) {
+          console.log('No authenticated user found for search');
+          return []; // Return empty array if not authenticated
+        } else {
+          user = authUser;
+        }
       }
 
       let query = supabase
