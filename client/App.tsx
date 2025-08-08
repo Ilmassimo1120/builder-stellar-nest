@@ -28,6 +28,7 @@ import TestConnection from "./pages/TestConnection";
 import TestStatus from "./pages/TestStatus";
 import CloudStatus from "./pages/CloudStatus";
 import Users from "./pages/Users";
+import Customers from "./pages/Customers";
 import { AuthProvider } from "./hooks/useAuth";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { AIAssistant } from "./components/AIAssistant";
