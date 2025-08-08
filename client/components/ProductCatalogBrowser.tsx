@@ -110,6 +110,7 @@ export default function ProductCatalogBrowser({
   };
 
   const handleAddToQuote = (product: ProductCatalogueItem) => {
+    console.log('Adding product to quote:', { productId: product.id, quantity, product });
     onAddProduct(product.id, quantity);
     setQuantity(1);
     setSelectedProduct(null);
