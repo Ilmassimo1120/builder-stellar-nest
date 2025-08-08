@@ -123,12 +123,20 @@ class EnhancedFileStorageService {
    */
   private formatError(error: unknown, defaultMessage: string): string {
     if (error instanceof Error) {
+      // Handle specific error types
+      if (error.name === 'TypeError' && error.message.includes('fetch')) {
+        return 'Network connection failed. Please check your internet connection and try again.';
+      }
       return error.message;
     }
     if (typeof error === 'string') {
       return error;
     }
     if (error && typeof error === 'object') {
+      // Handle fetch/network errors
+      if ('name' in error && error.name === 'TypeError') {
+        return 'Network connection failed. Please check your internet connection and try again.';
+      }
       // Handle Supabase error format
       if ('message' in error && typeof error.message === 'string') {
         return error.message;
@@ -142,7 +150,7 @@ class EnhancedFileStorageService {
       try {
         const errorStr = JSON.stringify(error);
         if (errorStr !== '{}') {
-          return `Error: ${errorStr}`;
+          return `Connection error: ${errorStr}`;
         }
       } catch {
         // JSON.stringify failed, fall back to default
