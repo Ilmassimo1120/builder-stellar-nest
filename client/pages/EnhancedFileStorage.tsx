@@ -18,6 +18,7 @@ import AuthTest from '@/components/AuthTest';
 import { safeFileStorageService } from '@/lib/services/safeFileStorageService';
 import { BucketName } from '@/lib/services/enhancedFileStorageService';
 import { useAuth } from '@/hooks/useAuth';
+import RoleBasedNavigation from '@/components/RoleBasedNavigation';
 
 interface StorageStats {
   totalFiles: number;
