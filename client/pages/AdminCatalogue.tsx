@@ -21,6 +21,13 @@ export default function AdminCatalogue() {
   const { user } = useAuth();
   const { toast } = useToast();
   const [showProductManager, setShowProductManager] = useState(false);
+  const [showCategoryManager, setShowCategoryManager] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  // Force refresh when categories change
+  const handleCategoriesChanged = () => {
+    setRefreshKey(prev => prev + 1);
+  };
 
   const products = productCatalog.getProducts();
   const activeProducts = products.filter((p) => p.isActive);
