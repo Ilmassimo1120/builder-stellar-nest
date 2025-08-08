@@ -64,6 +64,7 @@ interface ChatMessage {
 
 export function AIAssistant() {
   const aiContext = useAIContext();
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -274,7 +275,7 @@ What specific issue are you experiencing?`;
 • Take detailed site photos
 • Verify electrical capacity early
 • Consider future expansion needs
-�� Include load management for multiple units
+• Include load management for multiple units
 
 Would you like me to guide you through creating a project?`;
         suggestions = [
