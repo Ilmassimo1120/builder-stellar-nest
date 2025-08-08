@@ -18,7 +18,9 @@
     "start": "node dist/server/node-build.mjs",
     "test": "vitest --run",
     "format.fix": "prettier --write .",
-    "typecheck": "tsc"
+    "typecheck": "tsc",
+    "supabase:setup": "node scripts/setup-supabase.js",
+    "supabase:types": "supabase gen types typescript --local > client/lib/database.types.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.45.4",
