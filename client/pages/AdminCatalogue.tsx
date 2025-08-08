@@ -35,7 +35,7 @@ export default function AdminCatalogue() {
   const lowStockProducts = products.filter((p) => p.inventory.available <= 5);
 
   // Admin role check
-  if (user?.role !== "admin") {
+  if (user?.role !== "admin" && user?.role !== "global_admin") {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <Card className="w-96">
