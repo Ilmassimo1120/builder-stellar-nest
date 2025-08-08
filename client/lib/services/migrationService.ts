@@ -62,7 +62,7 @@ class MigrationService {
       if (quotes && quotes.length > 0) {
         console.log(`Migrating ${quotes.length} quotes...`);
         for (const quote of quotes) {
-          await this.migrateQuote(quote, user.id);
+          await this.migrateQuote(quote, userId);
           migratedItems++;
         }
       }
@@ -71,7 +71,7 @@ class MigrationService {
       const { data: userProfile } = await supabase
         .from("users")
         .select("role")
-        .eq("id", user.id)
+        .eq("id", userId)
         .single();
 
       if (
