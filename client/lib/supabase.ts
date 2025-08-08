@@ -423,7 +423,7 @@ const isProblematicEnvironment = (): boolean => {
   }
 
   // Check for other monitoring tools
-  if (window.dataLayer || window.gtag || window.analytics) {
+  if ((window as any).dataLayer || (window as any).gtag || (window as any).analytics) {
     return true;
   }
 
