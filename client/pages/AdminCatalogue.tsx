@@ -230,7 +230,7 @@ export default function AdminCatalogue() {
           )}
 
           {/* Categories Overview */}
-          <Card>
+          <Card key={`categories-${refreshKey}`}>
             <CardHeader>
               <CardTitle>Categories Overview</CardTitle>
               <CardDescription>
