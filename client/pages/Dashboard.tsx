@@ -72,9 +72,7 @@ export default function Dashboard() {
   const retryConnection = async (): Promise<void> => {
     try {
       console.log("🔄 Retrying Supabase connection...");
-      // Simple connection test
-      const { data, error } = await supabase.from('users').select('count').limit(1);
-      const isConnected = !error;
+      const isConnected = await autoConfigureSupabase();
       setIsSupabaseConnected(isConnected);
       if (isConnected) {
         console.log("✅ Connection successful, reloading projects...");
