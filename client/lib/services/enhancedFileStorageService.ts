@@ -159,19 +159,39 @@ class EnhancedFileStorageService {
   async uploadFile(request: FileUploadRequest): Promise<FileAsset> {
     try {
       // More robust authentication check
-      const { data: { user }, error: userError } = await supabase.auth.getUser();
+      let user = null;
+      let authError = null;
+
+      // First try to get user
+      const { data: { user: authUser }, error: userError } = await supabase.auth.getUser();
 
       if (userError) {
-        console.error('Authentication error:', userError);
-        throw new Error(`Authentication failed: ${userError.message}`);
+        console.warn('getUser() failed, trying getSession():', userError.message);
+
+        // Fallback to session check
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+
+        if (sessionError) {
+          console.error('Session check also failed:', sessionError);
+          authError = sessionError;
+        } else if (session?.user) {
+          console.log('Found user via session:', session.user.email);
+          user = session.user;
+        } else {
+          console.error('No session found');
+          authError = new Error('No active session');
+        }
+      } else if (authUser) {
+        console.log('User authenticated for upload:', authUser.email);
+        user = authUser;
+      } else {
+        console.error('No authenticated user found');
+        authError = new Error('No user in auth response');
       }
 
       if (!user) {
-        console.error('No authenticated user found');
-        throw new Error('Please log in to upload files');
+        throw new Error('Please log in to upload files. ' + (authError?.message || 'Authentication required.'));
       }
-
-      console.log('User authenticated for upload:', user.email);
 
       // Validate file
       const validation = this.validateFile(request.file, request.bucket);
