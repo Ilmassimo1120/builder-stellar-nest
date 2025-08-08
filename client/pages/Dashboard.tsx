@@ -1047,6 +1047,10 @@ export default function Dashboard() {
               </CardContent>
             </Card>
           </TabsContent>
+
+          <TabsContent value="database" className="space-y-6">
+            <SupabaseTest />
+          </TabsContent>
         </Tabs>
       </div>
     </div>
