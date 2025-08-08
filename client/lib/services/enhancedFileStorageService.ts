@@ -669,30 +669,34 @@ class EnhancedFileStorageService {
    * Maps database record to FileAsset interface
    */
   private mapToFileAsset(data: any): FileAsset {
+    if (!data) {
+      throw new Error('Invalid data provided to mapToFileAsset');
+    }
+
     return {
-      id: data.id,
-      fileName: data.file_name,
-      filePath: data.file_path,
-      bucketName: data.bucket_name,
-      fileSize: data.file_size,
-      mimeType: data.mime_type,
-      title: data.title,
-      description: data.description,
-      tags: data.tags || [],
-      category: data.category,
-      subcategory: data.subcategory,
-      authorId: data.author_id,
-      versionNumber: data.version_number,
-      status: data.status,
-      approvedBy: data.approved_by,
-      approvedAt: data.approved_at,
-      rejectionReason: data.rejection_reason,
-      parentVersionId: data.parent_version_id,
-      isCurrentVersion: data.is_current_version,
-      visibility: data.visibility,
-      accessPermissions: data.access_permissions,
-      createdAt: data.created_at,
-      updatedAt: data.updated_at
+      id: data.id || '',
+      fileName: data.file_name || '',
+      filePath: data.file_path || '',
+      bucketName: data.bucket_name as BucketName,
+      fileSize: Number(data.file_size) || 0,
+      mimeType: data.mime_type || '',
+      title: data.title || null,
+      description: data.description || null,
+      tags: Array.isArray(data.tags) ? data.tags : [],
+      category: data.category || null,
+      subcategory: data.subcategory || null,
+      authorId: data.author_id || '',
+      versionNumber: Number(data.version_number) || 1,
+      status: data.status || 'draft',
+      approvedBy: data.approved_by || null,
+      approvedAt: data.approved_at || null,
+      rejectionReason: data.rejection_reason || null,
+      parentVersionId: data.parent_version_id || null,
+      isCurrentVersion: Boolean(data.is_current_version),
+      visibility: data.visibility || 'private',
+      accessPermissions: data.access_permissions || {},
+      createdAt: data.created_at || new Date().toISOString(),
+      updatedAt: data.updated_at || new Date().toISOString()
     };
   }
 }
