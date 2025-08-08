@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button } from './ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Alert, AlertDescription } from './ui/alert';
-import { enhancedFileStorageService } from '@/lib/services/enhancedFileStorageService';
+import { safeFileStorageService } from '@/lib/services/safeFileStorageService';
 import { supabase } from '@/lib/supabase';
 
 export default function FileStorageDebug() {
