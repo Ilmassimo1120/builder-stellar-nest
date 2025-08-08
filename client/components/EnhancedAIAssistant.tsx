@@ -132,7 +132,9 @@ I combine file search with specialized EV charging expertise. What would you lik
         buckets: bucketHints
       };
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Unknown file search error';
+      const errorMessage = error instanceof Error ? error.message :
+                       (typeof error === 'string' ? error :
+                        (error && typeof error === 'object' ? JSON.stringify(error) : 'Unknown file search error'));
       console.error('File search error:', errorMessage, error);
       return {
         files: [],
