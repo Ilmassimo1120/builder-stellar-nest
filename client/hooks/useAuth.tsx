@@ -174,6 +174,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  // Permission checking methods
+  const hasPermission = (permission: string): boolean => {
+    return user ? rbacService.hasPermission(user.role, permission) : false;
+  };
+
+  const hasAnyPermission = (permissions: string[]): boolean => {
+    return user ? rbacService.hasAnyPermission(user.role, permissions) : false;
+  };
+
+  const hasAllPermissions = (permissions: string[]): boolean => {
+    return user ? rbacService.hasAllPermissions(user.role, permissions) : false;
+  };
+
+  const canAccessResource = (resource: string, action: string): boolean => {
+    return user ? rbacService.canAccessResource(user.role, resource, action) : false;
+  };
+
+  // Role checking convenience properties
+  const isAdmin = user?.role === UserRole.ADMIN || user?.role === UserRole.GLOBAL_ADMIN;
+  const isGlobalAdmin = user?.role === UserRole.GLOBAL_ADMIN;
+  const isSales = user?.role === UserRole.SALES;
+  const isPartner = user?.role === UserRole.PARTNER;
+
   const value: AuthContextType = {
     user,
     isAuthenticated: !!user,
@@ -181,7 +204,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     login,
     register,
     logout,
-    updateUser
+    updateUser,
+    hasPermission,
+    hasAnyPermission,
+    hasAllPermissions,
+    canAccessResource,
+    isAdmin,
+    isGlobalAdmin,
+    isSales,
+    isPartner
   };
 
   return (
