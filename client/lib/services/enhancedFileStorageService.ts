@@ -246,8 +246,9 @@ class EnhancedFileStorageService {
 
       return this.mapToFileAsset(result);
     } catch (error) {
-      console.error('File upload error:', error);
-      throw error;
+      const errorMessage = error instanceof Error ? error.message : 'Unknown upload error';
+      console.error('File upload error:', errorMessage, error);
+      throw new Error(`Upload failed: ${errorMessage}`);
     }
   }
 
@@ -309,8 +310,9 @@ class EnhancedFileStorageService {
 
       return (data || []).map(this.mapToFileAsset);
     } catch (error) {
-      console.error('Search error:', error);
-      throw error;
+      const errorMessage = error instanceof Error ? error.message : 'Unknown search error';
+      console.error('Search error:', errorMessage, error);
+      throw new Error(`Search failed: ${errorMessage}`);
     }
   }
 
@@ -329,7 +331,8 @@ class EnhancedFileStorageService {
 
       return this.mapToFileAsset(data);
     } catch (error) {
-      console.error('Get asset error:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      console.error('Get asset error:', errorMessage, error);
       return null;
     }
   }
@@ -356,8 +359,9 @@ class EnhancedFileStorageService {
       if (error) throw error;
       return true;
     } catch (error) {
-      console.error('Update metadata error:', error);
-      throw error;
+      const errorMessage = error instanceof Error ? error.message : 'Unknown metadata update error';
+      console.error('Update metadata error:', errorMessage, error);
+      throw new Error(`Metadata update failed: ${errorMessage}`);
     }
   }
 
@@ -382,8 +386,9 @@ class EnhancedFileStorageService {
 
       return data;
     } catch (error) {
-      console.error('Download error:', error);
-      throw error;
+      const errorMessage = error instanceof Error ? error.message : 'Unknown download error';
+      console.error('Download error:', errorMessage, error);
+      throw new Error(`Download failed: ${errorMessage}`);
     }
   }
 
@@ -405,8 +410,9 @@ class EnhancedFileStorageService {
 
       return data.signedUrl;
     } catch (error) {
-      console.error('Get signed URL error:', error);
-      throw error;
+      const errorMessage = error instanceof Error ? error.message : 'Unknown signed URL error';
+      console.error('Get signed URL error:', errorMessage, error);
+      throw new Error(`Failed to get signed URL: ${errorMessage}`);
     }
   }
 
@@ -440,8 +446,9 @@ class EnhancedFileStorageService {
 
       return true;
     } catch (error) {
-      console.error('Delete error:', error);
-      throw error;
+      const errorMessage = error instanceof Error ? error.message : 'Unknown delete error';
+      console.error('Delete error:', errorMessage, error);
+      throw new Error(`Delete failed: ${errorMessage}`);
     }
   }
 
@@ -459,8 +466,9 @@ class EnhancedFileStorageService {
       if (error) throw error;
       return true;
     } catch (error) {
-      console.error('Approve asset error:', error);
-      throw error;
+      const errorMessage = error instanceof Error ? error.message : 'Unknown approval error';
+      console.error('Approve asset error:', errorMessage, error);
+      throw new Error(`Approval failed: ${errorMessage}`);
     }
   }
 
@@ -491,8 +499,9 @@ class EnhancedFileStorageService {
 
       return (data || []).map(this.mapToFileAsset);
     } catch (error) {
-      console.error('Get version history error:', error);
-      throw error;
+      const errorMessage = error instanceof Error ? error.message : 'Unknown version history error';
+      console.error('Get version history error:', errorMessage, error);
+      throw new Error(`Failed to get version history: ${errorMessage}`);
     }
   }
 
@@ -511,8 +520,9 @@ class EnhancedFileStorageService {
 
       return data || [];
     } catch (error) {
-      console.error('Get changelog error:', error);
-      throw error;
+      const errorMessage = error instanceof Error ? error.message : 'Unknown changelog error';
+      console.error('Get changelog error:', errorMessage, error);
+      throw new Error(`Failed to get changelog: ${errorMessage}`);
     }
   }
 
@@ -545,8 +555,9 @@ class EnhancedFileStorageService {
 
       return data;
     } catch (error) {
-      console.error('Create share link error:', error);
-      throw error;
+      const errorMessage = error instanceof Error ? error.message : 'Unknown share link error';
+      console.error('Create share link error:', errorMessage, error);
+      throw new Error(`Failed to create share link: ${errorMessage}`);
     }
   }
 
@@ -570,7 +581,8 @@ class EnhancedFileStorageService {
 
       return this.mapToFileAsset(shareData.file_assets);
     } catch (error) {
-      console.error('Get asset by share token error:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown share token error';
+      console.error('Get asset by share token error:', errorMessage, error);
       return null;
     }
   }
@@ -621,8 +633,9 @@ class EnhancedFileStorageService {
         categoryBreakdown
       };
     } catch (error) {
-      console.error('Get storage usage error:', error);
-      throw error;
+      const errorMessage = error instanceof Error ? error.message : 'Unknown storage usage error';
+      console.error('Get storage usage error:', errorMessage, error);
+      throw new Error(`Failed to get storage usage: ${errorMessage}`);
     }
   }
 
@@ -639,7 +652,8 @@ class EnhancedFileStorageService {
           notes
         }]);
     } catch (error) {
-      console.error('Log change error:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown log error';
+      console.error('Log change error:', errorMessage, error);
       // Don't throw error for logging failures
     }
   }
