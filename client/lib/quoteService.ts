@@ -570,11 +570,16 @@ class QuoteService {
     }
   }
 
-  // Product catalogue integration (preparation for future)
+  // Product catalogue integration
   getProductCatalogueItems(category?: string): ProductCatalogueItem[] {
-    // This will integrate with the future Product Catalogue
-    // For now, return mock data based on EV charging equipment
-    return this.getMockCatalogueItems(category);
+    // Import the product catalog service for better organization
+    try {
+      const { productCatalog } = require('./productCatalog');
+      return productCatalog.getProducts(category ? { category } : undefined);
+    } catch (error) {
+      console.warn('Product catalog not available, using mock data');
+      return this.getMockCatalogueItems(category);
+    }
   }
 
   private getMockCatalogueItems(category?: string): ProductCatalogueItem[] {
