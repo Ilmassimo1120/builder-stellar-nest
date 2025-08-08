@@ -1,5 +1,6 @@
 import { ProductCatalogueItem } from "./quoteTypes";
 import { categoryService } from "./categoryService";
+import { userPreferencesService } from "./userPreferencesService";
 
 export interface ProductCategory {
   id: string;
