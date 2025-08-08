@@ -78,6 +78,13 @@ const navigationItems: NavItem[] = [
     roles: [UserRole.ADMIN, UserRole.GLOBAL_ADMIN, UserRole.SALES],
   },
   {
+    path: "/files",
+    label: "File Storage",
+    icon: <Cloud className="w-4 h-4" />,
+    roles: [UserRole.ADMIN, UserRole.GLOBAL_ADMIN],
+    badge: "Admin",
+  },
+  {
     path: "/users",
     label: "User Management",
     icon: <Users className="w-4 h-4" />,
