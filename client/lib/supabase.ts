@@ -408,7 +408,7 @@ const isProblematicEnvironment = (): boolean => {
   if (typeof window === "undefined") return false;
 
   // Check for FullStory specifically
-  if (window.FS || document.querySelector('script[src*="fullstory"]')) {
+  if ((window as any).FS || document.querySelector('script[src*="fullstory"]')) {
     return true;
   }
 
