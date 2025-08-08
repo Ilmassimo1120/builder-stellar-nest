@@ -620,7 +620,7 @@ export default function Dashboard() {
               </p>
               {!loading && (
                 <Badge variant="secondary" className="text-xs">
-                  {isSupabaseConnected ? "☁️ Cloud Storage" : "💾 Ready to Use"}
+                  {isSupabaseConnected ? "☁️ Cloud Connected" : "💾 Local Mode"}
                 </Badge>
               )}
             </div>
