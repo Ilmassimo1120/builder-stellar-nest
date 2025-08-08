@@ -77,37 +77,21 @@ export default function FileStorageDebug() {
   };
 
   const testSearch = async () => {
-    try {
-      const results = await enhancedFileStorageService.searchFiles({});
-      return {
-        success: true,
-        message: `Search successful: ${results.length} files found`,
-        data: results
-      };
-    } catch (error) {
-      return {
-        success: false,
-        message: `Search error: ${error instanceof Error ? error.message : String(error)}`,
-        error
-      };
-    }
+    const result = await safeFileStorageService.searchFiles({});
+    return {
+      success: !result.error,
+      message: result.error || `Search successful: ${result.files.length} files found`,
+      data: result
+    };
   };
 
   const testStorageUsage = async () => {
-    try {
-      const usage = await enhancedFileStorageService.getStorageUsage();
-      return {
-        success: true,
-        message: `Storage usage: ${usage.totalFiles} files, ${usage.totalSize} bytes`,
-        data: usage
-      };
-    } catch (error) {
-      return {
-        success: false,
-        message: `Storage usage error: ${error instanceof Error ? error.message : String(error)}`,
-        error
-      };
-    }
+    const result = await safeFileStorageService.getStorageUsage();
+    return {
+      success: !result.error,
+      message: result.error || `Storage usage: ${result.totalFiles} files, ${result.totalSize} bytes`,
+      data: result
+    };
   };
 
   return (
