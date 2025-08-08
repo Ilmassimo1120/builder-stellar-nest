@@ -741,12 +741,24 @@ class EnhancedFileStorageService {
         }
       }
 
-      const { data, error } = await supabase
-        .from('file_assets')
-        .select('bucket_name, category, file_size')
-        .eq('is_current_version', true);
+      // Try to query database, but handle gracefully if unavailable
+      let data = null;
+      try {
+        const { data: queryData, error } = await supabase
+          .from('file_assets')
+          .select('bucket_name, category, file_size')
+          .eq('is_current_version', true);
 
-      if (error) throw error;
+        if (error) {
+          console.warn('Database query failed, returning empty storage stats:', error.message);
+          data = null; // Will fall back to empty stats below
+        } else {
+          data = queryData;
+        }
+      } catch (queryError) {
+        console.warn('Database connection failed, returning empty storage stats:', this.formatError(queryError, 'Database unavailable'));
+        data = null; // Will fall back to empty stats below
+      }
 
       const totalFiles = data?.length || 0;
       const totalSize = data?.reduce((sum, file) => {
