@@ -32,6 +32,7 @@ import {
   TabsTrigger,
 } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
+import { Checkbox } from '@/components/ui/checkbox';
 import { productCatalog, ProductFilter } from '@/lib/productCatalog';
 import { ProductCatalogueItem } from '@/lib/quoteTypes';
 
