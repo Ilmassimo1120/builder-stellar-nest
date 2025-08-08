@@ -325,14 +325,37 @@ export default function QuoteBuilder() {
   };
 
   // Generate PDF
-  const generatePDF = () => {
+  const generatePDF = async () => {
     if (!quote) return;
 
-    // This will be implemented with PDF generation
-    toast({
-      title: "Generating PDF",
-      description: "Quote PDF will be downloaded shortly.",
-    });
+    try {
+      setSaving(true);
+      toast({
+        title: "Generating PDF",
+        description: "Quote PDF is being generated...",
+      });
+
+      await advancedPDFGenerator.generateQuotePDF(quote, {
+        includeHeader: true,
+        includeFooter: true,
+        includeTerms: true,
+        includeSpecifications: true,
+      });
+
+      toast({
+        title: "PDF Generated",
+        description: "Quote PDF has been downloaded successfully.",
+      });
+    } catch (error) {
+      console.error("PDF generation failed:", error);
+      toast({
+        title: "PDF Generation Failed",
+        description: "There was an error generating the PDF. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setSaving(false);
+    }
   };
 
   const getStatusColor = (status: string) => {
