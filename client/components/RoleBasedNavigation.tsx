@@ -11,6 +11,7 @@ import {
   Zap,
   Building,
   UserCheck,
+  Cloud,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -28,7 +29,6 @@ import UserRoleIndicator, {
   PermissionGate,
   RoleGate,
 } from "./UserRoleIndicator";
-import ConnectionStatus from "./ConnectionStatus";
 
 interface NavItem {
   path: string;
@@ -90,6 +90,12 @@ const navigationItems: NavItem[] = [
     icon: <Settings className="w-4 h-4" />,
     permission: "users.edit.own",
   },
+  {
+    path: "/cloud-status",
+    label: "Cloud Status",
+    icon: <Cloud className="w-4 h-4" />,
+    permission: "users.edit.own",
+  },
 ];
 
 interface RoleBasedNavigationProps {
@@ -144,13 +150,6 @@ export default function RoleBasedNavigation({
               <UserRoleIndicator size="sm" />
             </div>
           </DropdownMenuLabel>
-          <DropdownMenuSeparator />
-
-          {/* ChargeSource Cloud Status */}
-          <div className="px-2 py-1">
-            <ConnectionStatus />
-          </div>
-
           <DropdownMenuSeparator />
 
           {visibleItems.map((item) => (
