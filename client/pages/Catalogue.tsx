@@ -27,7 +27,14 @@ export default function Catalogue() {
 
   const categories = productCatalog.getCategories();
   const brands = productCatalog.getBrands();
+  // Refresh products list when refreshKey changes (after admin operations)
   const products = productCatalog.getProducts(filter);
+
+  // Force refresh when admin panel closes
+  const handleAdminPanelClose = () => {
+    setShowAdminPanel(false);
+    setRefreshKey(prev => prev + 1);
+  };
 
   const updateFilter = (key: keyof ProductFilter, value: any) => {
     setFilter(prev => ({
