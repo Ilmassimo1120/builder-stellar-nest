@@ -39,6 +39,7 @@ import RoleBasedNavigation from "@/components/RoleBasedNavigation";
 import GlobalSettings from "@/components/GlobalSettings";
 import PartnerSettings from "@/components/PartnerSettings";
 import UserAccountSettings from "@/components/UserAccountSettings";
+import { CRMSettings } from "@/components/CRMSettings";
 
 interface SettingsSection {
   id: string;
