@@ -397,19 +397,30 @@ export const setupDatabase = async () => {
 export const initializeSupabase = async () => {
   try {
     console.log("🚀 Initializing ChargeSource Supabase connection...");
+    console.log("🔧 Supabase URL:", supabaseUrl);
+    console.log("🔧 Supabase Key present:", !!supabaseAnonKey);
+    console.log("🔧 Environment VITE_SUPABASE_URL:", import.meta.env.VITE_SUPABASE_URL);
+    console.log("🔧 Environment VITE_SUPABASE_ANON_KEY present:", !!import.meta.env.VITE_SUPABASE_ANON_KEY);
 
     // Test connection using health check function
+    console.log("🔄 Calling health_check function...");
     const { data, error } = await supabase.rpc('health_check');
 
     if (error) {
-      console.warn("⚠️ Supabase connection not available, using local mode:", error.message);
+      console.error("❌ Supabase connection error:", error);
+      console.error("❌ Error details:", {
+        message: error.message,
+        code: error.code,
+        details: error.details,
+        hint: error.hint
+      });
       return false;
     }
 
     console.log("✅ Supabase connected successfully", data);
     return true;
   } catch (error) {
-    console.warn("⚠️ Supabase initialization failed, using local mode:", error);
+    console.error("❌ Supabase initialization exception:", error);
     return false;
   }
 };
