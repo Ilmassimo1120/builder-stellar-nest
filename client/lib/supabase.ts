@@ -1,10 +1,10 @@
 import { createClient } from "@supabase/supabase-js";
 
-// Supabase configuration
+// Supabase configuration - automatically configured for ChargeSource
 const supabaseUrl =
-  import.meta.env.VITE_SUPABASE_URL || "https://your-project.supabase.co";
+  import.meta.env.VITE_SUPABASE_URL || "https://tepmkljodsifaexmrinl.supabase.co";
 const supabaseAnonKey =
-  import.meta.env.VITE_SUPABASE_ANON_KEY || "your-anon-key";
+  import.meta.env.VITE_SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlcG1rbGpvZHNpZmFleG1yaW5sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ2MDQwMjUsImV4cCI6MjA3MDE4MDAyNX0.n4WdeHUHHc5PuJV8-2oDn826CoNxNzHHbt4KxeAhOYc";
 
 // Create Supabase client
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
