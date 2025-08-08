@@ -865,13 +865,14 @@ export default function ProjectWizard() {
 
   const handleLocalStorageSubmit = async () => {
     try {
-      const projectId = `PRJ-${Date.now()}`;
-      const createdAt = new Date().toISOString();
+      const currentProjectId = isEditMode && projectId ? projectId : `PRJ-${Date.now()}`;
+      const now = new Date().toISOString();
       const recommendations = getChargerRecommendations();
 
       const projectData = {
-        id: projectId,
-        createdAt,
+        id: currentProjectId,
+        createdAt: isEditMode ? undefined : now, // Keep original creation date in edit mode
+        updatedAt: now,
         status: "Planning",
         progress: 100,
         projectInfo: {
