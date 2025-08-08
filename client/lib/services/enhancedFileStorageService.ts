@@ -315,6 +315,8 @@ class EnhancedFileStorageService {
           });
 
         if (uploadError) {
+          console.error("Supabase storage upload error:", uploadError);
+
           // Handle specific storage errors
           if (
             uploadError.message.includes("not found") ||
@@ -326,10 +328,21 @@ class EnhancedFileStorageService {
           }
           if (
             uploadError.message.includes("permission") ||
-            uploadError.message.includes("unauthorized")
+            uploadError.message.includes("unauthorized") ||
+            uploadError.message.includes("JWT") ||
+            uploadError.message.includes("token")
           ) {
             throw new Error(
-              `Permission denied for storage bucket '${request.bucket}'. Please check your Supabase storage bucket permissions.`,
+              `Permission denied for storage bucket '${request.bucket}'. Please check your Supabase storage bucket permissions and authentication.`,
+            );
+          }
+          if (
+            uploadError.message.includes("Failed to fetch") ||
+            uploadError.message.includes("CORS") ||
+            uploadError.message.includes("network")
+          ) {
+            throw new Error(
+              `Network connection failed. This might be a CORS issue or network connectivity problem. Please check:\n\n• Your internet connection\n• CORS settings in Supabase dashboard\n• Firewall/proxy settings\n\nError: ${uploadError.message}`,
             );
           }
           throw new Error(`Storage upload failed: ${uploadError.message}`);
