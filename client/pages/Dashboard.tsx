@@ -478,13 +478,13 @@ export default function Dashboard() {
       color: "bg-accent",
       href: "/catalogue",
     },
-    {
-      title: "Upload Documents",
-      description: "Add drawings, photos, invoices",
+    ...(isAdmin || isGlobalAdmin ? [{
+      title: "Upload to Knowledge Base",
+      description: "Add documents, manuals, training videos",
       icon: <FileText className="w-6 h-6" />,
-      color: "bg-muted",
-      href: "/documents",
-    },
+      color: "bg-gradient-to-r from-blue-500 to-purple-600",
+      href: "/files",
+    }] : []),
   ];
 
   // Role-based statistics
