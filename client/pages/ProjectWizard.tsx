@@ -944,7 +944,7 @@ export default function ProjectWizard() {
       );
 
       const successMessage =
-        `🎉 Project "${projectData.projectInfo.name}" created successfully!\n\n` +
+        `🎉 Project "${projectData.projectInfo.name}" ${actionType.toLowerCase()} successfully!\n\n` +
         `📋 Project ID: ${projectData.id}\n` +
         `💰 Estimated Cost: ${projectData.estimatedBudget}\n` +
         `���️ Timeline: ${projectData.timeline}\n\n` +
