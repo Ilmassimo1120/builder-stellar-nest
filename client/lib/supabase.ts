@@ -418,7 +418,8 @@ export const initializeSupabase = async () => {
     console.log("✅ Supabase connected successfully", data);
     return true;
   } catch (error) {
-    console.error("❌ Supabase initialization exception:", error);
+    console.error("❌ Supabase initialization exception:", error instanceof Error ? error.message : String(error));
+    console.error("❌ Exception details:", JSON.stringify(error, null, 2));
     return false;
   }
 };
