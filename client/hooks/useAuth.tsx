@@ -63,12 +63,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       // For demo purposes, accept any email/password combination
       // In a real app, this would validate against a backend
+      const isAdmin = email.includes('admin') || email === 'admin@chargesource.com.au';
       const userData: User = {
         id: `user-${Date.now()}`,
         email,
         name: email.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
-        company: 'Demo Electrical Services',
-        role: 'contractor',
+        company: isAdmin ? 'ChargeSource Administration' : 'Demo Electrical Services',
+        role: isAdmin ? 'admin' : 'contractor',
         loginTime: new Date().toISOString()
       };
 
