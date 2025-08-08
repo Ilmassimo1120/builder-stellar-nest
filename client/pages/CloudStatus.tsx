@@ -10,6 +10,7 @@ import {
 import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 import ConnectionStatus from "@/components/ConnectionStatus";
+import SupabaseStorageDiagnostics from "@/components/SupabaseStorageDiagnostics";
 import { Logo } from "@/components/ui/logo";
 
 export default function CloudStatus() {
