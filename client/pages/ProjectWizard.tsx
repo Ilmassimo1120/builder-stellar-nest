@@ -898,7 +898,23 @@ export default function ProjectWizard() {
       const existingProjects = JSON.parse(
         localStorage.getItem("chargeSourceProjects") || "[]",
       );
-      existingProjects.unshift(projectData);
+
+      if (isEditMode && projectId) {
+        // Update existing project
+        const projectIndex = existingProjects.findIndex((p: any) => p.id === projectId);
+        if (projectIndex !== -1) {
+          // Preserve original creation date
+          projectData.createdAt = existingProjects[projectIndex].createdAt;
+          existingProjects[projectIndex] = projectData;
+        } else {
+          // Project not found, add as new
+          existingProjects.unshift(projectData);
+        }
+      } else {
+        // Create new project
+        existingProjects.unshift(projectData);
+      }
+
       localStorage.setItem(
         "chargeSourceProjects",
         JSON.stringify(existingProjects),
