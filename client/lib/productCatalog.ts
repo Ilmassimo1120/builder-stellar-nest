@@ -689,6 +689,64 @@ class ProductCatalogService {
     return this.getProducts(filter).length;
   }
 
+  // Admin CRUD operations
+  addProduct(product: Omit<ProductCatalogueItem, 'id' | 'createdAt' | 'updatedAt'>): ProductCatalogueItem {
+    const newProduct: ProductCatalogueItem = {
+      ...product,
+      id: `prod-${Date.now()}`,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+
+    this.products.unshift(newProduct);
+    this.saveToStorage();
+    return newProduct;
+  }
+
+  updateProduct(productId: string, updates: Partial<ProductCatalogueItem>): ProductCatalogueItem | null {
+    const productIndex = this.products.findIndex(p => p.id === productId);
+    if (productIndex === -1) return null;
+
+    const updatedProduct = {
+      ...this.products[productIndex],
+      ...updates,
+      updatedAt: new Date().toISOString()
+    };
+
+    this.products[productIndex] = updatedProduct;
+    this.saveToStorage();
+    return updatedProduct;
+  }
+
+  deleteProduct(productId: string): boolean {
+    const productIndex = this.products.findIndex(p => p.id === productId);
+    if (productIndex === -1) return false;
+
+    this.products.splice(productIndex, 1);
+    this.saveToStorage();
+    return true;
+  }
+
+  // Storage operations
+  private saveToStorage(): void {
+    try {
+      localStorage.setItem('chargeSourceProducts', JSON.stringify(this.products));
+    } catch (error) {
+      console.error('Error saving products to storage:', error);
+    }
+  }
+
+  private loadFromStorage(): void {
+    try {
+      const storedProducts = localStorage.getItem('chargeSourceProducts');
+      if (storedProducts) {
+        this.products = JSON.parse(storedProducts);
+      }
+    } catch (error) {
+      console.error('Error loading products from storage:', error);
+    }
+  }
+
   // Analytics methods
   getPopularProducts(limit: number = 10): ProductCatalogueItem[] {
     // In a real implementation, this would be based on sales/quote data
