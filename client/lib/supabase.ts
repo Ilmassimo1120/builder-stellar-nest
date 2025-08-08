@@ -427,19 +427,31 @@ export const initializeSupabase = async () => {
     console.log("🔧 Environment VITE_SUPABASE_ANON_KEY present:", !!import.meta.env.VITE_SUPABASE_ANON_KEY);
 
     // Test basic HTTP connectivity first
-    console.log("🌐 Testing basic HTTP connectivity to Supabase...");
+    console.log("��� Testing basic HTTP connectivity to Supabase...");
     try {
+      const controller = new AbortController();
+      setTimeout(() => controller.abort(), 5000); // 5 second timeout
+
       const response = await fetch(supabaseUrl + '/rest/v1/', {
         method: 'GET',
         headers: {
           'apikey': supabaseAnonKey,
-          'Authorization': `Bearer ${supabaseAnonKey}`
-        }
+          'Authorization': `Bearer ${supabaseAnonKey}`,
+          'Content-Type': 'application/json'
+        },
+        signal: controller.signal
       });
+
       console.log("🌐 HTTP Response status:", response.status);
-      console.log("🌐 HTTP Response headers:", Object.fromEntries(response.headers.entries()));
+      console.log("🌐 HTTP Response ok:", response.ok);
+
+      if (!response.ok) {
+        console.warn("⚠️ HTTP request succeeded but got error status:", response.status);
+        // Don't return false here - 401 is expected for some endpoints
+      }
     } catch (fetchError) {
       console.error("❌ Basic HTTP connectivity failed:", fetchError);
+      console.error("❌ This suggests a network/CORS/firewall issue");
       return false;
     }
 
