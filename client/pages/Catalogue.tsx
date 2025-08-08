@@ -99,17 +99,32 @@ export default function Catalogue() {
                 <h1 className="text-xl font-semibold">Product Catalogue</h1>
               </div>
             </div>
-            <nav className="hidden md:flex items-center space-x-6">
-              <a href="/dashboard" className="text-sm font-medium hover:text-primary transition-colors">
-                Dashboard
-              </a>
-              <a href="/projects" className="text-sm font-medium hover:text-primary transition-colors">
-                Projects
-              </a>
-              <a href="/quotes" className="text-sm font-medium hover:text-primary transition-colors">
-                Quotes
-              </a>
-            </nav>
+            <div className="flex items-center gap-4">
+              <nav className="hidden md:flex items-center space-x-6">
+                <a href="/dashboard" className="text-sm font-medium hover:text-primary transition-colors">
+                  Dashboard
+                </a>
+                <a href="/projects" className="text-sm font-medium hover:text-primary transition-colors">
+                  Projects
+                </a>
+                <a href="/quotes" className="text-sm font-medium hover:text-primary transition-colors">
+                  Quotes
+                </a>
+              </nav>
+
+              {/* Admin Controls */}
+              {user?.role === 'admin' && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setShowAdminPanel(true)}
+                  className="flex items-center gap-2 border-red-200 text-red-700 hover:bg-red-50"
+                >
+                  <Settings className="w-4 h-4" />
+                  Manage Products
+                </Button>
+              )}
+            </div>
           </div>
         </header>
 
