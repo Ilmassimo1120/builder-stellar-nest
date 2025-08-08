@@ -22,7 +22,19 @@ export default function ConnectionStatus() {
 
   const checkConnection = async () => {
     try {
-      console.log("🔄 ConnectionStatus: Starting connection check...");
+      console.log("🔄 ConnectionStatus: Starting safe connection check...");
+
+      // Check for problematic environments before doing anything
+      if (typeof window !== 'undefined') {
+        const hasFullStory = !!(window as any).FS || document.querySelector('script[src*="fullstory"]');
+        const hasFetchInterception = window.fetch && window.fetch.toString().includes('messageHandler');
+
+        if (hasFullStory || hasFetchInterception) {
+          console.log("🔄 ConnectionStatus: Monitoring tools detected, using local mode");
+          setIsConnected(false);
+          return;
+        }
+      }
 
       // Force reset the autoInit state
       autoInit.reset();
