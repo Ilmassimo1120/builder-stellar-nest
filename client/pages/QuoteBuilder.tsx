@@ -317,6 +317,17 @@ export default function QuoteBuilder() {
     }
   };
 
+  // Handle product comparison
+  const handleCompareProducts = (productIds: string[]) => {
+    setComparisonProducts(productIds);
+    setShowProductComparison(true);
+    setShowProductCatalogue(false);
+  };
+
+  const handleRemoveFromComparison = (productId: string) => {
+    setComparisonProducts(prev => prev.filter(id => id !== productId));
+  };
+
   // Send quote to client
   const sendQuote = async () => {
     if (!quote) return;
