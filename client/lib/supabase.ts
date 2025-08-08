@@ -408,20 +408,28 @@ export const initializeSupabase = async (): Promise<boolean> => {
   try {
     console.log("🚀 Initializing ChargeSource Supabase connection...");
 
-    // Skip network tests in offline environments
+    // Skip network tests in offline environments or problematic environments
     if (typeof navigator !== 'undefined' && !navigator.onLine) {
       console.log("🔄 Offline mode detected, skipping connection test");
       return false;
     }
 
-    // Try a simple ping to check if Supabase is reachable
+    // Check if we're in an environment with fetch interception (like FullStory)
+    if (typeof window !== 'undefined' && window.fetch && window.fetch.toString().includes('messageHandler')) {
+      console.log("🔄 Fetch interception detected, assuming offline mode to avoid errors");
+      return false;
+    }
+
+    // Try a simple connectivity test with multiple fallbacks
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+      const timeoutId = setTimeout(() => controller.abort(), 3000); // Reduced to 3 seconds
 
-      const response = await fetch(`${supabaseUrl}/health`, {
+      // Use the most basic endpoint possible
+      const response = await fetch(`${supabaseUrl}/`, {
         method: 'HEAD',
         signal: controller.signal,
+        mode: 'no-cors', // Allow cross-origin requests
         headers: {
           'apikey': supabaseAnonKey,
         },
@@ -429,22 +437,24 @@ export const initializeSupabase = async (): Promise<boolean> => {
 
       clearTimeout(timeoutId);
 
-      if (response.ok || response.status === 404) {
-        // 404 is fine - means Supabase is reachable
-        console.log("✅ Supabase endpoint is reachable");
-        return true;
-      }
+      // Any response (including CORS errors) means the endpoint is reachable
+      console.log("✅ Supabase endpoint is reachable");
+      return true;
     } catch (fetchError) {
-      console.log("⚠️ Network connectivity issue, operating in offline mode");
-      console.log("Error details:", fetchError instanceof Error ? fetchError.message : String(fetchError));
+      // Check if it's a network error vs other error
+      const errorMessage = fetchError instanceof Error ? fetchError.message : String(fetchError);
+
+      if (errorMessage.includes('Failed to fetch') || errorMessage.includes('Network')) {
+        console.log("📱 Network issue detected, operating in local mode");
+      } else {
+        console.log("⚠️ Unexpected error during connection test, operating in local mode");
+      }
+
+      console.log("Error details:", errorMessage);
       return false;
     }
-
-    // If we get here, assume offline mode
-    console.log("🔄 Unable to verify connection, operating in offline mode");
-    return false;
   } catch (error) {
-    console.log("⚠️ Connection check failed, operating in offline mode");
+    console.log("⚠️ Connection initialization failed, operating in local mode");
     console.log("Error details:", error instanceof Error ? error.message : String(error));
     return false;
   }
