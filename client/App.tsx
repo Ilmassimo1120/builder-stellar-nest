@@ -30,6 +30,7 @@ import CloudStatus from "./pages/CloudStatus";
 import Users from "./pages/Users";
 import Customers from "./pages/Customers";
 import FileStorage from "./pages/FileStorage";
+import EnhancedFileStorage from "./pages/EnhancedFileStorage";
 import { AuthProvider } from "./hooks/useAuth";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { AIAssistant } from "./components/AIAssistant";
