@@ -184,8 +184,11 @@ class MigrationService {
       });
 
       if (error) throw error;
+      console.log(`Successfully migrated project draft: ${draft.draftName || draft.id}`);
     } catch (error) {
-      console.error("Error migrating project draft:", error);
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      console.error(`Error migrating project draft "${draft.draftName || draft.id}":`, errorMessage);
+      throw new Error(`Failed to migrate project draft "${draft.draftName || draft.id}": ${errorMessage}`);
     }
   }
 
