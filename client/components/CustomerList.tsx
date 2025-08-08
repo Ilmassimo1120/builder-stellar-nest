@@ -51,7 +51,7 @@ import {
   Phone,
   MapPin,
   Calendar,
-  Sync,
+  RefreshCw,
   Filter,
   Grid,
   List,
