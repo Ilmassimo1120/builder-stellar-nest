@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Search, Filter, Package, Zap, Settings, Users, ShoppingCart, Eye, Star, Clock, CheckCircle, AlertTriangle } from 'lucide-react';
+import { Search, Filter, Package, Zap, Settings, Users, ShoppingCart, Eye, Star, Clock, CheckCircle, AlertTriangle, BarChart3 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
