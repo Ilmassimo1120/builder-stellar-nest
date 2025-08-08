@@ -248,7 +248,7 @@ class CategoryService {
       .replace(/[^a-z0-9\s]/g, '')
       .replace(/\s+/g, '-')
       .substring(0, 50);
-    
+
     // Ensure ID is unique across all subcategories
     let finalId = baseId;
     let counter = 1;
@@ -257,16 +257,21 @@ class CategoryService {
       counter++;
     }
 
+    // Assign the next order value for this category
+    const category = this.categories[categoryIndex];
+    const maxOrder = Math.max(...category.subcategories.map(sub => sub.order), -1);
+
     const newSubcategory: ProductSubcategory = {
       id: finalId,
       name: name.trim(),
       description: description.trim(),
       categoryId,
+      order: maxOrder + 1,
     };
 
     this.categories[categoryIndex].subcategories.push(newSubcategory);
     this.saveToStorage();
-    
+
     return newSubcategory;
   }
 
