@@ -16,8 +16,7 @@ export default function ConnectionStatus() {
   const forceRecheck = async () => {
     setIsLoading(true);
     // Reset the auto initialization
-    (autoInit as any).initialized = false;
-    (autoInit as any).supabaseConnected = false;
+    autoInit.reset();
     await checkConnection();
   };
 
