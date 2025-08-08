@@ -90,12 +90,6 @@ const navigationItems: NavItem[] = [
     icon: <Settings className="w-4 h-4" />,
     permission: "users.edit.own",
   },
-  {
-    path: "/cloud-status",
-    label: "Cloud Status",
-    icon: <Cloud className="w-4 h-4" />,
-    permission: "users.edit.own",
-  },
 ];
 
 interface RoleBasedNavigationProps {
@@ -165,6 +159,14 @@ export default function RoleBasedNavigation({
               </Link>
             </DropdownMenuItem>
           ))}
+
+          {/* Cloud Status - only in dropdown menu */}
+          <DropdownMenuItem asChild>
+            <Link to="/cloud-status" className="flex items-center gap-2">
+              <Cloud className="w-4 h-4" />
+              <span>Cloud Status</span>
+            </Link>
+          </DropdownMenuItem>
 
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={logout} className="text-red-600">
