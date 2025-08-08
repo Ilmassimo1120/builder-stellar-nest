@@ -57,6 +57,10 @@ export default function CloudStatus() {
               </CardContent>
             </Card>
           </div>
+
+          <div className="lg:col-span-2">
+            <SupabaseStorageDiagnostics />
+          </div>
         </div>
       </div>
     </div>
