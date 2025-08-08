@@ -40,6 +40,8 @@ interface ProductCatalogBrowserProps {
   onClose: () => void;
   onAddProduct: (productId: string, quantity: number) => void;
   selectedCategory?: string;
+  onCompareProducts?: (productIds: string[]) => void;
+  maxCompareProducts?: number;
 }
 
 export default function ProductCatalogBrowser({
