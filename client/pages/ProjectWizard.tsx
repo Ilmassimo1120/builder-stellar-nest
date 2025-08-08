@@ -134,8 +134,11 @@ interface ProjectDraft {
 
 export default function ProjectWizard() {
   const navigate = useNavigate();
+  const { projectId } = useParams<{ projectId: string }>();
   const { user } = useAuth();
   const [currentStep, setCurrentStep] = useState(1);
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [loadingProject, setLoadingProject] = useState(false);
   const totalSteps = 6;
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
