@@ -10,10 +10,22 @@ class AutoInitializationService {
 
     try {
       // Always test the connection fresh
-      console.log("🔄 AutoInit: Calling initializeSupabase()...");
-      this.supabaseConnected = await initializeSupabase();
+      console.log("🔄 AutoInit: Testing Supabase connection...");
+
+      // Use a timeout to prevent hanging
+      const timeoutPromise = new Promise<boolean>((resolve) => {
+        setTimeout(() => {
+          console.log("⏰ Connection test timed out, using local mode");
+          resolve(false);
+        }, 8000); // 8 second timeout
+      });
+
+      const connectionPromise = initializeSupabase();
+
+      this.supabaseConnected = await Promise.race([connectionPromise, timeoutPromise]);
+
       console.log(
-        "🔄 AutoInit: initializeSupabase() returned:",
+        "🔄 AutoInit: Connection test result:",
         this.supabaseConnected,
       );
 
@@ -37,7 +49,8 @@ class AutoInitializationService {
       );
       return this.supabaseConnected;
     } catch (error) {
-      console.error("❌ Auto-initialization failed with error:", error);
+      console.log("⚠️ Auto-initialization encountered an error, using local mode");
+      console.log("Error details:", error instanceof Error ? error.message : String(error));
       this.initialized = true;
       this.supabaseConnected = false;
       return false;
