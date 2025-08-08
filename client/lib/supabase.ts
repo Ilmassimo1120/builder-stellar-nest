@@ -629,5 +629,3 @@ export const projectService = {
     }
   },
 };
-
-export type { Database };
