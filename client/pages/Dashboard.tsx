@@ -144,8 +144,14 @@ export default function Dashboard() {
     try {
       setLoading(true);
 
-      // Auto-configure Supabase connection
-      const isConnected = await autoConfigureSupabase();
+      // Test Supabase connection
+      let isConnected = false;
+      try {
+        const { data, error } = await supabase.from('users').select('count').limit(1);
+        isConnected = !error;
+      } catch (error) {
+        console.log("Supabase not yet configured");
+      }
       setIsSupabaseConnected(isConnected);
 
       let loadedProjects = [];
@@ -153,24 +159,24 @@ export default function Dashboard() {
       if (isConnected) {
         // Load from Supabase
         try {
-          const supabaseProjects = await projectService.getAllProjects();
-          loadedProjects = supabaseProjects.map((project) => ({
-            id: project.id?.slice(0, 8) || "PRJ-NEW",
-            name: project.name,
-            client: project.client_name,
-            status: project.status,
-            progress: project.progress,
-            value:
-              `$${project.estimated_budget_min?.toLocaleString()} - $${project.estimated_budget_max?.toLocaleString()}` ||
-              "TBD",
-            deadline: new Date(
-              project.created_at || Date.now(),
-            ).toLocaleDateString(),
-            location:
-              project.site_address?.split(",").slice(-2).join(",").trim() ||
-              "TBD",
-            type: project.site_type || "EV Charging Project",
-          }));
+          const { data: supabaseProjects, error } = await supabase
+            .from('projects')
+            .select('*')
+            .order('created_at', { ascending: false });
+
+          if (!error && supabaseProjects) {
+            loadedProjects = supabaseProjects.map((project) => ({
+              id: project.id?.slice(0, 8) || "PRJ-NEW",
+              name: project.name,
+              client: project.client_info?.company || project.client_info?.name || "Unknown Client",
+              status: project.status,
+              progress: project.progress || 0,
+              value: project.estimated_budget ? `$${project.estimated_budget.toLocaleString()}` : "TBD",
+              deadline: new Date(project.created_at || Date.now()).toLocaleDateString(),
+              location: project.client_info?.address || "TBD",
+              type: project.description || "EV Charging Project",
+            }));
+          }
         } catch (error) {
           console.error("Error loading projects from Supabase:", error);
         }
