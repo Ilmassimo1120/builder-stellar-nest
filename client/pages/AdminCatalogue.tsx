@@ -310,7 +310,7 @@ export default function AdminCatalogue() {
             <CardHeader>
               <CardTitle>Categories Overview</CardTitle>
               <CardDescription>
-                Product distribution across categories
+                Product distribution across categories (drag to reorder)
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -319,20 +319,63 @@ export default function AdminCatalogue() {
                   const categoryProducts = productCatalog.getProducts({
                     category: category.id,
                   });
+                  const isDragged = draggedCategory === category.id;
+                  const isDragOver = dragOverCategory === category.id;
+
                   return (
                     <div
                       key={category.id}
-                      className="flex items-center justify-between p-4 border rounded-lg"
+                      draggable
+                      onDragStart={(e) => handleDragStart(e, category.id)}
+                      onDragOver={(e) => handleDragOver(e, category.id)}
+                      onDragLeave={handleDragLeave}
+                      onDrop={(e) => handleDrop(e, category.id)}
+                      className={`flex items-center justify-between p-4 border rounded-lg cursor-move transition-all ${
+                        isDragged ? 'opacity-50 scale-105' : ''
+                      } ${
+                        isDragOver ? 'border-primary bg-primary/5' : 'hover:border-muted-foreground'
+                      }`}
                     >
-                      <div>
-                        <h3 className="font-medium">{category.name}</h3>
-                        <p className="text-sm text-muted-foreground">
-                          {category.description}
-                        </p>
+                      <div className="flex items-center gap-3 flex-1">
+                        <GripVertical className="w-4 h-4 text-muted-foreground" />
+                        <div className="flex-1">
+                          <h3 className="font-medium">{category.name}</h3>
+                          <p className="text-sm text-muted-foreground">
+                            {category.description}
+                          </p>
+                        </div>
                       </div>
-                      <Badge variant="outline">
-                        {categoryProducts.length} products
-                      </Badge>
+                      <div className="flex items-center gap-2">
+                        <Badge variant="outline">
+                          {categoryProducts.length} products
+                        </Badge>
+                        <div className="flex flex-col gap-1">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="h-6 w-6 p-0"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleMoveCategory(category.id, 'up');
+                            }}
+                            disabled={productCatalog.getCategories().findIndex(c => c.id === category.id) === 0}
+                          >
+                            <ChevronUp className="w-3 h-3" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="h-6 w-6 p-0"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleMoveCategory(category.id, 'down');
+                            }}
+                            disabled={productCatalog.getCategories().findIndex(c => c.id === category.id) === productCatalog.getCategories().length - 1}
+                          >
+                            <ChevronDown className="w-3 h-3" />
+                          </Button>
+                        </div>
+                      </div>
                     </div>
                   );
                 })}
