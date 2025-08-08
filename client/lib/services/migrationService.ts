@@ -86,7 +86,7 @@ class MigrationService {
 
       // Clear localStorage after successful migration
       if (migratedItems > 0) {
-        this.clearMigratedData(userProfile?.role)
+        await this.clearMigratedData(userProfile?.role)
       }
 
       console.log(`Migration completed successfully. Migrated ${migratedItems} items.`)
