@@ -402,6 +402,23 @@ export const initializeSupabase = async () => {
     console.log("🔧 Environment VITE_SUPABASE_URL:", import.meta.env.VITE_SUPABASE_URL);
     console.log("🔧 Environment VITE_SUPABASE_ANON_KEY present:", !!import.meta.env.VITE_SUPABASE_ANON_KEY);
 
+    // Test basic HTTP connectivity first
+    console.log("🌐 Testing basic HTTP connectivity to Supabase...");
+    try {
+      const response = await fetch(supabaseUrl + '/rest/v1/', {
+        method: 'GET',
+        headers: {
+          'apikey': supabaseAnonKey,
+          'Authorization': `Bearer ${supabaseAnonKey}`
+        }
+      });
+      console.log("🌐 HTTP Response status:", response.status);
+      console.log("🌐 HTTP Response headers:", Object.fromEntries(response.headers.entries()));
+    } catch (fetchError) {
+      console.error("❌ Basic HTTP connectivity failed:", fetchError);
+      return false;
+    }
+
     // Test connection using health check function first
     console.log("🔄 Method 1: Trying health_check function...");
     let { data, error } = await supabase.rpc('health_check');
