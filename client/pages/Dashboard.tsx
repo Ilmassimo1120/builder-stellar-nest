@@ -838,7 +838,7 @@ export default function Dashboard() {
                             <div className="mt-3">
                               <Progress
                                 value={project.progress}
-                                className="h-2"
+                                className="h-2 w-[90%]"
                               />
                               <div className="flex items-center justify-between text-sm mt-1">
                                 <span>Progress</span>
