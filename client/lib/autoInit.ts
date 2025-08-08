@@ -6,15 +6,10 @@ class AutoInitializationService {
   private supabaseConnected = false;
 
   async initialize() {
-    if (this.initialized) {
-      console.log("🔄 AutoInit: Already initialized, returning cached result:", this.supabaseConnected);
-      return this.supabaseConnected;
-    }
-
     console.log("🚀 ChargeSource Auto-Initialization Starting...");
 
     try {
-      // Step 1: Initialize Supabase connection
+      // Always test the connection fresh
       console.log("🔄 AutoInit: Calling initializeSupabase()...");
       this.supabaseConnected = await initializeSupabase();
       console.log("🔄 AutoInit: initializeSupabase() returned:", this.supabaseConnected);
@@ -23,7 +18,11 @@ class AutoInitializationService {
         console.log("✅ ChargeSource connected to cloud database");
 
         // Step 2: Auto-migrate localStorage data if it exists
-        await this.autoMigrateIfNeeded();
+        try {
+          await this.autoMigrateIfNeeded();
+        } catch (migrationError) {
+          console.warn("⚠️ Migration failed but continuing:", migrationError);
+        }
       } else {
         console.log("📱 ChargeSource running in local mode");
       }
