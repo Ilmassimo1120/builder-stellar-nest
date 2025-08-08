@@ -188,7 +188,8 @@ export default function Dashboard() {
             }));
           }
         } catch (error) {
-          console.error("Error loading projects from Supabase:", error);
+          console.log("⚠️ Error loading projects from Supabase, using local data:");
+          console.log("Error details:", error instanceof Error ? error.message : String(error));
         }
       }
 
