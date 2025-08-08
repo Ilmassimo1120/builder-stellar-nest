@@ -26,6 +26,7 @@ import Settings from "./pages/Settings";
 import Analytics from "./pages/Analytics";
 import TestConnection from "./pages/TestConnection";
 import TestStatus from "./pages/TestStatus";
+import CloudStatus from "./pages/CloudStatus";
 import { AuthProvider } from "./hooks/useAuth";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { AIAssistant } from "./components/AIAssistant";
