@@ -39,20 +39,57 @@ export default function FileStorageDebug() {
   };
 
   const testAuth = async () => {
+    let localAuthResult = null;
+    let supabaseAuthResult = null;
+
+    // Test local auth
+    try {
+      const storedUser = localStorage.getItem('chargeSourceUser');
+      if (storedUser) {
+        const userData = JSON.parse(storedUser);
+        localAuthResult = {
+          success: true,
+          message: `Local auth user: ${userData.email} (${userData.role})`,
+          data: userData
+        };
+      } else {
+        localAuthResult = {
+          success: false,
+          message: 'No local auth user found',
+          data: null
+        };
+      }
+    } catch (error) {
+      localAuthResult = {
+        success: false,
+        message: `Local auth error: ${error instanceof Error ? error.message : String(error)}`,
+        data: null
+      };
+    }
+
+    // Test Supabase auth
     try {
       const { data: { user }, error } = await supabase.auth.getUser();
-      return {
+      supabaseAuthResult = {
         success: !error,
-        message: error ? `Auth error: ${error.message}` : `User: ${user?.email || 'No user'}`,
+        message: error ? `Supabase auth error: ${error.message}` : `Supabase user: ${user?.email || 'No user'}`,
         data: { user, error }
       };
     } catch (error) {
-      return {
+      supabaseAuthResult = {
         success: false,
-        message: `Auth exception: ${error instanceof Error ? error.message : String(error)}`,
-        error
+        message: `Supabase auth exception: ${error instanceof Error ? error.message : String(error)}`,
+        data: error
       };
     }
+
+    // Return combined result
+    const primaryAuth = localAuthResult.success ? 'Local Auth' : (supabaseAuthResult.success ? 'Supabase Auth' : 'None');
+    return {
+      success: localAuthResult.success || supabaseAuthResult.success,
+      message: `Primary: ${primaryAuth} | Local: ${localAuthResult.success ? '✅' : '❌'} | Supabase: ${supabaseAuthResult.success ? '✅' : '❌'}`,
+      data: { localAuth: localAuthResult, supabaseAuth: supabaseAuthResult }
+    };
   };
 
   const testDatabase = async () => {
