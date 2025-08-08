@@ -145,14 +145,16 @@ export default function Dashboard() {
 
       // Auto-configure and connect to Supabase
       console.log("🔄 Dashboard: Checking Supabase connection...");
+      let isConnected = false;
       try {
-        const isConnected = await autoConfigureSupabase();
+        isConnected = await autoConfigureSupabase();
         console.log("🔄 Dashboard: autoConfigureSupabase returned:", isConnected);
         setIsSupabaseConnected(isConnected);
       } catch (error) {
         console.log("⚠️ Dashboard: Supabase connection failed, using local mode");
         console.log("Error details:", error instanceof Error ? error.message : String(error));
         setIsSupabaseConnected(false);
+        isConnected = false;
       }
 
       let loadedProjects = [];
