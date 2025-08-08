@@ -451,10 +451,18 @@ export const isConnectedToSupabase = () => isSupabaseConnected;
 // Connection testing functions
 export const checkSupabaseConnection = async (): Promise<boolean> => {
   try {
-    const { data, error } = await supabase.rpc('health_check');
-    return !error;
+    // Try function first
+    let { data, error } = await supabase.rpc('health_check');
+
+    if (error) {
+      // Try table method as fallback
+      const result = await supabase.from('health_status').select('*').limit(1);
+      return !result.error;
+    }
+
+    return true;
   } catch (error) {
-    console.error("Supabase connection test failed:", error);
+    console.error("Supabase connection test failed:", error instanceof Error ? error.message : String(error));
     return false;
   }
 };
