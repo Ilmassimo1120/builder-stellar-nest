@@ -213,8 +213,11 @@ class MigrationService {
       });
 
       if (error) throw error;
+      console.log(`Successfully migrated quote: ${quote.title || quote.id}`);
     } catch (error) {
-      console.error("Error migrating quote:", error);
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      console.error(`Error migrating quote "${quote.title || quote.id}":`, errorMessage);
+      throw new Error(`Failed to migrate quote "${quote.title || quote.id}": ${errorMessage}`);
     }
   }
 
