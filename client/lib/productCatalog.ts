@@ -529,8 +529,12 @@ class ProductCatalogService {
   }
 
   // Public methods
-  getCategories(): ProductCategory[] {
-    return categoryService.getCategories();
+  getCategories(userId?: string): ProductCategory[] {
+    const categories = categoryService.getCategories();
+    if (userId) {
+      return userPreferencesService.applyCategoryOrder(userId, categories);
+    }
+    return categories;
   }
 
   getSubcategories(categoryId?: string): ProductSubcategory[] {
