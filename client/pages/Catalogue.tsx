@@ -159,14 +159,14 @@ export default function Catalogue() {
               </div>
               <div className="flex gap-2">
                 <Select
-                  value={filter.brand || ''}
-                  onValueChange={(value) => updateFilter('brand', value || undefined)}
+                  value={filter.brand || 'all-brands'}
+                  onValueChange={(value) => updateFilter('brand', value === 'all-brands' ? undefined : value)}
                 >
                   <SelectTrigger className="w-[150px]">
                     <SelectValue placeholder="All Brands" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">All Brands</SelectItem>
+                    <SelectItem value="all-brands">All Brands</SelectItem>
                     {brands.map((brand) => (
                       <SelectItem key={brand} value={brand}>
                         {brand}
