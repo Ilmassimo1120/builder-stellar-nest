@@ -81,10 +81,11 @@ export default function Dashboard() {
         // Reload projects if connection is successful
         await loadProjects();
       } else {
-        console.log("⚠️ Connection still not available");
+        console.log("📱 Connection not available, using local mode");
       }
     } catch (error) {
-      console.error("❌ Error retrying Supabase connection:", error);
+      console.log("⚠️ Error retrying Supabase connection, using local mode");
+      console.log("Error details:", error instanceof Error ? error.message : String(error));
       setIsSupabaseConnected(false);
     }
   };
