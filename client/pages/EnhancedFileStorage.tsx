@@ -179,16 +179,21 @@ export default function EnhancedFileStorage() {
         </Alert>
       )}
 
-      {/* Debug Section - Remove in production */}
-      <Card>
-        <CardHeader>
-          <CardTitle>🔧 Debug Section</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          <AuthTest />
-          <FileStorageDebug />
-        </CardContent>
-      </Card>
+      {/* Debug Section - Admin Only */}
+      {isAdmin && (
+        <Card>
+          <CardHeader>
+            <CardTitle>🔧 Debug Section</CardTitle>
+            <p className="text-sm text-muted-foreground">
+              Admin-only debugging tools for troubleshooting
+            </p>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <AuthTest />
+            <FileStorageDebug />
+          </CardContent>
+        </Card>
+      )}
 
       {/* Storage Overview */}
       {storageStats && (
