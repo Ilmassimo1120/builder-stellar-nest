@@ -171,6 +171,16 @@ export default function EnhancedFileStorage() {
         </Alert>
       )}
 
+      {/* Debug Section - Remove in production */}
+      <Card>
+        <CardHeader>
+          <CardTitle>🔧 Debug Section</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <FileStorageDebug />
+        </CardContent>
+      </Card>
+
       {/* Storage Overview */}
       {storageStats && (
         <>
