@@ -199,39 +199,46 @@ class EnhancedFileStorageService {
    */
   async uploadFile(request: FileUploadRequest): Promise<FileAsset> {
     try {
-      // More robust authentication check
+      // Primary authentication check using local auth system
       let user = null;
-      let authError = null;
+      let isAuthenticated = false;
 
-      // First try to get user
-      const { data: { user: authUser }, error: userError } = await supabase.auth.getUser();
-
-      if (userError) {
-        console.warn('getUser() failed, trying getSession():', userError.message);
-
-        // Fallback to session check
-        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-
-        if (sessionError) {
-          console.error('Session check also failed:', sessionError);
-          authError = sessionError;
-        } else if (session?.user) {
-          console.log('Found user via session:', session.user.email);
-          user = session.user;
-        } else {
-          console.error('No session found');
-          authError = new Error('No active session');
+      // Check local auth first (primary system)
+      try {
+        const storedUser = localStorage.getItem('chargeSourceUser');
+        if (storedUser) {
+          const userData = JSON.parse(storedUser);
+          user = {
+            id: userData.id,
+            email: userData.email
+          };
+          isAuthenticated = true;
+          console.log('Using local auth for upload:', userData.email);
         }
-      } else if (authUser) {
-        console.log('User authenticated for upload:', authUser.email);
-        user = authUser;
-      } else {
-        console.error('No authenticated user found');
-        authError = new Error('No user in auth response');
+      } catch (error) {
+        console.warn('Local auth check failed:', error);
       }
 
-      if (!user) {
-        throw new Error('Please log in to upload files. ' + (authError?.message || 'Authentication required.'));
+      // Only try Supabase auth if no local user AND we can reach the server
+      if (!isAuthenticated) {
+        try {
+          console.log('No local auth user, trying Supabase auth...');
+          const { data: { user: authUser }, error: userError } = await supabase.auth.getUser();
+
+          if (!userError && authUser) {
+            console.log('User authenticated via Supabase:', authUser.email);
+            user = authUser;
+            isAuthenticated = true;
+          } else if (userError) {
+            console.warn('Supabase auth failed:', userError.message);
+          }
+        } catch (error) {
+          console.log('Network error during auth check, operating in offline mode');
+        }
+      }
+
+      if (!isAuthenticated) {
+        throw new Error('Please log in to upload files. No active session found.');
       }
 
       // Validate file
