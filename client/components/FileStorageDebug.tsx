@@ -68,13 +68,16 @@ export default function FileStorageDebug() {
       // Test 1: Check authentication
       testResults.auth = await testAuth();
 
-      // Test 2: Check database connection
+      // Test 2: Check storage buckets
+      testResults.buckets = await testBuckets();
+
+      // Test 3: Check database connection
       testResults.database = await testDatabase();
 
-      // Test 3: Test search function
+      // Test 4: Test search function
       testResults.search = await testSearch();
 
-      // Test 4: Test storage usage
+      // Test 5: Test storage usage
       testResults.storageUsage = await testStorageUsage();
     } catch (error) {
       testResults.globalError = {
