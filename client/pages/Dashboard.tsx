@@ -439,36 +439,76 @@ export default function Dashboard() {
     },
   ];
 
-  const stats = [
-    {
-      title: "Active Projects",
-      value: "12",
-      change: "+2 this month",
-      trend: "up",
-      icon: <Zap className="w-5 h-5" />,
-    },
-    {
-      title: "Total Revenue",
-      value: "$1.2M",
-      change: "+15% this quarter",
-      trend: "up",
-      icon: <DollarSign className="w-5 h-5" />,
-    },
-    {
-      title: "Pending Quotes",
-      value: "8",
-      change: "3 expiring soon",
-      trend: "neutral",
-      icon: <FileText className="w-5 h-5" />,
-    },
-    {
-      title: "Avg. Project Value",
-      value: "$98K",
-      change: "+$12K from last month",
-      trend: "up",
-      icon: <TrendingUp className="w-5 h-5" />,
-    },
-  ];
+  // Role-based statistics
+  const getRoleBasedStats = () => {
+    const baseStats = [
+      {
+        title: "Active Projects",
+        value: "12",
+        change: "+2 this month",
+        trend: "up",
+        icon: <Zap className="w-5 h-5" />,
+        roles: [UserRole.USER, UserRole.PARTNER, UserRole.SALES, UserRole.ADMIN, UserRole.GLOBAL_ADMIN]
+      },
+      {
+        title: "Pending Quotes",
+        value: "8",
+        change: "3 expiring soon",
+        trend: "neutral",
+        icon: <FileText className="w-5 h-5" />,
+        roles: [UserRole.USER, UserRole.PARTNER, UserRole.SALES, UserRole.ADMIN, UserRole.GLOBAL_ADMIN]
+      }
+    ];
+
+    if (hasPermission('analytics.view')) {
+      baseStats.push(
+        {
+          title: "Total Revenue",
+          value: "$1.2M",
+          change: "+15% this quarter",
+          trend: "up",
+          icon: <DollarSign className="w-5 h-5" />,
+          roles: [UserRole.SALES, UserRole.ADMIN, UserRole.GLOBAL_ADMIN]
+        },
+        {
+          title: "Avg. Project Value",
+          value: "$98K",
+          change: "+$12K from last month",
+          trend: "up",
+          icon: <TrendingUp className="w-5 h-5" />,
+          roles: [UserRole.SALES, UserRole.ADMIN, UserRole.GLOBAL_ADMIN]
+        }
+      );
+    }
+
+    if (user?.role === UserRole.ADMIN || user?.role === UserRole.GLOBAL_ADMIN) {
+      baseStats.push({
+        title: "System Users",
+        value: "156",
+        change: "+8 this week",
+        trend: "up",
+        icon: <Users className="w-5 h-5" />,
+        roles: [UserRole.ADMIN, UserRole.GLOBAL_ADMIN]
+      });
+    }
+
+    if (user?.role === UserRole.GLOBAL_ADMIN) {
+      baseStats.push({
+        title: "System Health",
+        value: "99.8%",
+        change: "All systems operational",
+        trend: "up",
+        icon: <CheckCircle2 className="w-5 h-5" />,
+        roles: [UserRole.GLOBAL_ADMIN]
+      });
+    }
+
+    return baseStats.filter(stat =>
+      !stat.roles || stat.roles.includes(user?.role || UserRole.USER)
+    );
+  };
+
+  const stats = getRoleBasedStats();
 
   const getStatusColor = (status: string) => {
     switch (status) {
