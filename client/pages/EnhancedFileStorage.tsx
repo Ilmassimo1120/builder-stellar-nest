@@ -184,7 +184,8 @@ export default function EnhancedFileStorage() {
         <CardHeader>
           <CardTitle>🔧 Debug Section</CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="space-y-6">
+          <AuthTest />
           <FileStorageDebug />
         </CardContent>
       </Card>
