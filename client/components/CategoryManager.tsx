@@ -751,16 +751,45 @@ export default function CategoryManager({
                             </div>
                           ) : (
                             <div className="flex items-center justify-between">
-                              <div className="flex-1">
-                                <div className="flex items-center gap-2">
-                                  <h5 className="font-medium">{subcategory.name}</h5>
-                                  <Badge variant="secondary">{productCount} products</Badge>
+                              <div className="flex items-center gap-3 flex-1">
+                                <GripVertical className="w-4 h-4 text-muted-foreground cursor-move" />
+                                <div className="flex-1">
+                                  <div className="flex items-center gap-2">
+                                    <h5 className="font-medium">{subcategory.name}</h5>
+                                    <Badge variant="secondary">{productCount} products</Badge>
+                                  </div>
+                                  <p className="text-sm text-muted-foreground mt-1">
+                                    {subcategory.description}
+                                  </p>
                                 </div>
-                                <p className="text-sm text-muted-foreground mt-1">
-                                  {subcategory.description}
-                                </p>
                               </div>
                               <div className="flex items-center gap-1">
+                                <div className="flex flex-col gap-1">
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    className="h-6 w-6 p-0"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      handleMoveSubcategoryUp(subcategory.id);
+                                    }}
+                                    disabled={selectedCategory!.subcategories.findIndex(s => s.id === subcategory.id) === 0}
+                                  >
+                                    <ChevronUp className="w-3 h-3" />
+                                  </Button>
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    className="h-6 w-6 p-0"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      handleMoveSubcategoryDown(subcategory.id);
+                                    }}
+                                    disabled={selectedCategory!.subcategories.findIndex(s => s.id === subcategory.id) === selectedCategory!.subcategories.length - 1}
+                                  >
+                                    <ChevronDown className="w-3 h-3" />
+                                  </Button>
+                                </div>
                                 <Button 
                                   variant="ghost" 
                                   size="sm"
