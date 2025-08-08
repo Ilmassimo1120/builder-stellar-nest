@@ -537,8 +537,12 @@ class ProductCatalogService {
     return categories;
   }
 
-  getSubcategories(categoryId?: string): ProductSubcategory[] {
-    return categoryService.getSubcategories(categoryId);
+  getSubcategories(categoryId?: string, userId?: string): ProductSubcategory[] {
+    const subcategories = categoryService.getSubcategories(categoryId);
+    if (userId && categoryId) {
+      return userPreferencesService.applySubcategoryOrder(userId, categoryId, subcategories);
+    }
+    return subcategories;
   }
 
   getProducts(filter?: ProductFilter): ProductCatalogueItem[] {
