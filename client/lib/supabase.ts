@@ -453,14 +453,13 @@ export const checkSupabaseConnection = async (): Promise<boolean> => {
 };
 
 export const autoConfigureSupabase = async (): Promise<boolean> => {
-  // Return cached connection state if available
-  if (isSupabaseConnected) {
-    return true;
-  }
+  console.log("🔄 autoConfigureSupabase called");
 
-  // Try to establish connection
+  // Always recheck the connection
   const connected = await initializeSupabase();
   isSupabaseConnected = connected;
+
+  console.log("🔄 autoConfigureSupabase result:", connected);
   return connected;
 };
 
