@@ -373,7 +373,7 @@ class EnhancedFileStorageService {
 
       return (data || []).map(this.mapToFileAsset);
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Unknown search error';
+      const errorMessage = this.formatError(error, 'Unknown search error');
       console.error('Search error:', errorMessage, error);
       throw new Error(`Search failed: ${errorMessage}`);
     }
