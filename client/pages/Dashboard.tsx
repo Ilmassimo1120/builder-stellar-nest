@@ -143,7 +143,9 @@ export default function Dashboard() {
       setLoading(true);
 
       // Auto-configure and connect to Supabase
+      console.log("🔄 Dashboard: Checking Supabase connection...");
       const isConnected = await autoConfigureSupabase();
+      console.log("🔄 Dashboard: autoConfigureSupabase returned:", isConnected);
       setIsSupabaseConnected(isConnected);
 
       let loadedProjects = [];
