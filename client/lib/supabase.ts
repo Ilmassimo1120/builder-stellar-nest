@@ -426,60 +426,26 @@ export const initializeSupabase = async () => {
     console.log("🔧 Environment VITE_SUPABASE_URL:", import.meta.env.VITE_SUPABASE_URL);
     console.log("🔧 Environment VITE_SUPABASE_ANON_KEY present:", !!import.meta.env.VITE_SUPABASE_ANON_KEY);
 
-    // Test basic HTTP connectivity first
-    console.log("🌐 Testing basic HTTP connectivity to Supabase...");
+    // Test connection using health_status table (we know this works)
+    console.log("🔄 Testing health_status table...");
     try {
-      const controller = new AbortController();
-      setTimeout(() => controller.abort(), 5000); // 5 second timeout
-
-      const response = await fetch(supabaseUrl + '/rest/v1/', {
-        method: 'GET',
-        headers: {
-          'apikey': supabaseAnonKey,
-          'Authorization': `Bearer ${supabaseAnonKey}`,
-          'Content-Type': 'application/json'
-        },
-        signal: controller.signal
-      });
-
-      console.log("🌐 HTTP Response status:", response.status);
-      console.log("🌐 HTTP Response ok:", response.ok);
-
-      if (!response.ok) {
-        console.warn("⚠️ HTTP request succeeded but got error status:", response.status);
-        // Don't return false here - 401 is expected for some endpoints
-      }
-    } catch (fetchError) {
-      console.error("❌ Basic HTTP connectivity failed:", fetchError);
-      console.error("❌ This suggests a network/CORS/firewall issue");
-      return false;
-    }
-
-    // Test connection using health check function first
-    console.log("🔄 Method 1: Trying health_check function...");
-    let { data, error } = await supabase.rpc('health_check');
-
-    if (error) {
-      console.warn("⚠️ Method 1 failed:", error.message || 'Unknown error');
-      console.log("🔄 Method 2: Trying health_status table...");
-
-      // Try alternative method - query health_status table
-      const result = await supabase.from('health_status').select('*').limit(1);
-      data = result.data;
-      error = result.error;
+      const { data, error } = await supabase.from('health_status').select('*').limit(1);
 
       if (error) {
-        console.error("❌ Method 2 also failed:", error.message || 'Unknown error');
+        console.error("❌ Health status query failed:", error.message || 'Unknown error');
         console.error("❌ Error code:", error.code || 'No code');
-        console.error("❌ Error details:", error.details || 'No details');
-        console.error("❌ Error hint:", error.hint || 'No hint');
-        console.error("❌ Full error object:", JSON.stringify(error, null, 2));
+        console.error("❌ Full error:", JSON.stringify(error, null, 2));
         return false;
-      } else {
-        console.log("✅ Method 2 succeeded with table query");
       }
-    } else {
-      console.log("✅ Method 1 succeeded with function call");
+
+      if (data && data.length > 0) {
+        console.log("✅ Health status query succeeded:", data[0]);
+      } else {
+        console.log("✅ Health status query succeeded (no data)");
+      }
+    } catch (fetchError) {
+      console.error("❌ Health status query exception:", fetchError);
+      return false;
     }
 
     console.log("✅ Supabase connected successfully", data);
