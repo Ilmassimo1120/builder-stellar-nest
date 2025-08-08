@@ -128,13 +128,8 @@ export default function QuoteBuilder() {
             navigate("/quotes");
           }
         } else {
-          // This should not happen with proper routing
-          console.error("Invalid quote route - no ID provided");
-          toast({
-            title: "Invalid route",
-            description: "Invalid quote route. Redirecting to quotes page.",
-            variant: "destructive",
-          });
+          // This should not happen with proper routing, but handle gracefully
+          console.warn("No quote ID provided, redirecting to quotes page");
           navigate("/quotes");
         }
 
