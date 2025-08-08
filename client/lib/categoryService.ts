@@ -151,7 +151,7 @@ class CategoryService {
 
   // Category CRUD operations
   getCategories(): ProductCategory[] {
-    return [...this.categories];
+    return [...this.categories].sort((a, b) => a.order - b.order);
   }
 
   getCategory(categoryId: string): ProductCategory | null {
