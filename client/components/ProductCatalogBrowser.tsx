@@ -392,6 +392,13 @@ export default function ProductCatalogBrowser({
                           <div className="flex items-center justify-between">
                             <div className="flex items-center space-x-4 flex-1">
                               <div className="flex items-center gap-2">
+                                {onCompareProducts && (
+                                  <Checkbox
+                                    checked={compareProducts.includes(product.id)}
+                                    onCheckedChange={() => toggleProductComparison(product.id)}
+                                    aria-label={`Add ${product.name} to comparison`}
+                                  />
+                                )}
                                 {getCategoryIcon(product.category)}
                                 <Badge variant="outline" className="text-xs">
                                   {product.brand}
