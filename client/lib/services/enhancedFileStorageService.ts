@@ -402,6 +402,23 @@ class EnhancedFileStorageService {
 
       return this.mapToFileAsset(result);
     } catch (error) {
+      // Handle specific error types with better messages
+      if (error instanceof Error) {
+        if (error.message.includes('Storage bucket') && error.message.includes('not found')) {
+          // Storage bucket doesn't exist - provide helpful guidance
+          throw new Error(`❌ Upload failed: ${error.message}\n\n🔧 To fix this:\n1. Log into your Supabase dashboard\n2. Go to Storage section\n3. Create these buckets:\n   • charge-source-user-files\n   • charge-source-documents\n   • charge-source-videos`);
+        }
+        if (error.message.includes('Both storage and database are unavailable')) {
+          // Both systems down - provide setup guidance
+          throw new Error(`❌ ${error.message}\n\n🔧 Setup required:\n1. Create Supabase storage buckets\n2. Run database migration to create tables\n3. Configure environment variables`);
+        }
+        if (error.message.includes('Network connection failed')) {
+          throw new Error(`❌ Upload failed: Network connection issue. Please check your internet connection and try again.`);
+        }
+        // Re-throw the original error if it's already well-formatted
+        throw error;
+      }
+
       const errorMessage = this.formatError(error, 'Unknown upload error');
       console.error('File upload error:', errorMessage, error);
       throw new Error(`Upload failed: ${errorMessage}`);
