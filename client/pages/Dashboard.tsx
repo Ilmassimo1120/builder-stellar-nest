@@ -85,7 +85,10 @@ export default function Dashboard() {
       }
     } catch (error) {
       console.log("⚠️ Error retrying Supabase connection, using local mode");
-      console.log("Error details:", error instanceof Error ? error.message : String(error));
+      console.log(
+        "Error details:",
+        error instanceof Error ? error.message : String(error),
+      );
       setIsSupabaseConnected(false);
     }
   };
@@ -148,11 +151,19 @@ export default function Dashboard() {
       let isConnected = false;
       try {
         isConnected = await autoConfigureSupabase();
-        console.log("🔄 Dashboard: autoConfigureSupabase returned:", isConnected);
+        console.log(
+          "🔄 Dashboard: autoConfigureSupabase returned:",
+          isConnected,
+        );
         setIsSupabaseConnected(isConnected);
       } catch (error) {
-        console.log("⚠️ Dashboard: Supabase connection failed, using local mode");
-        console.log("Error details:", error instanceof Error ? error.message : String(error));
+        console.log(
+          "⚠️ Dashboard: Supabase connection failed, using local mode",
+        );
+        console.log(
+          "Error details:",
+          error instanceof Error ? error.message : String(error),
+        );
         setIsSupabaseConnected(false);
         isConnected = false;
       }
@@ -188,8 +199,13 @@ export default function Dashboard() {
             }));
           }
         } catch (error) {
-          console.log("⚠️ Error loading projects from Supabase, using local data:");
-          console.log("Error details:", error instanceof Error ? error.message : String(error));
+          console.log(
+            "⚠️ Error loading projects from Supabase, using local data:",
+          );
+          console.log(
+            "Error details:",
+            error instanceof Error ? error.message : String(error),
+          );
         }
       }
 
@@ -252,7 +268,10 @@ export default function Dashboard() {
       setProjects(uniqueProjects.length > 0 ? uniqueProjects : sampleProjects);
     } catch (error) {
       console.log("⚠️ Error in loadProjects, using sample data:");
-      console.log("Error details:", error instanceof Error ? error.message : String(error));
+      console.log(
+        "Error details:",
+        error instanceof Error ? error.message : String(error),
+      );
       setProjects(sampleProjects);
     } finally {
       setLoading(false);
@@ -714,7 +733,6 @@ export default function Dashboard() {
             </div>
           </CardContent>
         </Card>
-
 
         {/* Main Content Tabs */}
         <Tabs defaultValue="projects" className="space-y-6">

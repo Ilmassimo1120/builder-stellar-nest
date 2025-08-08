@@ -61,24 +61,35 @@ export default function CategoryManager({
 }: CategoryManagerProps) {
   const { toast } = useToast();
   const [categories, setCategories] = useState<ProductCategory[]>(
-    categoryService.getCategories()
+    categoryService.getCategories(),
   );
-  const [selectedCategory, setSelectedCategory] = useState<ProductCategory | null>(null);
+  const [selectedCategory, setSelectedCategory] =
+    useState<ProductCategory | null>(null);
   const [isAddingCategory, setIsAddingCategory] = useState(false);
   const [isEditingCategory, setIsEditingCategory] = useState(false);
   const [isAddingSubcategory, setIsAddingSubcategory] = useState(false);
-  const [editingSubcategory, setEditingSubcategory] = useState<ProductSubcategory | null>(null);
+  const [editingSubcategory, setEditingSubcategory] =
+    useState<ProductSubcategory | null>(null);
 
   // Form state
   const [newCategory, setNewCategory] = useState({ name: "", description: "" });
-  const [editCategory, setEditCategory] = useState<ProductCategory | null>(null);
-  const [newSubcategory, setNewSubcategory] = useState({ name: "", description: "" });
+  const [editCategory, setEditCategory] = useState<ProductCategory | null>(
+    null,
+  );
+  const [newSubcategory, setNewSubcategory] = useState({
+    name: "",
+    description: "",
+  });
 
   // Drag and drop state
   const [draggedCategory, setDraggedCategory] = useState<string | null>(null);
   const [dragOverCategory, setDragOverCategory] = useState<string | null>(null);
-  const [draggedSubcategory, setDraggedSubcategory] = useState<string | null>(null);
-  const [dragOverSubcategory, setDragOverSubcategory] = useState<string | null>(null);
+  const [draggedSubcategory, setDraggedSubcategory] = useState<string | null>(
+    null,
+  );
+  const [dragOverSubcategory, setDragOverSubcategory] = useState<string | null>(
+    null,
+  );
 
   const refreshCategories = () => {
     const updatedCategories = categoryService.getCategories();
@@ -108,7 +119,8 @@ export default function CategoryManager({
     } catch (error) {
       toast({
         title: "Error",
-        description: error instanceof Error ? error.message : "Failed to add category",
+        description:
+          error instanceof Error ? error.message : "Failed to add category",
         variant: "destructive",
       });
     }
@@ -139,7 +151,8 @@ export default function CategoryManager({
     } catch (error) {
       toast({
         title: "Error",
-        description: error instanceof Error ? error.message : "Failed to update category",
+        description:
+          error instanceof Error ? error.message : "Failed to update category",
         variant: "destructive",
       });
     }
@@ -147,7 +160,8 @@ export default function CategoryManager({
 
   const handleDeleteCategory = (categoryId: string) => {
     try {
-      const productsInCategory = categoryService.getProductsInCategory(categoryId);
+      const productsInCategory =
+        categoryService.getProductsInCategory(categoryId);
       if (productsInCategory > 0) {
         toast({
           title: "Cannot Delete",
@@ -169,7 +183,8 @@ export default function CategoryManager({
     } catch (error) {
       toast({
         title: "Error",
-        description: error instanceof Error ? error.message : "Failed to delete category",
+        description:
+          error instanceof Error ? error.message : "Failed to delete category",
         variant: "destructive",
       });
     }
@@ -189,7 +204,7 @@ export default function CategoryManager({
       categoryService.addSubcategory(
         selectedCategory.id,
         newSubcategory.name,
-        newSubcategory.description
+        newSubcategory.description,
       );
       setNewSubcategory({ name: "", description: "" });
       setIsAddingSubcategory(false);
@@ -204,7 +219,8 @@ export default function CategoryManager({
     } catch (error) {
       toast({
         title: "Error",
-        description: error instanceof Error ? error.message : "Failed to add subcategory",
+        description:
+          error instanceof Error ? error.message : "Failed to add subcategory",
         variant: "destructive",
       });
     }
@@ -229,7 +245,9 @@ export default function CategoryManager({
       refreshCategories();
       // Update selected category to show updated subcategory
       if (selectedCategory) {
-        const updatedCategory = categoryService.getCategory(selectedCategory.id);
+        const updatedCategory = categoryService.getCategory(
+          selectedCategory.id,
+        );
         if (updatedCategory) setSelectedCategory(updatedCategory);
       }
       toast({
@@ -239,7 +257,10 @@ export default function CategoryManager({
     } catch (error) {
       toast({
         title: "Error",
-        description: error instanceof Error ? error.message : "Failed to update subcategory",
+        description:
+          error instanceof Error
+            ? error.message
+            : "Failed to update subcategory",
         variant: "destructive",
       });
     }
@@ -247,7 +268,8 @@ export default function CategoryManager({
 
   const handleDeleteSubcategory = (subcategoryId: string) => {
     try {
-      const productsInSubcategory = categoryService.getProductsInSubcategory(subcategoryId);
+      const productsInSubcategory =
+        categoryService.getProductsInSubcategory(subcategoryId);
       if (productsInSubcategory > 0) {
         toast({
           title: "Cannot Delete",
@@ -261,7 +283,9 @@ export default function CategoryManager({
       refreshCategories();
       // Update selected category to remove deleted subcategory
       if (selectedCategory) {
-        const updatedCategory = categoryService.getCategory(selectedCategory.id);
+        const updatedCategory = categoryService.getCategory(
+          selectedCategory.id,
+        );
         if (updatedCategory) setSelectedCategory(updatedCategory);
       }
       toast({
@@ -271,7 +295,10 @@ export default function CategoryManager({
     } catch (error) {
       toast({
         title: "Error",
-        description: error instanceof Error ? error.message : "Failed to delete subcategory",
+        description:
+          error instanceof Error
+            ? error.message
+            : "Failed to delete subcategory",
         variant: "destructive",
       });
     }
@@ -280,12 +307,12 @@ export default function CategoryManager({
   // Category drag handlers
   const handleCategoryDragStart = (e: React.DragEvent, categoryId: string) => {
     setDraggedCategory(categoryId);
-    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.effectAllowed = "move";
   };
 
   const handleCategoryDragOver = (e: React.DragEvent, categoryId: string) => {
     e.preventDefault();
-    e.dataTransfer.dropEffect = 'move';
+    e.dataTransfer.dropEffect = "move";
     setDragOverCategory(categoryId);
   };
 
@@ -299,14 +326,18 @@ export default function CategoryManager({
 
     if (draggedCategory && draggedCategory !== targetCategoryId) {
       const newOrder = [...categories];
-      const draggedIndex = newOrder.findIndex(cat => cat.id === draggedCategory);
-      const targetIndex = newOrder.findIndex(cat => cat.id === targetCategoryId);
+      const draggedIndex = newOrder.findIndex(
+        (cat) => cat.id === draggedCategory,
+      );
+      const targetIndex = newOrder.findIndex(
+        (cat) => cat.id === targetCategoryId,
+      );
 
       if (draggedIndex !== -1 && targetIndex !== -1) {
         const [draggedItem] = newOrder.splice(draggedIndex, 1);
         newOrder.splice(targetIndex, 0, draggedItem);
 
-        categoryService.reorderCategories(newOrder.map(cat => cat.id));
+        categoryService.reorderCategories(newOrder.map((cat) => cat.id));
         refreshCategories();
 
         toast({
@@ -340,14 +371,20 @@ export default function CategoryManager({
   };
 
   // Subcategory drag handlers
-  const handleSubcategoryDragStart = (e: React.DragEvent, subcategoryId: string) => {
+  const handleSubcategoryDragStart = (
+    e: React.DragEvent,
+    subcategoryId: string,
+  ) => {
     setDraggedSubcategory(subcategoryId);
-    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.effectAllowed = "move";
   };
 
-  const handleSubcategoryDragOver = (e: React.DragEvent, subcategoryId: string) => {
+  const handleSubcategoryDragOver = (
+    e: React.DragEvent,
+    subcategoryId: string,
+  ) => {
     e.preventDefault();
-    e.dataTransfer.dropEffect = 'move';
+    e.dataTransfer.dropEffect = "move";
     setDragOverSubcategory(subcategoryId);
   };
 
@@ -355,24 +392,40 @@ export default function CategoryManager({
     setDragOverSubcategory(null);
   };
 
-  const handleSubcategoryDrop = (e: React.DragEvent, targetSubcategoryId: string) => {
+  const handleSubcategoryDrop = (
+    e: React.DragEvent,
+    targetSubcategoryId: string,
+  ) => {
     e.preventDefault();
     setDragOverSubcategory(null);
 
-    if (draggedSubcategory && draggedSubcategory !== targetSubcategoryId && selectedCategory) {
+    if (
+      draggedSubcategory &&
+      draggedSubcategory !== targetSubcategoryId &&
+      selectedCategory
+    ) {
       const newOrder = [...selectedCategory.subcategories];
-      const draggedIndex = newOrder.findIndex(sub => sub.id === draggedSubcategory);
-      const targetIndex = newOrder.findIndex(sub => sub.id === targetSubcategoryId);
+      const draggedIndex = newOrder.findIndex(
+        (sub) => sub.id === draggedSubcategory,
+      );
+      const targetIndex = newOrder.findIndex(
+        (sub) => sub.id === targetSubcategoryId,
+      );
 
       if (draggedIndex !== -1 && targetIndex !== -1) {
         const [draggedItem] = newOrder.splice(draggedIndex, 1);
         newOrder.splice(targetIndex, 0, draggedItem);
 
-        categoryService.reorderSubcategories(selectedCategory.id, newOrder.map(sub => sub.id));
+        categoryService.reorderSubcategories(
+          selectedCategory.id,
+          newOrder.map((sub) => sub.id),
+        );
         refreshCategories();
 
         // Update selected category
-        const updatedCategory = categoryService.getCategory(selectedCategory.id);
+        const updatedCategory = categoryService.getCategory(
+          selectedCategory.id,
+        );
         if (updatedCategory) setSelectedCategory(updatedCategory);
 
         toast({
@@ -389,7 +442,9 @@ export default function CategoryManager({
     if (categoryService.moveSubcategoryUp(subcategoryId)) {
       refreshCategories();
       if (selectedCategory) {
-        const updatedCategory = categoryService.getCategory(selectedCategory.id);
+        const updatedCategory = categoryService.getCategory(
+          selectedCategory.id,
+        );
         if (updatedCategory) setSelectedCategory(updatedCategory);
       }
       toast({
@@ -403,7 +458,9 @@ export default function CategoryManager({
     if (categoryService.moveSubcategoryDown(subcategoryId)) {
       refreshCategories();
       if (selectedCategory) {
-        const updatedCategory = categoryService.getCategory(selectedCategory.id);
+        const updatedCategory = categoryService.getCategory(
+          selectedCategory.id,
+        );
         if (updatedCategory) setSelectedCategory(updatedCategory);
       }
       toast({
@@ -424,7 +481,8 @@ export default function CategoryManager({
             Category Management
           </DialogTitle>
           <DialogDescription>
-            Manage product categories and subcategories. Drag items to reorder or use the up/down buttons.
+            Manage product categories and subcategories. Drag items to reorder
+            or use the up/down buttons.
           </DialogDescription>
         </DialogHeader>
 
@@ -433,7 +491,10 @@ export default function CategoryManager({
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <h3 className="text-lg font-semibold">Categories</h3>
-              <Dialog open={isAddingCategory} onOpenChange={setIsAddingCategory}>
+              <Dialog
+                open={isAddingCategory}
+                onOpenChange={setIsAddingCategory}
+              >
                 <DialogTrigger asChild>
                   <Button size="sm">
                     <Plus className="w-4 h-4 mr-2" />
@@ -444,7 +505,8 @@ export default function CategoryManager({
                   <DialogHeader>
                     <DialogTitle>Add New Category</DialogTitle>
                     <DialogDescription>
-                      Create a new product category for organizing your products.
+                      Create a new product category for organizing your
+                      products.
                     </DialogDescription>
                   </DialogHeader>
                   <div className="space-y-4">
@@ -454,7 +516,10 @@ export default function CategoryManager({
                         id="category-name"
                         value={newCategory.name}
                         onChange={(e) =>
-                          setNewCategory({ ...newCategory, name: e.target.value })
+                          setNewCategory({
+                            ...newCategory,
+                            name: e.target.value,
+                          })
                         }
                         placeholder="e.g., EV Chargers"
                       />
@@ -465,7 +530,10 @@ export default function CategoryManager({
                         id="category-description"
                         value={newCategory.description}
                         onChange={(e) =>
-                          setNewCategory({ ...newCategory, description: e.target.value })
+                          setNewCategory({
+                            ...newCategory,
+                            description: e.target.value,
+                          })
                         }
                         placeholder="Brief description of this category"
                         rows={3}
@@ -473,7 +541,10 @@ export default function CategoryManager({
                     </div>
                   </div>
                   <DialogFooter>
-                    <Button variant="outline" onClick={() => setIsAddingCategory(false)}>
+                    <Button
+                      variant="outline"
+                      onClick={() => setIsAddingCategory(false)}
+                    >
                       Cancel
                     </Button>
                     <Button onClick={handleAddCategory}>Add Category</Button>
@@ -484,7 +555,9 @@ export default function CategoryManager({
 
             <div className="space-y-2 max-h-[500px] overflow-y-auto">
               {categories.map((category) => {
-                const productCount = categoryService.getProductsInCategory(category.id);
+                const productCount = categoryService.getProductsInCategory(
+                  category.id,
+                );
                 return (
                   <Card
                     key={category.id}
@@ -498,9 +571,13 @@ export default function CategoryManager({
                         ? "ring-2 ring-primary bg-primary/5"
                         : "hover:bg-muted/50"
                     } ${
-                      draggedCategory === category.id ? "opacity-50 scale-105" : ""
+                      draggedCategory === category.id
+                        ? "opacity-50 scale-105"
+                        : ""
                     } ${
-                      dragOverCategory === category.id ? "border-primary bg-primary/5" : ""
+                      dragOverCategory === category.id
+                        ? "border-primary bg-primary/5"
+                        : ""
                     }`}
                     onClick={() => setSelectedCategory(category)}
                   >
@@ -511,7 +588,9 @@ export default function CategoryManager({
                           <div className="flex-1">
                             <div className="flex items-center gap-2">
                               <h4 className="font-medium">{category.name}</h4>
-                              <Badge variant="outline">{productCount} products</Badge>
+                              <Badge variant="outline">
+                                {productCount} products
+                              </Badge>
                             </div>
                             <p className="text-sm text-muted-foreground mt-1">
                               {category.description}
@@ -531,7 +610,11 @@ export default function CategoryManager({
                                 e.stopPropagation();
                                 handleMoveCategoryUp(category.id);
                               }}
-                              disabled={categories.findIndex(c => c.id === category.id) === 0}
+                              disabled={
+                                categories.findIndex(
+                                  (c) => c.id === category.id,
+                                ) === 0
+                              }
                             >
                               <ChevronUp className="w-3 h-3" />
                             </Button>
@@ -543,15 +626,26 @@ export default function CategoryManager({
                                 e.stopPropagation();
                                 handleMoveCategoryDown(category.id);
                               }}
-                              disabled={categories.findIndex(c => c.id === category.id) === categories.length - 1}
+                              disabled={
+                                categories.findIndex(
+                                  (c) => c.id === category.id,
+                                ) ===
+                                categories.length - 1
+                              }
                             >
                               <ChevronDown className="w-3 h-3" />
                             </Button>
                           </div>
-                          <Dialog open={isEditingCategory && editCategory?.id === category.id} onOpenChange={(open) => {
-                            setIsEditingCategory(open);
-                            if (open) setEditCategory({ ...category });
-                          }}>
+                          <Dialog
+                            open={
+                              isEditingCategory &&
+                              editCategory?.id === category.id
+                            }
+                            onOpenChange={(open) => {
+                              setIsEditingCategory(open);
+                              if (open) setEditCategory({ ...category });
+                            }}
+                          >
                             <DialogTrigger asChild>
                               <Button variant="ghost" size="sm">
                                 <Edit className="w-4 h-4" />
@@ -567,22 +661,32 @@ export default function CategoryManager({
                               {editCategory && (
                                 <div className="space-y-4">
                                   <div>
-                                    <Label htmlFor="edit-category-name">Category Name</Label>
+                                    <Label htmlFor="edit-category-name">
+                                      Category Name
+                                    </Label>
                                     <Input
                                       id="edit-category-name"
                                       value={editCategory.name}
                                       onChange={(e) =>
-                                        setEditCategory({ ...editCategory, name: e.target.value })
+                                        setEditCategory({
+                                          ...editCategory,
+                                          name: e.target.value,
+                                        })
                                       }
                                     />
                                   </div>
                                   <div>
-                                    <Label htmlFor="edit-category-description">Description</Label>
+                                    <Label htmlFor="edit-category-description">
+                                      Description
+                                    </Label>
                                     <Textarea
                                       id="edit-category-description"
                                       value={editCategory.description}
                                       onChange={(e) =>
-                                        setEditCategory({ ...editCategory, description: e.target.value })
+                                        setEditCategory({
+                                          ...editCategory,
+                                          description: e.target.value,
+                                        })
                                       }
                                       rows={3}
                                     />
@@ -590,31 +694,46 @@ export default function CategoryManager({
                                 </div>
                               )}
                               <DialogFooter>
-                                <Button variant="outline" onClick={() => setIsEditingCategory(false)}>
+                                <Button
+                                  variant="outline"
+                                  onClick={() => setIsEditingCategory(false)}
+                                >
                                   Cancel
                                 </Button>
-                                <Button onClick={handleEditCategory}>Save Changes</Button>
+                                <Button onClick={handleEditCategory}>
+                                  Save Changes
+                                </Button>
                               </DialogFooter>
                             </DialogContent>
                           </Dialog>
                           <AlertDialog>
                             <AlertDialogTrigger asChild>
-                              <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="text-destructive hover:text-destructive"
+                              >
                                 <Trash2 className="w-4 h-4" />
                               </Button>
                             </AlertDialogTrigger>
                             <AlertDialogContent>
                               <AlertDialogHeader>
-                                <AlertDialogTitle>Delete Category</AlertDialogTitle>
+                                <AlertDialogTitle>
+                                  Delete Category
+                                </AlertDialogTitle>
                                 <AlertDialogDescription>
-                                  Are you sure you want to delete "{category.name}"? This action cannot be undone.
-                                  All subcategories will also be deleted.
+                                  Are you sure you want to delete "
+                                  {category.name}"? This action cannot be
+                                  undone. All subcategories will also be
+                                  deleted.
                                 </AlertDialogDescription>
                               </AlertDialogHeader>
                               <AlertDialogFooter>
                                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                                 <AlertDialogAction
-                                  onClick={() => handleDeleteCategory(category.id)}
+                                  onClick={() =>
+                                    handleDeleteCategory(category.id)
+                                  }
                                   className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                                 >
                                   Delete
@@ -636,10 +755,15 @@ export default function CategoryManager({
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <h3 className="text-lg font-semibold">
-                {selectedCategory ? `${selectedCategory.name} Subcategories` : "Subcategories"}
+                {selectedCategory
+                  ? `${selectedCategory.name} Subcategories`
+                  : "Subcategories"}
               </h3>
               {selectedCategory && (
-                <Dialog open={isAddingSubcategory} onOpenChange={setIsAddingSubcategory}>
+                <Dialog
+                  open={isAddingSubcategory}
+                  onOpenChange={setIsAddingSubcategory}
+                >
                   <DialogTrigger asChild>
                     <Button size="sm">
                       <FolderPlus className="w-4 h-4 mr-2" />
@@ -648,30 +772,42 @@ export default function CategoryManager({
                   </DialogTrigger>
                   <DialogContent>
                     <DialogHeader>
-                      <DialogTitle>Add Subcategory to {selectedCategory.name}</DialogTitle>
+                      <DialogTitle>
+                        Add Subcategory to {selectedCategory.name}
+                      </DialogTitle>
                       <DialogDescription>
                         Create a new subcategory within this category.
                       </DialogDescription>
                     </DialogHeader>
                     <div className="space-y-4">
                       <div>
-                        <Label htmlFor="subcategory-name">Subcategory Name</Label>
+                        <Label htmlFor="subcategory-name">
+                          Subcategory Name
+                        </Label>
                         <Input
                           id="subcategory-name"
                           value={newSubcategory.name}
                           onChange={(e) =>
-                            setNewSubcategory({ ...newSubcategory, name: e.target.value })
+                            setNewSubcategory({
+                              ...newSubcategory,
+                              name: e.target.value,
+                            })
                           }
                           placeholder="e.g., AC Chargers - Residential"
                         />
                       </div>
                       <div>
-                        <Label htmlFor="subcategory-description">Description</Label>
+                        <Label htmlFor="subcategory-description">
+                          Description
+                        </Label>
                         <Textarea
                           id="subcategory-description"
                           value={newSubcategory.description}
                           onChange={(e) =>
-                            setNewSubcategory({ ...newSubcategory, description: e.target.value })
+                            setNewSubcategory({
+                              ...newSubcategory,
+                              description: e.target.value,
+                            })
                           }
                           placeholder="Brief description of this subcategory"
                           rows={3}
@@ -679,10 +815,15 @@ export default function CategoryManager({
                       </div>
                     </div>
                     <DialogFooter>
-                      <Button variant="outline" onClick={() => setIsAddingSubcategory(false)}>
+                      <Button
+                        variant="outline"
+                        onClick={() => setIsAddingSubcategory(false)}
+                      >
                         Cancel
                       </Button>
-                      <Button onClick={handleAddSubcategory}>Add Subcategory</Button>
+                      <Button onClick={handleAddSubcategory}>
+                        Add Subcategory
+                      </Button>
                     </DialogFooter>
                   </DialogContent>
                 </Dialog>
@@ -695,25 +836,42 @@ export default function CategoryManager({
                   <div className="text-center py-8 text-muted-foreground">
                     <FolderPlus className="w-12 h-12 mx-auto mb-4 opacity-50" />
                     <p>No subcategories yet</p>
-                    <p className="text-sm">Add your first subcategory to get started</p>
+                    <p className="text-sm">
+                      Add your first subcategory to get started
+                    </p>
                   </div>
                 ) : (
                   selectedCategory.subcategories.map((subcategory) => {
-                    const productCount = categoryService.getProductsInSubcategory(subcategory.id);
+                    const productCount =
+                      categoryService.getProductsInSubcategory(subcategory.id);
                     const isEditing = editingSubcategory?.id === subcategory.id;
-                    
+
                     return (
                       <Card
                         key={subcategory.id}
                         draggable={!isEditing}
-                        onDragStart={(e) => !isEditing && handleSubcategoryDragStart(e, subcategory.id)}
-                        onDragOver={(e) => !isEditing && handleSubcategoryDragOver(e, subcategory.id)}
-                        onDragLeave={!isEditing ? handleSubcategoryDragLeave : undefined}
-                        onDrop={(e) => !isEditing && handleSubcategoryDrop(e, subcategory.id)}
+                        onDragStart={(e) =>
+                          !isEditing &&
+                          handleSubcategoryDragStart(e, subcategory.id)
+                        }
+                        onDragOver={(e) =>
+                          !isEditing &&
+                          handleSubcategoryDragOver(e, subcategory.id)
+                        }
+                        onDragLeave={
+                          !isEditing ? handleSubcategoryDragLeave : undefined
+                        }
+                        onDrop={(e) =>
+                          !isEditing && handleSubcategoryDrop(e, subcategory.id)
+                        }
                         className={`transition-colors ${
-                          draggedSubcategory === subcategory.id ? "opacity-50 scale-105" : ""
+                          draggedSubcategory === subcategory.id
+                            ? "opacity-50 scale-105"
+                            : ""
                         } ${
-                          dragOverSubcategory === subcategory.id ? "border-primary bg-primary/5" : ""
+                          dragOverSubcategory === subcategory.id
+                            ? "border-primary bg-primary/5"
+                            : ""
                         }`}
                       >
                         <CardContent className="p-4">
@@ -722,26 +880,35 @@ export default function CategoryManager({
                               <Input
                                 value={editingSubcategory.name}
                                 onChange={(e) =>
-                                  setEditingSubcategory({ ...editingSubcategory, name: e.target.value })
+                                  setEditingSubcategory({
+                                    ...editingSubcategory,
+                                    name: e.target.value,
+                                  })
                                 }
                                 placeholder="Subcategory name"
                               />
                               <Textarea
                                 value={editingSubcategory.description}
                                 onChange={(e) =>
-                                  setEditingSubcategory({ ...editingSubcategory, description: e.target.value })
+                                  setEditingSubcategory({
+                                    ...editingSubcategory,
+                                    description: e.target.value,
+                                  })
                                 }
                                 placeholder="Description"
                                 rows={2}
                               />
                               <div className="flex gap-2">
-                                <Button size="sm" onClick={handleEditSubcategory}>
+                                <Button
+                                  size="sm"
+                                  onClick={handleEditSubcategory}
+                                >
                                   <Save className="w-4 h-4 mr-2" />
                                   Save
                                 </Button>
-                                <Button 
-                                  size="sm" 
-                                  variant="outline" 
+                                <Button
+                                  size="sm"
+                                  variant="outline"
                                   onClick={() => setEditingSubcategory(null)}
                                 >
                                   <X className="w-4 h-4 mr-2" />
@@ -755,8 +922,12 @@ export default function CategoryManager({
                                 <GripVertical className="w-4 h-4 text-muted-foreground cursor-move" />
                                 <div className="flex-1">
                                   <div className="flex items-center gap-2">
-                                    <h5 className="font-medium">{subcategory.name}</h5>
-                                    <Badge variant="secondary">{productCount} products</Badge>
+                                    <h5 className="font-medium">
+                                      {subcategory.name}
+                                    </h5>
+                                    <Badge variant="secondary">
+                                      {productCount} products
+                                    </Badge>
                                   </div>
                                   <p className="text-sm text-muted-foreground mt-1">
                                     {subcategory.description}
@@ -773,7 +944,11 @@ export default function CategoryManager({
                                       e.stopPropagation();
                                       handleMoveSubcategoryUp(subcategory.id);
                                     }}
-                                    disabled={selectedCategory!.subcategories.findIndex(s => s.id === subcategory.id) === 0}
+                                    disabled={
+                                      selectedCategory!.subcategories.findIndex(
+                                        (s) => s.id === subcategory.id,
+                                      ) === 0
+                                    }
                                   >
                                     <ChevronUp className="w-3 h-3" />
                                   </Button>
@@ -785,35 +960,56 @@ export default function CategoryManager({
                                       e.stopPropagation();
                                       handleMoveSubcategoryDown(subcategory.id);
                                     }}
-                                    disabled={selectedCategory!.subcategories.findIndex(s => s.id === subcategory.id) === selectedCategory!.subcategories.length - 1}
+                                    disabled={
+                                      selectedCategory!.subcategories.findIndex(
+                                        (s) => s.id === subcategory.id,
+                                      ) ===
+                                      selectedCategory!.subcategories.length - 1
+                                    }
                                   >
                                     <ChevronDown className="w-3 h-3" />
                                   </Button>
                                 </div>
-                                <Button 
-                                  variant="ghost" 
+                                <Button
+                                  variant="ghost"
                                   size="sm"
-                                  onClick={() => setEditingSubcategory({ ...subcategory })}
+                                  onClick={() =>
+                                    setEditingSubcategory({ ...subcategory })
+                                  }
                                 >
                                   <Edit className="w-4 h-4" />
                                 </Button>
                                 <AlertDialog>
                                   <AlertDialogTrigger asChild>
-                                    <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive">
+                                    <Button
+                                      variant="ghost"
+                                      size="sm"
+                                      className="text-destructive hover:text-destructive"
+                                    >
                                       <Trash2 className="w-4 h-4" />
                                     </Button>
                                   </AlertDialogTrigger>
                                   <AlertDialogContent>
                                     <AlertDialogHeader>
-                                      <AlertDialogTitle>Delete Subcategory</AlertDialogTitle>
+                                      <AlertDialogTitle>
+                                        Delete Subcategory
+                                      </AlertDialogTitle>
                                       <AlertDialogDescription>
-                                        Are you sure you want to delete "{subcategory.name}"? This action cannot be undone.
+                                        Are you sure you want to delete "
+                                        {subcategory.name}"? This action cannot
+                                        be undone.
                                       </AlertDialogDescription>
                                     </AlertDialogHeader>
                                     <AlertDialogFooter>
-                                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                      <AlertDialogCancel>
+                                        Cancel
+                                      </AlertDialogCancel>
                                       <AlertDialogAction
-                                        onClick={() => handleDeleteSubcategory(subcategory.id)}
+                                        onClick={() =>
+                                          handleDeleteSubcategory(
+                                            subcategory.id,
+                                          )
+                                        }
                                         className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                                       >
                                         Delete

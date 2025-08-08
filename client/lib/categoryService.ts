@@ -183,26 +183,27 @@ class CategoryService {
   }
 
   getCategory(categoryId: string): ProductCategory | null {
-    return this.categories.find(cat => cat.id === categoryId) || null;
+    return this.categories.find((cat) => cat.id === categoryId) || null;
   }
 
   addCategory(name: string, description: string): ProductCategory {
     // Generate a unique ID based on name
-    const id = name.toLowerCase()
-      .replace(/[^a-z0-9\s]/g, '')
-      .replace(/\s+/g, '-')
+    const id = name
+      .toLowerCase()
+      .replace(/[^a-z0-9\s]/g, "")
+      .replace(/\s+/g, "-")
       .substring(0, 50);
 
     // Ensure ID is unique
     let finalId = id;
     let counter = 1;
-    while (this.categories.some(cat => cat.id === finalId)) {
+    while (this.categories.some((cat) => cat.id === finalId)) {
       finalId = `${id}-${counter}`;
       counter++;
     }
 
     // Assign the next order value
-    const maxOrder = Math.max(...this.categories.map(cat => cat.order), -1);
+    const maxOrder = Math.max(...this.categories.map((cat) => cat.order), -1);
 
     const newCategory: ProductCategory = {
       id: finalId,
@@ -218,8 +219,13 @@ class CategoryService {
     return newCategory;
   }
 
-  updateCategory(categoryId: string, updates: { name?: string; description?: string }): ProductCategory | null {
-    const categoryIndex = this.categories.findIndex(cat => cat.id === categoryId);
+  updateCategory(
+    categoryId: string,
+    updates: { name?: string; description?: string },
+  ): ProductCategory | null {
+    const categoryIndex = this.categories.findIndex(
+      (cat) => cat.id === categoryId,
+    );
     if (categoryIndex === -1) return null;
 
     if (updates.name !== undefined) {
@@ -234,13 +240,17 @@ class CategoryService {
   }
 
   deleteCategory(categoryId: string): boolean {
-    const categoryIndex = this.categories.findIndex(cat => cat.id === categoryId);
+    const categoryIndex = this.categories.findIndex(
+      (cat) => cat.id === categoryId,
+    );
     if (categoryIndex === -1) return false;
 
     // Check if there are products in this category
     const productsInCategory = this.getProductsInCategory(categoryId);
     if (productsInCategory > 0) {
-      throw new Error(`Cannot delete category: ${productsInCategory} products are assigned to this category`);
+      throw new Error(
+        `Cannot delete category: ${productsInCategory} products are assigned to this category`,
+      );
     }
 
     this.categories.splice(categoryIndex, 1);
@@ -251,30 +261,43 @@ class CategoryService {
   // Subcategory CRUD operations
   getSubcategories(categoryId?: string): ProductSubcategory[] {
     if (categoryId) {
-      const category = this.categories.find(cat => cat.id === categoryId);
-      return category ? [...category.subcategories].sort((a, b) => a.order - b.order) : [];
+      const category = this.categories.find((cat) => cat.id === categoryId);
+      return category
+        ? [...category.subcategories].sort((a, b) => a.order - b.order)
+        : [];
     }
-    return this.categories.flatMap(cat => cat.subcategories).sort((a, b) => a.order - b.order);
+    return this.categories
+      .flatMap((cat) => cat.subcategories)
+      .sort((a, b) => a.order - b.order);
   }
 
   getSubcategory(subcategoryId: string): ProductSubcategory | null {
     for (const category of this.categories) {
-      const subcategory = category.subcategories.find(sub => sub.id === subcategoryId);
+      const subcategory = category.subcategories.find(
+        (sub) => sub.id === subcategoryId,
+      );
       if (subcategory) return subcategory;
     }
     return null;
   }
 
-  addSubcategory(categoryId: string, name: string, description: string): ProductSubcategory {
-    const categoryIndex = this.categories.findIndex(cat => cat.id === categoryId);
+  addSubcategory(
+    categoryId: string,
+    name: string,
+    description: string,
+  ): ProductSubcategory {
+    const categoryIndex = this.categories.findIndex(
+      (cat) => cat.id === categoryId,
+    );
     if (categoryIndex === -1) {
       throw new Error("Category not found");
     }
 
     // Generate a unique ID based on name
-    const baseId = name.toLowerCase()
-      .replace(/[^a-z0-9\s]/g, '')
-      .replace(/\s+/g, '-')
+    const baseId = name
+      .toLowerCase()
+      .replace(/[^a-z0-9\s]/g, "")
+      .replace(/\s+/g, "-")
       .substring(0, 50);
 
     // Ensure ID is unique across all subcategories
@@ -287,7 +310,10 @@ class CategoryService {
 
     // Assign the next order value for this category
     const category = this.categories[categoryIndex];
-    const maxOrder = Math.max(...category.subcategories.map(sub => sub.order), -1);
+    const maxOrder = Math.max(
+      ...category.subcategories.map((sub) => sub.order),
+      -1,
+    );
 
     const newSubcategory: ProductSubcategory = {
       id: finalId,
@@ -303,17 +329,23 @@ class CategoryService {
     return newSubcategory;
   }
 
-  updateSubcategory(subcategoryId: string, updates: { name?: string; description?: string }): ProductSubcategory | null {
+  updateSubcategory(
+    subcategoryId: string,
+    updates: { name?: string; description?: string },
+  ): ProductSubcategory | null {
     for (const category of this.categories) {
-      const subcategoryIndex = category.subcategories.findIndex(sub => sub.id === subcategoryId);
+      const subcategoryIndex = category.subcategories.findIndex(
+        (sub) => sub.id === subcategoryId,
+      );
       if (subcategoryIndex !== -1) {
         if (updates.name !== undefined) {
           category.subcategories[subcategoryIndex].name = updates.name.trim();
         }
         if (updates.description !== undefined) {
-          category.subcategories[subcategoryIndex].description = updates.description.trim();
+          category.subcategories[subcategoryIndex].description =
+            updates.description.trim();
         }
-        
+
         this.saveToStorage();
         return category.subcategories[subcategoryIndex];
       }
@@ -325,11 +357,15 @@ class CategoryService {
     // Check if there are products in this subcategory
     const productsInSubcategory = this.getProductsInSubcategory(subcategoryId);
     if (productsInSubcategory > 0) {
-      throw new Error(`Cannot delete subcategory: ${productsInSubcategory} products are assigned to this subcategory`);
+      throw new Error(
+        `Cannot delete subcategory: ${productsInSubcategory} products are assigned to this subcategory`,
+      );
     }
 
     for (const category of this.categories) {
-      const subcategoryIndex = category.subcategories.findIndex(sub => sub.id === subcategoryId);
+      const subcategoryIndex = category.subcategories.findIndex(
+        (sub) => sub.id === subcategoryId,
+      );
       if (subcategoryIndex !== -1) {
         category.subcategories.splice(subcategoryIndex, 1);
         this.saveToStorage();
@@ -349,17 +385,30 @@ class CategoryService {
   }
 
   // Utility methods for product management
-  getCategorySelectOptions(): { value: string; label: string; description: string }[] {
-    return this.categories.map(cat => ({
+  getCategorySelectOptions(): {
+    value: string;
+    label: string;
+    description: string;
+  }[] {
+    return this.categories.map((cat) => ({
       value: cat.id,
       label: cat.name,
       description: cat.description,
     }));
   }
 
-  getSubcategorySelectOptions(categoryId?: string): { value: string; label: string; description: string; categoryId: string }[] {
-    const subcategories = categoryId ? this.getSubcategories(categoryId) : this.getSubcategories();
-    return subcategories.map(sub => ({
+  getSubcategorySelectOptions(
+    categoryId?: string,
+  ): {
+    value: string;
+    label: string;
+    description: string;
+    categoryId: string;
+  }[] {
+    const subcategories = categoryId
+      ? this.getSubcategories(categoryId)
+      : this.getSubcategories();
+    return subcategories.map((sub) => ({
       value: sub.id,
       label: sub.name,
       description: sub.description,
@@ -369,17 +418,23 @@ class CategoryService {
 
   // Validation methods
   isCategoryNameUnique(name: string, excludeId?: string): boolean {
-    return !this.categories.some(cat => 
-      cat.name.toLowerCase() === name.toLowerCase() && cat.id !== excludeId
+    return !this.categories.some(
+      (cat) =>
+        cat.name.toLowerCase() === name.toLowerCase() && cat.id !== excludeId,
     );
   }
 
-  isSubcategoryNameUnique(name: string, categoryId: string, excludeId?: string): boolean {
-    const category = this.categories.find(cat => cat.id === categoryId);
+  isSubcategoryNameUnique(
+    name: string,
+    categoryId: string,
+    excludeId?: string,
+  ): boolean {
+    const category = this.categories.find((cat) => cat.id === categoryId);
     if (!category) return true;
-    
-    return !category.subcategories.some(sub => 
-      sub.name.toLowerCase() === name.toLowerCase() && sub.id !== excludeId
+
+    return !category.subcategories.some(
+      (sub) =>
+        sub.name.toLowerCase() === name.toLowerCase() && sub.id !== excludeId,
     );
   }
 
@@ -388,9 +443,11 @@ class CategoryService {
     try {
       localStorage.setItem(this.storageKey, JSON.stringify(this.categories));
       // Trigger a custom event to notify other components
-      window.dispatchEvent(new CustomEvent('categoriesChanged', { 
-        detail: { categories: this.categories } 
-      }));
+      window.dispatchEvent(
+        new CustomEvent("categoriesChanged", {
+          detail: { categories: this.categories },
+        }),
+      );
     } catch (error) {
       console.error("Error saving categories to storage:", error);
     }
@@ -416,7 +473,7 @@ class CategoryService {
   importCategories(categoriesJson: string): boolean {
     try {
       const importedCategories = JSON.parse(categoriesJson);
-      
+
       // Basic validation
       if (!Array.isArray(importedCategories)) {
         throw new Error("Invalid format: Expected an array of categories");
@@ -424,7 +481,11 @@ class CategoryService {
 
       // Validate structure
       for (const category of importedCategories) {
-        if (!category.id || !category.name || !Array.isArray(category.subcategories)) {
+        if (
+          !category.id ||
+          !category.name ||
+          !Array.isArray(category.subcategories)
+        ) {
           throw new Error("Invalid category structure");
         }
       }
@@ -442,7 +503,7 @@ class CategoryService {
   reorderCategories(categoryIds: string[]): boolean {
     try {
       // Create a map of current categories
-      const categoryMap = new Map(this.categories.map(cat => [cat.id, cat]));
+      const categoryMap = new Map(this.categories.map((cat) => [cat.id, cat]));
 
       // Validate that all IDs exist
       for (const id of categoryIds) {
@@ -467,13 +528,17 @@ class CategoryService {
 
   reorderSubcategories(categoryId: string, subcategoryIds: string[]): boolean {
     try {
-      const categoryIndex = this.categories.findIndex(cat => cat.id === categoryId);
+      const categoryIndex = this.categories.findIndex(
+        (cat) => cat.id === categoryId,
+      );
       if (categoryIndex === -1) {
         throw new Error("Category not found");
       }
 
       const category = this.categories[categoryIndex];
-      const subcategoryMap = new Map(category.subcategories.map(sub => [sub.id, sub]));
+      const subcategoryMap = new Map(
+        category.subcategories.map((sub) => [sub.id, sub]),
+      );
 
       // Validate that all IDs exist
       for (const id of subcategoryIds) {
@@ -483,10 +548,12 @@ class CategoryService {
       }
 
       // Update subcategories with new order
-      this.categories[categoryIndex].subcategories = subcategoryIds.map((id, index) => ({
-        ...subcategoryMap.get(id)!,
-        order: index,
-      }));
+      this.categories[categoryIndex].subcategories = subcategoryIds.map(
+        (id, index) => ({
+          ...subcategoryMap.get(id)!,
+          order: index,
+        }),
+      );
 
       this.saveToStorage();
       return true;
@@ -499,26 +566,37 @@ class CategoryService {
   // Move category up or down
   moveCategoryUp(categoryId: string): boolean {
     const sortedCategories = this.getCategories();
-    const currentIndex = sortedCategories.findIndex(cat => cat.id === categoryId);
+    const currentIndex = sortedCategories.findIndex(
+      (cat) => cat.id === categoryId,
+    );
 
     if (currentIndex <= 0) return false; // Already at top or not found
 
     const newOrder = [...sortedCategories];
-    [newOrder[currentIndex - 1], newOrder[currentIndex]] = [newOrder[currentIndex], newOrder[currentIndex - 1]];
+    [newOrder[currentIndex - 1], newOrder[currentIndex]] = [
+      newOrder[currentIndex],
+      newOrder[currentIndex - 1],
+    ];
 
-    return this.reorderCategories(newOrder.map(cat => cat.id));
+    return this.reorderCategories(newOrder.map((cat) => cat.id));
   }
 
   moveCategoryDown(categoryId: string): boolean {
     const sortedCategories = this.getCategories();
-    const currentIndex = sortedCategories.findIndex(cat => cat.id === categoryId);
+    const currentIndex = sortedCategories.findIndex(
+      (cat) => cat.id === categoryId,
+    );
 
-    if (currentIndex >= sortedCategories.length - 1 || currentIndex === -1) return false; // Already at bottom or not found
+    if (currentIndex >= sortedCategories.length - 1 || currentIndex === -1)
+      return false; // Already at bottom or not found
 
     const newOrder = [...sortedCategories];
-    [newOrder[currentIndex], newOrder[currentIndex + 1]] = [newOrder[currentIndex + 1], newOrder[currentIndex]];
+    [newOrder[currentIndex], newOrder[currentIndex + 1]] = [
+      newOrder[currentIndex + 1],
+      newOrder[currentIndex],
+    ];
 
-    return this.reorderCategories(newOrder.map(cat => cat.id));
+    return this.reorderCategories(newOrder.map((cat) => cat.id));
   }
 
   // Move subcategory up or down
@@ -527,14 +605,22 @@ class CategoryService {
     if (!subcategory) return false;
 
     const sortedSubcategories = this.getSubcategories(subcategory.categoryId);
-    const currentIndex = sortedSubcategories.findIndex(sub => sub.id === subcategoryId);
+    const currentIndex = sortedSubcategories.findIndex(
+      (sub) => sub.id === subcategoryId,
+    );
 
     if (currentIndex <= 0) return false; // Already at top or not found
 
     const newOrder = [...sortedSubcategories];
-    [newOrder[currentIndex - 1], newOrder[currentIndex]] = [newOrder[currentIndex], newOrder[currentIndex - 1]];
+    [newOrder[currentIndex - 1], newOrder[currentIndex]] = [
+      newOrder[currentIndex],
+      newOrder[currentIndex - 1],
+    ];
 
-    return this.reorderSubcategories(subcategory.categoryId, newOrder.map(sub => sub.id));
+    return this.reorderSubcategories(
+      subcategory.categoryId,
+      newOrder.map((sub) => sub.id),
+    );
   }
 
   moveSubcategoryDown(subcategoryId: string): boolean {
@@ -542,14 +628,23 @@ class CategoryService {
     if (!subcategory) return false;
 
     const sortedSubcategories = this.getSubcategories(subcategory.categoryId);
-    const currentIndex = sortedSubcategories.findIndex(sub => sub.id === subcategoryId);
+    const currentIndex = sortedSubcategories.findIndex(
+      (sub) => sub.id === subcategoryId,
+    );
 
-    if (currentIndex >= sortedSubcategories.length - 1 || currentIndex === -1) return false; // Already at bottom or not found
+    if (currentIndex >= sortedSubcategories.length - 1 || currentIndex === -1)
+      return false; // Already at bottom or not found
 
     const newOrder = [...sortedSubcategories];
-    [newOrder[currentIndex], newOrder[currentIndex + 1]] = [newOrder[currentIndex + 1], newOrder[currentIndex]];
+    [newOrder[currentIndex], newOrder[currentIndex + 1]] = [
+      newOrder[currentIndex + 1],
+      newOrder[currentIndex],
+    ];
 
-    return this.reorderSubcategories(subcategory.categoryId, newOrder.map(sub => sub.id));
+    return this.reorderSubcategories(
+      subcategory.categoryId,
+      newOrder.map((sub) => sub.id),
+    );
   }
 
   // Reset to defaults

@@ -25,12 +25,17 @@ export default function ConnectionStatus() {
       console.log("🔄 ConnectionStatus: Starting safe connection check...");
 
       // Check for problematic environments before doing anything
-      if (typeof window !== 'undefined') {
-        const hasFullStory = !!(window as any).FS || document.querySelector('script[src*="fullstory"]');
-        const hasFetchInterception = window.fetch && window.fetch.toString().includes('messageHandler');
+      if (typeof window !== "undefined") {
+        const hasFullStory =
+          !!(window as any).FS ||
+          document.querySelector('script[src*="fullstory"]');
+        const hasFetchInterception =
+          window.fetch && window.fetch.toString().includes("messageHandler");
 
         if (hasFullStory || hasFetchInterception) {
-          console.log("🔄 ConnectionStatus: Monitoring tools detected, using local mode");
+          console.log(
+            "🔄 ConnectionStatus: Monitoring tools detected, using local mode",
+          );
           setIsConnected(false);
           return;
         }
@@ -51,8 +56,13 @@ export default function ConnectionStatus() {
 
       setIsConnected(finalState);
     } catch (error) {
-      console.log("⚠️ ConnectionStatus: Connection check failed, using local mode");
-      console.log("Error details:", error instanceof Error ? error.message : String(error));
+      console.log(
+        "⚠️ ConnectionStatus: Connection check failed, using local mode",
+      );
+      console.log(
+        "Error details:",
+        error instanceof Error ? error.message : String(error),
+      );
       setIsConnected(false);
     } finally {
       setIsLoading(false);

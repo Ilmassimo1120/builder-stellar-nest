@@ -1,12 +1,26 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Users as UsersIcon, Shield, UserCheck, Plus } from "lucide-react";
+import {
+  ArrowLeft,
+  Users as UsersIcon,
+  Shield,
+  UserCheck,
+  Plus,
+} from "lucide-react";
 import { Link } from "react-router-dom";
 import { Logo } from "@/components/ui/logo";
 import { useAuth } from "@/hooks/useAuth";
-import UserRoleIndicator, { PermissionGate } from "@/components/UserRoleIndicator";
+import UserRoleIndicator, {
+  PermissionGate,
+} from "@/components/UserRoleIndicator";
 
 export default function Users() {
   const { user } = useAuth();
@@ -23,7 +37,7 @@ export default function Users() {
       lastActive: "2 hours ago",
     },
     {
-      id: "2", 
+      id: "2",
       name: "Sarah Johnson",
       email: "sarah@evinstallpro.com.au",
       role: "partner",
@@ -34,7 +48,7 @@ export default function Users() {
     {
       id: "3",
       name: "Mike Chen",
-      email: "mike@chargeexperts.com.au", 
+      email: "mike@chargeexperts.com.au",
       role: "sales",
       company: "Charge Experts",
       verified: false,
@@ -86,7 +100,8 @@ export default function Users() {
           <div>
             <h1 className="text-3xl font-bold mb-2">User Management</h1>
             <p className="text-muted-foreground">
-              Manage users, roles, and permissions across the ChargeSource platform
+              Manage users, roles, and permissions across the ChargeSource
+              platform
             </p>
           </div>
           <div className="flex items-center gap-3 mt-4 md:mt-0">
@@ -136,18 +151,18 @@ export default function Users() {
                       </p>
                     </div>
                   </div>
-                  
+
                   <div className="flex items-center gap-4">
                     <div className="text-right">
                       <Badge className={getRoleBadgeColor(sampleUser.role)}>
                         <Shield className="w-3 h-3 mr-1" />
-                        {sampleUser.role.replace('_', ' ').toUpperCase()}
+                        {sampleUser.role.replace("_", " ").toUpperCase()}
                       </Badge>
                       <p className="text-xs text-muted-foreground mt-1">
                         Active {sampleUser.lastActive}
                       </p>
                     </div>
-                    
+
                     <PermissionGate permission="users.edit.all">
                       <div className="flex items-center gap-2">
                         <Button variant="outline" size="sm">
@@ -174,13 +189,15 @@ export default function Users() {
             <CardContent className="space-y-3">
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
-                  <Badge className="bg-red-100 text-red-800">GLOBAL ADMIN</Badge>
+                  <Badge className="bg-red-100 text-red-800">
+                    GLOBAL ADMIN
+                  </Badge>
                 </div>
                 <p className="text-sm text-muted-foreground">
                   Full system access, platform management
                 </p>
               </div>
-              
+
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <Badge className="bg-purple-100 text-purple-800">ADMIN</Badge>
@@ -189,7 +206,7 @@ export default function Users() {
                   Company administration, user management
                 </p>
               </div>
-              
+
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <Badge className="bg-blue-100 text-blue-800">SALES</Badge>
@@ -212,11 +229,15 @@ export default function Users() {
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold">142</div>
-                <div className="text-sm text-muted-foreground">Verified Users</div>
+                <div className="text-sm text-muted-foreground">
+                  Verified Users
+                </div>
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold">89</div>
-                <div className="text-sm text-muted-foreground">Active This Week</div>
+                <div className="text-sm text-muted-foreground">
+                  Active This Week
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -232,14 +253,14 @@ export default function Users() {
                   Invite New User
                 </Button>
               </PermissionGate>
-              
+
               <PermissionGate permission="users.view.all">
                 <Button variant="outline" className="w-full justify-start">
                   <UsersIcon className="w-4 h-4 mr-2" />
                   Export User List
                 </Button>
               </PermissionGate>
-              
+
               <PermissionGate permission="settings.edit">
                 <Button variant="outline" className="w-full justify-start">
                   <Shield className="w-4 h-4 mr-2" />

@@ -17,7 +17,6 @@ export interface ProductSubcategory {
   order: number;
 }
 
-
 export interface ProductFilter {
   category?: string;
   subcategory?: string;

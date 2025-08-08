@@ -14,7 +14,17 @@ import { Logo } from "@/components/ui/logo";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import AdminProductManager from "@/components/AdminProductManager";
 import CategoryManager from "@/components/CategoryManager";
-import { Shield, ArrowLeft, Package, Users, BarChart3, Folder, GripVertical, ChevronUp, ChevronDown } from "lucide-react";
+import {
+  Shield,
+  ArrowLeft,
+  Package,
+  Users,
+  BarChart3,
+  Folder,
+  GripVertical,
+  ChevronUp,
+  ChevronDown,
+} from "lucide-react";
 import { productCatalog } from "@/lib/productCatalog";
 import { categoryService } from "@/lib/categoryService";
 
@@ -29,19 +39,19 @@ export default function AdminCatalogue() {
 
   // Force refresh when categories change
   const handleCategoriesChanged = () => {
-    setRefreshKey(prev => prev + 1);
+    setRefreshKey((prev) => prev + 1);
   };
 
   // Category reordering handlers
   const handleDragStart = (e: React.DragEvent, categoryId: string) => {
     setDraggedCategory(categoryId);
-    e.dataTransfer.effectAllowed = 'move';
-    e.dataTransfer.setData('text/html', categoryId);
+    e.dataTransfer.effectAllowed = "move";
+    e.dataTransfer.setData("text/html", categoryId);
   };
 
   const handleDragOver = (e: React.DragEvent, categoryId: string) => {
     e.preventDefault();
-    e.dataTransfer.dropEffect = 'move';
+    e.dataTransfer.dropEffect = "move";
     setDragOverCategory(categoryId);
   };
 
@@ -57,8 +67,12 @@ export default function AdminCatalogue() {
       const categories = productCatalog.getCategories();
       const newOrder = [...categories];
 
-      const draggedIndex = newOrder.findIndex(cat => cat.id === draggedCategory);
-      const targetIndex = newOrder.findIndex(cat => cat.id === targetCategoryId);
+      const draggedIndex = newOrder.findIndex(
+        (cat) => cat.id === draggedCategory,
+      );
+      const targetIndex = newOrder.findIndex(
+        (cat) => cat.id === targetCategoryId,
+      );
 
       if (draggedIndex !== -1 && targetIndex !== -1) {
         // Remove dragged item and insert at target position
@@ -66,7 +80,7 @@ export default function AdminCatalogue() {
         newOrder.splice(targetIndex, 0, draggedItem);
 
         // Update order in categoryService
-        categoryService.reorderCategories(newOrder.map(cat => cat.id));
+        categoryService.reorderCategories(newOrder.map((cat) => cat.id));
         handleCategoriesChanged();
 
         toast({
@@ -79,10 +93,11 @@ export default function AdminCatalogue() {
     setDraggedCategory(null);
   };
 
-  const handleMoveCategory = (categoryId: string, direction: 'up' | 'down') => {
-    const success = direction === 'up'
-      ? categoryService.moveCategoryUp(categoryId)
-      : categoryService.moveCategoryDown(categoryId);
+  const handleMoveCategory = (categoryId: string, direction: "up" | "down") => {
+    const success =
+      direction === "up"
+        ? categoryService.moveCategoryUp(categoryId)
+        : categoryService.moveCategoryDown(categoryId);
 
     if (success) {
       handleCategoriesChanged();
@@ -101,12 +116,12 @@ export default function AdminCatalogue() {
   // Listen for category changes
   useEffect(() => {
     const handleCategoriesChanged = () => {
-      setRefreshKey(prev => prev + 1);
+      setRefreshKey((prev) => prev + 1);
     };
 
-    window.addEventListener('categoriesChanged', handleCategoriesChanged);
+    window.addEventListener("categoriesChanged", handleCategoriesChanged);
     return () => {
-      window.removeEventListener('categoriesChanged', handleCategoriesChanged);
+      window.removeEventListener("categoriesChanged", handleCategoriesChanged);
     };
   }, []);
 
@@ -331,9 +346,11 @@ export default function AdminCatalogue() {
                       onDragLeave={handleDragLeave}
                       onDrop={(e) => handleDrop(e, category.id)}
                       className={`flex items-center justify-between p-4 border rounded-lg cursor-move transition-all ${
-                        isDragged ? 'opacity-50 scale-105' : ''
+                        isDragged ? "opacity-50 scale-105" : ""
                       } ${
-                        isDragOver ? 'border-primary bg-primary/5' : 'hover:border-muted-foreground'
+                        isDragOver
+                          ? "border-primary bg-primary/5"
+                          : "hover:border-muted-foreground"
                       }`}
                     >
                       <div className="flex items-center gap-3 flex-1">
@@ -356,9 +373,13 @@ export default function AdminCatalogue() {
                             className="h-6 w-6 p-0"
                             onClick={(e) => {
                               e.stopPropagation();
-                              handleMoveCategory(category.id, 'up');
+                              handleMoveCategory(category.id, "up");
                             }}
-                            disabled={productCatalog.getCategories().findIndex(c => c.id === category.id) === 0}
+                            disabled={
+                              productCatalog
+                                .getCategories()
+                                .findIndex((c) => c.id === category.id) === 0
+                            }
                           >
                             <ChevronUp className="w-3 h-3" />
                           </Button>
@@ -368,9 +389,14 @@ export default function AdminCatalogue() {
                             className="h-6 w-6 p-0"
                             onClick={(e) => {
                               e.stopPropagation();
-                              handleMoveCategory(category.id, 'down');
+                              handleMoveCategory(category.id, "down");
                             }}
-                            disabled={productCatalog.getCategories().findIndex(c => c.id === category.id) === productCatalog.getCategories().length - 1}
+                            disabled={
+                              productCatalog
+                                .getCategories()
+                                .findIndex((c) => c.id === category.id) ===
+                              productCatalog.getCategories().length - 1
+                            }
                           >
                             <ChevronDown className="w-3 h-3" />
                           </Button>

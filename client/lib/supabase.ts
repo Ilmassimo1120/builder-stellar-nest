@@ -405,7 +405,7 @@ export const setupDatabase = async () => {
 
 // Check if we're in a problematic environment (FullStory, etc.)
 const isProblematicEnvironment = (): boolean => {
-  if (typeof window === 'undefined') return false;
+  if (typeof window === "undefined") return false;
 
   // Check for FullStory specifically
   if (window.FS || document.querySelector('script[src*="fullstory"]')) {
@@ -413,11 +413,12 @@ const isProblematicEnvironment = (): boolean => {
   }
 
   // Check if fetch is wrapped/intercepted
-  if (window.fetch && (
-    window.fetch.toString().includes('messageHandler') ||
-    window.fetch.toString().includes('fullstory') ||
-    window.fetch.toString().includes('eval')
-  )) {
+  if (
+    window.fetch &&
+    (window.fetch.toString().includes("messageHandler") ||
+      window.fetch.toString().includes("fullstory") ||
+      window.fetch.toString().includes("eval"))
+  ) {
     return true;
   }
 
@@ -436,19 +437,26 @@ export const initializeSupabase = async (): Promise<boolean> => {
 
     // Check for problematic environments first - this is critical
     if (isProblematicEnvironment()) {
-      console.log("🔄 Monitoring tools detected (FullStory/Analytics), operating in local mode to prevent errors");
+      console.log(
+        "🔄 Monitoring tools detected (FullStory/Analytics), operating in local mode to prevent errors",
+      );
       return false;
     }
 
     // Skip network tests in offline environments
-    if (typeof navigator !== 'undefined' && !navigator.onLine) {
+    if (typeof navigator !== "undefined" && !navigator.onLine) {
       console.log("🔄 Offline mode detected, skipping connection test");
       return false;
     }
 
     // For cloud environments or when we can't safely test, assume local mode
-    if (typeof window !== 'undefined' && window.location?.hostname?.includes('fly.dev')) {
-      console.log("🔄 Cloud environment detected, operating in local mode for safety");
+    if (
+      typeof window !== "undefined" &&
+      window.location?.hostname?.includes("fly.dev")
+    ) {
+      console.log(
+        "🔄 Cloud environment detected, operating in local mode for safety",
+      );
       return false;
     }
 
@@ -456,7 +464,10 @@ export const initializeSupabase = async (): Promise<boolean> => {
     return true;
   } catch (error) {
     console.log("⚠️ Connection initialization failed, operating in local mode");
-    console.log("Error details:", error instanceof Error ? error.message : String(error));
+    console.log(
+      "Error details:",
+      error instanceof Error ? error.message : String(error),
+    );
     return false;
   }
 };
@@ -482,12 +493,15 @@ export const checkSupabaseConnection = async (): Promise<boolean> => {
     }
 
     // Skip connection check if we know we're offline
-    if (typeof navigator !== 'undefined' && !navigator.onLine) {
+    if (typeof navigator !== "undefined" && !navigator.onLine) {
       return false;
     }
 
     // For now, always return false in cloud environments to prevent fetch errors
-    if (typeof window !== 'undefined' && window.location?.hostname?.includes('fly.dev')) {
+    if (
+      typeof window !== "undefined" &&
+      window.location?.hostname?.includes("fly.dev")
+    ) {
       console.log("🔄 Cloud environment, skipping network test");
       return false;
     }
@@ -495,7 +509,10 @@ export const checkSupabaseConnection = async (): Promise<boolean> => {
     console.log("✅ Safe environment, connection available");
     return true;
   } catch (error) {
-    console.log("Connection check failed:", error instanceof Error ? error.message : String(error));
+    console.log(
+      "Connection check failed:",
+      error instanceof Error ? error.message : String(error),
+    );
     return false;
   }
 };
@@ -525,7 +542,10 @@ export const autoConfigureSupabase = async (): Promise<boolean> => {
     return connected;
   } catch (error) {
     console.log("⚠️ autoConfigureSupabase error, falling back to local mode");
-    console.log("Error details:", error instanceof Error ? error.message : String(error));
+    console.log(
+      "Error details:",
+      error instanceof Error ? error.message : String(error),
+    );
     isSupabaseConnected = false;
     return false;
   }

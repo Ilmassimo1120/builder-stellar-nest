@@ -39,8 +39,13 @@ class AutoInitializationService {
       );
       return this.supabaseConnected;
     } catch (error) {
-      console.log("⚠️ Auto-initialization encountered an error, using local mode");
-      console.log("Error details:", error instanceof Error ? error.message : String(error));
+      console.log(
+        "⚠️ Auto-initialization encountered an error, using local mode",
+      );
+      console.log(
+        "Error details:",
+        error instanceof Error ? error.message : String(error),
+      );
       this.initialized = true;
       this.supabaseConnected = false;
       return false;
