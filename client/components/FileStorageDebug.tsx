@@ -187,6 +187,25 @@ export default function FileStorageDebug() {
     };
   };
 
+  const testBuckets = async () => {
+    try {
+      const status = await bucketInitService.checkBuckets();
+      return {
+        success: status.allExist,
+        message: status.allExist
+          ? `All ${status.existing.length} buckets exist`
+          : `Missing ${status.missing.length} buckets: ${status.missing.join(', ')}`,
+        data: status
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: `Bucket check failed: ${error instanceof Error ? error.message : String(error)}`,
+        error
+      };
+    }
+  };
+
   const testStorageUsage = async () => {
     const result = await safeFileStorageService.getStorageUsage();
     return {
