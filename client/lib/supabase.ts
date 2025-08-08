@@ -486,12 +486,25 @@ export const checkSupabaseConnection = async (): Promise<boolean> => {
 export const autoConfigureSupabase = async (): Promise<boolean> => {
   console.log("🔄 autoConfigureSupabase called");
 
-  // Always recheck the connection
-  const connected = await initializeSupabase();
-  isSupabaseConnected = connected;
+  try {
+    // Always recheck the connection
+    const connected = await initializeSupabase();
+    isSupabaseConnected = connected;
 
-  console.log("🔄 autoConfigureSupabase result:", connected);
-  return connected;
+    if (connected) {
+      console.log("✅ Supabase connection established");
+    } else {
+      console.log("💾 Operating in local storage mode");
+    }
+
+    console.log("🔄 autoConfigureSupabase result:", connected);
+    return connected;
+  } catch (error) {
+    console.log("⚠️ autoConfigureSupabase error, falling back to local mode");
+    console.log("Error details:", error instanceof Error ? error.message : String(error));
+    isSupabaseConnected = false;
+    return false;
+  }
 };
 
 // Project service functions
