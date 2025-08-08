@@ -42,10 +42,8 @@ import {
 } from "lucide-react";
 import { Logo } from "@/components/ui/logo";
 import { KnowledgeBaseWidget } from "@/components/KnowledgeBaseWidget";
-import { SupabaseSetup } from "@/components/SupabaseSetup";
-import SupabaseMigration from "@/components/SupabaseMigration";
 import SupabaseTest from "@/components/SupabaseTest";
-import { supabase } from "@/lib/supabase";
+import { supabase, autoConfigureSupabase } from "@/lib/supabase";
 import { useAuth } from "@/hooks/useAuth";
 import RoleBasedNavigation, {
   RoleQuickActions,
