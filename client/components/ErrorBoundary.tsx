@@ -1,7 +1,6 @@
-import React, { Component, ErrorInfo, ReactNode } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { AlertTriangle, RefreshCw } from "lucide-react";
+import React, { Component, ErrorInfo, ReactNode } from 'react';
+import { Alert, AlertDescription } from './ui/alert';
+import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 
 interface Props {
   children: ReactNode;
@@ -10,33 +9,27 @@ interface Props {
 
 interface State {
   hasError: boolean;
-  error?: Error;
-  errorInfo?: ErrorInfo;
+  error: Error | null;
+  errorInfo: ErrorInfo | null;
 }
 
-class ErrorBoundary extends Component<Props, State> {
+export class ErrorBoundary extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = { hasError: false };
+    this.state = { hasError: false, error: null, errorInfo: null };
   }
 
   static getDerivedStateFromError(error: Error): State {
-    return { hasError: true, error };
+    return { hasError: true, error, errorInfo: null };
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error("Error caught by boundary:", error, errorInfo);
-    this.setState({ error, errorInfo });
-
-    // Report to error tracking service in production
-    if (process.env.NODE_ENV === "production") {
-      // Example: reportError(error, errorInfo);
-    }
+    console.error('ErrorBoundary caught an error:', error, errorInfo);
+    this.setState({
+      error,
+      errorInfo
+    });
   }
-
-  handleRetry = () => {
-    this.setState({ hasError: false, error: undefined, errorInfo: undefined });
-  };
 
   render() {
     if (this.state.hasError) {
@@ -45,51 +38,29 @@ class ErrorBoundary extends Component<Props, State> {
       }
 
       return (
-        <div className="min-h-[400px] flex items-center justify-center p-4">
-          <Card className="max-w-md mx-auto">
-            <CardHeader className="text-center">
-              <div className="w-12 h-12 bg-destructive/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <AlertTriangle className="w-6 h-6 text-destructive" />
-              </div>
-              <CardTitle className="text-xl">Something went wrong</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <p className="text-sm text-muted-foreground text-center">
-                An unexpected error occurred. This has been logged and our team
-                will investigate.
-              </p>
-
-              {process.env.NODE_ENV === "development" && this.state.error && (
-                <details className="text-xs bg-muted p-2 rounded">
-                  <summary className="cursor-pointer font-medium mb-2">
-                    Error Details (Development)
-                  </summary>
-                  <pre className="whitespace-pre-wrap overflow-auto max-h-32">
-                    {this.state.error.message}
-                    {this.state.errorInfo?.componentStack}
-                  </pre>
-                </details>
-              )}
-
-              <div className="flex gap-2 justify-center">
-                <Button
-                  variant="outline"
-                  onClick={() => window.location.reload()}
-                  className="flex items-center gap-2"
-                >
-                  <RefreshCw className="w-4 h-4" />
-                  Reload Page
-                </Button>
-                <Button
-                  onClick={this.handleRetry}
-                  className="flex items-center gap-2"
-                >
-                  Try Again
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+        <Card className="m-4">
+          <CardHeader>
+            <CardTitle className="text-red-600">Something went wrong</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Alert variant="destructive">
+              <AlertDescription>
+                <div className="space-y-2">
+                  <p>An error occurred while rendering this component.</p>
+                  {this.state.error && (
+                    <details className="text-sm">
+                      <summary>Error Details</summary>
+                      <pre className="mt-2 p-2 bg-muted rounded text-xs overflow-auto">
+                        {this.state.error.toString()}
+                        {this.state.errorInfo?.componentStack}
+                      </pre>
+                    </details>
+                  )}
+                </div>
+              </AlertDescription>
+            </Alert>
+          </CardContent>
+        </Card>
       );
     }
 
