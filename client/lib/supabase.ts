@@ -427,7 +427,7 @@ export const isConnectedToSupabase = () => isSupabaseConnected;
 // Connection testing functions
 export const checkSupabaseConnection = async (): Promise<boolean> => {
   try {
-    const { data, error } = await supabase.from('users').select('count').limit(1);
+    const { data, error } = await supabase.rpc('health_check');
     return !error;
   } catch (error) {
     console.error("Supabase connection test failed:", error);
