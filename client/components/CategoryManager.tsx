@@ -41,6 +41,9 @@ import {
   ChevronRight,
   Save,
   X,
+  GripVertical,
+  ChevronUp,
+  ChevronDown,
 } from "lucide-react";
 import { ProductCategory, ProductSubcategory } from "@/lib/productCatalog";
 import { categoryService } from "@/lib/categoryService";
