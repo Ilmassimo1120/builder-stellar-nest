@@ -1308,6 +1308,13 @@ export default function QuoteBuilder() {
           </div>
         </div>
       )}
+
+      {/* Product Catalog Browser */}
+      <ProductCatalogBrowser
+        isOpen={showProductCatalogue}
+        onClose={() => setShowProductCatalogue(false)}
+        onAddProduct={addProduct}
+      />
     </div>
   );
 }
