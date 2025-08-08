@@ -19,6 +19,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Placeholder from "./pages/Placeholder";
 import NotFound from "./pages/NotFound";
+import Catalogue from "./pages/Catalogue";
 import { AuthProvider } from "./hooks/useAuth";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { AIAssistant } from "./components/AIAssistant";
