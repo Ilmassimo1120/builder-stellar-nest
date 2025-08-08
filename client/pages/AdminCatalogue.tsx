@@ -16,6 +16,7 @@ import AdminProductManager from "@/components/AdminProductManager";
 import CategoryManager from "@/components/CategoryManager";
 import { Shield, ArrowLeft, Package, Users, BarChart3, Folder, GripVertical, ChevronUp, ChevronDown } from "lucide-react";
 import { productCatalog } from "@/lib/productCatalog";
+import { categoryService } from "@/lib/categoryService";
 
 export default function AdminCatalogue() {
   const { user } = useAuth();
