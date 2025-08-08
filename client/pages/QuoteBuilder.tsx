@@ -66,6 +66,10 @@ export default function QuoteBuilder() {
   const { user } = useAuth();
   const { toast } = useToast();
   const [searchParams] = useSearchParams();
+  const location = useLocation();
+
+  // Determine if we're creating a new quote
+  const isNewQuote = location.pathname === "/quotes/new" || quoteId === "new";
 
   const [quote, setQuote] = useState<Quote | null>(null);
   const [loading, setLoading] = useState(true);
