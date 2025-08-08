@@ -223,7 +223,8 @@ export default function Index() {
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
               <p>
-                Everything You Need to Scale Your EV Charging Installation Services
+                Everything You Need to Scale Your EV Charging Installation
+                Services
               </p>
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
