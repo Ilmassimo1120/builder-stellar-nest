@@ -321,16 +321,38 @@ class EnhancedFileStorageService {
       let uploadSuccess = false;
 
       try {
-        console.log(`🔄 Attempting to upload file to bucket: ${request.bucket}`);
-        console.log(`📁 File path: ${filePath}`);
+        console.log(`🔄 Attempting to upload file via secure edge function`);
+        console.log(`📁 File name: ${request.file.name}`);
         console.log(`📦 File size: ${(request.file.size / 1024 / 1024).toFixed(2)} MB`);
 
-        const { data, error: uploadError } = await supabase.storage
-          .from(request.bucket)
-          .upload(filePath, request.file, {
-            cacheControl: "3600",
-            upsert: false,
-          });
+        // Get auth token for edge function
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+
+        if (sessionError || !session?.access_token) {
+          throw new Error("Authentication required for file upload. Please log in.");
+        }
+
+        // Create form data for edge function
+        const formData = new FormData();
+        formData.append('file', request.file);
+
+        // Call secure upload edge function
+        const response = await fetch(`${supabase.supabaseUrl}/functions/v1/secure-file-upload`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${session.access_token}`,
+          },
+          body: formData,
+        });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`Upload failed: ${errorText}`);
+        }
+
+        const uploadResult = await response.json();
+        const data = { path: uploadResult.path };
+        const uploadError = null;
 
         if (uploadError) {
           console.error("Supabase storage upload error:", uploadError);
