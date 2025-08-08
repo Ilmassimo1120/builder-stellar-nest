@@ -30,7 +30,12 @@ class ProductCatalogService {
 
   constructor() {
     this.initializeCategories();
-    this.initializeProducts();
+    this.loadFromStorage();
+    // Only initialize default products if none exist in storage
+    if (this.products.length === 0) {
+      this.initializeProducts();
+      this.saveToStorage();
+    }
   }
 
   private initializeCategories(): void {
