@@ -13,6 +13,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import { Logo } from '@/components/ui/logo';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
+import AdminProductManager from '@/components/AdminProductManager';
 
 export default function Catalogue() {
   const { user } = useAuth();
