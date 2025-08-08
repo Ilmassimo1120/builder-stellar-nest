@@ -68,6 +68,14 @@ const settingsSections: SettingsSection[] = [
     component: PartnerSettings,
   },
   {
+    id: "crm",
+    title: "CRM Integration",
+    description: "Customer relationship management and sync settings",
+    icon: <Database className="w-5 h-5" />,
+    roles: [UserRole.SALES, UserRole.ADMIN, UserRole.GLOBAL_ADMIN],
+    component: CRMSettings,
+  },
+  {
     id: "global",
     title: "Global System Settings",
     description: "System-wide configuration and administrative controls",
