@@ -9,7 +9,7 @@ import { BrowserRouter } from "react-router-dom";
 import { autoInit } from "@/lib/autoInit";
 import { AuthProvider } from "./hooks/useAuth";
 import { EnhancedAIAssistant } from "./components/EnhancedAIAssistant";
-import { AppRoutes } from "./routes/AppRoutes";
+import AppRoutes from "./routes/AppRoutes";
 
 const queryClient = new QueryClient();
 
