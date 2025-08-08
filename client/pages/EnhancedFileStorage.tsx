@@ -145,7 +145,23 @@ export default function EnhancedFileStorage() {
   }
 
   return (
-    <div className="container mx-auto py-8 space-y-8">
+    <div className="min-h-screen bg-background">
+      {/* Navigation Header */}
+      <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
+        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
+          <div className="flex items-center space-x-4">
+            <Button variant="outline" size="sm" asChild>
+              <Link to="/dashboard" className="flex items-center space-x-2">
+                <ArrowLeft className="h-4 w-4" />
+                <span>Dashboard</span>
+              </Link>
+            </Button>
+          </div>
+          <RoleBasedNavigation variant="header" />
+        </div>
+      </header>
+
+      <div className="container mx-auto py-8 space-y-8">
       {/* Navigation Header */}
       <div className="flex items-center space-x-4 mb-6">
         <Button variant="outline" size="sm" asChild>
@@ -537,6 +553,7 @@ export default function EnhancedFileStorage() {
           </CardContent>
         </Card>
       )}
+      </div>
     </div>
   );
 }
