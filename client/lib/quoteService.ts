@@ -14,6 +14,7 @@ import {
   ProductCatalogueItem,
   ClientDecision,
 } from "./quoteTypes";
+import { productCatalog } from "./productCatalog";
 
 // Default margin settings
 const DEFAULT_MARGIN_SETTINGS: MarginSettings = {
