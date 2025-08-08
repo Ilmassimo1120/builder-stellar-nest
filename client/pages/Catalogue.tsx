@@ -57,12 +57,16 @@ export default function Catalogue() {
   const [activeView, setActiveView] = useState<"grid" | "list">("grid");
   const [activeCategory, setActiveCategory] = useState<string>("all");
   const [showAdminPanel, setShowAdminPanel] = useState(false);
+  const [showPreferences, setShowPreferences] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
 
-  const categories = productCatalog.getCategories();
+  const userId = user?.id || "anonymous";
+
+  // Use user preferences for sorting
+  const categories = productCatalog.getCategories(userId);
   const brands = productCatalog.getBrands();
-  // Refresh products list when refreshKey changes (after admin operations)
-  const products = productCatalog.getProducts(filter);
+  // Refresh products list when refreshKey changes and use user preferences
+  const products = productCatalog.getProducts({ ...filter, userId });
 
   // Force refresh when admin panel closes
   const handleAdminPanelClose = () => {
