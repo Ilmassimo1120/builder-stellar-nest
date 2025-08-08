@@ -153,14 +153,14 @@ export default function ProductCatalogBrowser({
             {/* Filter Controls */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <Select
-                value={filter.category || ''}
-                onValueChange={(value) => updateFilter('category', value || undefined)}
+                value={filter.category || 'all-categories'}
+                onValueChange={(value) => updateFilter('category', value === 'all-categories' ? undefined : value)}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="All Categories" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Categories</SelectItem>
+                  <SelectItem value="all-categories">All Categories</SelectItem>
                   {categories.map((category) => (
                     <SelectItem key={category.id} value={category.id}>
                       {category.name}
@@ -171,14 +171,14 @@ export default function ProductCatalogBrowser({
 
               {filteredSubcategories.length > 0 && (
                 <Select
-                  value={filter.subcategory || ''}
-                  onValueChange={(value) => updateFilter('subcategory', value || undefined)}
+                  value={filter.subcategory || 'all-subcategories'}
+                  onValueChange={(value) => updateFilter('subcategory', value === 'all-subcategories' ? undefined : value)}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="All Subcategories" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">All Subcategories</SelectItem>
+                    <SelectItem value="all-subcategories">All Subcategories</SelectItem>
                     {filteredSubcategories.map((subcategory) => (
                       <SelectItem key={subcategory.id} value={subcategory.id}>
                         {subcategory.name}
@@ -189,14 +189,14 @@ export default function ProductCatalogBrowser({
               )}
 
               <Select
-                value={filter.brand || ''}
-                onValueChange={(value) => updateFilter('brand', value || undefined)}
+                value={filter.brand || 'all-brands'}
+                onValueChange={(value) => updateFilter('brand', value === 'all-brands' ? undefined : value)}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="All Brands" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Brands</SelectItem>
+                  <SelectItem value="all-brands">All Brands</SelectItem>
                   {brands.map((brand) => (
                     <SelectItem key={brand} value={brand}>
                       {brand}
