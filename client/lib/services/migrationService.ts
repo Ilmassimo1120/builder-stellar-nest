@@ -132,12 +132,19 @@ class MigrationService {
         await this.clearMigratedData(userProfile?.role);
       }
 
-      console.log(
-        `Migration completed successfully. Migrated ${migratedItems} items.`,
-      );
+      let message = `Migration completed! Migrated ${migratedItems} items to Supabase.`;
+      let success = true;
+
+      if (errors.length > 0) {
+        console.warn(`Migration completed with ${errors.length} errors:`, errors);
+        message += ` ${errors.length} items failed to migrate. Check console for details.`;
+        success = migratedItems > 0; // Success if at least some items migrated
+      }
+
+      console.log(`Migration summary: ${migratedItems} successful, ${errors.length} failed`);
       return {
-        success: true,
-        message: `Migration completed successfully! Migrated ${migratedItems} items to Supabase.`,
+        success,
+        message,
       };
     } catch (error) {
       console.error("Migration failed:", error);
