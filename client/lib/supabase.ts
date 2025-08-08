@@ -405,38 +405,19 @@ export const setupDatabase = async () => {
 export const initializeSupabase = async () => {
   try {
     console.log("🚀 Initializing ChargeSource Supabase connection...");
-    console.log("🔧 Supabase URL:", supabaseUrl);
-    console.log("🔧 Supabase Key present:", !!supabaseAnonKey);
-    console.log("🔧 Environment VITE_SUPABASE_URL:", import.meta.env.VITE_SUPABASE_URL);
-    console.log("🔧 Environment VITE_SUPABASE_ANON_KEY present:", !!import.meta.env.VITE_SUPABASE_ANON_KEY);
 
-    // Test connection using health_status table (we know this works)
-    console.log("🔄 Testing health_status table...");
-    try {
-      const { data, error } = await supabase.from('health_status').select('*').limit(1);
+    // Use the exact same test that works in /test-supabase
+    const { data, error } = await supabase.from('health_status').select('*').limit(1);
 
-      if (error) {
-        console.error("❌ Health status query failed:", error.message || 'Unknown error');
-        console.error("❌ Error code:", error.code || 'No code');
-        console.error("❌ Full error:", JSON.stringify(error, null, 2));
-        return false;
-      }
-
-      if (data && data.length > 0) {
-        console.log("✅ Health status query succeeded:", data[0]);
-      } else {
-        console.log("✅ Health status query succeeded (no data)");
-      }
-    } catch (fetchError) {
-      console.error("❌ Health status query exception:", fetchError);
+    if (error) {
+      console.error("❌ Supabase connection failed:", error.message);
       return false;
     }
 
-    console.log("✅ Supabase connected successfully", data);
+    console.log("✅ Supabase connected successfully:", data);
     return true;
   } catch (error) {
-    console.error("❌ Supabase initialization exception:", error instanceof Error ? error.message : String(error));
-    console.error("❌ Exception details:", JSON.stringify(error, null, 2));
+    console.error("❌ Supabase initialization failed:", error instanceof Error ? error.message : String(error));
     return false;
   }
 };
