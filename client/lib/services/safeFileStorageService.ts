@@ -8,27 +8,54 @@ import { supabase } from '../supabase';
 class SafeFileStorageService {
   private formatError(error: unknown, defaultMessage: string): string {
     if (error instanceof Error) {
+      // Handle network/fetch errors
+      if (error.name === 'TypeError' && error.message.includes('fetch')) {
+        return 'Network connection failed. Please check your internet connection and try again.';
+      }
       return error.message;
     }
     if (typeof error === 'string') {
       return error;
     }
     if (error && typeof error === 'object') {
+      // Handle fetch/network errors
+      if ('name' in error && error.name === 'TypeError') {
+        return 'Network connection failed. Please check your internet connection and try again.';
+      }
       // Handle Supabase error format
       if ('message' in error && typeof error.message === 'string') {
         return error.message;
       }
-      // Handle other error objects
+      // Handle other error objects safely
       try {
-        return JSON.stringify(error);
+        const errorStr = JSON.stringify(error);
+        if (errorStr !== '{}') {
+          return `Connection error: ${errorStr}`;
+        }
       } catch {
-        return defaultMessage;
+        // JSON.stringify failed, fall back to default
       }
     }
     return defaultMessage;
   }
 
   private async checkAuthentication(): Promise<{ authenticated: boolean; user: any | null; error: string | null }> {
+    // Check local auth first (primary system)
+    try {
+      const storedUser = localStorage.getItem('chargeSourceUser');
+      if (storedUser) {
+        const userData = JSON.parse(storedUser);
+        return {
+          authenticated: true,
+          user: { id: userData.id, email: userData.email },
+          error: null
+        };
+      }
+    } catch (error) {
+      console.warn('Local auth check failed:', error);
+    }
+
+    // Fallback to Supabase auth if local auth not available
     try {
       const { data: { user }, error } = await supabase.auth.getUser();
       if (error) {
@@ -39,10 +66,10 @@ class SafeFileStorageService {
       }
       return { authenticated: true, user, error: null };
     } catch (error) {
-      return { 
-        authenticated: false, 
-        user: null, 
-        error: this.formatError(error, 'Authentication check failed') 
+      return {
+        authenticated: false,
+        user: null,
+        error: this.formatError(error, 'Authentication check failed')
       };
     }
   }
