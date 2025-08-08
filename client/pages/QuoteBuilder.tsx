@@ -59,6 +59,7 @@ import {
   ProductCatalogueItem,
 } from "@/lib/quoteTypes";
 import { quoteService } from "@/lib/quoteService";
+import { advancedPDFGenerator } from "@/lib/advancedPDFGenerator";
 
 export default function QuoteBuilder() {
   const { quoteId } = useParams<{ quoteId: string }>();
