@@ -57,6 +57,15 @@ function MigrationModal({ isOpen, onClose, onSuccess }: MigrationModalProps) {
   const [currentStep, setCurrentStep] = useState("");
 
   const handleMigration = async () => {
+    if (!user) {
+      toast({
+        title: "Authentication Required",
+        description: "Please log in to migrate your data",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setMigrating(true);
     setProgress(0);
     setCurrentStep("Starting migration...");
