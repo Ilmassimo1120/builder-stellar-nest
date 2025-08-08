@@ -316,7 +316,7 @@ class EnhancedFileStorageService {
 
       return this.mapToFileAsset(result);
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Unknown upload error';
+      const errorMessage = this.formatError(error, 'Unknown upload error');
       console.error('File upload error:', errorMessage, error);
       throw new Error(`Upload failed: ${errorMessage}`);
     }
@@ -427,7 +427,7 @@ class EnhancedFileStorageService {
 
       return this.mapToFileAsset(data);
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      const errorMessage = this.formatError(error, 'Unknown error');
       console.error('Get asset error:', errorMessage, error);
       return null;
     }
@@ -482,7 +482,7 @@ class EnhancedFileStorageService {
 
       return data;
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Unknown download error';
+      const errorMessage = this.formatError(error, 'Unknown download error');
       console.error('Download error:', errorMessage, error);
       throw new Error(`Download failed: ${errorMessage}`);
     }
@@ -768,7 +768,7 @@ class EnhancedFileStorageService {
         categoryBreakdown
       };
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Unknown storage usage error';
+      const errorMessage = this.formatError(error, 'Unknown storage usage error');
       console.error('Get storage usage error:', errorMessage, error);
       throw new Error(`Failed to get storage usage: ${errorMessage}`);
     }
