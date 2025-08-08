@@ -85,6 +85,14 @@ const App = () => (
               }
             />
             <Route
+              path="/quotes/new"
+              element={
+                <ProtectedRoute>
+                  <QuoteBuilder />
+                </ProtectedRoute>
+              }
+            />
+            <Route
               path="/quotes/:quoteId"
               element={
                 <ProtectedRoute>
