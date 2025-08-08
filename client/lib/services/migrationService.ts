@@ -23,9 +23,11 @@ class MigrationService {
           if (localUser) {
             user = JSON.parse(localUser);
           } else {
-            return {
-              success: false,
-              message: "User must be authenticated to migrate data",
+            // For auto-migration, create a temporary user ID
+            console.log("Creating temporary user for auto-migration");
+            user = {
+              id: `temp-${Date.now()}`,
+              email: "auto-migrated@chargesource.local"
             };
           }
         } else {
