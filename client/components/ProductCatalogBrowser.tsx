@@ -59,6 +59,7 @@ export default function ProductCatalogBrowser({
   const [selectedProduct, setSelectedProduct] = useState<ProductCatalogueItem | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [activeView, setActiveView] = useState<'grid' | 'list'>('grid');
+  const [compareProducts, setCompareProducts] = useState<string[]>([]);
 
   const categories = productCatalog.getCategories();
   const brands = productCatalog.getBrands();
