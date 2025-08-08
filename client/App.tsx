@@ -311,23 +311,7 @@ const App = () => (
               }
             />
 
-            {/* Auth & Account - login route moved to top */}
-            <Route
-              path="/settings"
-              element={
-                <Placeholder
-                  title="Account Settings"
-                  description="Manage your account and preferences"
-                  features={[
-                    "Profile management",
-                    "Team settings",
-                    "Billing information",
-                    "Notification preferences",
-                    "Security settings",
-                  ]}
-                />
-              }
-            />
+            {/* Note: Actual settings route is defined in protected routes section */}
 
             {/* Legal & Info */}
             <Route
