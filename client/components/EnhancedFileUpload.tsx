@@ -246,14 +246,23 @@ export default function EnhancedFileUpload({
           uploadedAssets.push(result);
 
         } catch (error) {
-          const errorMessage = error instanceof Error ? error.message : 'Upload failed';
-          
+          let errorMessage = error instanceof Error ? error.message : 'Upload failed';
+
+          // Provide more helpful error messages for common issues
+          if (errorMessage.includes('authenticated') || errorMessage.includes('log in')) {
+            errorMessage = '🔐 Please log in to upload files. You may need to refresh the page after logging in.';
+          } else if (errorMessage.includes('bucket') && errorMessage.includes('not found')) {
+            errorMessage = '📂 Storage bucket not found. Please contact support to set up file storage.';
+          } else if (errorMessage.includes('permission')) {
+            errorMessage = '🚫 Permission denied. Please check your account permissions.';
+          }
+
           // Update status to error
-          setUploadStates(prev => prev.map((s, index) => 
-            index === i ? { 
-              ...s, 
-              status: 'error' as const, 
-              error: errorMessage 
+          setUploadStates(prev => prev.map((s, index) =>
+            index === i ? {
+              ...s,
+              status: 'error' as const,
+              error: errorMessage
             } : s
           ));
 
