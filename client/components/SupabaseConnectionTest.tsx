@@ -29,10 +29,11 @@ export default function SupabaseConnectionTest() {
       const { data, error } = await supabase.rpc('health_check');
       
       if (error) {
-        addResult(`❌ Connection failed: ${error.message}`);
-        addResult(`📋 Error code: ${error.code}`);
-        addResult(`📋 Error details: ${error.details}`);
-        addResult(`💡 Error hint: ${error.hint}`);
+        addResult(`❌ Connection failed: ${error.message || 'Unknown error'}`);
+        addResult(`📋 Error code: ${error.code || 'No code'}`);
+        addResult(`📋 Error details: ${error.details || 'No details'}`);
+        addResult(`💡 Error hint: ${error.hint || 'No hint'}`);
+        addResult(`🔍 Full error: ${JSON.stringify(error, null, 2)}`);
       } else {
         addResult("✅ Connection successful!");
         addResult(`📊 Query result: ${JSON.stringify(data)}`);
