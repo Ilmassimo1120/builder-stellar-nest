@@ -45,7 +45,7 @@ const PublicLazyRoute = ({ children }: { children: React.ReactNode }) => (
   <Suspense fallback={<PageLoading />}>{children}</Suspense>
 );
 
-export const AppRoutes = () => (
+const AppRoutes = () => (
   <Routes>
     {/* Public Routes */}
     <Route
