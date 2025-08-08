@@ -222,10 +222,59 @@ export default function FileStorageDebug() {
       <CardHeader>
         <CardTitle>File Storage Debug</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
-        <Button onClick={runTests} disabled={loading}>
-          {loading ? "Running Tests..." : "Run Debug Tests"}
-        </Button>
+      <CardContent className="space-y-6">
+        {/* Bucket Status Section */}
+        {bucketStatus && (
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-semibold">Storage Buckets</h3>
+              <div className="flex items-center space-x-2">
+                <Badge variant={bucketStatus.allExist ? "default" : "destructive"}>
+                  {bucketStatus.allExist ? "✅ All Ready" : `❌ ${bucketStatus.missing.length} Missing`}
+                </Badge>
+                {!bucketStatus.allExist && (
+                  <Button
+                    onClick={initializeBuckets}
+                    disabled={initializingBuckets}
+                    size="sm"
+                    variant="outline"
+                  >
+                    {initializingBuckets ? "Creating..." : "Create Buckets"}
+                  </Button>
+                )}
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {bucketStatus.buckets.map((bucket: any) => (
+                <div key={bucket.id} className="p-3 border rounded-lg">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="font-medium text-sm">{bucket.name}</span>
+                    <Badge variant={bucket.exists ? "default" : "secondary"}>
+                      {bucket.exists ? "✅" : "❌"}
+                    </Badge>
+                  </div>
+                  <div className="text-xs text-muted-foreground space-y-1">
+                    <div>Max: {bucket.maxSize}</div>
+                    <div>Types: {bucket.allowedTypes}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <Separator />
+
+        {/* Test Section */}
+        <div className="flex space-x-2">
+          <Button onClick={runTests} disabled={loading}>
+            {loading ? "Running Tests..." : "Run Debug Tests"}
+          </Button>
+          <Button onClick={checkBucketStatus} variant="outline" size="sm">
+            Refresh Status
+          </Button>
+        </div>
 
         {Object.keys(results).length > 0 && (
           <div className="space-y-4">
