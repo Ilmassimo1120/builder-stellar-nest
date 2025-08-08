@@ -81,12 +81,18 @@ export default function EnhancedFileStorage() {
       setLoading(true);
       
       // Load storage usage stats
-      const usage = await enhancedFileStorageService.getStorageUsage();
-      setStorageStats(usage);
+      const usageResult = await safeFileStorageService.getStorageUsage();
+      if (usageResult.error) {
+        throw new Error(usageResult.error);
+      }
+      setStorageStats(usageResult);
 
       // Calculate status distribution
-      const allFiles = await enhancedFileStorageService.searchFiles({});
-      const statusCounts = allFiles.reduce((acc, file) => {
+      const filesResult = await safeFileStorageService.searchFiles({});
+      if (filesResult.error) {
+        throw new Error(filesResult.error);
+      }
+      const statusCounts = filesResult.files.reduce((acc, file) => {
         acc[file.status] = (acc[file.status] || 0) + 1;
         return acc;
       }, {} as Record<string, number>);
