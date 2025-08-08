@@ -672,6 +672,12 @@ export default function Catalogue() {
             </DialogContent>
           </Dialog>
         )}
+
+        {/* User Preferences Manager */}
+        <UserPreferencesManager
+          isOpen={showPreferences}
+          onClose={handlePreferencesClose}
+        />
       </div>
     </ProtectedRoute>
   );
