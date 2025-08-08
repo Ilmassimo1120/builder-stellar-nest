@@ -6,6 +6,14 @@ const supabaseUrl =
 const supabaseAnonKey =
   import.meta.env.VITE_SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlcG1rbGpvZHNpZmFleG1yaW5sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ2MDQwMjUsImV4cCI6MjA3MDE4MDAyNX0.n4WdeHUHHc5PuJV8-2oDn826CoNxNzHHbt4KxeAhOYc";
 
+// Validate configuration
+if (!supabaseUrl || supabaseUrl.includes('your-project')) {
+  console.error("❌ Invalid Supabase URL configuration:", supabaseUrl);
+}
+if (!supabaseAnonKey || supabaseAnonKey.includes('your-anon-key')) {
+  console.error("❌ Invalid Supabase API key configuration");
+}
+
 // Create Supabase client
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
