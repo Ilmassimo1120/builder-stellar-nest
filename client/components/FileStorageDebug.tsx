@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Alert, AlertDescription } from "./ui/alert";
+import { Badge } from "./ui/badge";
+import { Separator } from "./ui/separator";
 import { safeFileStorageService } from "@/lib/services/safeFileStorageService";
+import { bucketInitService } from "@/lib/services/bucketInitService";
 import { supabase } from "@/lib/supabase";
 
 export default function FileStorageDebug() {
