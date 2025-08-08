@@ -407,13 +407,11 @@ export const initializeSupabase = async () => {
     const { data, error } = await supabase.rpc('health_check');
 
     if (error) {
-      console.error("❌ Supabase connection error:", error);
-      console.error("❌ Error details:", {
-        message: error.message,
-        code: error.code,
-        details: error.details,
-        hint: error.hint
-      });
+      console.error("❌ Supabase connection error:", error.message || 'Unknown error');
+      console.error("❌ Error code:", error.code || 'No code');
+      console.error("❌ Error details:", error.details || 'No details');
+      console.error("❌ Error hint:", error.hint || 'No hint');
+      console.error("❌ Full error object:", JSON.stringify(error, null, 2));
       return false;
     }
 
