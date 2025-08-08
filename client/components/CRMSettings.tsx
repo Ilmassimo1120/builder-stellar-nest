@@ -386,7 +386,7 @@ export function CRMSettings() {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <Sync className="w-5 h-5" />
+                    <RefreshCw className="w-5 h-5" />
                     Sync Settings
                   </CardTitle>
                   <CardDescription>
