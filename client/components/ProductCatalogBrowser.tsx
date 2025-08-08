@@ -121,6 +121,25 @@ export default function ProductCatalogBrowser({
     setSelectedProduct(null);
   };
 
+  const toggleProductComparison = (productId: string) => {
+    setCompareProducts(prev => {
+      if (prev.includes(productId)) {
+        return prev.filter(id => id !== productId);
+      } else if (prev.length < maxCompareProducts) {
+        return [...prev, productId];
+      } else {
+        // Replace oldest product if at max capacity
+        return [...prev.slice(1), productId];
+      }
+    });
+  };
+
+  const handleCompareProducts = () => {
+    if (onCompareProducts && compareProducts.length > 1) {
+      onCompareProducts(compareProducts);
+    }
+  };
+
   if (!isOpen) return null;
 
   return (
