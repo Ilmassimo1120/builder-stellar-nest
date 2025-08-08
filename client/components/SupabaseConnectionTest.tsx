@@ -51,7 +51,8 @@ export default function SupabaseConnectionTest() {
       }
       
     } catch (error) {
-      addResult(`💥 Unexpected error: ${error}`);
+      addResult(`💥 Unexpected error: ${error instanceof Error ? error.message : String(error)}`);
+      addResult(`🔍 Exception details: ${JSON.stringify(error, null, 2)}`);
     } finally {
       setTesting(false);
     }
