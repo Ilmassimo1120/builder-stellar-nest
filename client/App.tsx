@@ -202,6 +202,16 @@ const App = () => (
             <Route path="/clients" element={<Customers />} />
             <Route path="/customers" element={<Customers />} />
 
+            {/* File Storage */}
+            <Route
+              path="/files"
+              element={
+                <ProtectedRoute>
+                  <FileStorage />
+                </ProtectedRoute>
+              }
+            />
+
             {/* Document Management */}
             <Route
               path="/documents"
