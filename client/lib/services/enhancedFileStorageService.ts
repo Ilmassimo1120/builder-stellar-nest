@@ -119,6 +119,39 @@ class EnhancedFileStorageService {
   };
 
   /**
+   * Safely formats error objects into readable strings
+   */
+  private formatError(error: unknown, defaultMessage: string): string {
+    if (error instanceof Error) {
+      return error.message;
+    }
+    if (typeof error === 'string') {
+      return error;
+    }
+    if (error && typeof error === 'object') {
+      // Handle Supabase error format
+      if ('message' in error && typeof error.message === 'string') {
+        return error.message;
+      }
+      // Handle PostgreSQL/database errors
+      if ('code' in error && 'details' in error) {
+        const dbError = error as any;
+        return `Database error (${dbError.code}): ${dbError.message || dbError.details || 'Unknown database error'}`;
+      }
+      // Try to extract meaningful error information
+      try {
+        const errorStr = JSON.stringify(error);
+        if (errorStr !== '{}') {
+          return `Error: ${errorStr}`;
+        }
+      } catch {
+        // JSON.stringify failed, fall back to default
+      }
+    }
+    return defaultMessage;
+  }
+
+  /**
    * Validates file before upload based on bucket requirements
    */
   validateFile(file: File, bucket: BucketName): { valid: boolean; error?: string } {
