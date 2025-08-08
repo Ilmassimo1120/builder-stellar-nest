@@ -60,6 +60,7 @@ import {
 } from "@/lib/quoteTypes";
 import { quoteService } from "@/lib/quoteService";
 import { advancedPDFGenerator } from "@/lib/advancedPDFGenerator";
+import ProductCatalogBrowser from "@/components/ProductCatalogBrowser";
 
 export default function QuoteBuilder() {
   const { quoteId } = useParams<{ quoteId: string }>();
