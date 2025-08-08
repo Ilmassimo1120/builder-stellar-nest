@@ -1342,6 +1342,16 @@ export default function QuoteBuilder() {
         isOpen={showProductCatalogue}
         onClose={() => setShowProductCatalogue(false)}
         onAddProduct={addProduct}
+        onCompareProducts={handleCompareProducts}
+      />
+
+      {/* Product Comparison */}
+      <ProductComparison
+        isOpen={showProductComparison}
+        onClose={() => setShowProductComparison(false)}
+        selectedProducts={comparisonProducts}
+        onAddToQuote={addProduct}
+        onRemoveFromComparison={handleRemoveFromComparison}
       />
     </div>
   );
