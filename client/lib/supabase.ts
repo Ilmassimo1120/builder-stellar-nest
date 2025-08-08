@@ -404,60 +404,49 @@ export const setupDatabase = async () => {
 };
 
 // Auto-initialize Supabase connection on app startup
-export const initializeSupabase = async () => {
+export const initializeSupabase = async (): Promise<boolean> => {
   try {
     console.log("🚀 Initializing ChargeSource Supabase connection...");
 
-    // Try using direct fetch first (we know this works)
-    try {
-      const response = await fetch(
-        `${supabaseUrl}/rest/v1/health_status?select=*`,
-        {
-          method: "GET",
-          headers: {
-            apikey: supabaseAnonKey,
-            Authorization: `Bearer ${supabaseAnonKey}`,
-            "Content-Type": "application/json",
-          },
-        },
-      );
+    // Skip network tests in offline environments
+    if (typeof navigator !== 'undefined' && !navigator.onLine) {
+      console.log("🔄 Offline mode detected, skipping connection test");
+      return false;
+    }
 
-      if (response.ok) {
-        const data = await response.json();
-        console.log("✅ Direct fetch succeeded:", data);
+    // Try a simple ping to check if Supabase is reachable
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+
+      const response = await fetch(`${supabaseUrl}/health`, {
+        method: 'HEAD',
+        signal: controller.signal,
+        headers: {
+          'apikey': supabaseAnonKey,
+        },
+      });
+
+      clearTimeout(timeoutId);
+
+      if (response.ok || response.status === 404) {
+        // 404 is fine - means Supabase is reachable
+        console.log("✅ Supabase endpoint is reachable");
         return true;
-      } else {
-        console.error("❌ Direct fetch failed:", response.status);
       }
     } catch (fetchError) {
-      console.error("❌ Direct fetch error:", fetchError);
+      console.log("⚠️ Network connectivity issue, operating in offline mode");
+      console.log("Error details:", fetchError instanceof Error ? fetchError.message : String(fetchError));
+      return false;
     }
 
-    // Fallback to Supabase client
-    const { data, error } = await supabase
-      .from("health_status")
-      .select("*")
-      .limit(1);
-
-    if (error) {
-      console.error("❌ Supabase client failed:", error.message);
-      // Since we know the connection works via direct test, return true anyway
-      console.log(
-        "⚠️ Supabase client has issues but connection works - returning true",
-      );
-      return true;
-    }
-
-    console.log("✅ Supabase client succeeded:", data);
-    return true;
+    // If we get here, assume offline mode
+    console.log("🔄 Unable to verify connection, operating in offline mode");
+    return false;
   } catch (error) {
-    console.error(
-      "❌ Supabase initialization failed:",
-      error instanceof Error ? error.message : String(error),
-    );
-    // Since we know the connection works, return true
-    console.log("⚠️ Exception occurred but connection works - returning true");
-    return true;
+    console.log("⚠️ Connection check failed, operating in offline mode");
+    console.log("Error details:", error instanceof Error ? error.message : String(error));
+    return false;
   }
 };
 
