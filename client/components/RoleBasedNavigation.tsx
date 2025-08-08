@@ -265,7 +265,6 @@ export function RoleQuickActions() {
         <Button variant="outline" size="sm" asChild>
           <Link to="/projects/new">
             <Zap className="w-4 h-4 mr-2" />
-            New Project
           </Link>
         </Button>
       </PermissionGate>
