@@ -220,9 +220,9 @@ class CategoryService {
   getSubcategories(categoryId?: string): ProductSubcategory[] {
     if (categoryId) {
       const category = this.categories.find(cat => cat.id === categoryId);
-      return category ? [...category.subcategories] : [];
+      return category ? [...category.subcategories].sort((a, b) => a.order - b.order) : [];
     }
-    return this.categories.flatMap(cat => cat.subcategories);
+    return this.categories.flatMap(cat => cat.subcategories).sort((a, b) => a.order - b.order);
   }
 
   getSubcategory(subcategoryId: string): ProductSubcategory | null {
