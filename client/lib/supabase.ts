@@ -402,17 +402,31 @@ export const initializeSupabase = async () => {
     console.log("🔧 Environment VITE_SUPABASE_URL:", import.meta.env.VITE_SUPABASE_URL);
     console.log("🔧 Environment VITE_SUPABASE_ANON_KEY present:", !!import.meta.env.VITE_SUPABASE_ANON_KEY);
 
-    // Test connection using health check function
-    console.log("🔄 Calling health_check function...");
-    const { data, error } = await supabase.rpc('health_check');
+    // Test connection using health check function first
+    console.log("🔄 Method 1: Trying health_check function...");
+    let { data, error } = await supabase.rpc('health_check');
 
     if (error) {
-      console.error("❌ Supabase connection error:", error.message || 'Unknown error');
-      console.error("❌ Error code:", error.code || 'No code');
-      console.error("❌ Error details:", error.details || 'No details');
-      console.error("❌ Error hint:", error.hint || 'No hint');
-      console.error("❌ Full error object:", JSON.stringify(error, null, 2));
-      return false;
+      console.warn("⚠️ Method 1 failed:", error.message || 'Unknown error');
+      console.log("🔄 Method 2: Trying health_status table...");
+
+      // Try alternative method - query health_status table
+      const result = await supabase.from('health_status').select('*').limit(1);
+      data = result.data;
+      error = result.error;
+
+      if (error) {
+        console.error("❌ Method 2 also failed:", error.message || 'Unknown error');
+        console.error("❌ Error code:", error.code || 'No code');
+        console.error("❌ Error details:", error.details || 'No details');
+        console.error("❌ Error hint:", error.hint || 'No hint');
+        console.error("❌ Full error object:", JSON.stringify(error, null, 2));
+        return false;
+      } else {
+        console.log("✅ Method 2 succeeded with table query");
+      }
+    } else {
+      console.log("✅ Method 1 succeeded with function call");
     }
 
     console.log("✅ Supabase connected successfully", data);
