@@ -142,14 +142,8 @@ export default function Dashboard() {
     try {
       setLoading(true);
 
-      // Test Supabase connection
-      let isConnected = false;
-      try {
-        const { data, error } = await supabase.from('users').select('count').limit(1);
-        isConnected = !error;
-      } catch (error) {
-        console.log("Supabase not yet configured");
-      }
+      // Auto-configure and connect to Supabase
+      const isConnected = await autoConfigureSupabase();
       setIsSupabaseConnected(isConnected);
 
       let loadedProjects = [];
