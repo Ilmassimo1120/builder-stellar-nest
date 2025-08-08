@@ -178,6 +178,14 @@ export default function AdminCatalogue() {
               <Package className="w-4 h-4" />
               Manage Products
             </Button>
+            <Button
+              onClick={() => setShowCategoryManager(true)}
+              variant="outline"
+              className="flex items-center gap-2"
+            >
+              <Folder className="w-4 h-4" />
+              Manage Categories
+            </Button>
           </div>
 
           {/* Low Stock Alert */}
