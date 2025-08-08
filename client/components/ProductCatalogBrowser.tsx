@@ -298,10 +298,19 @@ export default function ProductCatalogBrowser({
                                 {product.brand}
                               </Badge>
                             </div>
-                            <Badge className={availability.color} variant="secondary">
-                              <AvailabilityIcon className="w-3 h-3 mr-1" />
-                              {product.inventory.available} available
-                            </Badge>
+                            <div className="flex items-center gap-2">
+                              {onCompareProducts && (
+                                <Checkbox
+                                  checked={compareProducts.includes(product.id)}
+                                  onCheckedChange={() => toggleProductComparison(product.id)}
+                                  aria-label={`Add ${product.name} to comparison`}
+                                />
+                              )}
+                              <Badge className={availability.color} variant="secondary">
+                                <AvailabilityIcon className="w-3 h-3 mr-1" />
+                                {product.inventory.available} available
+                              </Badge>
+                            </div>
                           </div>
                           <CardTitle className="text-lg leading-tight">
                             {product.name}
