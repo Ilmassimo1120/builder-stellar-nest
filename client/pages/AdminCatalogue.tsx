@@ -24,6 +24,8 @@ export default function AdminCatalogue() {
   const [showProductManager, setShowProductManager] = useState(false);
   const [showCategoryManager, setShowCategoryManager] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
+  const [draggedCategory, setDraggedCategory] = useState<string | null>(null);
+  const [dragOverCategory, setDragOverCategory] = useState<string | null>(null);
 
   // Force refresh when categories change
   const handleCategoriesChanged = () => {
