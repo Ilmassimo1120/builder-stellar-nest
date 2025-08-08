@@ -24,9 +24,9 @@ export default function SupabaseConnectionTest() {
       addResult(`📡 Supabase URL: ${supabase.supabaseUrl}`);
       addResult(`🔑 Supabase Key: ${supabase.supabaseKey ? 'Present' : 'Missing'}`);
       
-      // Test 3: Try a simple connection test
-      addResult("🚀 Testing connection to users table...");
-      const { data, error } = await supabase.from('users').select('count').limit(1);
+      // Test 3: Try a simple connection test using health check
+      addResult("🚀 Testing connection with health check...");
+      const { data, error } = await supabase.rpc('health_check');
       
       if (error) {
         addResult(`❌ Connection failed: ${error.message}`);
