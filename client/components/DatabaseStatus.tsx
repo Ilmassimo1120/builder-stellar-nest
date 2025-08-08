@@ -1,10 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import { Badge } from './ui/badge';
-import { Button } from './ui/button';
-import { Alert, AlertDescription } from './ui/alert';
-import { Database, Wifi, WifiOff, CheckCircle, AlertTriangle } from 'lucide-react';
-import { safeFileStorageService } from '@/lib/services/safeFileStorageService';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { Badge } from "./ui/badge";
+import { Button } from "./ui/button";
+import { Alert, AlertDescription } from "./ui/alert";
+import {
+  Database,
+  Wifi,
+  WifiOff,
+  CheckCircle,
+  AlertTriangle,
+} from "lucide-react";
+import { safeFileStorageService } from "@/lib/services/safeFileStorageService";
 
 export default function DatabaseStatus() {
   const [status, setStatus] = useState<{
@@ -18,7 +24,7 @@ export default function DatabaseStatus() {
     canQuery: false,
     storageWorking: false,
     error: null,
-    lastCheck: null
+    lastCheck: null,
   });
   const [isChecking, setIsChecking] = useState(false);
 
@@ -40,16 +46,15 @@ export default function DatabaseStatus() {
         canQuery,
         storageWorking,
         error: storageResult.error || searchResult.error,
-        lastCheck: checkTime
+        lastCheck: checkTime,
       });
-
     } catch (error) {
       setStatus({
         connected: false,
         canQuery: false,
         storageWorking: false,
-        error: error instanceof Error ? error.message : 'Unknown error',
-        lastCheck: checkTime
+        error: error instanceof Error ? error.message : "Unknown error",
+        lastCheck: checkTime,
       });
     } finally {
       setIsChecking(false);
@@ -72,21 +77,21 @@ export default function DatabaseStatus() {
 
   const getStatusText = () => {
     if (status.connected && status.canQuery && status.storageWorking) {
-      return 'All systems operational';
+      return "All systems operational";
     } else if (status.connected) {
-      return 'Connected with limited functionality';
+      return "Connected with limited functionality";
     } else {
-      return 'Offline mode - database unavailable';
+      return "Offline mode - database unavailable";
     }
   };
 
   const getStatusVariant = (): "default" | "secondary" | "destructive" => {
     if (status.connected && status.canQuery && status.storageWorking) {
-      return 'default';
+      return "default";
     } else if (status.connected) {
-      return 'secondary';
+      return "secondary";
     } else {
-      return 'destructive';
+      return "destructive";
     }
   };
 
@@ -102,39 +107,40 @@ export default function DatabaseStatus() {
       <CardContent className="space-y-4">
         <div className="flex items-center justify-between">
           <span className="text-sm font-medium">Overall Status:</span>
-          <Badge variant={getStatusVariant()}>
-            {getStatusText()}
-          </Badge>
+          <Badge variant={getStatusVariant()}>{getStatusText()}</Badge>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="flex items-center space-x-2">
-            {status.connected ? 
-              <Wifi className="h-4 w-4 text-green-500" /> : 
+            {status.connected ? (
+              <Wifi className="h-4 w-4 text-green-500" />
+            ) : (
               <WifiOff className="h-4 w-4 text-red-500" />
-            }
+            )}
             <span className="text-sm">
-              Network: {status.connected ? 'Connected' : 'Offline'}
+              Network: {status.connected ? "Connected" : "Offline"}
             </span>
           </div>
 
           <div className="flex items-center space-x-2">
-            {status.canQuery ? 
-              <CheckCircle className="h-4 w-4 text-green-500" /> : 
+            {status.canQuery ? (
+              <CheckCircle className="h-4 w-4 text-green-500" />
+            ) : (
               <AlertTriangle className="h-4 w-4 text-yellow-500" />
-            }
+            )}
             <span className="text-sm">
-              Search: {status.canQuery ? 'Working' : 'Limited'}
+              Search: {status.canQuery ? "Working" : "Limited"}
             </span>
           </div>
 
           <div className="flex items-center space-x-2">
-            {status.storageWorking ? 
-              <CheckCircle className="h-4 w-4 text-green-500" /> : 
+            {status.storageWorking ? (
+              <CheckCircle className="h-4 w-4 text-green-500" />
+            ) : (
               <AlertTriangle className="h-4 w-4 text-yellow-500" />
-            }
+            )}
             <span className="text-sm">
-              Storage: {status.storageWorking ? 'Working' : 'Limited'}
+              Storage: {status.storageWorking ? "Working" : "Limited"}
             </span>
           </div>
         </div>
@@ -149,24 +155,25 @@ export default function DatabaseStatus() {
 
         <div className="flex items-center justify-between">
           <span className="text-xs text-muted-foreground">
-            Last checked: {status.lastCheck || 'Never'}
+            Last checked: {status.lastCheck || "Never"}
           </span>
-          <Button 
-            variant="outline" 
-            size="sm" 
+          <Button
+            variant="outline"
+            size="sm"
             onClick={checkDatabaseStatus}
             disabled={isChecking}
           >
-            {isChecking ? 'Checking...' : 'Refresh Status'}
+            {isChecking ? "Checking..." : "Refresh Status"}
           </Button>
         </div>
 
         <Alert>
           <AlertDescription>
-            <strong>How it works:</strong> The file storage system now gracefully handles database 
-            unavailability by returning empty results instead of crashing. This allows the 
-            application to function even when the database tables don't exist yet or there 
-            are network connectivity issues.
+            <strong>How it works:</strong> The file storage system now
+            gracefully handles database unavailability by returning empty
+            results instead of crashing. This allows the application to function
+            even when the database tables don't exist yet or there are network
+            connectivity issues.
           </AlertDescription>
         </Alert>
       </CardContent>

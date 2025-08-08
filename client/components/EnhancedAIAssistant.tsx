@@ -12,19 +12,38 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import {
-  Bot, Send, Sparkles, FileText, Search, Database,
-  BookOpen, Calculator, Settings, Download, Eye,
-  Clock, Users, Shield, Zap, HelpCircle,
-  Minimize2, Maximize2, Filter, Tags,
-  Video, Image, File, Archive
+  Bot,
+  Send,
+  Sparkles,
+  FileText,
+  Search,
+  Database,
+  BookOpen,
+  Calculator,
+  Settings,
+  Download,
+  Eye,
+  Clock,
+  Users,
+  Shield,
+  Zap,
+  HelpCircle,
+  Minimize2,
+  Maximize2,
+  Filter,
+  Tags,
+  Video,
+  Image,
+  File,
+  Archive,
 } from "lucide-react";
 import { useAIContext } from "@/hooks/useAIContext";
 import { findAIResponse } from "@/lib/aiKnowledge";
-import { 
-  enhancedFileStorageService, 
-  FileAsset, 
+import {
+  enhancedFileStorageService,
+  FileAsset,
   SearchFilters,
-  BucketName 
+  BucketName,
 } from "@/lib/services/enhancedFileStorageService";
 import { useNavigate } from "react-router-dom";
 
@@ -97,7 +116,7 @@ I combine file search with specialized EV charging expertise. What would you lik
           "Find compliance documents",
           "Show training videos",
           "Help with troubleshooting",
-          ...aiContext.suggestions
+          ...aiContext.suggestions,
         ],
       };
       setMessages([welcomeMessage]);
@@ -105,17 +124,20 @@ I combine file search with specialized EV charging expertise. What would you lik
   }, [aiContext, messages.length]);
 
   // Enhanced file search functionality
-  const searchFiles = async (query: string, filters?: Partial<SearchFilters>): Promise<FileSearchResult> => {
+  const searchFiles = async (
+    query: string,
+    filters?: Partial<SearchFilters>,
+  ): Promise<FileSearchResult> => {
     try {
       setIsSearching(true);
-      
+
       // Extract search terms and bucket hints from query
       const searchTerms = extractSearchTerms(query);
       const bucketHints = extractBucketHints(query);
-      
+
       const searchFilters: SearchFilters = {
-        searchQuery: searchTerms.join(' '),
-        ...filters
+        searchQuery: searchTerms.join(" "),
+        ...filters,
       };
 
       // Add bucket filter if detected
@@ -123,24 +145,30 @@ I combine file search with specialized EV charging expertise. What would you lik
         searchFilters.bucket = bucketHints[0];
       }
 
-      const results = await enhancedFileStorageService.searchFiles(searchFilters);
-      
+      const results =
+        await enhancedFileStorageService.searchFiles(searchFilters);
+
       return {
         files: results.slice(0, 10), // Limit to top 10 results
         totalFound: results.length,
         searchTerms,
-        buckets: bucketHints
+        buckets: bucketHints,
       };
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message :
-                       (typeof error === 'string' ? error :
-                        (error && typeof error === 'object' ? JSON.stringify(error) : 'Unknown file search error'));
-      console.error('File search error:', errorMessage, error);
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : typeof error === "string"
+            ? error
+            : error && typeof error === "object"
+              ? JSON.stringify(error)
+              : "Unknown file search error";
+      console.error("File search error:", errorMessage, error);
       return {
         files: [],
         totalFound: 0,
         searchTerms: [],
-        buckets: []
+        buckets: [],
       };
     } finally {
       setIsSearching(false);
@@ -149,12 +177,27 @@ I combine file search with specialized EV charging expertise. What would you lik
 
   // Extract meaningful search terms from user query
   const extractSearchTerms = (query: string): string[] => {
-    const stopWords = ['find', 'search', 'show', 'me', 'get', 'looking', 'for', 'about', 'the', 'a', 'an', 'and', 'or'];
+    const stopWords = [
+      "find",
+      "search",
+      "show",
+      "me",
+      "get",
+      "looking",
+      "for",
+      "about",
+      "the",
+      "a",
+      "an",
+      "and",
+      "or",
+    ];
     const words = query.toLowerCase().split(/\s+/);
-    return words.filter(word => 
-      word.length > 2 && 
-      !stopWords.includes(word) &&
-      !/^(file|document|video|manual|guide)s?$/.test(word)
+    return words.filter(
+      (word) =>
+        word.length > 2 &&
+        !stopWords.includes(word) &&
+        !/^(file|document|video|manual|guide)s?$/.test(word),
     );
   };
 
@@ -162,24 +205,37 @@ I combine file search with specialized EV charging expertise. What would you lik
   const extractBucketHints = (query: string): BucketName[] => {
     const buckets: BucketName[] = [];
     const lowerQuery = query.toLowerCase();
-    
-    if (lowerQuery.includes('video') || lowerQuery.includes('training') || lowerQuery.includes('demonstration')) {
-      buckets.push('charge-source-videos');
+
+    if (
+      lowerQuery.includes("video") ||
+      lowerQuery.includes("training") ||
+      lowerQuery.includes("demonstration")
+    ) {
+      buckets.push("charge-source-videos");
     }
-    if (lowerQuery.includes('document') || lowerQuery.includes('manual') || lowerQuery.includes('report') || lowerQuery.includes('specification')) {
-      buckets.push('charge-source-documents');
+    if (
+      lowerQuery.includes("document") ||
+      lowerQuery.includes("manual") ||
+      lowerQuery.includes("report") ||
+      lowerQuery.includes("specification")
+    ) {
+      buckets.push("charge-source-documents");
     }
-    if (lowerQuery.includes('personal') || lowerQuery.includes('user') || lowerQuery.includes('my')) {
-      buckets.push('charge-source-user-files');
+    if (
+      lowerQuery.includes("personal") ||
+      lowerQuery.includes("user") ||
+      lowerQuery.includes("my")
+    ) {
+      buckets.push("charge-source-user-files");
     }
-    
+
     return buckets;
   };
 
   // Enhanced AI response system with file search integration
   const getAIResponse = async (userMessage: string): Promise<ChatMessage> => {
     const message = userMessage.toLowerCase();
-    
+
     let response = "";
     let suggestions: string[] = [];
     let fileResults: FileAsset[] = [];
@@ -191,29 +247,34 @@ I combine file search with specialized EV charging expertise. What would you lik
     }> = [];
 
     // Check if this is a file search request
-    const isFileSearchQuery = message.includes('find') || message.includes('search') || 
-                             message.includes('show') || message.includes('locate') ||
-                             message.includes('documents') || message.includes('files') ||
-                             message.includes('videos') || message.includes('manuals');
+    const isFileSearchQuery =
+      message.includes("find") ||
+      message.includes("search") ||
+      message.includes("show") ||
+      message.includes("locate") ||
+      message.includes("documents") ||
+      message.includes("files") ||
+      message.includes("videos") ||
+      message.includes("manuals");
 
     if (isFileSearchQuery) {
       // Perform file search
       const searchResult = await searchFiles(userMessage);
       fileResults = searchResult.files;
-      
+
       if (searchResult.totalFound > 0) {
         response = `🔍 **File Search Results**
 
-Found **${searchResult.totalFound}** files matching your query for: **${searchResult.searchTerms.join(', ')}**
+Found **${searchResult.totalFound}** files matching your query for: **${searchResult.searchTerms.join(", ")}**
 
-${searchResult.buckets.length > 0 ? `**Search focused on**: ${searchResult.buckets.map(b => getBucketDisplayName(b)).join(', ')}` : ''}
+${searchResult.buckets.length > 0 ? `**Search focused on**: ${searchResult.buckets.map((b) => getBucketDisplayName(b)).join(", ")}` : ""}
 
 **Top Results:**`;
 
         // Add file results to response
         fileResults.slice(0, 5).forEach((file, index) => {
           const bucketName = getBucketDisplayName(file.bucketName);
-          response += `\n\n**${index + 1}. ${file.title || file.fileName}**\n• Type: ${bucketName} | Size: ${formatFileSize(file.fileSize)}\n• Status: ${file.status.replace('_', ' ')}\n• Description: ${file.description || 'No description available'}`;
+          response += `\n\n**${index + 1}. ${file.title || file.fileName}**\n• Type: ${bucketName} | Size: ${formatFileSize(file.fileSize)}\n• Status: ${file.status.replace("_", " ")}\n• Description: ${file.description || "No description available"}`;
         });
 
         if (searchResult.totalFound > 5) {
@@ -224,7 +285,7 @@ ${searchResult.buckets.length > 0 ? `**Search focused on**: ${searchResult.bucke
           "Refine search with filters",
           "Search in specific bucket",
           "Find related documents",
-          "Show file details"
+          "Show file details",
         ];
 
         actions = [
@@ -232,13 +293,16 @@ ${searchResult.buckets.length > 0 ? `**Search focused on**: ${searchResult.bucke
             label: `View All ${searchResult.totalFound} Results`,
             action: "view-all-results",
             icon: <Search className="w-4 h-4" />,
-            data: { searchQuery: userMessage, totalFound: searchResult.totalFound }
+            data: {
+              searchQuery: userMessage,
+              totalFound: searchResult.totalFound,
+            },
           },
           {
             label: "Open File Manager",
             action: "open-file-manager",
-            icon: <FileText className="w-4 h-4" />
-          }
+            icon: <FileText className="w-4 h-4" />,
+          },
         ];
 
         // Add quick access actions for top files
@@ -247,14 +311,13 @@ ${searchResult.buckets.length > 0 ? `**Search focused on**: ${searchResult.bucke
             label: `Preview "${fileResults[0].title || fileResults[0].fileName}"`,
             action: "preview-file",
             icon: <Eye className="w-4 h-4" />,
-            data: { fileId: fileResults[0].id }
+            data: { fileId: fileResults[0].id },
           });
         }
-
       } else {
         response = `🔍 **No Files Found**
 
-I couldn't find any files matching your search for: **${searchResult.searchTerms.join(', ')}**
+I couldn't find any files matching your search for: **${searchResult.searchTerms.join(", ")}**
 
 **Suggestions to improve your search:**
 • Try different keywords or terms
@@ -271,20 +334,20 @@ I couldn't find any files matching your search for: **${searchResult.searchTerms
           "Browse files by category",
           "Upload new documents",
           "Search with different terms",
-          "Get technical guidance instead"
+          "Get technical guidance instead",
         ];
 
         actions = [
           {
             label: "Open File Manager",
             action: "open-file-manager",
-            icon: <FileText className="w-4 h-4" />
+            icon: <FileText className="w-4 h-4" />,
           },
           {
             label: "Upload Files",
             action: "upload-files",
-            icon: <Database className="w-4 h-4" />
-          }
+            icon: <Database className="w-4 h-4" />,
+          },
         ];
       }
     } else {
@@ -293,22 +356,26 @@ I couldn't find any files matching your search for: **${searchResult.searchTerms
       if (knowledgeResponse) {
         response = knowledgeResponse.response;
         suggestions = knowledgeResponse.suggestions || [];
-        actions = knowledgeResponse.actions?.map((action) => ({
-          ...action,
-          icon: action.icon ? <FileText className="w-4 h-4" /> : <Zap className="w-4 h-4" />
-        })) || [];
+        actions =
+          knowledgeResponse.actions?.map((action) => ({
+            ...action,
+            icon: action.icon ? (
+              <FileText className="w-4 h-4" />
+            ) : (
+              <Zap className="w-4 h-4" />
+            ),
+          })) || [];
 
         // Add file search suggestions related to the topic
         const topicKeywords = knowledgeResponse.keywords.slice(0, 2);
-        suggestions.push(`Find files about ${topicKeywords.join(' and ')}`);
-        
+        suggestions.push(`Find files about ${topicKeywords.join(" and ")}`);
+
         actions.push({
           label: `Search Files: "${topicKeywords[0]}"`,
           action: "search-files-topic",
           icon: <Search className="w-4 h-4" />,
-          data: { keywords: topicKeywords }
+          data: { keywords: topicKeywords },
         });
-
       } else {
         // Default response with file search integration
         response = `I'd be happy to help! 🤖 I can assist with:
@@ -334,17 +401,17 @@ Could you be more specific about what you need help with? I can search your file
 
         suggestions = [
           "Search for installation guides",
-          "Find compliance documents", 
+          "Find compliance documents",
           "Technical troubleshooting help",
-          "Platform feature guidance"
+          "Platform feature guidance",
         ];
 
         actions = [
           {
             label: "Browse All Files",
             action: "open-file-manager",
-            icon: <FileText className="w-4 h-4" />
-          }
+            icon: <FileText className="w-4 h-4" />,
+          },
         ];
       }
     }
@@ -403,16 +470,18 @@ Could you be more specific about what you need help with? I can search your file
       case "preview-file":
         if (data?.fileId) {
           try {
-            const signedUrl = await enhancedFileStorageService.getSignedUrl(data.fileId);
-            window.open(signedUrl, '_blank');
+            const signedUrl = await enhancedFileStorageService.getSignedUrl(
+              data.fileId,
+            );
+            window.open(signedUrl, "_blank");
           } catch (error) {
-            console.error('Preview error:', error);
+            console.error("Preview error:", error);
           }
         }
         break;
       case "search-files-topic":
         if (data?.keywords) {
-          setInputMessage(`Find files about ${data.keywords.join(' ')}`);
+          setInputMessage(`Find files about ${data.keywords.join(" ")}`);
         }
         break;
       case "new-project":
@@ -431,25 +500,25 @@ Could you be more specific about what you need help with? I can search your file
   // Utility functions
   const getBucketDisplayName = (bucketName: BucketName): string => {
     const bucketNames = {
-      'charge-source-user-files': '👤 User Files',
-      'charge-source-documents': '📄 Documents', 
-      'charge-source-videos': '🎥 Videos'
+      "charge-source-user-files": "👤 User Files",
+      "charge-source-documents": "📄 Documents",
+      "charge-source-videos": "🎥 Videos",
     };
     return bucketNames[bucketName] || bucketName;
   };
 
   const formatFileSize = (bytes: number): string => {
-    if (bytes === 0) return '0 Bytes';
+    if (bytes === 0) return "0 Bytes";
     const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const sizes = ["Bytes", "KB", "MB", "GB"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
   };
 
   const getFileIcon = (mimeType: string) => {
-    if (mimeType.startsWith('image/')) return <Image className="w-4 h-4" />;
-    if (mimeType.startsWith('video/')) return <Video className="w-4 h-4" />;
-    if (mimeType.includes('pdf')) return <FileText className="w-4 h-4" />;
+    if (mimeType.startsWith("image/")) return <Image className="w-4 h-4" />;
+    if (mimeType.startsWith("video/")) return <Video className="w-4 h-4" />;
+    if (mimeType.includes("pdf")) return <FileText className="w-4 h-4" />;
     return <File className="w-4 h-4" />;
   };
 
@@ -503,7 +572,10 @@ Could you be more specific about what you need help with? I can search your file
                   <div>
                     <DialogTitle className="text-sm flex items-center gap-2">
                       Enhanced AI Assistant
-                      <Badge variant="secondary" className="text-xs bg-green-100 text-green-800">
+                      <Badge
+                        variant="secondary"
+                        className="text-xs bg-green-100 text-green-800"
+                      >
                         <Sparkles className="w-3 h-3 mr-1" />
                         File Search
                       </Badge>
@@ -561,53 +633,63 @@ Could you be more specific about what you need help with? I can search your file
                           </div>
 
                           {/* File Results */}
-                          {message.fileResults && message.fileResults.length > 0 && (
-                            <div className="mt-3 space-y-2">
-                              <div className="text-xs font-medium text-muted-foreground">
-                                Quick Actions:
-                              </div>
-                              {message.fileResults.slice(0, 3).map((file) => (
-                                <div
-                                  key={file.id}
-                                  className="flex items-center justify-between p-2 bg-background rounded border text-xs"
-                                >
-                                  <div className="flex items-center space-x-2 flex-1 min-w-0">
-                                    {getFileIcon(file.mimeType)}
-                                    <span className="truncate font-medium">
-                                      {file.title || file.fileName}
-                                    </span>
-                                  </div>
-                                  <div className="flex space-x-1">
-                                    <Button
-                                      size="sm"
-                                      variant="ghost"
-                                      className="h-6 w-6 p-0"
-                                      onClick={() => handleActionClick("preview-file", { fileId: file.id })}
-                                    >
-                                      <Eye className="w-3 h-3" />
-                                    </Button>
-                                  </div>
+                          {message.fileResults &&
+                            message.fileResults.length > 0 && (
+                              <div className="mt-3 space-y-2">
+                                <div className="text-xs font-medium text-muted-foreground">
+                                  Quick Actions:
                                 </div>
-                              ))}
-                            </div>
-                          )}
+                                {message.fileResults.slice(0, 3).map((file) => (
+                                  <div
+                                    key={file.id}
+                                    className="flex items-center justify-between p-2 bg-background rounded border text-xs"
+                                  >
+                                    <div className="flex items-center space-x-2 flex-1 min-w-0">
+                                      {getFileIcon(file.mimeType)}
+                                      <span className="truncate font-medium">
+                                        {file.title || file.fileName}
+                                      </span>
+                                    </div>
+                                    <div className="flex space-x-1">
+                                      <Button
+                                        size="sm"
+                                        variant="ghost"
+                                        className="h-6 w-6 p-0"
+                                        onClick={() =>
+                                          handleActionClick("preview-file", {
+                                            fileId: file.id,
+                                          })
+                                        }
+                                      >
+                                        <Eye className="w-3 h-3" />
+                                      </Button>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
 
                           {/* Suggestions */}
-                          {message.suggestions && message.suggestions.length > 0 && (
-                            <div className="mt-3 space-y-1">
-                              {message.suggestions.map((suggestion, index) => (
-                                <Button
-                                  key={index}
-                                  variant="outline"
-                                  size="sm"
-                                  className="text-xs h-6 px-2 mr-1 mb-1"
-                                  onClick={() => handleSuggestionClick(suggestion)}
-                                >
-                                  {suggestion}
-                                </Button>
-                              ))}
-                            </div>
-                          )}
+                          {message.suggestions &&
+                            message.suggestions.length > 0 && (
+                              <div className="mt-3 space-y-1">
+                                {message.suggestions.map(
+                                  (suggestion, index) => (
+                                    <Button
+                                      key={index}
+                                      variant="outline"
+                                      size="sm"
+                                      className="text-xs h-6 px-2 mr-1 mb-1"
+                                      onClick={() =>
+                                        handleSuggestionClick(suggestion)
+                                      }
+                                    >
+                                      {suggestion}
+                                    </Button>
+                                  ),
+                                )}
+                              </div>
+                            )}
 
                           {/* Action Buttons */}
                           {message.actions && message.actions.length > 0 && (
@@ -618,7 +700,12 @@ Could you be more specific about what you need help with? I can search your file
                                   variant="secondary"
                                   size="sm"
                                   className="text-xs h-7 px-3 mr-1 mb-1"
-                                  onClick={() => handleActionClick(action.action, action.data)}
+                                  onClick={() =>
+                                    handleActionClick(
+                                      action.action,
+                                      action.data,
+                                    )
+                                  }
                                 >
                                   {action.icon}
                                   <span className="ml-1">{action.label}</span>
@@ -673,7 +760,9 @@ Could you be more specific about what you need help with? I can search your file
                       placeholder="Ask me or search files..."
                       value={inputMessage}
                       onChange={(e) => setInputMessage(e.target.value)}
-                      onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
+                      onKeyPress={(e) =>
+                        e.key === "Enter" && handleSendMessage()
+                      }
                       className="flex-1"
                     />
                     <Button
@@ -713,7 +802,10 @@ Could you be more specific about what you need help with? I can search your file
       {/* Chat Status Indicator */}
       {isOpen && (
         <div className="fixed bottom-24 right-6 z-40">
-          <Badge variant="secondary" className="text-xs bg-green-100 text-green-800 border-green-200">
+          <Badge
+            variant="secondary"
+            className="text-xs bg-green-100 text-green-800 border-green-200"
+          >
             <div className="w-2 h-2 bg-green-500 rounded-full mr-1 animate-pulse"></div>
             Enhanced AI + Files
           </Badge>

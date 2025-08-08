@@ -1,11 +1,11 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef } from "react";
 
 // Cache for localStorage values to prevent repeated JSON parsing
 const storageCache = new Map<string, any>();
 const listeners = new Map<string, Set<(value: any) => void>>();
 
 // Custom event for cross-tab synchronization
-const STORAGE_EVENT = 'optimized-storage-change';
+const STORAGE_EVENT = "optimized-storage-change";
 
 interface StorageOptions {
   cache?: boolean;
@@ -20,20 +20,20 @@ interface StorageOptions {
 export function useOptimizedStorage<T>(
   key: string,
   defaultValue: T,
-  options: StorageOptions = {}
+  options: StorageOptions = {},
 ): [T, (value: T | ((prev: T) => T)) => void] {
-  const { 
-    cache = true, 
-    serialize = JSON.stringify, 
-    deserialize = JSON.parse 
+  const {
+    cache = true,
+    serialize = JSON.stringify,
+    deserialize = JSON.parse,
   } = options;
 
   const isMountedRef = useRef(true);
 
   // Get initial value with caching
   const getStoredValue = useCallback((): T => {
-    if (typeof window === 'undefined') return defaultValue;
-    
+    if (typeof window === "undefined") return defaultValue;
+
     try {
       // Check cache first if caching is enabled
       if (cache && storageCache.has(key)) {
@@ -46,12 +46,12 @@ export function useOptimizedStorage<T>(
       }
 
       const parsed = deserialize(item);
-      
+
       // Update cache
       if (cache) {
         storageCache.set(key, parsed);
       }
-      
+
       return parsed;
     } catch (error) {
       console.warn(`Error reading localStorage key "${key}":`, error);
@@ -62,40 +62,45 @@ export function useOptimizedStorage<T>(
   const [storedValue, setStoredValue] = useState<T>(getStoredValue);
 
   // Update localStorage and cache
-  const setValue = useCallback((value: T | ((prev: T) => T)) => {
-    if (typeof window === 'undefined') return;
-    
-    try {
-      const currentValue = getStoredValue();
-      const newValue = typeof value === 'function' 
-        ? (value as (prev: T) => T)(currentValue)
-        : value;
+  const setValue = useCallback(
+    (value: T | ((prev: T) => T)) => {
+      if (typeof window === "undefined") return;
 
-      // Update localStorage
-      localStorage.setItem(key, serialize(newValue));
-      
-      // Update cache
-      if (cache) {
-        storageCache.set(key, newValue);
-      }
-      
-      // Update state if component is still mounted
-      if (isMountedRef.current) {
-        setStoredValue(newValue);
-      }
+      try {
+        const currentValue = getStoredValue();
+        const newValue =
+          typeof value === "function"
+            ? (value as (prev: T) => T)(currentValue)
+            : value;
 
-      // Notify other instances
-      notifyListeners(key, newValue);
-      
-      // Dispatch custom event for cross-tab sync
-      window.dispatchEvent(new CustomEvent(STORAGE_EVENT, {
-        detail: { key, value: newValue }
-      }));
-      
-    } catch (error) {
-      console.error(`Error setting localStorage key "${key}":`, error);
-    }
-  }, [key, serialize, cache, getStoredValue]);
+        // Update localStorage
+        localStorage.setItem(key, serialize(newValue));
+
+        // Update cache
+        if (cache) {
+          storageCache.set(key, newValue);
+        }
+
+        // Update state if component is still mounted
+        if (isMountedRef.current) {
+          setStoredValue(newValue);
+        }
+
+        // Notify other instances
+        notifyListeners(key, newValue);
+
+        // Dispatch custom event for cross-tab sync
+        window.dispatchEvent(
+          new CustomEvent(STORAGE_EVENT, {
+            detail: { key, value: newValue },
+          }),
+        );
+      } catch (error) {
+        console.error(`Error setting localStorage key "${key}":`, error);
+      }
+    },
+    [key, serialize, cache, getStoredValue],
+  );
 
   // Listen for storage changes from other tabs
   useEffect(() => {
@@ -103,12 +108,12 @@ export function useOptimizedStorage<T>(
       if (e.key === key && e.newValue !== null && isMountedRef.current) {
         try {
           const newValue = deserialize(e.newValue);
-          
+
           // Update cache
           if (cache) {
             storageCache.set(key, newValue);
           }
-          
+
           setStoredValue(newValue);
         } catch (error) {
           console.warn(`Error parsing storage change for key "${key}":`, error);
@@ -122,14 +127,17 @@ export function useOptimizedStorage<T>(
       }
     };
 
-    window.addEventListener('storage', handleStorageChange);
-    window.addEventListener(STORAGE_EVENT, handleCustomStorageChange as EventListener);
+    window.addEventListener("storage", handleStorageChange);
+    window.addEventListener(
+      STORAGE_EVENT,
+      handleCustomStorageChange as EventListener,
+    );
 
     // Register listener for programmatic updates
     if (!listeners.has(key)) {
       listeners.set(key, new Set());
     }
-    
+
     const keyListeners = listeners.get(key)!;
     const updateListener = (newValue: any) => {
       if (isMountedRef.current) {
@@ -139,8 +147,11 @@ export function useOptimizedStorage<T>(
     keyListeners.add(updateListener);
 
     return () => {
-      window.removeEventListener('storage', handleStorageChange);
-      window.removeEventListener(STORAGE_EVENT, handleCustomStorageChange as EventListener);
+      window.removeEventListener("storage", handleStorageChange);
+      window.removeEventListener(
+        STORAGE_EVENT,
+        handleCustomStorageChange as EventListener,
+      );
       keyListeners.delete(updateListener);
     };
   }, [key, deserialize, cache]);
@@ -159,7 +170,7 @@ export function useOptimizedStorage<T>(
 function notifyListeners(key: string, value: any) {
   const keyListeners = listeners.get(key);
   if (keyListeners) {
-    keyListeners.forEach(listener => listener(value));
+    keyListeners.forEach((listener) => listener(value));
   }
 }
 
@@ -191,7 +202,7 @@ export const storageUtils = {
    * Preload frequently accessed keys
    */
   preloadKeys: (keys: string[]) => {
-    keys.forEach(key => {
+    keys.forEach((key) => {
       try {
         const item = localStorage.getItem(key);
         if (item !== null) {
@@ -206,25 +217,29 @@ export const storageUtils = {
 
 // Hook for projects specifically
 export function useProjectsStorage() {
-  return useOptimizedStorage('chargeSourceProjects', [], {
+  return useOptimizedStorage("chargeSourceProjects", [], {
     cache: true,
   });
 }
 
-// Hook for drafts specifically  
+// Hook for drafts specifically
 export function useDraftsStorage() {
-  return useOptimizedStorage('chargeSourceDrafts', [], {
+  return useOptimizedStorage("chargeSourceDrafts", [], {
     cache: true,
   });
 }
 
 // Hook for user preferences
 export function useUserPreferences() {
-  return useOptimizedStorage('chargeSourceUserPrefs', {
-    theme: 'light',
-    notifications: true,
-    autoSave: true,
-  }, {
-    cache: true,
-  });
+  return useOptimizedStorage(
+    "chargeSourceUserPrefs",
+    {
+      theme: "light",
+      notifications: true,
+      autoSave: true,
+    },
+    {
+      cache: true,
+    },
+  );
 }

@@ -1,30 +1,30 @@
-import React, { Suspense, lazy } from 'react';
-import { Routes, Route } from 'react-router-dom';
-import { ProtectedRoute } from '../components/ProtectedRoute';
-import LoadingSpinner from '../components/LoadingSpinner';
+import React, { Suspense, lazy } from "react";
+import { Routes, Route } from "react-router-dom";
+import { ProtectedRoute } from "../components/ProtectedRoute";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 // Lazy load all page components for better bundle splitting
-const Index = lazy(() => import('../pages/Index'));
-const Dashboard = lazy(() => import('../pages/Dashboard'));
-const Projects = lazy(() => import('../pages/Projects'));
-const ProjectWizard = lazy(() => import('../pages/ProjectWizard'));
-const ProjectDetail = lazy(() => import('../pages/ProjectDetail'));
-const Quotes = lazy(() => import('../pages/Quotes'));
-const QuoteBuilder = lazy(() => import('../pages/QuoteBuilder'));
-const ClientPortal = lazy(() => import('../pages/ClientPortal'));
-const Login = lazy(() => import('../pages/Login'));
-const Register = lazy(() => import('../pages/Register'));
-const Catalogue = lazy(() => import('../pages/Catalogue'));
-const AdminCatalogue = lazy(() => import('../pages/AdminCatalogue'));
-const Settings = lazy(() => import('../pages/Settings'));
-const Analytics = lazy(() => import('../pages/Analytics'));
-const Users = lazy(() => import('../pages/Users'));
-const Customers = lazy(() => import('../pages/Customers'));
-const EnhancedFileStorage = lazy(() => import('../pages/EnhancedFileStorage'));
-const FileStorage = lazy(() => import('../pages/FileStorage'));
-const CloudStatus = lazy(() => import('../pages/CloudStatus'));
-const NotFound = lazy(() => import('../pages/NotFound'));
-const Placeholder = lazy(() => import('../pages/Placeholder'));
+const Index = lazy(() => import("../pages/Index"));
+const Dashboard = lazy(() => import("../pages/Dashboard"));
+const Projects = lazy(() => import("../pages/Projects"));
+const ProjectWizard = lazy(() => import("../pages/ProjectWizard"));
+const ProjectDetail = lazy(() => import("../pages/ProjectDetail"));
+const Quotes = lazy(() => import("../pages/Quotes"));
+const QuoteBuilder = lazy(() => import("../pages/QuoteBuilder"));
+const ClientPortal = lazy(() => import("../pages/ClientPortal"));
+const Login = lazy(() => import("../pages/Login"));
+const Register = lazy(() => import("../pages/Register"));
+const Catalogue = lazy(() => import("../pages/Catalogue"));
+const AdminCatalogue = lazy(() => import("../pages/AdminCatalogue"));
+const Settings = lazy(() => import("../pages/Settings"));
+const Analytics = lazy(() => import("../pages/Analytics"));
+const Users = lazy(() => import("../pages/Users"));
+const Customers = lazy(() => import("../pages/Customers"));
+const EnhancedFileStorage = lazy(() => import("../pages/EnhancedFileStorage"));
+const FileStorage = lazy(() => import("../pages/FileStorage"));
+const CloudStatus = lazy(() => import("../pages/CloudStatus"));
+const NotFound = lazy(() => import("../pages/NotFound"));
+const Placeholder = lazy(() => import("../pages/Placeholder"));
 
 // Loading component for Suspense fallback
 const PageLoading = () => (
@@ -36,53 +36,49 @@ const PageLoading = () => (
 // Reusable protected route wrapper with loading
 const ProtectedLazyRoute = ({ children }: { children: React.ReactNode }) => (
   <ProtectedRoute>
-    <Suspense fallback={<PageLoading />}>
-      {children}
-    </Suspense>
+    <Suspense fallback={<PageLoading />}>{children}</Suspense>
   </ProtectedRoute>
 );
 
 // Public route wrapper with loading
 const PublicLazyRoute = ({ children }: { children: React.ReactNode }) => (
-  <Suspense fallback={<PageLoading />}>
-    {children}
-  </Suspense>
+  <Suspense fallback={<PageLoading />}>{children}</Suspense>
 );
 
 export const AppRoutes = () => (
   <Routes>
     {/* Public Routes */}
-    <Route 
-      path="/" 
+    <Route
+      path="/"
       element={
         <PublicLazyRoute>
           <Index />
         </PublicLazyRoute>
-      } 
+      }
     />
-    <Route 
-      path="/login" 
+    <Route
+      path="/login"
       element={
         <PublicLazyRoute>
           <Login />
         </PublicLazyRoute>
-      } 
+      }
     />
-    <Route 
-      path="/register" 
+    <Route
+      path="/register"
       element={
         <PublicLazyRoute>
           <Register />
         </PublicLazyRoute>
-      } 
+      }
     />
-    <Route 
-      path="/client/quote/:quoteId" 
+    <Route
+      path="/client/quote/:quoteId"
       element={
         <PublicLazyRoute>
           <ClientPortal />
         </PublicLazyRoute>
-      } 
+      }
     />
 
     {/* Protected Routes */}
@@ -94,7 +90,7 @@ export const AppRoutes = () => (
         </ProtectedLazyRoute>
       }
     />
-    
+
     {/* Project Management Routes */}
     <Route
       path="/projects"
@@ -174,39 +170,39 @@ export const AppRoutes = () => (
     />
 
     {/* Catalogue Routes */}
-    <Route 
-      path="/catalogue" 
+    <Route
+      path="/catalogue"
       element={
         <ProtectedLazyRoute>
           <Catalogue />
         </ProtectedLazyRoute>
-      } 
+      }
     />
-    <Route 
-      path="/admin/catalogue" 
+    <Route
+      path="/admin/catalogue"
       element={
         <ProtectedLazyRoute>
           <AdminCatalogue />
         </ProtectedLazyRoute>
-      } 
+      }
     />
 
     {/* Customer Management */}
-    <Route 
-      path="/clients" 
+    <Route
+      path="/clients"
       element={
         <ProtectedLazyRoute>
           <Customers />
         </ProtectedLazyRoute>
-      } 
+      }
     />
-    <Route 
-      path="/customers" 
+    <Route
+      path="/customers"
       element={
         <ProtectedLazyRoute>
           <Customers />
         </ProtectedLazyRoute>
-      } 
+      }
     />
 
     {/* Admin Routes */}
@@ -323,13 +319,13 @@ export const AppRoutes = () => (
     />
 
     {/* Catch-all route */}
-    <Route 
-      path="*" 
+    <Route
+      path="*"
       element={
         <PublicLazyRoute>
           <NotFound />
         </PublicLazyRoute>
-      } 
+      }
     />
   </Routes>
 );

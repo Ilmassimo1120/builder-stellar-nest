@@ -1,15 +1,15 @@
-import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import { Alert, AlertDescription } from './ui/alert';
-import { Badge } from './ui/badge';
-import { 
-  Database, 
-  HardDrive, 
-  CheckCircle, 
-  AlertTriangle, 
+import React from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { Alert, AlertDescription } from "./ui/alert";
+import { Badge } from "./ui/badge";
+import {
+  Database,
+  HardDrive,
+  CheckCircle,
+  AlertTriangle,
   ExternalLink,
-  Copy
-} from 'lucide-react';
+  Copy,
+} from "lucide-react";
 
 export default function SupabaseSetupGuide() {
   const copyToClipboard = (text: string) => {
@@ -17,9 +17,9 @@ export default function SupabaseSetupGuide() {
   };
 
   const buckets = [
-    'charge-source-user-files',
-    'charge-source-documents', 
-    'charge-source-videos'
+    "charge-source-user-files",
+    "charge-source-documents",
+    "charge-source-videos",
   ];
 
   return (
@@ -35,8 +35,9 @@ export default function SupabaseSetupGuide() {
         <Alert>
           <AlertTriangle className="h-4 w-4" />
           <AlertDescription>
-            <strong>Current Status:</strong> The file storage system is running in demo mode. 
-            To enable full functionality with cloud storage and database, complete the setup below.
+            <strong>Current Status:</strong> The file storage system is running
+            in demo mode. To enable full functionality with cloud storage and
+            database, complete the setup below.
           </AlertDescription>
         </Alert>
 
@@ -46,14 +47,17 @@ export default function SupabaseSetupGuide() {
             <HardDrive className="h-5 w-5" />
             <span>1. Create Storage Buckets</span>
           </h3>
-          
+
           <div className="space-y-3">
             <p className="text-sm text-muted-foreground">
               Create these storage buckets in your Supabase dashboard:
             </p>
-            
+
             {buckets.map((bucket) => (
-              <div key={bucket} className="flex items-center justify-between p-3 bg-muted rounded-lg">
+              <div
+                key={bucket}
+                className="flex items-center justify-between p-3 bg-muted rounded-lg"
+              >
                 <div className="flex items-center space-x-3">
                   <CheckCircle className="h-4 w-4 text-gray-400" />
                   <code className="text-sm font-mono">{bucket}</code>
@@ -74,10 +78,16 @@ export default function SupabaseSetupGuide() {
               <strong>How to create buckets:</strong>
               <ol className="list-decimal list-inside mt-2 space-y-1 text-sm">
                 <li>Go to your Supabase dashboard</li>
-                <li>Navigate to <strong>Storage</strong> section</li>
-                <li>Click <strong>"New bucket"</strong></li>
+                <li>
+                  Navigate to <strong>Storage</strong> section
+                </li>
+                <li>
+                  Click <strong>"New bucket"</strong>
+                </li>
                 <li>Enter the bucket name exactly as shown above</li>
-                <li>Set as <strong>Public bucket</strong> for file downloads</li>
+                <li>
+                  Set as <strong>Public bucket</strong> for file downloads
+                </li>
                 <li>Repeat for all three buckets</li>
               </ol>
             </AlertDescription>
@@ -90,21 +100,26 @@ export default function SupabaseSetupGuide() {
             <Database className="h-5 w-5" />
             <span>2. Create Database Tables</span>
           </h3>
-          
+
           <Alert>
             <AlertDescription>
-              <strong>Required tables:</strong> <code>file_assets</code>, <code>file_asset_changelog</code>, <code>file_asset_shares</code>
-              <br /><br />
-              Run the SQL migration file to create all necessary database tables and functions.
-              Check the <code>supabase/migrations/</code> folder for the migration scripts.
+              <strong>Required tables:</strong> <code>file_assets</code>,{" "}
+              <code>file_asset_changelog</code>, <code>file_asset_shares</code>
+              <br />
+              <br />
+              Run the SQL migration file to create all necessary database tables
+              and functions. Check the <code>supabase/migrations/</code> folder
+              for the migration scripts.
             </AlertDescription>
           </Alert>
         </div>
 
         {/* What Works Without Setup */}
         <div className="space-y-4">
-          <h3 className="text-lg font-semibold">Current Functionality (Demo Mode)</h3>
-          
+          <h3 className="text-lg font-semibold">
+            Current Functionality (Demo Mode)
+          </h3>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <h4 className="font-medium text-green-600">✅ Works Now</h4>
@@ -117,7 +132,7 @@ export default function SupabaseSetupGuide() {
                 <li>• Upload simulation with feedback</li>
               </ul>
             </div>
-            
+
             <div className="space-y-2">
               <h4 className="font-medium text-orange-600">⚠️ Needs Setup</h4>
               <ul className="text-sm space-y-1">
@@ -143,7 +158,7 @@ export default function SupabaseSetupGuide() {
             <ExternalLink className="h-4 w-4" />
             <span>Open Supabase Dashboard</span>
           </a>
-          
+
           <a
             href="https://supabase.com/docs/guides/storage"
             target="_blank"
@@ -153,7 +168,7 @@ export default function SupabaseSetupGuide() {
             <ExternalLink className="h-4 w-4" />
             <span>Storage Documentation</span>
           </a>
-          
+
           <a
             href="https://supabase.com/docs/guides/database/tables"
             target="_blank"
