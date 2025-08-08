@@ -70,6 +70,7 @@ export default function Dashboard() {
   const [projects, setProjects] = useState<any[]>([]);
   const [isSupabaseConnected, setIsSupabaseConnected] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [showPreferences, setShowPreferences] = useState(false);
 
   // Function to retry Supabase connection
   const retryConnection = async (): Promise<void> => {
