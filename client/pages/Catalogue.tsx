@@ -22,6 +22,8 @@ export default function Catalogue() {
   const [selectedProduct, setSelectedProduct] = useState<ProductCatalogueItem | null>(null);
   const [activeView, setActiveView] = useState<'grid' | 'list'>('grid');
   const [activeCategory, setActiveCategory] = useState<string>('all');
+  const [showAdminPanel, setShowAdminPanel] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   const categories = productCatalog.getCategories();
   const brands = productCatalog.getBrands();
