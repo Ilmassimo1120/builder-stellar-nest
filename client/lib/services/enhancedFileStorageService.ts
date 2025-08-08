@@ -275,24 +275,6 @@ class EnhancedFileStorageService {
       if (!isAuthenticated) {
         try {
           console.log("No local auth user, trying Supabase auth...");
-
-          // Quick connection test before attempting auth
-          try {
-            const response = await fetch(`${supabase.supabaseUrl}/rest/v1/`, {
-              method: 'HEAD',
-              headers: {
-                'apikey': supabase.supabaseKey,
-                'Authorization': `Bearer ${supabase.supabaseKey}`
-              }
-            });
-            if (!response.ok) {
-              throw new Error(`HTTP ${response.status}`);
-            }
-          } catch (connectionError) {
-            console.warn("Supabase connection test failed:", connectionError);
-            throw new Error("Unable to connect to Supabase. Please check your internet connection and Supabase configuration.");
-          }
-
           const {
             data: { user: authUser },
             error: userError,
