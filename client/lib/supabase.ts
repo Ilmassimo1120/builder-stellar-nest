@@ -14,7 +14,7 @@ if (!supabaseAnonKey || supabaseAnonKey.includes('your-anon-key')) {
   console.error("❌ Invalid Supabase API key configuration");
 }
 
-// Create Supabase client with cloud-friendly configuration
+// Create Supabase client
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     autoRefreshToken: true,
@@ -26,22 +26,6 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
       eventsPerSecond: 10,
     },
   },
-  global: {
-    headers: {
-      'X-Client-Info': 'chargesource-app',
-    },
-    fetch: (url, options = {}) => {
-      console.log("🌐 Supabase fetch:", url);
-      return fetch(url, {
-        ...options,
-        // Add timeout for cloud environments
-        signal: AbortSignal.timeout(10000), // 10 second timeout
-      }).catch(error => {
-        console.error("🌐 Fetch error:", error);
-        throw error;
-      });
-    }
-  }
 });
 
 // Database Types
