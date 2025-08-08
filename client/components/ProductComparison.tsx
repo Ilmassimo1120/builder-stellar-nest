@@ -1,30 +1,30 @@
-import React, { useState, useMemo } from 'react';
-import { 
-  X, 
-  Plus, 
-  Minus, 
-  Check, 
-  Star, 
-  Zap, 
-  Package, 
-  Clock, 
+import React, { useState, useMemo } from "react";
+import {
+  X,
+  Plus,
+  Minus,
+  Check,
+  Star,
+  Zap,
+  Package,
+  Clock,
   DollarSign,
   ShoppingCart,
   BarChart3,
   TrendingUp,
   Shield,
   Truck,
-  AlertTriangle
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+  AlertTriangle,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -32,7 +32,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
+} from "@/components/ui/dialog";
 import {
   Table,
   TableBody,
@@ -40,12 +40,12 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
-import { Separator } from '@/components/ui/separator';
-import { useToast } from '@/hooks/use-toast';
-import { useAuth } from '@/hooks/useAuth';
-import { ProductCatalogueItem } from '@/lib/quoteTypes';
-import { productCatalog } from '@/lib/productCatalog';
+} from "@/components/ui/table";
+import { Separator } from "@/components/ui/separator";
+import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/useAuth";
+import { ProductCatalogueItem } from "@/lib/quoteTypes";
+import { productCatalog } from "@/lib/productCatalog";
 
 interface ProductComparisonProps {
   isOpen: boolean;
@@ -59,31 +59,72 @@ interface ProductComparisonProps {
 interface ComparisonFeature {
   key: string;
   label: string;
-  type: 'text' | 'number' | 'currency' | 'boolean' | 'array' | 'rating';
+  type: "text" | "number" | "currency" | "boolean" | "array" | "rating";
   important?: boolean;
 }
 
 const COMPARISON_FEATURES: ComparisonFeature[] = [
-  { key: 'name', label: 'Product Name', type: 'text', important: true },
-  { key: 'brand', label: 'Brand', type: 'text', important: true },
-  { key: 'model', label: 'Model', type: 'text' },
-  { key: 'specifications.powerRating', label: 'Power Rating', type: 'text', important: true },
-  { key: 'specifications.inputVoltage', label: 'Input Voltage', type: 'text' },
-  { key: 'specifications.outputVoltage', label: 'Output Voltage', type: 'text' },
-  { key: 'specifications.connectorType', label: 'Connector Type', type: 'text', important: true },
-  { key: 'specifications.connectorTypes', label: 'Connector Types', type: 'array' },
-  { key: 'specifications.dimensions', label: 'Dimensions', type: 'text' },
-  { key: 'specifications.weight', label: 'Weight', type: 'text' },
-  { key: 'specifications.protection', label: 'Protection Rating', type: 'text' },
-  { key: 'specifications.efficiency', label: 'Efficiency', type: 'text' },
-  { key: 'specifications.temperature', label: 'Operating Temperature', type: 'text' },
-  { key: 'specifications.warranty', label: 'Warranty', type: 'text' },
-  { key: 'pricing.recommendedRetail', label: 'Recommended Retail Price', type: 'currency', important: true },
-  { key: 'pricing.listPrice', label: 'List Price', type: 'currency' },
-  { key: 'inventory.available', label: 'Available Stock', type: 'number', important: true },
-  { key: 'inventory.leadTime', label: 'Lead Time', type: 'text', important: true },
-  { key: 'category', label: 'Category', type: 'text' },
-  { key: 'subcategory', label: 'Subcategory', type: 'text' }
+  { key: "name", label: "Product Name", type: "text", important: true },
+  { key: "brand", label: "Brand", type: "text", important: true },
+  { key: "model", label: "Model", type: "text" },
+  {
+    key: "specifications.powerRating",
+    label: "Power Rating",
+    type: "text",
+    important: true,
+  },
+  { key: "specifications.inputVoltage", label: "Input Voltage", type: "text" },
+  {
+    key: "specifications.outputVoltage",
+    label: "Output Voltage",
+    type: "text",
+  },
+  {
+    key: "specifications.connectorType",
+    label: "Connector Type",
+    type: "text",
+    important: true,
+  },
+  {
+    key: "specifications.connectorTypes",
+    label: "Connector Types",
+    type: "array",
+  },
+  { key: "specifications.dimensions", label: "Dimensions", type: "text" },
+  { key: "specifications.weight", label: "Weight", type: "text" },
+  {
+    key: "specifications.protection",
+    label: "Protection Rating",
+    type: "text",
+  },
+  { key: "specifications.efficiency", label: "Efficiency", type: "text" },
+  {
+    key: "specifications.temperature",
+    label: "Operating Temperature",
+    type: "text",
+  },
+  { key: "specifications.warranty", label: "Warranty", type: "text" },
+  {
+    key: "pricing.recommendedRetail",
+    label: "Recommended Retail Price",
+    type: "currency",
+    important: true,
+  },
+  { key: "pricing.listPrice", label: "List Price", type: "currency" },
+  {
+    key: "inventory.available",
+    label: "Available Stock",
+    type: "number",
+    important: true,
+  },
+  {
+    key: "inventory.leadTime",
+    label: "Lead Time",
+    type: "text",
+    important: true,
+  },
+  { key: "category", label: "Category", type: "text" },
+  { key: "subcategory", label: "Subcategory", type: "text" },
 ];
 
 export default function ProductComparison({
@@ -92,42 +133,45 @@ export default function ProductComparison({
   selectedProducts,
   onAddToQuote,
   onRemoveFromComparison,
-  maxProducts = 4
+  maxProducts = 4,
 }: ProductComparisonProps) {
   const { toast } = useToast();
   const { hasPermission } = useAuth();
   const [quantities, setQuantities] = useState<Record<string, number>>({});
 
   // Check permission for product comparison
-  const canCompare = hasPermission('quotes.compare');
+  const canCompare = hasPermission("quotes.compare");
 
   // Get product details
   const products = useMemo(() => {
-    return selectedProducts.map(id => 
-      productCatalog.getProducts().find(p => p.id === id)
-    ).filter(Boolean) as ProductCatalogueItem[];
+    return selectedProducts
+      .map((id) => productCatalog.getProducts().find((p) => p.id === id))
+      .filter(Boolean) as ProductCatalogueItem[];
   }, [selectedProducts]);
 
   // Get value from nested object path
   const getNestedValue = (obj: any, path: string): any => {
-    return path.split('.').reduce((current, key) => current?.[key], obj);
+    return path.split(".").reduce((current, key) => current?.[key], obj);
   };
 
   // Format value based on type
-  const formatValue = (value: any, type: ComparisonFeature['type']): string => {
-    if (value === null || value === undefined || value === '') return '-';
-    
+  const formatValue = (value: any, type: ComparisonFeature["type"]): string => {
+    if (value === null || value === undefined || value === "") return "-";
+
     switch (type) {
-      case 'currency':
+      case "currency":
         return `$${Number(value).toLocaleString()}`;
-      case 'number':
+      case "number":
         return Number(value).toLocaleString();
-      case 'boolean':
-        return value ? 'Yes' : 'No';
-      case 'array':
-        return Array.isArray(value) ? value.join(', ') : String(value);
-      case 'rating':
-        return '★'.repeat(Math.floor(Number(value))) + '☆'.repeat(5 - Math.floor(Number(value)));
+      case "boolean":
+        return value ? "Yes" : "No";
+      case "array":
+        return Array.isArray(value) ? value.join(", ") : String(value);
+      case "rating":
+        return (
+          "★".repeat(Math.floor(Number(value))) +
+          "☆".repeat(5 - Math.floor(Number(value)))
+        );
       default:
         return String(value);
     }
@@ -135,20 +179,22 @@ export default function ProductComparison({
 
   // Get best value for comparison highlighting
   const getBestValue = (feature: ComparisonFeature): any => {
-    const values = products.map(p => getNestedValue(p, feature.key)).filter(v => v !== null && v !== undefined && v !== '');
-    
+    const values = products
+      .map((p) => getNestedValue(p, feature.key))
+      .filter((v) => v !== null && v !== undefined && v !== "");
+
     if (values.length === 0) return null;
-    
+
     switch (feature.type) {
-      case 'currency':
-      case 'number':
+      case "currency":
+      case "number":
         return Math.min(...values.map(Number));
-      case 'text':
-        if (feature.key === 'inventory.leadTime') {
+      case "text":
+        if (feature.key === "inventory.leadTime") {
           // For lead time, shorter is better
           return values.sort((a, b) => {
-            const aNum = parseInt(String(a).replace(/\D/g, ''));
-            const bNum = parseInt(String(b).replace(/\D/g, ''));
+            const aNum = parseInt(String(a).replace(/\D/g, ""));
+            const bNum = parseInt(String(b).replace(/\D/g, ""));
             return aNum - bNum;
           })[0];
         }
@@ -161,14 +207,15 @@ export default function ProductComparison({
   // Check if value is the best among compared products
   const isBestValue = (value: any, feature: ComparisonFeature): boolean => {
     const bestValue = getBestValue(feature);
-    if (bestValue === null || value === null || value === undefined) return false;
-    
+    if (bestValue === null || value === null || value === undefined)
+      return false;
+
     switch (feature.type) {
-      case 'currency':
-      case 'number':
+      case "currency":
+      case "number":
         return Number(value) === Number(bestValue);
-      case 'text':
-        if (feature.key === 'inventory.leadTime') {
+      case "text":
+        if (feature.key === "inventory.leadTime") {
           return value === bestValue;
         }
         return false;
@@ -178,9 +225,9 @@ export default function ProductComparison({
   };
 
   const updateQuantity = (productId: string, delta: number) => {
-    setQuantities(prev => ({
+    setQuantities((prev) => ({
       ...prev,
-      [productId]: Math.max(1, (prev[productId] || 1) + delta)
+      [productId]: Math.max(1, (prev[productId] || 1) + delta),
     }));
   };
 
@@ -195,11 +242,23 @@ export default function ProductComparison({
 
   const getAvailabilityStatus = (product: ProductCatalogueItem) => {
     if (product.inventory.available > 10) {
-      return { status: 'In Stock', color: 'bg-green-100 text-green-800', icon: Check };
+      return {
+        status: "In Stock",
+        color: "bg-green-100 text-green-800",
+        icon: Check,
+      };
     } else if (product.inventory.available > 0) {
-      return { status: 'Low Stock', color: 'bg-yellow-100 text-yellow-800', icon: AlertTriangle };
+      return {
+        status: "Low Stock",
+        color: "bg-yellow-100 text-yellow-800",
+        icon: AlertTriangle,
+      };
     } else {
-      return { status: 'Back Order', color: 'bg-red-100 text-red-800', icon: Clock };
+      return {
+        status: "Back Order",
+        color: "bg-red-100 text-red-800",
+        icon: Clock,
+      };
     }
   };
 
@@ -210,7 +269,8 @@ export default function ProductComparison({
           <DialogHeader>
             <DialogTitle>Access Denied</DialogTitle>
             <DialogDescription>
-              You don't have permission to compare products. Please contact your administrator.
+              You don't have permission to compare products. Please contact your
+              administrator.
             </DialogDescription>
           </DialogHeader>
           <div className="flex justify-end">
@@ -232,7 +292,8 @@ export default function ProductComparison({
             Product Comparison
           </DialogTitle>
           <DialogDescription>
-            Compare up to {maxProducts} products side by side to make the best choice for your quote
+            Compare up to {maxProducts} products side by side to make the best
+            choice for your quote
           </DialogDescription>
         </DialogHeader>
 
@@ -241,7 +302,8 @@ export default function ProductComparison({
             <Package className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
             <h3 className="text-lg font-medium mb-2">No Products Selected</h3>
             <p className="text-muted-foreground">
-              Add products to comparison from the product catalog to get started.
+              Add products to comparison from the product catalog to get
+              started.
             </p>
           </div>
         ) : (
@@ -263,31 +325,38 @@ export default function ProductComparison({
                     >
                       <X className="w-4 h-4" />
                     </Button>
-                    
+
                     <CardHeader className="pb-3">
                       <div className="flex items-center gap-2 mb-2">
                         <Badge variant="outline">{product.brand}</Badge>
-                        <Badge className={availability.color} variant="secondary">
+                        <Badge
+                          className={availability.color}
+                          variant="secondary"
+                        >
                           <AvailabilityIcon className="w-3 h-3 mr-1" />
                           {availability.status}
                         </Badge>
                       </div>
-                      <CardTitle className="text-sm line-clamp-2">{product.name}</CardTitle>
+                      <CardTitle className="text-sm line-clamp-2">
+                        {product.name}
+                      </CardTitle>
                       <div className="flex items-center gap-2">
                         <Zap className="w-4 h-4 text-primary" />
                         <span className="text-sm font-medium">
-                          {product.specifications.powerRating || 'N/A'}
+                          {product.specifications.powerRating || "N/A"}
                         </span>
                       </div>
                     </CardHeader>
-                    
+
                     <CardContent>
                       <div className="space-y-3">
                         <div className="text-center">
                           <div className="text-2xl font-bold">
-                            ${product.pricing.recommendedRetail.toLocaleString()}
+                            $
+                            {product.pricing.recommendedRetail.toLocaleString()}
                           </div>
-                          {product.pricing.listPrice !== product.pricing.recommendedRetail && (
+                          {product.pricing.listPrice !==
+                            product.pricing.recommendedRetail && (
                             <div className="text-sm text-muted-foreground line-through">
                               ${product.pricing.listPrice.toLocaleString()}
                             </div>
@@ -327,7 +396,7 @@ export default function ProductComparison({
                               </Button>
                             </div>
                           </div>
-                          
+
                           <Button
                             size="sm"
                             onClick={() => handleAddToQuote(product)}
@@ -363,9 +432,14 @@ export default function ProductComparison({
                             Feature
                           </TableHead>
                           {products.map((product) => (
-                            <TableHead key={product.id} className="text-center min-w-[150px]">
+                            <TableHead
+                              key={product.id}
+                              className="text-center min-w-[150px]"
+                            >
                               <div className="flex flex-col gap-1">
-                                <span className="font-medium truncate">{product.name}</span>
+                                <span className="font-medium truncate">
+                                  {product.name}
+                                </span>
                                 <Badge variant="outline" className="text-xs">
                                   {product.brand}
                                 </Badge>
@@ -376,9 +450,13 @@ export default function ProductComparison({
                       </TableHeader>
                       <TableBody>
                         {COMPARISON_FEATURES.map((feature) => {
-                          const hasData = products.some(p => {
+                          const hasData = products.some((p) => {
                             const value = getNestedValue(p, feature.key);
-                            return value !== null && value !== undefined && value !== '';
+                            return (
+                              value !== null &&
+                              value !== undefined &&
+                              value !== ""
+                            );
                           });
 
                           if (!hasData) return null;
@@ -394,18 +472,26 @@ export default function ProductComparison({
                                 </div>
                               </TableCell>
                               {products.map((product) => {
-                                const value = getNestedValue(product, feature.key);
-                                const formattedValue = formatValue(value, feature.type);
+                                const value = getNestedValue(
+                                  product,
+                                  feature.key,
+                                );
+                                const formattedValue = formatValue(
+                                  value,
+                                  feature.type,
+                                );
                                 const isBest = isBestValue(value, feature);
 
                                 return (
-                                  <TableCell 
-                                    key={product.id} 
-                                    className={`text-center ${isBest ? 'bg-green-50 font-semibold text-green-800' : ''}`}
+                                  <TableCell
+                                    key={product.id}
+                                    className={`text-center ${isBest ? "bg-green-50 font-semibold text-green-800" : ""}`}
                                   >
                                     <div className="flex items-center justify-center gap-1">
                                       {formattedValue}
-                                      {isBest && <TrendingUp className="w-3 h-3 text-green-600" />}
+                                      {isBest && (
+                                        <TrendingUp className="w-3 h-3 text-green-600" />
+                                      )}
                                     </div>
                                   </TableCell>
                                 );

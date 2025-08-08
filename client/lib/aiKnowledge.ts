@@ -8,7 +8,13 @@ export interface AIKnowledgeItem {
     action: string;
     icon?: string;
   }>;
-  category: "installation" | "standards" | "troubleshooting" | "platform" | "safety" | "pricing";
+  category:
+    | "installation"
+    | "standards"
+    | "troubleshooting"
+    | "platform"
+    | "safety"
+    | "pricing";
 }
 
 export const aiKnowledgeBase: AIKnowledgeItem[] = [
@@ -40,12 +46,12 @@ export const aiKnowledgeBase: AIKnowledgeItem[] = [
       "How to test insulation resistance?",
       "What breaker curve should I use?",
       "Load calculation guidelines",
-      "Connection torque specifications"
+      "Connection torque specifications",
     ],
     actions: [
       { label: "Load Calculator", action: "load-calculator" },
-      { label: "Breaker Selection Guide", action: "breaker-guide" }
-    ]
+      { label: "Breaker Selection Guide", action: "breaker-guide" },
+    ],
   },
   {
     keywords: ["rcd", "earth leakage", "protection", "safety"],
@@ -74,8 +80,8 @@ export const aiKnowledgeBase: AIKnowledgeItem[] = [
       "Type A vs Type B RCD differences",
       "RCD testing procedures",
       "Nuisance tripping solutions",
-      "When to use 30mA vs 300mA"
-    ]
+      "When to use 30mA vs 300mA",
+    ],
   },
   {
     keywords: ["cable sizing", "current rating", "voltage drop"],
@@ -103,12 +109,12 @@ export const aiKnowledgeBase: AIKnowledgeItem[] = [
       "Voltage drop calculator",
       "Derating factor tables",
       "Cable selection chart",
-      "Installation method comparison"
+      "Installation method comparison",
     ],
     actions: [
       { label: "Cable Calculator", action: "cable-calculator" },
-      { label: "AS/NZS 3008 Guide", action: "cable-standards" }
-    ]
+      { label: "AS/NZS 3008 Guide", action: "cable-standards" },
+    ],
   },
   {
     keywords: ["load management", "dynamic", "static", "power sharing"],
@@ -146,8 +152,8 @@ export const aiKnowledgeBase: AIKnowledgeItem[] = [
       "Static vs dynamic comparison",
       "Load management sizing",
       "Grid integration options",
-      "Cost-benefit analysis"
-    ]
+      "Cost-benefit analysis",
+    ],
   },
   {
     keywords: ["permit", "approval", "council", "authority"],
@@ -178,8 +184,8 @@ export const aiKnowledgeBase: AIKnowledgeItem[] = [
       "Permit application checklist",
       "Required documentation",
       "Inspection procedures",
-      "Authority contact details"
-    ]
+      "Authority contact details",
+    ],
   },
   {
     keywords: ["pricing", "quote", "margin", "cost"],
@@ -210,12 +216,12 @@ export const aiKnowledgeBase: AIKnowledgeItem[] = [
       "Material markup guidelines",
       "Labor rate calculator",
       "Quote template library",
-      "Pricing best practices"
+      "Pricing best practices",
     ],
     actions: [
       { label: "Create Quote", action: "new-quote" },
-      { label: "Pricing Calculator", action: "pricing-calculator" }
-    ]
+      { label: "Pricing Calculator", action: "pricing-calculator" },
+    ],
   },
   {
     keywords: ["workplace", "employee", "commercial", "office"],
@@ -250,21 +256,23 @@ export const aiKnowledgeBase: AIKnowledgeItem[] = [
       "Employee charging policies",
       "Cost recovery options",
       "Government incentives",
-      "Maintenance planning"
-    ]
-  }
+      "Maintenance planning",
+    ],
+  },
 ];
 
 export function findAIResponse(query: string): AIKnowledgeItem | null {
   const normalizedQuery = query.toLowerCase();
-  
-  return aiKnowledgeBase.find(item =>
-    item.keywords.some(keyword =>
-      normalizedQuery.includes(keyword.toLowerCase())
-    )
-  ) || null;
+
+  return (
+    aiKnowledgeBase.find((item) =>
+      item.keywords.some((keyword) =>
+        normalizedQuery.includes(keyword.toLowerCase()),
+      ),
+    ) || null
+  );
 }
 
 export function getResponsesByCategory(category: string): AIKnowledgeItem[] {
-  return aiKnowledgeBase.filter(item => item.category === category);
+  return aiKnowledgeBase.filter((item) => item.category === category);
 }

@@ -1,5 +1,10 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { useParams, useNavigate, useSearchParams, useLocation } from "react-router-dom";
+import {
+  useParams,
+  useNavigate,
+  useSearchParams,
+  useLocation,
+} from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -98,7 +103,12 @@ export default function QuoteBuilder() {
           const projectId = searchParams.get("project");
           const templateId = searchParams.get("template");
 
-          console.log("Creating new quote with projectId:", projectId, "templateId:", templateId);
+          console.log(
+            "Creating new quote with projectId:",
+            projectId,
+            "templateId:",
+            templateId,
+          );
 
           const newQuote = quoteService.createQuote(
             projectId || undefined,
@@ -145,7 +155,8 @@ export default function QuoteBuilder() {
         console.error("Error loading quote:", error);
         toast({
           title: "Error loading quote",
-          description: "There was an error loading the quote. Please try again.",
+          description:
+            "There was an error loading the quote. Please try again.",
           variant: "destructive",
         });
         setLoading(false);
@@ -287,11 +298,15 @@ export default function QuoteBuilder() {
   // Add product from catalogue
   const addProduct = (productId: string, quantity: number = 1) => {
     if (!quote) {
-      console.error('No quote available');
+      console.error("No quote available");
       return;
     }
 
-    console.log('Adding product to quote:', { quoteId: quote.id, productId, quantity });
+    console.log("Adding product to quote:", {
+      quoteId: quote.id,
+      productId,
+      quantity,
+    });
 
     const updatedQuote = quoteService.addProductToQuote(
       quote.id,
@@ -300,7 +315,7 @@ export default function QuoteBuilder() {
     );
 
     if (updatedQuote) {
-      console.log('Product added successfully, updating quote:', updatedQuote);
+      console.log("Product added successfully, updating quote:", updatedQuote);
       setQuote(updatedQuote);
       setShowProductCatalogue(false);
       toast({
@@ -308,7 +323,7 @@ export default function QuoteBuilder() {
         description: "Product has been added to the quote.",
       });
     } else {
-      console.error('Failed to add product to quote');
+      console.error("Failed to add product to quote");
       toast({
         title: "Error",
         description: "Failed to add product to quote. Please try again.",
@@ -325,7 +340,7 @@ export default function QuoteBuilder() {
   };
 
   const handleRemoveFromComparison = (productId: string) => {
-    setComparisonProducts(prev => prev.filter(id => id !== productId));
+    setComparisonProducts((prev) => prev.filter((id) => id !== productId));
   };
 
   // Send quote to client

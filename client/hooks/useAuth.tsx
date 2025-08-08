@@ -1,5 +1,11 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { UserRole, rbacService } from '@/lib/rbac';
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
+import { UserRole, rbacService } from "@/lib/rbac";
 
 export interface User {
   id: string;
@@ -27,7 +33,11 @@ interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  login: (email: string, password: string, rememberMe?: boolean) => Promise<boolean>;
+  login: (
+    email: string,
+    password: string,
+    rememberMe?: boolean,
+  ) => Promise<boolean>;
   register: (userData: any) => Promise<boolean>;
   logout: () => void;
   updateUser: (userData: Partial<User>) => void;
@@ -51,14 +61,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const checkSession = () => {
       try {
-        const storedUser = localStorage.getItem('chargeSourceUser');
+        const storedUser = localStorage.getItem("chargeSourceUser");
         if (storedUser) {
           const userData = JSON.parse(storedUser);
           setUser(userData);
         }
       } catch (error) {
-        console.error('Error loading user session:', error);
-        localStorage.removeItem('chargeSourceUser');
+        console.error("Error loading user session:", error);
+        localStorage.removeItem("chargeSourceUser");
       } finally {
         setIsLoading(false);
       }
@@ -67,58 +77,71 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     checkSession();
   }, []);
 
-  const login = async (email: string, password: string, rememberMe = false): Promise<boolean> => {
+  const login = async (
+    email: string,
+    password: string,
+    rememberMe = false,
+  ): Promise<boolean> => {
     try {
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
       // For demo purposes, accept any email/password combination
       // In a real app, this would validate against a backend
       let role: UserRole = UserRole.USER;
-      let company = 'Demo Electrical Services';
-      let department = 'General';
+      let company = "Demo Electrical Services";
+      let department = "General";
 
       // Determine role based on email patterns
-      if (email.includes('globaladmin') || email === 'globaladmin@chargesource.com.au') {
+      if (
+        email.includes("globaladmin") ||
+        email === "globaladmin@chargesource.com.au"
+      ) {
         role = UserRole.GLOBAL_ADMIN;
-        company = 'ChargeSource Global';
-        department = 'Global Administration';
-      } else if (email.includes('admin') || email === 'admin@chargesource.com.au') {
+        company = "ChargeSource Global";
+        department = "Global Administration";
+      } else if (
+        email.includes("admin") ||
+        email === "admin@chargesource.com.au"
+      ) {
         role = UserRole.ADMIN;
-        company = 'ChargeSource Administration';
-        department = 'Administration';
-      } else if (email.includes('sales') || email.includes('sale')) {
+        company = "ChargeSource Administration";
+        department = "Administration";
+      } else if (email.includes("sales") || email.includes("sale")) {
         role = UserRole.SALES;
-        company = 'ChargeSource Sales';
-        department = 'Sales & Marketing';
-      } else if (email.includes('partner')) {
+        company = "ChargeSource Sales";
+        department = "Sales & Marketing";
+      } else if (email.includes("partner")) {
         role = UserRole.PARTNER;
-        company = 'Partner Organization';
-        department = 'Partnership';
+        company = "Partner Organization";
+        department = "Partnership";
       }
 
       const userData: User = {
         id: `user-${Date.now()}`,
         email,
-        name: email.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+        name: email
+          .split("@")[0]
+          .replace(/[._]/g, " ")
+          .replace(/\b\w/g, (l) => l.toUpperCase()),
         company,
         department,
         role,
         loginTime: new Date().toISOString(),
         permissions: rbacService.getRolePermissions(role),
-        verified: true
+        verified: true,
       };
 
       setUser(userData);
-      localStorage.setItem('chargeSourceUser', JSON.stringify(userData));
+      localStorage.setItem("chargeSourceUser", JSON.stringify(userData));
 
       if (rememberMe) {
-        localStorage.setItem('chargeSourceRememberMe', 'true');
+        localStorage.setItem("chargeSourceRememberMe", "true");
       }
 
       return true;
     } catch (error) {
-      console.error('Login error:', error);
+      console.error("Login error:", error);
       return false;
     }
   };
@@ -126,7 +149,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const register = async (userData: any): Promise<boolean> => {
     try {
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      await new Promise((resolve) => setTimeout(resolve, 1500));
 
       const newUser: User = {
         id: `user-${Date.now()}`,
@@ -145,23 +168,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         role: UserRole.USER,
         permissions: rbacService.getRolePermissions(UserRole.USER),
         registrationDate: new Date().toISOString(),
-        verified: false
+        verified: false,
       };
 
       setUser(newUser);
-      localStorage.setItem('chargeSourceUser', JSON.stringify(newUser));
-      
+      localStorage.setItem("chargeSourceUser", JSON.stringify(newUser));
+
       return true;
     } catch (error) {
-      console.error('Registration error:', error);
+      console.error("Registration error:", error);
       return false;
     }
   };
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem('chargeSourceUser');
-    localStorage.removeItem('chargeSourceRememberMe');
+    localStorage.removeItem("chargeSourceUser");
+    localStorage.removeItem("chargeSourceRememberMe");
     // Also clear any project data if desired
     // localStorage.removeItem('chargeSourceProjects');
   };
@@ -170,7 +193,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (user) {
       const updatedUser = { ...user, ...userData };
       setUser(updatedUser);
-      localStorage.setItem('chargeSourceUser', JSON.stringify(updatedUser));
+      localStorage.setItem("chargeSourceUser", JSON.stringify(updatedUser));
     }
   };
 
@@ -188,11 +211,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const canAccessResource = (resource: string, action: string): boolean => {
-    return user ? rbacService.canAccessResource(user.role, resource, action) : false;
+    return user
+      ? rbacService.canAccessResource(user.role, resource, action)
+      : false;
   };
 
   // Role checking convenience properties
-  const isAdmin = user?.role === UserRole.ADMIN || user?.role === UserRole.GLOBAL_ADMIN;
+  const isAdmin =
+    user?.role === UserRole.ADMIN || user?.role === UserRole.GLOBAL_ADMIN;
   const isGlobalAdmin = user?.role === UserRole.GLOBAL_ADMIN;
   const isSales = user?.role === UserRole.SALES;
   const isPartner = user?.role === UserRole.PARTNER;
@@ -212,20 +238,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     isAdmin,
     isGlobalAdmin,
     isSales,
-    isPartner
+    isPartner,
   };
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth() {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 }
@@ -233,13 +255,13 @@ export function useAuth() {
 // Hook for protected routes
 export function useRequireAuth() {
   const auth = useAuth();
-  
+
   useEffect(() => {
     if (!auth.isLoading && !auth.isAuthenticated) {
       // Redirect to login if not authenticated
-      window.location.href = '/login';
+      window.location.href = "/login";
     }
   }, [auth.isAuthenticated, auth.isLoading]);
-  
+
   return auth;
 }

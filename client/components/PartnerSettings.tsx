@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { 
+import React, { useState, useEffect } from "react";
+import {
   Save,
   Building,
   DollarSign,
@@ -17,34 +17,34 @@ import {
   MapPin,
   Star,
   TrendingUp,
-  Package
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
+  Package,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Switch } from '@/components/ui/switch';
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Separator } from '@/components/ui/separator';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { useToast } from '@/hooks/use-toast';
-import { useAuth } from '@/hooks/useAuth';
-import { UserRole } from '@/lib/rbac';
+} from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/useAuth";
+import { UserRole } from "@/lib/rbac";
 
 interface PartnerConfig {
   companyInfo: {
@@ -124,40 +124,40 @@ interface PartnerConfig {
 
 const defaultPartnerConfig: PartnerConfig = {
   companyInfo: {
-    companyName: '',
-    tradingName: '',
-    abn: '',
-    acn: '',
-    registeredAddress: '',
-    businessAddress: '',
-    phone: '',
-    email: '',
-    website: '',
-    industry: 'electrical',
-    yearsInBusiness: 0
+    companyName: "",
+    tradingName: "",
+    abn: "",
+    acn: "",
+    registeredAddress: "",
+    businessAddress: "",
+    phone: "",
+    email: "",
+    website: "",
+    industry: "electrical",
+    yearsInBusiness: 0,
   },
   licensing: {
-    electricalLicense: '',
-    licenseExpiry: '',
+    electricalLicense: "",
+    licenseExpiry: "",
     certifications: [],
-    insurancePolicy: '',
+    insurancePolicy: "",
     insuranceAmount: 10000000,
-    insuranceExpiry: '',
-    workCover: ''
+    insuranceExpiry: "",
+    workCover: "",
   },
   contract: {
-    contractType: 'standard',
-    startDate: '',
-    endDate: '',
-    renewalDate: '',
-    status: 'active',
+    contractType: "standard",
+    startDate: "",
+    endDate: "",
+    renewalDate: "",
+    status: "active",
     territory: [],
     exclusiveRights: false,
     minimumOrders: 12,
-    performanceTargets: 85
+    performanceTargets: 85,
   },
   pricing: {
-    discountTier: 'standard',
+    discountTier: "standard",
     volumeDiscounts: true,
     earlyPaymentDiscount: 2,
     standardPaymentTerms: 30,
@@ -166,8 +166,8 @@ const defaultPartnerConfig: PartnerConfig = {
       chargers: 25,
       accessories: 35,
       installation: 45,
-      service: 55
-    }
+      service: 55,
+    },
   },
   services: {
     installationServices: true,
@@ -177,7 +177,7 @@ const defaultPartnerConfig: PartnerConfig = {
     warrantySupport: true,
     emergencyCallout: false,
     serviceAreas: [],
-    certifiedTechnicians: 0
+    certifiedTechnicians: 0,
   },
   performance: {
     completedProjects: 0,
@@ -185,17 +185,17 @@ const defaultPartnerConfig: PartnerConfig = {
     onTimeDelivery: 0,
     customerSatisfaction: 0,
     qualityScore: 0,
-    responseTime: 0
+    responseTime: 0,
   },
   preferences: {
-    communicationMethod: 'email',
-    reportingFrequency: 'monthly',
-    invoiceFormat: 'pdf',
-    paymentMethod: 'bank_transfer',
+    communicationMethod: "email",
+    reportingFrequency: "monthly",
+    invoiceFormat: "pdf",
+    paymentMethod: "bank_transfer",
     autoApproveQuotes: false,
     sendPerformanceReports: true,
-    marketingOptIn: false
-  }
+    marketingOptIn: false,
+  },
 };
 
 export default function PartnerSettings() {
@@ -206,39 +206,46 @@ export default function PartnerSettings() {
   const [saving, setSaving] = useState(false);
 
   // Determine if user can edit all settings or just view/edit their own
-  const canEditAll = user?.role === UserRole.ADMIN || user?.role === UserRole.GLOBAL_ADMIN;
+  const canEditAll =
+    user?.role === UserRole.ADMIN || user?.role === UserRole.GLOBAL_ADMIN;
 
   // Load configuration from localStorage
   useEffect(() => {
     try {
-      const storageKey = canEditAll ? 'chargeSourcePartnerConfig' : `chargeSourcePartnerConfig_${user?.id}`;
+      const storageKey = canEditAll
+        ? "chargeSourcePartnerConfig"
+        : `chargeSourcePartnerConfig_${user?.id}`;
       const savedConfig = localStorage.getItem(storageKey);
       if (savedConfig) {
         setConfig({ ...defaultPartnerConfig, ...JSON.parse(savedConfig) });
       } else if (user?.company) {
         // Pre-populate with user data
-        setConfig(prev => ({
+        setConfig((prev) => ({
           ...prev,
           companyInfo: {
             ...prev.companyInfo,
             companyName: user.company,
             email: user.email,
-            phone: user.phone || ''
-          }
+            phone: user.phone || "",
+          },
         }));
       }
     } catch (error) {
-      console.error('Error loading partner config:', error);
+      console.error("Error loading partner config:", error);
     }
   }, [user, canEditAll]);
 
-  const updateConfig = (section: keyof PartnerConfig, field: string, value: any) => {
-    setConfig(prev => ({
+  const updateConfig = (
+    section: keyof PartnerConfig,
+    field: string,
+    value: any,
+  ) => {
+    setConfig((prev) => ({
       ...prev,
       [section]: {
         ...prev[section],
-        [field]: value
-      }
+        [field]: value,
+      },
     }));
     setHasChanges(true);
   };
@@ -247,12 +254,14 @@ export default function PartnerSettings() {
     setSaving(true);
     try {
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      const storageKey = canEditAll ? 'chargeSourcePartnerConfig' : `chargeSourcePartnerConfig_${user?.id}`;
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      const storageKey = canEditAll
+        ? "chargeSourcePartnerConfig"
+        : `chargeSourcePartnerConfig_${user?.id}`;
       localStorage.setItem(storageKey, JSON.stringify(config));
       setHasChanges(false);
-      
+
       toast({
         title: "Configuration Saved",
         description: "Partner settings have been updated successfully.",
@@ -279,21 +288,26 @@ export default function PartnerSettings() {
                 Partner Settings
               </CardTitle>
               <CardDescription>
-                {canEditAll 
+                {canEditAll
                   ? "Manage partner contracts, pricing, and business relationships"
-                  : "Manage your partner profile and business settings"
-                }
+                  : "Manage your partner profile and business settings"}
               </CardDescription>
             </div>
             <div className="flex items-center gap-2">
               {hasChanges && (
-                <Badge variant="outline" className="text-orange-600 border-orange-200">
+                <Badge
+                  variant="outline"
+                  className="text-orange-600 border-orange-200"
+                >
                   Unsaved Changes
                 </Badge>
               )}
-              <Button onClick={saveConfiguration} disabled={!hasChanges || saving}>
+              <Button
+                onClick={saveConfiguration}
+                disabled={!hasChanges || saving}
+              >
                 <Save className="w-4 h-4 mr-2" />
-                {saving ? 'Saving...' : 'Save Changes'}
+                {saving ? "Saving..." : "Save Changes"}
               </Button>
             </div>
           </div>
@@ -330,7 +344,9 @@ export default function PartnerSettings() {
                   <Input
                     id="companyName"
                     value={config.companyInfo.companyName}
-                    onChange={(e) => updateConfig('companyInfo', 'companyName', e.target.value)}
+                    onChange={(e) =>
+                      updateConfig("companyInfo", "companyName", e.target.value)
+                    }
                   />
                 </div>
                 <div className="space-y-2">
@@ -338,7 +354,9 @@ export default function PartnerSettings() {
                   <Input
                     id="tradingName"
                     value={config.companyInfo.tradingName}
-                    onChange={(e) => updateConfig('companyInfo', 'tradingName', e.target.value)}
+                    onChange={(e) =>
+                      updateConfig("companyInfo", "tradingName", e.target.value)
+                    }
                   />
                 </div>
                 <div className="space-y-2">
@@ -346,7 +364,9 @@ export default function PartnerSettings() {
                   <Input
                     id="abn"
                     value={config.companyInfo.abn}
-                    onChange={(e) => updateConfig('companyInfo', 'abn', e.target.value)}
+                    onChange={(e) =>
+                      updateConfig("companyInfo", "abn", e.target.value)
+                    }
                   />
                 </div>
                 <div className="space-y-2">
@@ -354,7 +374,9 @@ export default function PartnerSettings() {
                   <Input
                     id="acn"
                     value={config.companyInfo.acn}
-                    onChange={(e) => updateConfig('companyInfo', 'acn', e.target.value)}
+                    onChange={(e) =>
+                      updateConfig("companyInfo", "acn", e.target.value)
+                    }
                   />
                 </div>
                 <div className="space-y-2">
@@ -362,7 +384,9 @@ export default function PartnerSettings() {
                   <Input
                     id="phone"
                     value={config.companyInfo.phone}
-                    onChange={(e) => updateConfig('companyInfo', 'phone', e.target.value)}
+                    onChange={(e) =>
+                      updateConfig("companyInfo", "phone", e.target.value)
+                    }
                   />
                 </div>
                 <div className="space-y-2">
@@ -371,7 +395,9 @@ export default function PartnerSettings() {
                     id="email"
                     type="email"
                     value={config.companyInfo.email}
-                    onChange={(e) => updateConfig('companyInfo', 'email', e.target.value)}
+                    onChange={(e) =>
+                      updateConfig("companyInfo", "email", e.target.value)
+                    }
                   />
                 </div>
                 <div className="space-y-2">
@@ -379,7 +405,9 @@ export default function PartnerSettings() {
                   <Input
                     id="website"
                     value={config.companyInfo.website}
-                    onChange={(e) => updateConfig('companyInfo', 'website', e.target.value)}
+                    onChange={(e) =>
+                      updateConfig("companyInfo", "website", e.target.value)
+                    }
                   />
                 </div>
                 <div className="space-y-2">
@@ -388,7 +416,13 @@ export default function PartnerSettings() {
                     id="yearsInBusiness"
                     type="number"
                     value={config.companyInfo.yearsInBusiness}
-                    onChange={(e) => updateConfig('companyInfo', 'yearsInBusiness', parseInt(e.target.value) || 0)}
+                    onChange={(e) =>
+                      updateConfig(
+                        "companyInfo",
+                        "yearsInBusiness",
+                        parseInt(e.target.value) || 0,
+                      )
+                    }
                   />
                 </div>
                 <div className="space-y-2 md:col-span-2">
@@ -396,7 +430,13 @@ export default function PartnerSettings() {
                   <Textarea
                     id="registeredAddress"
                     value={config.companyInfo.registeredAddress}
-                    onChange={(e) => updateConfig('companyInfo', 'registeredAddress', e.target.value)}
+                    onChange={(e) =>
+                      updateConfig(
+                        "companyInfo",
+                        "registeredAddress",
+                        e.target.value,
+                      )
+                    }
                     rows={3}
                   />
                 </div>
@@ -405,27 +445,41 @@ export default function PartnerSettings() {
                   <Textarea
                     id="businessAddress"
                     value={config.companyInfo.businessAddress}
-                    onChange={(e) => updateConfig('companyInfo', 'businessAddress', e.target.value)}
+                    onChange={(e) =>
+                      updateConfig(
+                        "companyInfo",
+                        "businessAddress",
+                        e.target.value,
+                      )
+                    }
                     rows={3}
                   />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="industry">Industry Sector</Label>
-                  <Select 
-                    value={config.companyInfo.industry} 
-                    onValueChange={(value) => updateConfig('companyInfo', 'industry', value)}
+                  <Select
+                    value={config.companyInfo.industry}
+                    onValueChange={(value) =>
+                      updateConfig("companyInfo", "industry", value)
+                    }
                   >
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="electrical">Electrical Contracting</SelectItem>
+                      <SelectItem value="electrical">
+                        Electrical Contracting
+                      </SelectItem>
                       <SelectItem value="solar">Solar Installation</SelectItem>
                       <SelectItem value="automotive">Automotive</SelectItem>
                       <SelectItem value="construction">Construction</SelectItem>
-                      <SelectItem value="facilities">Facilities Management</SelectItem>
+                      <SelectItem value="facilities">
+                        Facilities Management
+                      </SelectItem>
                       <SelectItem value="retail">Retail/Commercial</SelectItem>
-                      <SelectItem value="government">Government/Council</SelectItem>
+                      <SelectItem value="government">
+                        Government/Council
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -449,11 +503,19 @@ export default function PartnerSettings() {
             <CardContent className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <Label htmlFor="electricalLicense">Electrical License Number</Label>
+                  <Label htmlFor="electricalLicense">
+                    Electrical License Number
+                  </Label>
                   <Input
                     id="electricalLicense"
                     value={config.licensing.electricalLicense}
-                    onChange={(e) => updateConfig('licensing', 'electricalLicense', e.target.value)}
+                    onChange={(e) =>
+                      updateConfig(
+                        "licensing",
+                        "electricalLicense",
+                        e.target.value,
+                      )
+                    }
                   />
                 </div>
                 <div className="space-y-2">
@@ -462,24 +524,42 @@ export default function PartnerSettings() {
                     id="licenseExpiry"
                     type="date"
                     value={config.licensing.licenseExpiry}
-                    onChange={(e) => updateConfig('licensing', 'licenseExpiry', e.target.value)}
+                    onChange={(e) =>
+                      updateConfig("licensing", "licenseExpiry", e.target.value)
+                    }
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="insurancePolicy">Insurance Policy Number</Label>
+                  <Label htmlFor="insurancePolicy">
+                    Insurance Policy Number
+                  </Label>
                   <Input
                     id="insurancePolicy"
                     value={config.licensing.insurancePolicy}
-                    onChange={(e) => updateConfig('licensing', 'insurancePolicy', e.target.value)}
+                    onChange={(e) =>
+                      updateConfig(
+                        "licensing",
+                        "insurancePolicy",
+                        e.target.value,
+                      )
+                    }
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="insuranceAmount">Insurance Coverage Amount</Label>
+                  <Label htmlFor="insuranceAmount">
+                    Insurance Coverage Amount
+                  </Label>
                   <Input
                     id="insuranceAmount"
                     type="number"
                     value={config.licensing.insuranceAmount}
-                    onChange={(e) => updateConfig('licensing', 'insuranceAmount', parseInt(e.target.value) || 0)}
+                    onChange={(e) =>
+                      updateConfig(
+                        "licensing",
+                        "insuranceAmount",
+                        parseInt(e.target.value) || 0,
+                      )
+                    }
                   />
                 </div>
                 <div className="space-y-2">
@@ -488,7 +568,13 @@ export default function PartnerSettings() {
                     id="insuranceExpiry"
                     type="date"
                     value={config.licensing.insuranceExpiry}
-                    onChange={(e) => updateConfig('licensing', 'insuranceExpiry', e.target.value)}
+                    onChange={(e) =>
+                      updateConfig(
+                        "licensing",
+                        "insuranceExpiry",
+                        e.target.value,
+                      )
+                    }
                   />
                 </div>
                 <div className="space-y-2">
@@ -496,23 +582,25 @@ export default function PartnerSettings() {
                   <Input
                     id="workCover"
                     value={config.licensing.workCover}
-                    onChange={(e) => updateConfig('licensing', 'workCover', e.target.value)}
+                    onChange={(e) =>
+                      updateConfig("licensing", "workCover", e.target.value)
+                    }
                   />
                 </div>
               </div>
-              
+
               <Separator />
-              
+
               <div className="space-y-2">
                 <Label>Certifications & Qualifications</Label>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                   {[
-                    'AS/NZS 3000 Wiring Rules',
-                    'EV Charging Standards',
-                    'Solar Installation',
-                    'High Voltage Work',
-                    'Work Health & Safety',
-                    'Quality Management'
+                    "AS/NZS 3000 Wiring Rules",
+                    "EV Charging Standards",
+                    "Solar Installation",
+                    "High Voltage Work",
+                    "Work Health & Safety",
+                    "Quality Management",
                   ].map((cert) => (
                     <div key={cert} className="flex items-center space-x-2">
                       <input
@@ -522,12 +610,20 @@ export default function PartnerSettings() {
                         onChange={(e) => {
                           const certifications = e.target.checked
                             ? [...config.licensing.certifications, cert]
-                            : config.licensing.certifications.filter(c => c !== cert);
-                          updateConfig('licensing', 'certifications', certifications);
+                            : config.licensing.certifications.filter(
+                                (c) => c !== cert,
+                              );
+                          updateConfig(
+                            "licensing",
+                            "certifications",
+                            certifications,
+                          );
                         }}
                         className="rounded"
                       />
-                      <label htmlFor={cert} className="text-sm">{cert}</label>
+                      <label htmlFor={cert} className="text-sm">
+                        {cert}
+                      </label>
                     </div>
                   ))}
                 </div>
@@ -552,9 +648,11 @@ export default function PartnerSettings() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <Label htmlFor="contractType">Contract Type</Label>
-                  <Select 
-                    value={config.contract.contractType} 
-                    onValueChange={(value) => updateConfig('contract', 'contractType', value)}
+                  <Select
+                    value={config.contract.contractType}
+                    onValueChange={(value) =>
+                      updateConfig("contract", "contractType", value)
+                    }
                     disabled={!canEditAll}
                   >
                     <SelectTrigger>
@@ -562,17 +660,23 @@ export default function PartnerSettings() {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="standard">Standard Partner</SelectItem>
-                      <SelectItem value="preferred">Preferred Partner</SelectItem>
-                      <SelectItem value="exclusive">Exclusive Partner</SelectItem>
+                      <SelectItem value="preferred">
+                        Preferred Partner
+                      </SelectItem>
+                      <SelectItem value="exclusive">
+                        Exclusive Partner
+                      </SelectItem>
                       <SelectItem value="premium">Premium Partner</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="status">Contract Status</Label>
-                  <Select 
-                    value={config.contract.status} 
-                    onValueChange={(value) => updateConfig('contract', 'status', value)}
+                  <Select
+                    value={config.contract.status}
+                    onValueChange={(value) =>
+                      updateConfig("contract", "status", value)
+                    }
                     disabled={!canEditAll}
                   >
                     <SelectTrigger>
@@ -592,7 +696,9 @@ export default function PartnerSettings() {
                     id="startDate"
                     type="date"
                     value={config.contract.startDate}
-                    onChange={(e) => updateConfig('contract', 'startDate', e.target.value)}
+                    onChange={(e) =>
+                      updateConfig("contract", "startDate", e.target.value)
+                    }
                     disabled={!canEditAll}
                   />
                 </div>
@@ -602,7 +708,9 @@ export default function PartnerSettings() {
                     id="endDate"
                     type="date"
                     value={config.contract.endDate}
-                    onChange={(e) => updateConfig('contract', 'endDate', e.target.value)}
+                    onChange={(e) =>
+                      updateConfig("contract", "endDate", e.target.value)
+                    }
                     disabled={!canEditAll}
                   />
                 </div>
@@ -612,27 +720,45 @@ export default function PartnerSettings() {
                     id="renewalDate"
                     type="date"
                     value={config.contract.renewalDate}
-                    onChange={(e) => updateConfig('contract', 'renewalDate', e.target.value)}
+                    onChange={(e) =>
+                      updateConfig("contract", "renewalDate", e.target.value)
+                    }
                     disabled={!canEditAll}
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="minimumOrders">Minimum Orders (per year)</Label>
+                  <Label htmlFor="minimumOrders">
+                    Minimum Orders (per year)
+                  </Label>
                   <Input
                     id="minimumOrders"
                     type="number"
                     value={config.contract.minimumOrders}
-                    onChange={(e) => updateConfig('contract', 'minimumOrders', parseInt(e.target.value) || 0)}
+                    onChange={(e) =>
+                      updateConfig(
+                        "contract",
+                        "minimumOrders",
+                        parseInt(e.target.value) || 0,
+                      )
+                    }
                     disabled={!canEditAll}
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="performanceTargets">Performance Target (%)</Label>
+                  <Label htmlFor="performanceTargets">
+                    Performance Target (%)
+                  </Label>
                   <Input
                     id="performanceTargets"
                     type="number"
                     value={config.contract.performanceTargets}
-                    onChange={(e) => updateConfig('contract', 'performanceTargets', parseInt(e.target.value) || 0)}
+                    onChange={(e) =>
+                      updateConfig(
+                        "contract",
+                        "performanceTargets",
+                        parseInt(e.target.value) || 0,
+                      )
+                    }
                     disabled={!canEditAll}
                   />
                 </div>
@@ -647,7 +773,9 @@ export default function PartnerSettings() {
                 </div>
                 <Switch
                   checked={config.contract.exclusiveRights}
-                  onCheckedChange={(checked) => updateConfig('contract', 'exclusiveRights', checked)}
+                  onCheckedChange={(checked) =>
+                    updateConfig("contract", "exclusiveRights", checked)
+                  }
                   disabled={!canEditAll}
                 />
               </div>
@@ -656,16 +784,19 @@ export default function PartnerSettings() {
                 <Label>Service Territory</Label>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                   {[
-                    'Sydney Metropolitan',
-                    'Melbourne Metropolitan',
-                    'Brisbane Metropolitan',
-                    'Perth Metropolitan',
-                    'Adelaide Metropolitan',
-                    'Regional NSW',
-                    'Regional VIC',
-                    'Regional QLD'
+                    "Sydney Metropolitan",
+                    "Melbourne Metropolitan",
+                    "Brisbane Metropolitan",
+                    "Perth Metropolitan",
+                    "Adelaide Metropolitan",
+                    "Regional NSW",
+                    "Regional VIC",
+                    "Regional QLD",
                   ].map((territory) => (
-                    <div key={territory} className="flex items-center space-x-2">
+                    <div
+                      key={territory}
+                      className="flex items-center space-x-2"
+                    >
                       <input
                         type="checkbox"
                         id={territory}
@@ -673,13 +804,17 @@ export default function PartnerSettings() {
                         onChange={(e) => {
                           const territories = e.target.checked
                             ? [...config.contract.territory, territory]
-                            : config.contract.territory.filter(t => t !== territory);
-                          updateConfig('contract', 'territory', territories);
+                            : config.contract.territory.filter(
+                                (t) => t !== territory,
+                              );
+                          updateConfig("contract", "territory", territories);
                         }}
                         className="rounded"
                         disabled={!canEditAll}
                       />
-                      <label htmlFor={territory} className="text-sm">{territory}</label>
+                      <label htmlFor={territory} className="text-sm">
+                        {territory}
+                      </label>
                     </div>
                   ))}
                 </div>
@@ -704,9 +839,11 @@ export default function PartnerSettings() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <Label htmlFor="discountTier">Discount Tier</Label>
-                  <Select 
-                    value={config.pricing.discountTier} 
-                    onValueChange={(value) => updateConfig('pricing', 'discountTier', value)}
+                  <Select
+                    value={config.pricing.discountTier}
+                    onValueChange={(value) =>
+                      updateConfig("pricing", "discountTier", value)
+                    }
                     disabled={!canEditAll}
                   >
                     <SelectTrigger>
@@ -722,23 +859,39 @@ export default function PartnerSettings() {
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="earlyPaymentDiscount">Early Payment Discount (%)</Label>
+                  <Label htmlFor="earlyPaymentDiscount">
+                    Early Payment Discount (%)
+                  </Label>
                   <Input
                     id="earlyPaymentDiscount"
                     type="number"
                     step="0.1"
                     value={config.pricing.earlyPaymentDiscount}
-                    onChange={(e) => updateConfig('pricing', 'earlyPaymentDiscount', parseFloat(e.target.value) || 0)}
+                    onChange={(e) =>
+                      updateConfig(
+                        "pricing",
+                        "earlyPaymentDiscount",
+                        parseFloat(e.target.value) || 0,
+                      )
+                    }
                     disabled={!canEditAll}
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="standardPaymentTerms">Payment Terms (days)</Label>
+                  <Label htmlFor="standardPaymentTerms">
+                    Payment Terms (days)
+                  </Label>
                   <Input
                     id="standardPaymentTerms"
                     type="number"
                     value={config.pricing.standardPaymentTerms}
-                    onChange={(e) => updateConfig('pricing', 'standardPaymentTerms', parseInt(e.target.value) || 0)}
+                    onChange={(e) =>
+                      updateConfig(
+                        "pricing",
+                        "standardPaymentTerms",
+                        parseInt(e.target.value) || 0,
+                      )
+                    }
                     disabled={!canEditAll}
                   />
                 </div>
@@ -748,7 +901,13 @@ export default function PartnerSettings() {
                     id="creditLimit"
                     type="number"
                     value={config.pricing.creditLimit}
-                    onChange={(e) => updateConfig('pricing', 'creditLimit', parseInt(e.target.value) || 0)}
+                    onChange={(e) =>
+                      updateConfig(
+                        "pricing",
+                        "creditLimit",
+                        parseInt(e.target.value) || 0,
+                      )
+                    }
                     disabled={!canEditAll}
                   />
                 </div>
@@ -763,7 +922,9 @@ export default function PartnerSettings() {
                 </div>
                 <Switch
                   checked={config.pricing.volumeDiscounts}
-                  onCheckedChange={(checked) => updateConfig('pricing', 'volumeDiscounts', checked)}
+                  onCheckedChange={(checked) =>
+                    updateConfig("pricing", "volumeDiscounts", checked)
+                  }
                   disabled={!canEditAll}
                 />
               </div>
@@ -779,10 +940,12 @@ export default function PartnerSettings() {
                       id="chargersMargin"
                       type="number"
                       value={config.pricing.marginSettings.chargers}
-                      onChange={(e) => updateConfig('pricing', 'marginSettings', {
-                        ...config.pricing.marginSettings,
-                        chargers: parseInt(e.target.value) || 0
-                      })}
+                      onChange={(e) =>
+                        updateConfig("pricing", "marginSettings", {
+                          ...config.pricing.marginSettings,
+                          chargers: parseInt(e.target.value) || 0,
+                        })
+                      }
                       disabled={!canEditAll}
                     />
                   </div>
@@ -792,10 +955,12 @@ export default function PartnerSettings() {
                       id="accessoriesMargin"
                       type="number"
                       value={config.pricing.marginSettings.accessories}
-                      onChange={(e) => updateConfig('pricing', 'marginSettings', {
-                        ...config.pricing.marginSettings,
-                        accessories: parseInt(e.target.value) || 0
-                      })}
+                      onChange={(e) =>
+                        updateConfig("pricing", "marginSettings", {
+                          ...config.pricing.marginSettings,
+                          accessories: parseInt(e.target.value) || 0,
+                        })
+                      }
                       disabled={!canEditAll}
                     />
                   </div>
@@ -805,10 +970,12 @@ export default function PartnerSettings() {
                       id="installationMargin"
                       type="number"
                       value={config.pricing.marginSettings.installation}
-                      onChange={(e) => updateConfig('pricing', 'marginSettings', {
-                        ...config.pricing.marginSettings,
-                        installation: parseInt(e.target.value) || 0
-                      })}
+                      onChange={(e) =>
+                        updateConfig("pricing", "marginSettings", {
+                          ...config.pricing.marginSettings,
+                          installation: parseInt(e.target.value) || 0,
+                        })
+                      }
                     />
                   </div>
                   <div className="space-y-2">
@@ -817,10 +984,12 @@ export default function PartnerSettings() {
                       id="serviceMargin"
                       type="number"
                       value={config.pricing.marginSettings.service}
-                      onChange={(e) => updateConfig('pricing', 'marginSettings', {
-                        ...config.pricing.marginSettings,
-                        service: parseInt(e.target.value) || 0
-                      })}
+                      onChange={(e) =>
+                        updateConfig("pricing", "marginSettings", {
+                          ...config.pricing.marginSettings,
+                          service: parseInt(e.target.value) || 0,
+                        })
+                      }
                     />
                   </div>
                 </div>
@@ -852,7 +1021,9 @@ export default function PartnerSettings() {
                   </div>
                   <Switch
                     checked={config.services.installationServices}
-                    onCheckedChange={(checked) => updateConfig('services', 'installationServices', checked)}
+                    onCheckedChange={(checked) =>
+                      updateConfig("services", "installationServices", checked)
+                    }
                   />
                 </div>
                 <div className="flex items-center justify-between">
@@ -864,7 +1035,9 @@ export default function PartnerSettings() {
                   </div>
                   <Switch
                     checked={config.services.maintenanceServices}
-                    onCheckedChange={(checked) => updateConfig('services', 'maintenanceServices', checked)}
+                    onCheckedChange={(checked) =>
+                      updateConfig("services", "maintenanceServices", checked)
+                    }
                   />
                 </div>
                 <div className="flex items-center justify-between">
@@ -876,7 +1049,9 @@ export default function PartnerSettings() {
                   </div>
                   <Switch
                     checked={config.services.supportServices}
-                    onCheckedChange={(checked) => updateConfig('services', 'supportServices', checked)}
+                    onCheckedChange={(checked) =>
+                      updateConfig("services", "supportServices", checked)
+                    }
                   />
                 </div>
                 <div className="flex items-center justify-between">
@@ -888,7 +1063,9 @@ export default function PartnerSettings() {
                   </div>
                   <Switch
                     checked={config.services.trainingServices}
-                    onCheckedChange={(checked) => updateConfig('services', 'trainingServices', checked)}
+                    onCheckedChange={(checked) =>
+                      updateConfig("services", "trainingServices", checked)
+                    }
                   />
                 </div>
                 <div className="flex items-center justify-between">
@@ -900,7 +1077,9 @@ export default function PartnerSettings() {
                   </div>
                   <Switch
                     checked={config.services.warrantySupport}
-                    onCheckedChange={(checked) => updateConfig('services', 'warrantySupport', checked)}
+                    onCheckedChange={(checked) =>
+                      updateConfig("services", "warrantySupport", checked)
+                    }
                   />
                 </div>
                 <div className="flex items-center justify-between">
@@ -912,7 +1091,9 @@ export default function PartnerSettings() {
                   </div>
                   <Switch
                     checked={config.services.emergencyCallout}
-                    onCheckedChange={(checked) => updateConfig('services', 'emergencyCallout', checked)}
+                    onCheckedChange={(checked) =>
+                      updateConfig("services", "emergencyCallout", checked)
+                    }
                   />
                 </div>
               </div>
@@ -920,12 +1101,20 @@ export default function PartnerSettings() {
               <Separator />
 
               <div className="space-y-2">
-                <Label htmlFor="certifiedTechnicians">Certified Technicians</Label>
+                <Label htmlFor="certifiedTechnicians">
+                  Certified Technicians
+                </Label>
                 <Input
                   id="certifiedTechnicians"
                   type="number"
                   value={config.services.certifiedTechnicians}
-                  onChange={(e) => updateConfig('services', 'certifiedTechnicians', parseInt(e.target.value) || 0)}
+                  onChange={(e) =>
+                    updateConfig(
+                      "services",
+                      "certifiedTechnicians",
+                      parseInt(e.target.value) || 0,
+                    )
+                  }
                 />
               </div>
 
@@ -933,12 +1122,12 @@ export default function PartnerSettings() {
                 <Label>Service Areas</Label>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                   {[
-                    'Residential',
-                    'Commercial',
-                    'Industrial',
-                    'Public Infrastructure',
-                    'Fleet Management',
-                    'Retail/Shopping Centres'
+                    "Residential",
+                    "Commercial",
+                    "Industrial",
+                    "Public Infrastructure",
+                    "Fleet Management",
+                    "Retail/Shopping Centres",
                   ].map((area) => (
                     <div key={area} className="flex items-center space-x-2">
                       <input
@@ -948,12 +1137,16 @@ export default function PartnerSettings() {
                         onChange={(e) => {
                           const areas = e.target.checked
                             ? [...config.services.serviceAreas, area]
-                            : config.services.serviceAreas.filter(a => a !== area);
-                          updateConfig('services', 'serviceAreas', areas);
+                            : config.services.serviceAreas.filter(
+                                (a) => a !== area,
+                              );
+                          updateConfig("services", "serviceAreas", areas);
                         }}
                         className="rounded"
                       />
-                      <label htmlFor={area} className="text-sm">{area}</label>
+                      <label htmlFor={area} className="text-sm">
+                        {area}
+                      </label>
                     </div>
                   ))}
                 </div>
@@ -979,44 +1172,70 @@ export default function PartnerSettings() {
                 <Card>
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm font-medium">Completed Projects</span>
+                      <span className="text-sm font-medium">
+                        Completed Projects
+                      </span>
                       <CheckCircle2 className="w-4 h-4 text-green-600" />
                     </div>
-                    <div className="text-2xl font-bold">{config.performance.completedProjects}</div>
-                    <p className="text-xs text-muted-foreground">Total installations</p>
+                    <div className="text-2xl font-bold">
+                      {config.performance.completedProjects}
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      Total installations
+                    </p>
                   </CardContent>
                 </Card>
 
                 <Card>
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm font-medium">Average Rating</span>
+                      <span className="text-sm font-medium">
+                        Average Rating
+                      </span>
                       <Star className="w-4 h-4 text-yellow-600" />
                     </div>
-                    <div className="text-2xl font-bold">{config.performance.averageRating}/5</div>
-                    <p className="text-xs text-muted-foreground">Customer feedback</p>
+                    <div className="text-2xl font-bold">
+                      {config.performance.averageRating}/5
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      Customer feedback
+                    </p>
                   </CardContent>
                 </Card>
 
                 <Card>
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm font-medium">On-Time Delivery</span>
+                      <span className="text-sm font-medium">
+                        On-Time Delivery
+                      </span>
                       <Clock className="w-4 h-4 text-blue-600" />
                     </div>
-                    <div className="text-2xl font-bold">{config.performance.onTimeDelivery}%</div>
-                    <Progress value={config.performance.onTimeDelivery} className="mt-2" />
+                    <div className="text-2xl font-bold">
+                      {config.performance.onTimeDelivery}%
+                    </div>
+                    <Progress
+                      value={config.performance.onTimeDelivery}
+                      className="mt-2"
+                    />
                   </CardContent>
                 </Card>
 
                 <Card>
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm font-medium">Customer Satisfaction</span>
+                      <span className="text-sm font-medium">
+                        Customer Satisfaction
+                      </span>
                       <Users className="w-4 h-4 text-purple-600" />
                     </div>
-                    <div className="text-2xl font-bold">{config.performance.customerSatisfaction}%</div>
-                    <Progress value={config.performance.customerSatisfaction} className="mt-2" />
+                    <div className="text-2xl font-bold">
+                      {config.performance.customerSatisfaction}%
+                    </div>
+                    <Progress
+                      value={config.performance.customerSatisfaction}
+                      className="mt-2"
+                    />
                   </CardContent>
                 </Card>
 
@@ -1026,8 +1245,13 @@ export default function PartnerSettings() {
                       <span className="text-sm font-medium">Quality Score</span>
                       <Shield className="w-4 h-4 text-green-600" />
                     </div>
-                    <div className="text-2xl font-bold">{config.performance.qualityScore}%</div>
-                    <Progress value={config.performance.qualityScore} className="mt-2" />
+                    <div className="text-2xl font-bold">
+                      {config.performance.qualityScore}%
+                    </div>
+                    <Progress
+                      value={config.performance.qualityScore}
+                      className="mt-2"
+                    />
                   </CardContent>
                 </Card>
 
@@ -1037,8 +1261,12 @@ export default function PartnerSettings() {
                       <span className="text-sm font-medium">Response Time</span>
                       <Clock className="w-4 h-4 text-orange-600" />
                     </div>
-                    <div className="text-2xl font-bold">{config.performance.responseTime}h</div>
-                    <p className="text-xs text-muted-foreground">Average response</p>
+                    <div className="text-2xl font-bold">
+                      {config.performance.responseTime}h
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      Average response
+                    </p>
                   </CardContent>
                 </Card>
               </div>
@@ -1047,19 +1275,31 @@ export default function PartnerSettings() {
                 <>
                   <Separator />
                   <div className="space-y-4">
-                    <h3 className="text-lg font-medium">Update Performance Data</h3>
+                    <h3 className="text-lg font-medium">
+                      Update Performance Data
+                    </h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                       <div className="space-y-2">
-                        <Label htmlFor="completedProjects">Completed Projects</Label>
+                        <Label htmlFor="completedProjects">
+                          Completed Projects
+                        </Label>
                         <Input
                           id="completedProjects"
                           type="number"
                           value={config.performance.completedProjects}
-                          onChange={(e) => updateConfig('performance', 'completedProjects', parseInt(e.target.value) || 0)}
+                          onChange={(e) =>
+                            updateConfig(
+                              "performance",
+                              "completedProjects",
+                              parseInt(e.target.value) || 0,
+                            )
+                          }
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="averageRating">Average Rating (1-5)</Label>
+                        <Label htmlFor="averageRating">
+                          Average Rating (1-5)
+                        </Label>
                         <Input
                           id="averageRating"
                           type="number"
@@ -1067,29 +1307,51 @@ export default function PartnerSettings() {
                           min="1"
                           max="5"
                           value={config.performance.averageRating}
-                          onChange={(e) => updateConfig('performance', 'averageRating', parseFloat(e.target.value) || 0)}
+                          onChange={(e) =>
+                            updateConfig(
+                              "performance",
+                              "averageRating",
+                              parseFloat(e.target.value) || 0,
+                            )
+                          }
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="onTimeDelivery">On-Time Delivery (%)</Label>
+                        <Label htmlFor="onTimeDelivery">
+                          On-Time Delivery (%)
+                        </Label>
                         <Input
                           id="onTimeDelivery"
                           type="number"
                           min="0"
                           max="100"
                           value={config.performance.onTimeDelivery}
-                          onChange={(e) => updateConfig('performance', 'onTimeDelivery', parseInt(e.target.value) || 0)}
+                          onChange={(e) =>
+                            updateConfig(
+                              "performance",
+                              "onTimeDelivery",
+                              parseInt(e.target.value) || 0,
+                            )
+                          }
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="customerSatisfaction">Customer Satisfaction (%)</Label>
+                        <Label htmlFor="customerSatisfaction">
+                          Customer Satisfaction (%)
+                        </Label>
                         <Input
                           id="customerSatisfaction"
                           type="number"
                           min="0"
                           max="100"
                           value={config.performance.customerSatisfaction}
-                          onChange={(e) => updateConfig('performance', 'customerSatisfaction', parseInt(e.target.value) || 0)}
+                          onChange={(e) =>
+                            updateConfig(
+                              "performance",
+                              "customerSatisfaction",
+                              parseInt(e.target.value) || 0,
+                            )
+                          }
                         />
                       </div>
                       <div className="space-y-2">
@@ -1100,16 +1362,30 @@ export default function PartnerSettings() {
                           min="0"
                           max="100"
                           value={config.performance.qualityScore}
-                          onChange={(e) => updateConfig('performance', 'qualityScore', parseInt(e.target.value) || 0)}
+                          onChange={(e) =>
+                            updateConfig(
+                              "performance",
+                              "qualityScore",
+                              parseInt(e.target.value) || 0,
+                            )
+                          }
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="responseTime">Response Time (hours)</Label>
+                        <Label htmlFor="responseTime">
+                          Response Time (hours)
+                        </Label>
                         <Input
                           id="responseTime"
                           type="number"
                           value={config.performance.responseTime}
-                          onChange={(e) => updateConfig('performance', 'responseTime', parseInt(e.target.value) || 0)}
+                          onChange={(e) =>
+                            updateConfig(
+                              "performance",
+                              "responseTime",
+                              parseInt(e.target.value) || 0,
+                            )
+                          }
                         />
                       </div>
                     </div>
@@ -1135,10 +1411,14 @@ export default function PartnerSettings() {
             <CardContent className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <Label htmlFor="communicationMethod">Preferred Communication Method</Label>
-                  <Select 
-                    value={config.preferences.communicationMethod} 
-                    onValueChange={(value) => updateConfig('preferences', 'communicationMethod', value)}
+                  <Label htmlFor="communicationMethod">
+                    Preferred Communication Method
+                  </Label>
+                  <Select
+                    value={config.preferences.communicationMethod}
+                    onValueChange={(value) =>
+                      updateConfig("preferences", "communicationMethod", value)
+                    }
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -1152,10 +1432,14 @@ export default function PartnerSettings() {
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="reportingFrequency">Reporting Frequency</Label>
-                  <Select 
-                    value={config.preferences.reportingFrequency} 
-                    onValueChange={(value) => updateConfig('preferences', 'reportingFrequency', value)}
+                  <Label htmlFor="reportingFrequency">
+                    Reporting Frequency
+                  </Label>
+                  <Select
+                    value={config.preferences.reportingFrequency}
+                    onValueChange={(value) =>
+                      updateConfig("preferences", "reportingFrequency", value)
+                    }
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -1170,9 +1454,11 @@ export default function PartnerSettings() {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="invoiceFormat">Invoice Format</Label>
-                  <Select 
-                    value={config.preferences.invoiceFormat} 
-                    onValueChange={(value) => updateConfig('preferences', 'invoiceFormat', value)}
+                  <Select
+                    value={config.preferences.invoiceFormat}
+                    onValueChange={(value) =>
+                      updateConfig("preferences", "invoiceFormat", value)
+                    }
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -1186,16 +1472,22 @@ export default function PartnerSettings() {
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="paymentMethod">Preferred Payment Method</Label>
-                  <Select 
-                    value={config.preferences.paymentMethod} 
-                    onValueChange={(value) => updateConfig('preferences', 'paymentMethod', value)}
+                  <Label htmlFor="paymentMethod">
+                    Preferred Payment Method
+                  </Label>
+                  <Select
+                    value={config.preferences.paymentMethod}
+                    onValueChange={(value) =>
+                      updateConfig("preferences", "paymentMethod", value)
+                    }
                   >
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="bank_transfer">Bank Transfer</SelectItem>
+                      <SelectItem value="bank_transfer">
+                        Bank Transfer
+                      </SelectItem>
                       <SelectItem value="credit_card">Credit Card</SelectItem>
                       <SelectItem value="direct_debit">Direct Debit</SelectItem>
                       <SelectItem value="cheque">Cheque</SelectItem>
@@ -1207,7 +1499,9 @@ export default function PartnerSettings() {
               <Separator />
 
               <div className="space-y-4">
-                <h3 className="text-lg font-medium">Notification Preferences</h3>
+                <h3 className="text-lg font-medium">
+                  Notification Preferences
+                </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="flex items-center justify-between">
                     <div className="space-y-0.5">
@@ -1218,7 +1512,13 @@ export default function PartnerSettings() {
                     </div>
                     <Switch
                       checked={config.preferences.autoApproveQuotes}
-                      onCheckedChange={(checked) => updateConfig('preferences', 'autoApproveQuotes', checked)}
+                      onCheckedChange={(checked) =>
+                        updateConfig(
+                          "preferences",
+                          "autoApproveQuotes",
+                          checked,
+                        )
+                      }
                     />
                   </div>
                   <div className="flex items-center justify-between">
@@ -1230,7 +1530,13 @@ export default function PartnerSettings() {
                     </div>
                     <Switch
                       checked={config.preferences.sendPerformanceReports}
-                      onCheckedChange={(checked) => updateConfig('preferences', 'sendPerformanceReports', checked)}
+                      onCheckedChange={(checked) =>
+                        updateConfig(
+                          "preferences",
+                          "sendPerformanceReports",
+                          checked,
+                        )
+                      }
                     />
                   </div>
                   <div className="flex items-center justify-between">
@@ -1242,7 +1548,9 @@ export default function PartnerSettings() {
                     </div>
                     <Switch
                       checked={config.preferences.marketingOptIn}
-                      onCheckedChange={(checked) => updateConfig('preferences', 'marketingOptIn', checked)}
+                      onCheckedChange={(checked) =>
+                        updateConfig("preferences", "marketingOptIn", checked)
+                      }
                     />
                   </div>
                 </div>

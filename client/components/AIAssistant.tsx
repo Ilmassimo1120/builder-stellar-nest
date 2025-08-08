@@ -86,9 +86,9 @@ export function AIAssistant() {
       const welcomeMessage: ChatMessage = {
         id: "welcome",
         type: "assistant",
-        content: `👋 Hi! I'm your specialized EV charging assistant. I see you're on the **${aiContext.pageTitle}** page.\n\nI can help you with:\n\n• Installation guides and Australian standards\n• Project planning and quoting\n• Troubleshooting and technical support\n• Platform navigation and features\n• Best practices for ${aiContext.userRole === 'client' ? 'understanding quotes' : 'electrical contractors'}\n\nWhat would you like to know?`,
+        content: `👋 Hi! I'm your specialized EV charging assistant. I see you're on the **${aiContext.pageTitle}** page.\n\nI can help you with:\n\n• Installation guides and Australian standards\n• Project planning and quoting\n• Troubleshooting and technical support\n• Platform navigation and features\n• Best practices for ${aiContext.userRole === "client" ? "understanding quotes" : "electrical contractors"}\n\nWhat would you like to know?`,
         timestamp: new Date(),
-        suggestions: aiContext.suggestions
+        suggestions: aiContext.suggestions,
       };
       setMessages([welcomeMessage]);
     }
@@ -103,17 +103,26 @@ export function AIAssistant() {
 
     let response = "";
     let suggestions: string[] = [];
-    let actions: Array<{ label: string; action: string; icon?: React.ReactNode }> = [];
+    let actions: Array<{
+      label: string;
+      action: string;
+      icon?: React.ReactNode;
+    }> = [];
 
     // First, check the AI knowledge database for expert responses
     const knowledgeResponse = findAIResponse(userMessage);
     if (knowledgeResponse) {
       response = knowledgeResponse.response;
       suggestions = knowledgeResponse.suggestions || [];
-      actions = knowledgeResponse.actions?.map(action => ({
-        ...action,
-        icon: action.icon ? <FileText className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />
-      })) || [];
+      actions =
+        knowledgeResponse.actions?.map((action) => ({
+          ...action,
+          icon: action.icon ? (
+            <FileText className="w-4 h-4" />
+          ) : (
+            <ArrowRight className="w-4 h-4" />
+          ),
+        })) || [];
 
       return {
         id: `ai-${Date.now()}`,
@@ -121,13 +130,17 @@ export function AIAssistant() {
         content: response,
         timestamp: new Date(),
         suggestions,
-        actions
+        actions,
       };
     }
 
     // Installation and Technical Queries
     if (message.includes("install") || message.includes("installation")) {
-      if (message.includes("ac") || message.includes("22kw") || message.includes("7kw")) {
+      if (
+        message.includes("ac") ||
+        message.includes("22kw") ||
+        message.includes("7kw")
+      ) {
         response = `🔧 **AC Charging Installation Guide**
 
 For AC charging installations in Australia:
@@ -152,11 +165,19 @@ Would you like specific guidance for your charger type?`;
           "Show me wiring diagrams",
           "What permits do I need?",
           "Load management setup",
-          "Commissioning checklist"
+          "Commissioning checklist",
         ];
         actions = [
-          { label: "View Installation Guide", action: "open-knowledge", icon: <BookOpen className="w-4 h-4" /> },
-          { label: "Create Installation Project", action: "new-project", icon: <Zap className="w-4 h-4" /> }
+          {
+            label: "View Installation Guide",
+            action: "open-knowledge",
+            icon: <BookOpen className="w-4 h-4" />,
+          },
+          {
+            label: "Create Installation Project",
+            action: "new-project",
+            icon: <Zap className="w-4 h-4" />,
+          },
         ];
       } else if (message.includes("dc") || message.includes("fast")) {
         response = `⚡ **DC Fast Charging Installation**
@@ -180,13 +201,17 @@ DC installations require specialized expertise:
           "Find certified installers",
           "Grid connection process",
           "DC charger specifications",
-          "Safety requirements"
+          "Safety requirements",
         ];
       }
     }
-    
+
     // Standards and Compliance
-    else if (message.includes("standard") || message.includes("compliance") || message.includes("regulation")) {
+    else if (
+      message.includes("standard") ||
+      message.includes("compliance") ||
+      message.includes("regulation")
+    ) {
       response = `📋 **Australian EV Charging Standards**
 
 **Primary Standards:**
@@ -211,16 +236,29 @@ Need help with specific compliance requirements?`;
         "RCD requirements",
         "Cable sizing calculator",
         "Testing procedures",
-        "Permit requirements"
+        "Permit requirements",
       ];
       actions = [
-        { label: "Compliance Checklist", action: "compliance-guide", icon: <Shield className="w-4 h-4" /> },
-        { label: "Standards Database", action: "standards-db", icon: <FileText className="w-4 h-4" /> }
+        {
+          label: "Compliance Checklist",
+          action: "compliance-guide",
+          icon: <Shield className="w-4 h-4" />,
+        },
+        {
+          label: "Standards Database",
+          action: "standards-db",
+          icon: <FileText className="w-4 h-4" />,
+        },
       ];
     }
-    
+
     // Troubleshooting
-    else if (message.includes("trouble") || message.includes("problem") || message.includes("issue") || message.includes("fault")) {
+    else if (
+      message.includes("trouble") ||
+      message.includes("problem") ||
+      message.includes("issue") ||
+      message.includes("fault")
+    ) {
       response = `🔍 **Troubleshooting Assistant**
 
 **Common Issues & Solutions:**
@@ -245,14 +283,22 @@ What specific issue are you experiencing?`;
         "Circuit breaker keeps tripping",
         "Charger won't start",
         "Network connectivity issues",
-        "Safety system activated"
+        "Safety system activated",
       ];
       actions = [
-        { label: "Diagnostic Tool", action: "diagnostic", icon: <Settings className="w-4 h-4" /> },
-        { label: "Contact Support", action: "support", icon: <HelpCircle className="w-4 h-4" /> }
+        {
+          label: "Diagnostic Tool",
+          action: "diagnostic",
+          icon: <Settings className="w-4 h-4" />,
+        },
+        {
+          label: "Contact Support",
+          action: "support",
+          icon: <HelpCircle className="w-4 h-4" />,
+        },
       ];
     }
-    
+
     // Project and Quoting Help
     else if (message.includes("project") || message.includes("quote")) {
       if (pageContext.includes("project") || message.includes("create")) {
@@ -282,17 +328,28 @@ Would you like me to guide you through creating a project?`;
           "Start new project wizard",
           "Create quote from existing project",
           "Site assessment tips",
-          "Pricing guidelines"
+          "Pricing guidelines",
         ];
         actions = [
-          { label: "New Project Wizard", action: "new-project", icon: <Zap className="w-4 h-4" /> },
-          { label: "Quote Builder", action: "new-quote", icon: <Calculator className="w-4 h-4" /> }
+          {
+            label: "New Project Wizard",
+            action: "new-project",
+            icon: <Zap className="w-4 h-4" />,
+          },
+          {
+            label: "Quote Builder",
+            action: "new-quote",
+            icon: <Calculator className="w-4 h-4" />,
+          },
         ];
       }
     }
-    
+
     // Platform Navigation Help
-    else if (message.includes("how") && (message.includes("use") || message.includes("navigate"))) {
+    else if (
+      message.includes("how") &&
+      (message.includes("use") || message.includes("navigate"))
+    ) {
       response = `🗺️ **Platform Navigation Guide**
 
 **Main Sections:**
@@ -318,12 +375,16 @@ Would you like me to guide you through creating a project?`;
         "Show me key features",
         "How to create templates",
         "Team collaboration setup",
-        "Data export options"
+        "Data export options",
       ];
     }
-    
+
     // Load Management and Smart Charging
-    else if (message.includes("load") || message.includes("smart") || message.includes("management")) {
+    else if (
+      message.includes("load") ||
+      message.includes("smart") ||
+      message.includes("management")
+    ) {
       response = `🧠 **Load Management & Smart Charging**
 
 **Why Load Management?**
@@ -350,10 +411,10 @@ Need help designing a load management system?`;
         "Calculate load requirements",
         "Compare management systems",
         "Grid integration options",
-        "Cost-benefit analysis"
+        "Cost-benefit analysis",
       ];
     }
-    
+
     // Default responses for general queries
     else if (message.includes("hello") || message.includes("hi")) {
       response = `Hello! 👋 I'm your specialized EV charging assistant. I have deep knowledge of:
@@ -369,10 +430,10 @@ How can I help you today?`;
         "Help with installation",
         "Australian standards guide",
         "Create new project",
-        "Platform navigation"
+        "Platform navigation",
       ];
     }
-    
+
     // Search functionality
     else if (message.includes("search") || message.includes("find")) {
       response = `🔍 **Search & Knowledge Assistant**
@@ -396,10 +457,10 @@ What specific information are you looking for?`;
         "Find installation guides",
         "Search compliance requirements",
         "Locate troubleshooting info",
-        "Platform feature help"
+        "Platform feature help",
       ];
     }
-    
+
     // Fallback for unrecognized queries
     else {
       response = `I'd be happy to help! 🤖 As your EV charging specialist, I can assist with:
@@ -421,7 +482,7 @@ Could you please be more specific about what you need help with?`;
         "Installation help",
         "Standards and compliance",
         "Platform features",
-        "Troubleshooting guide"
+        "Troubleshooting guide",
       ];
     }
 
@@ -431,7 +492,7 @@ Could you please be more specific about what you need help with?`;
       content: response,
       timestamp: new Date(),
       suggestions,
-      actions
+      actions,
     };
   };
 
@@ -442,17 +503,17 @@ Could you please be more specific about what you need help with?`;
       id: `user-${Date.now()}`,
       type: "user",
       content: inputMessage,
-      timestamp: new Date()
+      timestamp: new Date(),
     };
 
-    setMessages(prev => [...prev, userMessage]);
+    setMessages((prev) => [...prev, userMessage]);
     setInputMessage("");
     setIsTyping(true);
 
     // Simulate AI processing time
     setTimeout(async () => {
       const aiResponse = await getAIResponse(inputMessage);
-      setMessages(prev => [...prev, aiResponse]);
+      setMessages((prev) => [...prev, aiResponse]);
       setIsTyping(false);
     }, 1500);
   };
@@ -520,14 +581,22 @@ Could you please be more specific about what you need help with?`;
         "Calculate specific project cost",
         "Labor rate guidelines",
         "Material markup standards",
-        "Create detailed quote"
+        "Create detailed quote",
       ],
       actions: [
-        { label: "Create Detailed Quote", action: "new-quote", icon: <Calculator className="w-4 h-4" /> },
-        { label: "Load Calculator", action: "load-calculator", icon: <Zap className="w-4 h-4" /> }
-      ]
+        {
+          label: "Create Detailed Quote",
+          action: "new-quote",
+          icon: <Calculator className="w-4 h-4" />,
+        },
+        {
+          label: "Load Calculator",
+          action: "load-calculator",
+          icon: <Zap className="w-4 h-4" />,
+        },
+      ],
     };
-    setMessages(prev => [...prev, calculatorMessage]);
+    setMessages((prev) => [...prev, calculatorMessage]);
   };
 
   const handleLoadCalculator = () => {
@@ -540,10 +609,10 @@ Could you please be more specific about what you need help with?`;
         "Calculate voltage drop",
         "Diversity factor guidelines",
         "Supply upgrade requirements",
-        "Load management options"
-      ]
+        "Load management options",
+      ],
     };
-    setMessages(prev => [...prev, loadMessage]);
+    setMessages((prev) => [...prev, loadMessage]);
   };
 
   const handleCableCalculator = () => {
@@ -556,10 +625,10 @@ Could you please be more specific about what you need help with?`;
         "Calculate specific voltage drop",
         "Derating factor table",
         "Installation method comparison",
-        "Cable specification guide"
-      ]
+        "Cable specification guide",
+      ],
     };
-    setMessages(prev => [...prev, cableMessage]);
+    setMessages((prev) => [...prev, cableMessage]);
   };
 
   const handleBreakerGuide = () => {
@@ -572,10 +641,10 @@ Could you please be more specific about what you need help with?`;
         "Breaker sizing calculator",
         "RCD type selection",
         "Arc fault protection",
-        "Protection coordination"
-      ]
+        "Protection coordination",
+      ],
     };
-    setMessages(prev => [...prev, breakerMessage]);
+    setMessages((prev) => [...prev, breakerMessage]);
   };
 
   const handleCableStandards = () => {
@@ -588,10 +657,10 @@ Could you please be more specific about what you need help with?`;
         "Download derating tables",
         "Installation method guide",
         "Cable specification sheets",
-        "Compliance checklist"
-      ]
+        "Compliance checklist",
+      ],
     };
-    setMessages(prev => [...prev, standardsMessage]);
+    setMessages((prev) => [...prev, standardsMessage]);
   };
 
   const handleComplianceGuide = () => {
@@ -604,10 +673,10 @@ Could you please be more specific about what you need help with?`;
         "Download test sheets",
         "Compliance documentation",
         "Inspection procedures",
-        "Periodic testing guide"
-      ]
+        "Periodic testing guide",
+      ],
     };
-    setMessages(prev => [...prev, complianceMessage]);
+    setMessages((prev) => [...prev, complianceMessage]);
   };
 
   const handleStandardsDatabase = () => {
@@ -620,10 +689,10 @@ Could you please be more specific about what you need help with?`;
         "Latest standard updates",
         "Purchase standards",
         "Industry guidelines",
-        "Technical bulletins"
-      ]
+        "Technical bulletins",
+      ],
     };
-    setMessages(prev => [...prev, dbMessage]);
+    setMessages((prev) => [...prev, dbMessage]);
   };
 
   const handleDiagnosticTool = () => {
@@ -636,24 +705,36 @@ Could you please be more specific about what you need help with?`;
         "Fault finding flowchart",
         "Test equipment guide",
         "Common fault solutions",
-        "Escalation procedures"
-      ]
+        "Escalation procedures",
+      ],
     };
-    setMessages(prev => [...prev, diagnosticMessage]);
+    setMessages((prev) => [...prev, diagnosticMessage]);
   };
 
   const formatMessage = (content: string) => {
-    return content.split('\n').map((line, index) => {
-      if (line.startsWith('**') && line.endsWith('**')) {
-        return <div key={index} className="font-semibold text-foreground mt-2 mb-1">{line.slice(2, -2)}</div>;
+    return content.split("\n").map((line, index) => {
+      if (line.startsWith("**") && line.endsWith("**")) {
+        return (
+          <div key={index} className="font-semibold text-foreground mt-2 mb-1">
+            {line.slice(2, -2)}
+          </div>
+        );
       }
-      if (line.startsWith('• ')) {
-        return <div key={index} className="ml-4 text-sm">{line}</div>;
+      if (line.startsWith("• ")) {
+        return (
+          <div key={index} className="ml-4 text-sm">
+            {line}
+          </div>
+        );
       }
-      if (line.trim() === '') {
+      if (line.trim() === "") {
         return <div key={index} className="h-2"></div>;
       }
-      return <div key={index} className="text-sm">{line}</div>;
+      return (
+        <div key={index} className="text-sm">
+          {line}
+        </div>
+      );
     });
   };
 
@@ -680,7 +761,10 @@ Could you please be more specific about what you need help with?`;
                   <div>
                     <DialogTitle className="text-sm flex items-center gap-2">
                       EV Charging Assistant
-                      <Badge variant="secondary" className="text-xs bg-green-100 text-green-800">
+                      <Badge
+                        variant="secondary"
+                        className="text-xs bg-green-100 text-green-800"
+                      >
                         <Sparkles className="w-3 h-3 mr-1" />
                         Expert AI
                       </Badge>
@@ -696,7 +780,11 @@ Could you please be more specific about what you need help with?`;
                     size="sm"
                     onClick={() => setIsMinimized(!isMinimized)}
                   >
-                    {isMinimized ? <Maximize2 className="w-4 h-4" /> : <Minimize2 className="w-4 h-4" />}
+                    {isMinimized ? (
+                      <Maximize2 className="w-4 h-4" />
+                    ) : (
+                      <Minimize2 className="w-4 h-4" />
+                    )}
                   </Button>
                 </div>
               </div>
@@ -726,24 +814,29 @@ Could you please be more specific about what you need help with?`;
                               message.content
                             )}
                           </div>
-                          
+
                           {/* Suggestions */}
-                          {message.suggestions && message.suggestions.length > 0 && (
-                            <div className="mt-3 space-y-1">
-                              {message.suggestions.map((suggestion, index) => (
-                                <Button
-                                  key={index}
-                                  variant="outline"
-                                  size="sm"
-                                  className="text-xs h-6 px-2 mr-1 mb-1"
-                                  onClick={() => handleSuggestionClick(suggestion)}
-                                >
-                                  {suggestion}
-                                </Button>
-                              ))}
-                            </div>
-                          )}
-                          
+                          {message.suggestions &&
+                            message.suggestions.length > 0 && (
+                              <div className="mt-3 space-y-1">
+                                {message.suggestions.map(
+                                  (suggestion, index) => (
+                                    <Button
+                                      key={index}
+                                      variant="outline"
+                                      size="sm"
+                                      className="text-xs h-6 px-2 mr-1 mb-1"
+                                      onClick={() =>
+                                        handleSuggestionClick(suggestion)
+                                      }
+                                    >
+                                      {suggestion}
+                                    </Button>
+                                  ),
+                                )}
+                              </div>
+                            )}
+
                           {/* Action Buttons */}
                           {message.actions && message.actions.length > 0 && (
                             <div className="mt-3 space-y-1">
@@ -753,7 +846,9 @@ Could you please be more specific about what you need help with?`;
                                   variant="secondary"
                                   size="sm"
                                   className="text-xs h-7 px-3 mr-1 mb-1"
-                                  onClick={() => handleActionClick(action.action)}
+                                  onClick={() =>
+                                    handleActionClick(action.action)
+                                  }
                                 >
                                   {action.icon}
                                   <span className="ml-1">{action.label}</span>
@@ -761,22 +856,31 @@ Could you please be more specific about what you need help with?`;
                               ))}
                             </div>
                           )}
-                          
+
                           <div className="text-xs opacity-60 mt-2">
-                            {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            {message.timestamp.toLocaleTimeString([], {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            })}
                           </div>
                         </div>
                       </div>
                     ))}
-                    
+
                     {/* Typing Indicator */}
                     {isTyping && (
                       <div className="flex justify-start">
                         <div className="bg-muted rounded-lg p-3 max-w-[85%]">
                           <div className="flex items-center space-x-1">
                             <div className="w-2 h-2 bg-current rounded-full animate-pulse"></div>
-                            <div className="w-2 h-2 bg-current rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
-                            <div className="w-2 h-2 bg-current rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></div>
+                            <div
+                              className="w-2 h-2 bg-current rounded-full animate-pulse"
+                              style={{ animationDelay: "0.2s" }}
+                            ></div>
+                            <div
+                              className="w-2 h-2 bg-current rounded-full animate-pulse"
+                              style={{ animationDelay: "0.4s" }}
+                            ></div>
                           </div>
                         </div>
                       </div>
@@ -792,7 +896,9 @@ Could you please be more specific about what you need help with?`;
                       placeholder="Ask me about EV charging..."
                       value={inputMessage}
                       onChange={(e) => setInputMessage(e.target.value)}
-                      onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
+                      onKeyPress={(e) =>
+                        e.key === "Enter" && handleSendMessage()
+                      }
                       className="flex-1"
                     />
                     <Button
@@ -832,7 +938,10 @@ Could you please be more specific about what you need help with?`;
       {/* Chat Status Indicator */}
       {isOpen && (
         <div className="fixed bottom-24 right-6 z-40">
-          <Badge variant="secondary" className="text-xs bg-green-100 text-green-800 border-green-200">
+          <Badge
+            variant="secondary"
+            className="text-xs bg-green-100 text-green-800 border-green-200"
+          >
             <div className="w-2 h-2 bg-green-500 rounded-full mr-1 animate-pulse"></div>
             Online
           </Badge>

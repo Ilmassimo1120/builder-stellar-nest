@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { 
+import React, { useState } from "react";
+import {
   Save,
   User,
   Mail,
@@ -11,33 +11,33 @@ import {
   Shield,
   Download,
   Trash2,
-  AlertTriangle
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
+  AlertTriangle,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Switch } from '@/components/ui/switch';
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Separator } from '@/components/ui/separator';
-import { Badge } from '@/components/ui/badge';
-import { useToast } from '@/hooks/use-toast';
-import { useAuth } from '@/hooks/useAuth';
-import UserRoleIndicator from './UserRoleIndicator';
+} from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
+import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/useAuth";
+import UserRoleIndicator from "./UserRoleIndicator";
 
 export default function UserAccountSettings() {
   const { toast } = useToast();
@@ -49,20 +49,20 @@ export default function UserAccountSettings() {
 
   // Form states
   const [profileData, setProfileData] = useState({
-    firstName: user?.firstName || '',
-    lastName: user?.lastName || '',
-    email: user?.email || '',
-    phone: user?.phone || '',
-    company: user?.company || '',
-    department: user?.department || '',
-    businessAddress: user?.businessAddress || '',
-    website: user?.website || ''
+    firstName: user?.firstName || "",
+    lastName: user?.lastName || "",
+    email: user?.email || "",
+    phone: user?.phone || "",
+    company: user?.company || "",
+    department: user?.department || "",
+    businessAddress: user?.businessAddress || "",
+    website: user?.website || "",
   });
 
   const [passwordData, setPasswordData] = useState({
-    currentPassword: '',
-    newPassword: '',
-    confirmPassword: ''
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
   });
 
   const [preferences, setPreferences] = useState({
@@ -72,32 +72,32 @@ export default function UserAccountSettings() {
     weeklyReports: true,
     projectUpdates: true,
     quoteAlerts: true,
-    language: 'en',
-    timezone: 'Australia/Sydney',
-    dateFormat: 'dd/mm/yyyy',
-    currency: 'AUD'
+    language: "en",
+    timezone: "Australia/Sydney",
+    dateFormat: "dd/mm/yyyy",
+    currency: "AUD",
   });
 
   const [privacy, setPrivacy] = useState({
-    profileVisibility: 'team',
+    profileVisibility: "team",
     showEmail: false,
     showPhone: false,
     dataCollection: true,
-    analytics: true
+    analytics: true,
   });
 
   const updateProfileData = (field: string, value: string) => {
-    setProfileData(prev => ({ ...prev, [field]: value }));
+    setProfileData((prev) => ({ ...prev, [field]: value }));
     setHasChanges(true);
   };
 
   const updatePreferences = (field: string, value: any) => {
-    setPreferences(prev => ({ ...prev, [field]: value }));
+    setPreferences((prev) => ({ ...prev, [field]: value }));
     setHasChanges(true);
   };
 
   const updatePrivacy = (field: string, value: any) => {
-    setPrivacy(prev => ({ ...prev, [field]: value }));
+    setPrivacy((prev) => ({ ...prev, [field]: value }));
     setHasChanges(true);
   };
 
@@ -105,8 +105,8 @@ export default function UserAccountSettings() {
     setSaving(true);
     try {
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
       // Update user in auth context
       updateUser({
         firstName: profileData.firstName,
@@ -117,15 +117,18 @@ export default function UserAccountSettings() {
         company: profileData.company,
         department: profileData.department,
         businessAddress: profileData.businessAddress,
-        website: profileData.website
+        website: profileData.website,
       });
 
       // Save preferences and privacy settings
-      localStorage.setItem(`userPreferences_${user?.id}`, JSON.stringify(preferences));
+      localStorage.setItem(
+        `userPreferences_${user?.id}`,
+        JSON.stringify(preferences),
+      );
       localStorage.setItem(`userPrivacy_${user?.id}`, JSON.stringify(privacy));
-      
+
       setHasChanges(false);
-      
+
       toast({
         title: "Profile Updated",
         description: "Your account settings have been saved successfully.",
@@ -162,14 +165,14 @@ export default function UserAccountSettings() {
 
     try {
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
       setPasswordData({
-        currentPassword: '',
-        newPassword: '',
-        confirmPassword: ''
+        currentPassword: "",
+        newPassword: "",
+        confirmPassword: "",
       });
-      
+
       toast({
         title: "Password Changed",
         description: "Your password has been updated successfully.",
@@ -190,15 +193,15 @@ export default function UserAccountSettings() {
       privacy,
       role: user?.role,
       loginHistory: [], // Would be fetched from API
-      activityLog: [] // Would be fetched from API
+      activityLog: [], // Would be fetched from API
     };
 
     const dataStr = JSON.stringify(userData, null, 2);
-    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    const dataBlob = new Blob([dataStr], { type: "application/json" });
     const url = URL.createObjectURL(dataBlob);
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = url;
-    link.download = `user-data-${user?.id}-${new Date().toISOString().split('T')[0]}.json`;
+    link.download = `user-data-${user?.id}-${new Date().toISOString().split("T")[0]}.json`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -212,24 +215,26 @@ export default function UserAccountSettings() {
 
   const deleteAccount = async () => {
     const confirmed = window.confirm(
-      "Are you sure you want to delete your account? This action cannot be undone."
+      "Are you sure you want to delete your account? This action cannot be undone.",
     );
-    
+
     if (!confirmed) return;
 
     try {
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
       toast({
         title: "Account Deletion Request",
-        description: "Your account deletion request has been submitted for review.",
+        description:
+          "Your account deletion request has been submitted for review.",
         variant: "destructive",
       });
     } catch (error) {
       toast({
         title: "Deletion Failed",
-        description: "Failed to process account deletion. Please contact support.",
+        description:
+          "Failed to process account deletion. Please contact support.",
         variant: "destructive",
       });
     }
@@ -251,13 +256,16 @@ export default function UserAccountSettings() {
             </div>
             <div className="flex items-center gap-2">
               {hasChanges && (
-                <Badge variant="outline" className="text-orange-600 border-orange-200">
+                <Badge
+                  variant="outline"
+                  className="text-orange-600 border-orange-200"
+                >
                   Unsaved Changes
                 </Badge>
               )}
               <Button onClick={saveProfile} disabled={!hasChanges || saving}>
                 <Save className="w-4 h-4 mr-2" />
-                {saving ? 'Saving...' : 'Save Changes'}
+                {saving ? "Saving..." : "Save Changes"}
               </Button>
             </div>
           </div>
@@ -305,7 +313,9 @@ export default function UserAccountSettings() {
                   <Input
                     id="firstName"
                     value={profileData.firstName}
-                    onChange={(e) => updateProfileData('firstName', e.target.value)}
+                    onChange={(e) =>
+                      updateProfileData("firstName", e.target.value)
+                    }
                   />
                 </div>
                 <div className="space-y-2">
@@ -313,7 +323,9 @@ export default function UserAccountSettings() {
                   <Input
                     id="lastName"
                     value={profileData.lastName}
-                    onChange={(e) => updateProfileData('lastName', e.target.value)}
+                    onChange={(e) =>
+                      updateProfileData("lastName", e.target.value)
+                    }
                   />
                 </div>
                 <div className="space-y-2">
@@ -322,7 +334,7 @@ export default function UserAccountSettings() {
                     id="email"
                     type="email"
                     value={profileData.email}
-                    onChange={(e) => updateProfileData('email', e.target.value)}
+                    onChange={(e) => updateProfileData("email", e.target.value)}
                   />
                 </div>
                 <div className="space-y-2">
@@ -330,7 +342,7 @@ export default function UserAccountSettings() {
                   <Input
                     id="phone"
                     value={profileData.phone}
-                    onChange={(e) => updateProfileData('phone', e.target.value)}
+                    onChange={(e) => updateProfileData("phone", e.target.value)}
                   />
                 </div>
                 <div className="space-y-2">
@@ -338,7 +350,9 @@ export default function UserAccountSettings() {
                   <Input
                     id="company"
                     value={profileData.company}
-                    onChange={(e) => updateProfileData('company', e.target.value)}
+                    onChange={(e) =>
+                      updateProfileData("company", e.target.value)
+                    }
                   />
                 </div>
                 <div className="space-y-2">
@@ -346,7 +360,9 @@ export default function UserAccountSettings() {
                   <Input
                     id="department"
                     value={profileData.department}
-                    onChange={(e) => updateProfileData('department', e.target.value)}
+                    onChange={(e) =>
+                      updateProfileData("department", e.target.value)
+                    }
                   />
                 </div>
                 <div className="space-y-2 md:col-span-2">
@@ -354,7 +370,9 @@ export default function UserAccountSettings() {
                   <Textarea
                     id="businessAddress"
                     value={profileData.businessAddress}
-                    onChange={(e) => updateProfileData('businessAddress', e.target.value)}
+                    onChange={(e) =>
+                      updateProfileData("businessAddress", e.target.value)
+                    }
                     rows={3}
                   />
                 </div>
@@ -363,7 +381,9 @@ export default function UserAccountSettings() {
                   <Input
                     id="website"
                     value={profileData.website}
-                    onChange={(e) => updateProfileData('website', e.target.value)}
+                    onChange={(e) =>
+                      updateProfileData("website", e.target.value)
+                    }
                   />
                 </div>
               </div>
@@ -375,43 +395,63 @@ export default function UserAccountSettings() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <Label htmlFor="language">Language</Label>
-                    <Select 
-                      value={preferences.language} 
-                      onValueChange={(value) => updatePreferences('language', value)}
+                    <Select
+                      value={preferences.language}
+                      onValueChange={(value) =>
+                        updatePreferences("language", value)
+                      }
                     >
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="en">English</SelectItem>
-                        <SelectItem value="en-au">English (Australia)</SelectItem>
-                        <SelectItem value="en-nz">English (New Zealand)</SelectItem>
+                        <SelectItem value="en-au">
+                          English (Australia)
+                        </SelectItem>
+                        <SelectItem value="en-nz">
+                          English (New Zealand)
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="timezone">Timezone</Label>
-                    <Select 
-                      value={preferences.timezone} 
-                      onValueChange={(value) => updatePreferences('timezone', value)}
+                    <Select
+                      value={preferences.timezone}
+                      onValueChange={(value) =>
+                        updatePreferences("timezone", value)
+                      }
                     >
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="Australia/Sydney">Australia/Sydney</SelectItem>
-                        <SelectItem value="Australia/Melbourne">Australia/Melbourne</SelectItem>
-                        <SelectItem value="Australia/Perth">Australia/Perth</SelectItem>
-                        <SelectItem value="Australia/Brisbane">Australia/Brisbane</SelectItem>
-                        <SelectItem value="Australia/Adelaide">Australia/Adelaide</SelectItem>
+                        <SelectItem value="Australia/Sydney">
+                          Australia/Sydney
+                        </SelectItem>
+                        <SelectItem value="Australia/Melbourne">
+                          Australia/Melbourne
+                        </SelectItem>
+                        <SelectItem value="Australia/Perth">
+                          Australia/Perth
+                        </SelectItem>
+                        <SelectItem value="Australia/Brisbane">
+                          Australia/Brisbane
+                        </SelectItem>
+                        <SelectItem value="Australia/Adelaide">
+                          Australia/Adelaide
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="dateFormat">Date Format</Label>
-                    <Select 
-                      value={preferences.dateFormat} 
-                      onValueChange={(value) => updatePreferences('dateFormat', value)}
+                    <Select
+                      value={preferences.dateFormat}
+                      onValueChange={(value) =>
+                        updatePreferences("dateFormat", value)
+                      }
                     >
                       <SelectTrigger>
                         <SelectValue />
@@ -425,15 +465,19 @@ export default function UserAccountSettings() {
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="currency">Currency</Label>
-                    <Select 
-                      value={preferences.currency} 
-                      onValueChange={(value) => updatePreferences('currency', value)}
+                    <Select
+                      value={preferences.currency}
+                      onValueChange={(value) =>
+                        updatePreferences("currency", value)
+                      }
                     >
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="AUD">Australian Dollar (AUD)</SelectItem>
+                        <SelectItem value="AUD">
+                          Australian Dollar (AUD)
+                        </SelectItem>
                         <SelectItem value="USD">US Dollar (USD)</SelectItem>
                         <SelectItem value="EUR">Euro (EUR)</SelectItem>
                         <SelectItem value="GBP">British Pound (GBP)</SelectItem>
@@ -467,21 +511,29 @@ export default function UserAccountSettings() {
                     <div className="relative">
                       <Input
                         id="currentPassword"
-                        type={showCurrentPassword ? 'text' : 'password'}
+                        type={showCurrentPassword ? "text" : "password"}
                         value={passwordData.currentPassword}
-                        onChange={(e) => setPasswordData(prev => ({
-                          ...prev,
-                          currentPassword: e.target.value
-                        }))}
+                        onChange={(e) =>
+                          setPasswordData((prev) => ({
+                            ...prev,
+                            currentPassword: e.target.value,
+                          }))
+                        }
                       />
                       <Button
                         type="button"
                         variant="ghost"
                         size="sm"
                         className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
-                        onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                        onClick={() =>
+                          setShowCurrentPassword(!showCurrentPassword)
+                        }
                       >
-                        {showCurrentPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                        {showCurrentPassword ? (
+                          <EyeOff className="w-4 h-4" />
+                        ) : (
+                          <Eye className="w-4 h-4" />
+                        )}
                       </Button>
                     </div>
                   </div>
@@ -490,12 +542,14 @@ export default function UserAccountSettings() {
                     <div className="relative">
                       <Input
                         id="newPassword"
-                        type={showNewPassword ? 'text' : 'password'}
+                        type={showNewPassword ? "text" : "password"}
                         value={passwordData.newPassword}
-                        onChange={(e) => setPasswordData(prev => ({
-                          ...prev,
-                          newPassword: e.target.value
-                        }))}
+                        onChange={(e) =>
+                          setPasswordData((prev) => ({
+                            ...prev,
+                            newPassword: e.target.value,
+                          }))
+                        }
                       />
                       <Button
                         type="button"
@@ -504,26 +558,38 @@ export default function UserAccountSettings() {
                         className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
                         onClick={() => setShowNewPassword(!showNewPassword)}
                       >
-                        {showNewPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                        {showNewPassword ? (
+                          <EyeOff className="w-4 h-4" />
+                        ) : (
+                          <Eye className="w-4 h-4" />
+                        )}
                       </Button>
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="confirmPassword">Confirm New Password</Label>
+                    <Label htmlFor="confirmPassword">
+                      Confirm New Password
+                    </Label>
                     <Input
                       id="confirmPassword"
                       type="password"
                       value={passwordData.confirmPassword}
-                      onChange={(e) => setPasswordData(prev => ({
-                        ...prev,
-                        confirmPassword: e.target.value
-                      }))}
+                      onChange={(e) =>
+                        setPasswordData((prev) => ({
+                          ...prev,
+                          confirmPassword: e.target.value,
+                        }))
+                      }
                     />
                   </div>
                 </div>
-                <Button 
+                <Button
                   onClick={changePassword}
-                  disabled={!passwordData.currentPassword || !passwordData.newPassword || !passwordData.confirmPassword}
+                  disabled={
+                    !passwordData.currentPassword ||
+                    !passwordData.newPassword ||
+                    !passwordData.confirmPassword
+                  }
                 >
                   <Lock className="w-4 h-4 mr-2" />
                   Change Password
@@ -547,7 +613,7 @@ export default function UserAccountSettings() {
                       Setup 2FA
                     </Button>
                   </div>
-                  
+
                   <div className="flex items-center justify-between p-4 border rounded-lg">
                     <div>
                       <h4 className="font-medium">Login History</h4>
@@ -591,7 +657,9 @@ export default function UserAccountSettings() {
                     </div>
                     <Switch
                       checked={preferences.emailNotifications}
-                      onCheckedChange={(checked) => updatePreferences('emailNotifications', checked)}
+                      onCheckedChange={(checked) =>
+                        updatePreferences("emailNotifications", checked)
+                      }
                     />
                   </div>
                   <div className="flex items-center justify-between">
@@ -603,7 +671,9 @@ export default function UserAccountSettings() {
                     </div>
                     <Switch
                       checked={preferences.pushNotifications}
-                      onCheckedChange={(checked) => updatePreferences('pushNotifications', checked)}
+                      onCheckedChange={(checked) =>
+                        updatePreferences("pushNotifications", checked)
+                      }
                     />
                   </div>
                   <div className="flex items-center justify-between">
@@ -615,7 +685,9 @@ export default function UserAccountSettings() {
                     </div>
                     <Switch
                       checked={preferences.marketingEmails}
-                      onCheckedChange={(checked) => updatePreferences('marketingEmails', checked)}
+                      onCheckedChange={(checked) =>
+                        updatePreferences("marketingEmails", checked)
+                      }
                     />
                   </div>
                 </div>
@@ -635,7 +707,9 @@ export default function UserAccountSettings() {
                     </div>
                     <Switch
                       checked={preferences.weeklyReports}
-                      onCheckedChange={(checked) => updatePreferences('weeklyReports', checked)}
+                      onCheckedChange={(checked) =>
+                        updatePreferences("weeklyReports", checked)
+                      }
                     />
                   </div>
                   <div className="flex items-center justify-between">
@@ -647,7 +721,9 @@ export default function UserAccountSettings() {
                     </div>
                     <Switch
                       checked={preferences.projectUpdates}
-                      onCheckedChange={(checked) => updatePreferences('projectUpdates', checked)}
+                      onCheckedChange={(checked) =>
+                        updatePreferences("projectUpdates", checked)
+                      }
                     />
                   </div>
                   <div className="flex items-center justify-between">
@@ -659,7 +735,9 @@ export default function UserAccountSettings() {
                     </div>
                     <Switch
                       checked={preferences.quoteAlerts}
-                      onCheckedChange={(checked) => updatePreferences('quoteAlerts', checked)}
+                      onCheckedChange={(checked) =>
+                        updatePreferences("quoteAlerts", checked)
+                      }
                     />
                   </div>
                 </div>
@@ -685,10 +763,14 @@ export default function UserAccountSettings() {
                 <h3 className="text-lg font-medium">Profile Visibility</h3>
                 <div className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="profileVisibility">Who can see your profile</Label>
-                    <Select 
-                      value={privacy.profileVisibility} 
-                      onValueChange={(value) => updatePrivacy('profileVisibility', value)}
+                    <Label htmlFor="profileVisibility">
+                      Who can see your profile
+                    </Label>
+                    <Select
+                      value={privacy.profileVisibility}
+                      onValueChange={(value) =>
+                        updatePrivacy("profileVisibility", value)
+                      }
                     >
                       <SelectTrigger>
                         <SelectValue />
@@ -701,7 +783,7 @@ export default function UserAccountSettings() {
                       </SelectContent>
                     </Select>
                   </div>
-                  
+
                   <div className="flex items-center justify-between">
                     <div className="space-y-0.5">
                       <Label>Show Email Address</Label>
@@ -711,10 +793,12 @@ export default function UserAccountSettings() {
                     </div>
                     <Switch
                       checked={privacy.showEmail}
-                      onCheckedChange={(checked) => updatePrivacy('showEmail', checked)}
+                      onCheckedChange={(checked) =>
+                        updatePrivacy("showEmail", checked)
+                      }
                     />
                   </div>
-                  
+
                   <div className="flex items-center justify-between">
                     <div className="space-y-0.5">
                       <Label>Show Phone Number</Label>
@@ -724,7 +808,9 @@ export default function UserAccountSettings() {
                     </div>
                     <Switch
                       checked={privacy.showPhone}
-                      onCheckedChange={(checked) => updatePrivacy('showPhone', checked)}
+                      onCheckedChange={(checked) =>
+                        updatePrivacy("showPhone", checked)
+                      }
                     />
                   </div>
                 </div>
@@ -744,10 +830,12 @@ export default function UserAccountSettings() {
                     </div>
                     <Switch
                       checked={privacy.dataCollection}
-                      onCheckedChange={(checked) => updatePrivacy('dataCollection', checked)}
+                      onCheckedChange={(checked) =>
+                        updatePrivacy("dataCollection", checked)
+                      }
                     />
                   </div>
-                  
+
                   <div className="flex items-center justify-between">
                     <div className="space-y-0.5">
                       <Label>Analytics</Label>
@@ -757,7 +845,9 @@ export default function UserAccountSettings() {
                     </div>
                     <Switch
                       checked={privacy.analytics}
-                      onCheckedChange={(checked) => updatePrivacy('analytics', checked)}
+                      onCheckedChange={(checked) =>
+                        updatePrivacy("analytics", checked)
+                      }
                     />
                   </div>
                 </div>
@@ -798,16 +888,21 @@ export default function UserAccountSettings() {
               <Separator />
 
               <div className="space-y-4">
-                <h3 className="text-lg font-medium text-red-600">Danger Zone</h3>
+                <h3 className="text-lg font-medium text-red-600">
+                  Danger Zone
+                </h3>
                 <div className="p-4 border border-red-200 rounded-lg bg-red-50">
                   <div className="flex items-start gap-3">
                     <AlertTriangle className="w-5 h-5 text-red-600 mt-0.5" />
                     <div className="flex-1">
-                      <h4 className="font-medium text-red-900">Delete Account</h4>
+                      <h4 className="font-medium text-red-900">
+                        Delete Account
+                      </h4>
                       <p className="text-sm text-red-700 mt-1">
-                        Permanently delete your account and all associated data. This action cannot be undone.
+                        Permanently delete your account and all associated data.
+                        This action cannot be undone.
                       </p>
-                      <Button 
+                      <Button
                         onClick={deleteAccount}
                         variant="destructive"
                         className="mt-3"

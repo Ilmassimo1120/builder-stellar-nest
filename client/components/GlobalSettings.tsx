@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { 
+import React, { useState, useEffect } from "react";
+import {
   Save,
   AlertTriangle,
   CheckCircle2,
@@ -16,32 +16,32 @@ import {
   Package,
   Truck,
   Clock,
-  RotateCcw
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
+  RotateCcw,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Switch } from '@/components/ui/switch';
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Separator } from '@/components/ui/separator';
-import { Badge } from '@/components/ui/badge';
-import { useToast } from '@/hooks/use-toast';
-import { useAuth } from '@/hooks/useAuth';
+} from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
+import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/useAuth";
 
 interface GlobalConfig {
   system: {
@@ -99,24 +99,24 @@ interface GlobalConfig {
 
 const defaultConfig: GlobalConfig = {
   system: {
-    siteName: 'ChargeSource Portal',
-    supportEmail: 'support@chargesource.com.au',
+    siteName: "ChargeSource Portal",
+    supportEmail: "support@chargesource.com.au",
     maintenanceMode: false,
     allowRegistration: true,
     requireEmailVerification: true,
     sessionTimeout: 480, // 8 hours in minutes
-    maxUploadSize: 10 // MB
+    maxUploadSize: 10, // MB
   },
   business: {
-    companyName: 'ChargeSource Pty Ltd',
-    companyAddress: '123 Electric Avenue, Sydney NSW 2000',
-    companyPhone: '+61 2 9876 5432',
-    companyEmail: 'info@chargesource.com.au',
-    abn: '12 345 678 901',
+    companyName: "ChargeSource Pty Ltd",
+    companyAddress: "123 Electric Avenue, Sydney NSW 2000",
+    companyPhone: "+61 2 9876 5432",
+    companyEmail: "info@chargesource.com.au",
+    abn: "12 345 678 901",
     gstRate: 10,
     defaultMarkup: 35,
-    currency: 'AUD',
-    timezone: 'Australia/Sydney'
+    currency: "AUD",
+    timezone: "Australia/Sydney",
   },
   notifications: {
     emailNotifications: true,
@@ -124,22 +124,22 @@ const defaultConfig: GlobalConfig = {
     pushNotifications: true,
     quoteExpireyAlert: 7, // days
     lowStockAlert: 10, // units
-    systemAlerts: true
+    systemAlerts: true,
   },
   integrations: {
     supabaseEnabled: false,
     stripeEnabled: false,
-    emailProvider: 'sendgrid',
-    smsProvider: 'twilio',
-    analyticsEnabled: true
+    emailProvider: "sendgrid",
+    smsProvider: "twilio",
+    analyticsEnabled: true,
   },
   security: {
     enforceStrongPasswords: true,
     enableTwoFactor: false,
     loginAttempts: 5,
     lockoutDuration: 30, // minutes
-    sessionSecurity: 'high',
-    dataEncryption: true
+    sessionSecurity: "high",
+    dataEncryption: true,
   },
   features: {
     productComparison: true,
@@ -147,8 +147,8 @@ const defaultConfig: GlobalConfig = {
     automatedQuotes: false,
     clientPortal: true,
     mobileApp: false,
-    apiAccess: true
-  }
+    apiAccess: true,
+  },
 };
 
 export default function GlobalSettings() {
@@ -161,22 +161,26 @@ export default function GlobalSettings() {
   // Load configuration from localStorage
   useEffect(() => {
     try {
-      const savedConfig = localStorage.getItem('chargeSourceGlobalConfig');
+      const savedConfig = localStorage.getItem("chargeSourceGlobalConfig");
       if (savedConfig) {
         setConfig({ ...defaultConfig, ...JSON.parse(savedConfig) });
       }
     } catch (error) {
-      console.error('Error loading global config:', error);
+      console.error("Error loading global config:", error);
     }
   }, []);
 
-  const updateConfig = (section: keyof GlobalConfig, field: string, value: any) => {
-    setConfig(prev => ({
+  const updateConfig = (
+    section: keyof GlobalConfig,
+    field: string,
+    value: any,
+  ) => {
+    setConfig((prev) => ({
       ...prev,
       [section]: {
         ...prev[section],
-        [field]: value
-      }
+        [field]: value,
+      },
     }));
     setHasChanges(true);
   };
@@ -185,11 +189,11 @@ export default function GlobalSettings() {
     setSaving(true);
     try {
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      localStorage.setItem('chargeSourceGlobalConfig', JSON.stringify(config));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      localStorage.setItem("chargeSourceGlobalConfig", JSON.stringify(config));
       setHasChanges(false);
-      
+
       toast({
         title: "Configuration Saved",
         description: "Global settings have been updated successfully.",
@@ -225,12 +229,16 @@ export default function GlobalSettings() {
                 Global System Settings
               </CardTitle>
               <CardDescription>
-                Configure system-wide settings that affect all users and operations
+                Configure system-wide settings that affect all users and
+                operations
               </CardDescription>
             </div>
             <div className="flex items-center gap-2">
               {hasChanges && (
-                <Badge variant="outline" className="text-orange-600 border-orange-200">
+                <Badge
+                  variant="outline"
+                  className="text-orange-600 border-orange-200"
+                >
                   Unsaved Changes
                 </Badge>
               )}
@@ -238,9 +246,12 @@ export default function GlobalSettings() {
                 <RotateCcw className="w-4 h-4 mr-2" />
                 Reset
               </Button>
-              <Button onClick={saveConfiguration} disabled={!hasChanges || saving}>
+              <Button
+                onClick={saveConfiguration}
+                disabled={!hasChanges || saving}
+              >
                 <Save className="w-4 h-4 mr-2" />
-                {saving ? 'Saving...' : 'Save Changes'}
+                {saving ? "Saving..." : "Save Changes"}
               </Button>
             </div>
           </div>
@@ -276,7 +287,9 @@ export default function GlobalSettings() {
                   <Input
                     id="siteName"
                     value={config.system.siteName}
-                    onChange={(e) => updateConfig('system', 'siteName', e.target.value)}
+                    onChange={(e) =>
+                      updateConfig("system", "siteName", e.target.value)
+                    }
                   />
                 </div>
                 <div className="space-y-2">
@@ -285,16 +298,26 @@ export default function GlobalSettings() {
                     id="supportEmail"
                     type="email"
                     value={config.system.supportEmail}
-                    onChange={(e) => updateConfig('system', 'supportEmail', e.target.value)}
+                    onChange={(e) =>
+                      updateConfig("system", "supportEmail", e.target.value)
+                    }
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="sessionTimeout">Session Timeout (minutes)</Label>
+                  <Label htmlFor="sessionTimeout">
+                    Session Timeout (minutes)
+                  </Label>
                   <Input
                     id="sessionTimeout"
                     type="number"
                     value={config.system.sessionTimeout}
-                    onChange={(e) => updateConfig('system', 'sessionTimeout', parseInt(e.target.value))}
+                    onChange={(e) =>
+                      updateConfig(
+                        "system",
+                        "sessionTimeout",
+                        parseInt(e.target.value),
+                      )
+                    }
                   />
                 </div>
                 <div className="space-y-2">
@@ -303,7 +326,13 @@ export default function GlobalSettings() {
                     id="maxUploadSize"
                     type="number"
                     value={config.system.maxUploadSize}
-                    onChange={(e) => updateConfig('system', 'maxUploadSize', parseInt(e.target.value))}
+                    onChange={(e) =>
+                      updateConfig(
+                        "system",
+                        "maxUploadSize",
+                        parseInt(e.target.value),
+                      )
+                    }
                   />
                 </div>
               </div>
@@ -322,7 +351,9 @@ export default function GlobalSettings() {
                     </div>
                     <Switch
                       checked={config.system.maintenanceMode}
-                      onCheckedChange={(checked) => updateConfig('system', 'maintenanceMode', checked)}
+                      onCheckedChange={(checked) =>
+                        updateConfig("system", "maintenanceMode", checked)
+                      }
                     />
                   </div>
                   <div className="flex items-center justify-between">
@@ -334,7 +365,9 @@ export default function GlobalSettings() {
                     </div>
                     <Switch
                       checked={config.system.allowRegistration}
-                      onCheckedChange={(checked) => updateConfig('system', 'allowRegistration', checked)}
+                      onCheckedChange={(checked) =>
+                        updateConfig("system", "allowRegistration", checked)
+                      }
                     />
                   </div>
                   <div className="flex items-center justify-between">
@@ -346,7 +379,13 @@ export default function GlobalSettings() {
                     </div>
                     <Switch
                       checked={config.system.requireEmailVerification}
-                      onCheckedChange={(checked) => updateConfig('system', 'requireEmailVerification', checked)}
+                      onCheckedChange={(checked) =>
+                        updateConfig(
+                          "system",
+                          "requireEmailVerification",
+                          checked,
+                        )
+                      }
                     />
                   </div>
                 </div>
@@ -374,7 +413,9 @@ export default function GlobalSettings() {
                   <Input
                     id="companyName"
                     value={config.business.companyName}
-                    onChange={(e) => updateConfig('business', 'companyName', e.target.value)}
+                    onChange={(e) =>
+                      updateConfig("business", "companyName", e.target.value)
+                    }
                   />
                 </div>
                 <div className="space-y-2">
@@ -382,7 +423,9 @@ export default function GlobalSettings() {
                   <Input
                     id="abn"
                     value={config.business.abn}
-                    onChange={(e) => updateConfig('business', 'abn', e.target.value)}
+                    onChange={(e) =>
+                      updateConfig("business", "abn", e.target.value)
+                    }
                   />
                 </div>
                 <div className="space-y-2 md:col-span-2">
@@ -390,7 +433,9 @@ export default function GlobalSettings() {
                   <Textarea
                     id="companyAddress"
                     value={config.business.companyAddress}
-                    onChange={(e) => updateConfig('business', 'companyAddress', e.target.value)}
+                    onChange={(e) =>
+                      updateConfig("business", "companyAddress", e.target.value)
+                    }
                     rows={3}
                   />
                 </div>
@@ -399,7 +444,9 @@ export default function GlobalSettings() {
                   <Input
                     id="companyPhone"
                     value={config.business.companyPhone}
-                    onChange={(e) => updateConfig('business', 'companyPhone', e.target.value)}
+                    onChange={(e) =>
+                      updateConfig("business", "companyPhone", e.target.value)
+                    }
                   />
                 </div>
                 <div className="space-y-2">
@@ -408,7 +455,9 @@ export default function GlobalSettings() {
                     id="companyEmail"
                     type="email"
                     value={config.business.companyEmail}
-                    onChange={(e) => updateConfig('business', 'companyEmail', e.target.value)}
+                    onChange={(e) =>
+                      updateConfig("business", "companyEmail", e.target.value)
+                    }
                   />
                 </div>
                 <div className="space-y-2">
@@ -418,7 +467,13 @@ export default function GlobalSettings() {
                     type="number"
                     step="0.1"
                     value={config.business.gstRate}
-                    onChange={(e) => updateConfig('business', 'gstRate', parseFloat(e.target.value))}
+                    onChange={(e) =>
+                      updateConfig(
+                        "business",
+                        "gstRate",
+                        parseFloat(e.target.value),
+                      )
+                    }
                   />
                 </div>
                 <div className="space-y-2">
@@ -427,20 +482,30 @@ export default function GlobalSettings() {
                     id="defaultMarkup"
                     type="number"
                     value={config.business.defaultMarkup}
-                    onChange={(e) => updateConfig('business', 'defaultMarkup', parseInt(e.target.value))}
+                    onChange={(e) =>
+                      updateConfig(
+                        "business",
+                        "defaultMarkup",
+                        parseInt(e.target.value),
+                      )
+                    }
                   />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="currency">Currency</Label>
-                  <Select 
-                    value={config.business.currency} 
-                    onValueChange={(value) => updateConfig('business', 'currency', value)}
+                  <Select
+                    value={config.business.currency}
+                    onValueChange={(value) =>
+                      updateConfig("business", "currency", value)
+                    }
                   >
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="AUD">Australian Dollar (AUD)</SelectItem>
+                      <SelectItem value="AUD">
+                        Australian Dollar (AUD)
+                      </SelectItem>
                       <SelectItem value="USD">US Dollar (USD)</SelectItem>
                       <SelectItem value="EUR">Euro (EUR)</SelectItem>
                       <SelectItem value="GBP">British Pound (GBP)</SelectItem>
@@ -449,19 +514,31 @@ export default function GlobalSettings() {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="timezone">Timezone</Label>
-                  <Select 
-                    value={config.business.timezone} 
-                    onValueChange={(value) => updateConfig('business', 'timezone', value)}
+                  <Select
+                    value={config.business.timezone}
+                    onValueChange={(value) =>
+                      updateConfig("business", "timezone", value)
+                    }
                   >
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="Australia/Sydney">Australia/Sydney</SelectItem>
-                      <SelectItem value="Australia/Melbourne">Australia/Melbourne</SelectItem>
-                      <SelectItem value="Australia/Perth">Australia/Perth</SelectItem>
-                      <SelectItem value="Australia/Brisbane">Australia/Brisbane</SelectItem>
-                      <SelectItem value="Australia/Adelaide">Australia/Adelaide</SelectItem>
+                      <SelectItem value="Australia/Sydney">
+                        Australia/Sydney
+                      </SelectItem>
+                      <SelectItem value="Australia/Melbourne">
+                        Australia/Melbourne
+                      </SelectItem>
+                      <SelectItem value="Australia/Perth">
+                        Australia/Perth
+                      </SelectItem>
+                      <SelectItem value="Australia/Brisbane">
+                        Australia/Brisbane
+                      </SelectItem>
+                      <SelectItem value="Australia/Adelaide">
+                        Australia/Adelaide
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -495,7 +572,13 @@ export default function GlobalSettings() {
                     </div>
                     <Switch
                       checked={config.notifications.emailNotifications}
-                      onCheckedChange={(checked) => updateConfig('notifications', 'emailNotifications', checked)}
+                      onCheckedChange={(checked) =>
+                        updateConfig(
+                          "notifications",
+                          "emailNotifications",
+                          checked,
+                        )
+                      }
                     />
                   </div>
                   <div className="flex items-center justify-between">
@@ -507,7 +590,13 @@ export default function GlobalSettings() {
                     </div>
                     <Switch
                       checked={config.notifications.smsNotifications}
-                      onCheckedChange={(checked) => updateConfig('notifications', 'smsNotifications', checked)}
+                      onCheckedChange={(checked) =>
+                        updateConfig(
+                          "notifications",
+                          "smsNotifications",
+                          checked,
+                        )
+                      }
                     />
                   </div>
                   <div className="flex items-center justify-between">
@@ -519,7 +608,13 @@ export default function GlobalSettings() {
                     </div>
                     <Switch
                       checked={config.notifications.pushNotifications}
-                      onCheckedChange={(checked) => updateConfig('notifications', 'pushNotifications', checked)}
+                      onCheckedChange={(checked) =>
+                        updateConfig(
+                          "notifications",
+                          "pushNotifications",
+                          checked,
+                        )
+                      }
                     />
                   </div>
                 </div>
@@ -531,24 +626,40 @@ export default function GlobalSettings() {
                 <h3 className="text-lg font-medium">Alert Thresholds</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <Label htmlFor="quoteExpireyAlert">Quote Expiry Alert (days)</Label>
+                    <Label htmlFor="quoteExpireyAlert">
+                      Quote Expiry Alert (days)
+                    </Label>
                     <Input
                       id="quoteExpireyAlert"
                       type="number"
                       value={config.notifications.quoteExpireyAlert}
-                      onChange={(e) => updateConfig('notifications', 'quoteExpireyAlert', parseInt(e.target.value))}
+                      onChange={(e) =>
+                        updateConfig(
+                          "notifications",
+                          "quoteExpireyAlert",
+                          parseInt(e.target.value),
+                        )
+                      }
                     />
                     <p className="text-sm text-muted-foreground">
                       Alert when quotes are expiring within this many days
                     </p>
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="lowStockAlert">Low Stock Alert (units)</Label>
+                    <Label htmlFor="lowStockAlert">
+                      Low Stock Alert (units)
+                    </Label>
                     <Input
                       id="lowStockAlert"
                       type="number"
                       value={config.notifications.lowStockAlert}
-                      onChange={(e) => updateConfig('notifications', 'lowStockAlert', parseInt(e.target.value))}
+                      onChange={(e) =>
+                        updateConfig(
+                          "notifications",
+                          "lowStockAlert",
+                          parseInt(e.target.value),
+                        )
+                      }
                     />
                     <p className="text-sm text-muted-foreground">
                       Alert when product stock falls below this level
@@ -566,7 +677,9 @@ export default function GlobalSettings() {
                 </div>
                 <Switch
                   checked={config.notifications.systemAlerts}
-                  onCheckedChange={(checked) => updateConfig('notifications', 'systemAlerts', checked)}
+                  onCheckedChange={(checked) =>
+                    updateConfig("notifications", "systemAlerts", checked)
+                  }
                 />
               </div>
             </CardContent>
@@ -596,7 +709,9 @@ export default function GlobalSettings() {
                   </div>
                   <Switch
                     checked={config.integrations.supabaseEnabled}
-                    onCheckedChange={(checked) => updateConfig('integrations', 'supabaseEnabled', checked)}
+                    onCheckedChange={(checked) =>
+                      updateConfig("integrations", "supabaseEnabled", checked)
+                    }
                   />
                 </div>
                 <div className="flex items-center justify-between">
@@ -608,7 +723,9 @@ export default function GlobalSettings() {
                   </div>
                   <Switch
                     checked={config.integrations.stripeEnabled}
-                    onCheckedChange={(checked) => updateConfig('integrations', 'stripeEnabled', checked)}
+                    onCheckedChange={(checked) =>
+                      updateConfig("integrations", "stripeEnabled", checked)
+                    }
                   />
                 </div>
                 <div className="flex items-center justify-between">
@@ -620,7 +737,9 @@ export default function GlobalSettings() {
                   </div>
                   <Switch
                     checked={config.integrations.analyticsEnabled}
-                    onCheckedChange={(checked) => updateConfig('integrations', 'analyticsEnabled', checked)}
+                    onCheckedChange={(checked) =>
+                      updateConfig("integrations", "analyticsEnabled", checked)
+                    }
                   />
                 </div>
               </div>
@@ -630,9 +749,11 @@ export default function GlobalSettings() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <Label htmlFor="emailProvider">Email Provider</Label>
-                  <Select 
-                    value={config.integrations.emailProvider} 
-                    onValueChange={(value) => updateConfig('integrations', 'emailProvider', value)}
+                  <Select
+                    value={config.integrations.emailProvider}
+                    onValueChange={(value) =>
+                      updateConfig("integrations", "emailProvider", value)
+                    }
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -647,9 +768,11 @@ export default function GlobalSettings() {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="smsProvider">SMS Provider</Label>
-                  <Select 
-                    value={config.integrations.smsProvider} 
-                    onValueChange={(value) => updateConfig('integrations', 'smsProvider', value)}
+                  <Select
+                    value={config.integrations.smsProvider}
+                    onValueChange={(value) =>
+                      updateConfig("integrations", "smsProvider", value)
+                    }
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -690,7 +813,13 @@ export default function GlobalSettings() {
                   </div>
                   <Switch
                     checked={config.security.enforceStrongPasswords}
-                    onCheckedChange={(checked) => updateConfig('security', 'enforceStrongPasswords', checked)}
+                    onCheckedChange={(checked) =>
+                      updateConfig(
+                        "security",
+                        "enforceStrongPasswords",
+                        checked,
+                      )
+                    }
                   />
                 </div>
                 <div className="flex items-center justify-between">
@@ -702,7 +831,9 @@ export default function GlobalSettings() {
                   </div>
                   <Switch
                     checked={config.security.enableTwoFactor}
-                    onCheckedChange={(checked) => updateConfig('security', 'enableTwoFactor', checked)}
+                    onCheckedChange={(checked) =>
+                      updateConfig("security", "enableTwoFactor", checked)
+                    }
                   />
                 </div>
                 <div className="flex items-center justify-between">
@@ -714,7 +845,9 @@ export default function GlobalSettings() {
                   </div>
                   <Switch
                     checked={config.security.dataEncryption}
-                    onCheckedChange={(checked) => updateConfig('security', 'dataEncryption', checked)}
+                    onCheckedChange={(checked) =>
+                      updateConfig("security", "dataEncryption", checked)
+                    }
                   />
                 </div>
               </div>
@@ -728,23 +861,39 @@ export default function GlobalSettings() {
                     id="loginAttempts"
                     type="number"
                     value={config.security.loginAttempts}
-                    onChange={(e) => updateConfig('security', 'loginAttempts', parseInt(e.target.value))}
+                    onChange={(e) =>
+                      updateConfig(
+                        "security",
+                        "loginAttempts",
+                        parseInt(e.target.value),
+                      )
+                    }
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="lockoutDuration">Lockout Duration (minutes)</Label>
+                  <Label htmlFor="lockoutDuration">
+                    Lockout Duration (minutes)
+                  </Label>
                   <Input
                     id="lockoutDuration"
                     type="number"
                     value={config.security.lockoutDuration}
-                    onChange={(e) => updateConfig('security', 'lockoutDuration', parseInt(e.target.value))}
+                    onChange={(e) =>
+                      updateConfig(
+                        "security",
+                        "lockoutDuration",
+                        parseInt(e.target.value),
+                      )
+                    }
                   />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="sessionSecurity">Session Security</Label>
-                  <Select 
-                    value={config.security.sessionSecurity} 
-                    onValueChange={(value) => updateConfig('security', 'sessionSecurity', value)}
+                  <Select
+                    value={config.security.sessionSecurity}
+                    onValueChange={(value) =>
+                      updateConfig("security", "sessionSecurity", value)
+                    }
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -785,7 +934,9 @@ export default function GlobalSettings() {
                   </div>
                   <Switch
                     checked={config.features.productComparison}
-                    onCheckedChange={(checked) => updateConfig('features', 'productComparison', checked)}
+                    onCheckedChange={(checked) =>
+                      updateConfig("features", "productComparison", checked)
+                    }
                   />
                 </div>
                 <div className="flex items-center justify-between">
@@ -797,7 +948,9 @@ export default function GlobalSettings() {
                   </div>
                   <Switch
                     checked={config.features.advancedReporting}
-                    onCheckedChange={(checked) => updateConfig('features', 'advancedReporting', checked)}
+                    onCheckedChange={(checked) =>
+                      updateConfig("features", "advancedReporting", checked)
+                    }
                   />
                 </div>
                 <div className="flex items-center justify-between">
@@ -809,7 +962,9 @@ export default function GlobalSettings() {
                   </div>
                   <Switch
                     checked={config.features.automatedQuotes}
-                    onCheckedChange={(checked) => updateConfig('features', 'automatedQuotes', checked)}
+                    onCheckedChange={(checked) =>
+                      updateConfig("features", "automatedQuotes", checked)
+                    }
                   />
                 </div>
                 <div className="flex items-center justify-between">
@@ -821,7 +976,9 @@ export default function GlobalSettings() {
                   </div>
                   <Switch
                     checked={config.features.clientPortal}
-                    onCheckedChange={(checked) => updateConfig('features', 'clientPortal', checked)}
+                    onCheckedChange={(checked) =>
+                      updateConfig("features", "clientPortal", checked)
+                    }
                   />
                 </div>
                 <div className="flex items-center justify-between">
@@ -833,7 +990,9 @@ export default function GlobalSettings() {
                   </div>
                   <Switch
                     checked={config.features.mobileApp}
-                    onCheckedChange={(checked) => updateConfig('features', 'mobileApp', checked)}
+                    onCheckedChange={(checked) =>
+                      updateConfig("features", "mobileApp", checked)
+                    }
                   />
                 </div>
                 <div className="flex items-center justify-between">
@@ -845,7 +1004,9 @@ export default function GlobalSettings() {
                   </div>
                   <Switch
                     checked={config.features.apiAccess}
-                    onCheckedChange={(checked) => updateConfig('features', 'apiAccess', checked)}
+                    onCheckedChange={(checked) =>
+                      updateConfig("features", "apiAccess", checked)
+                    }
                   />
                 </div>
               </div>

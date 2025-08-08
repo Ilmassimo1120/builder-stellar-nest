@@ -1,27 +1,60 @@
-import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Search, Filter, Package, Zap, Settings, Users, ShoppingCart, Eye, Star, Clock, CheckCircle, AlertTriangle, Plus } from 'lucide-react';
-import { productCatalog, ProductFilter } from '@/lib/productCatalog';
-import { ProductCatalogueItem } from '@/lib/quoteTypes';
-import { useAuth } from '@/hooks/useAuth';
-import { useToast } from '@/hooks/use-toast';
-import { Logo } from '@/components/ui/logo';
-import { ProtectedRoute } from '@/components/ProtectedRoute';
-import AdminProductManager from '@/components/AdminProductManager';
+import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  Search,
+  Filter,
+  Package,
+  Zap,
+  Settings,
+  Users,
+  ShoppingCart,
+  Eye,
+  Star,
+  Clock,
+  CheckCircle,
+  AlertTriangle,
+  Plus,
+} from "lucide-react";
+import { productCatalog, ProductFilter } from "@/lib/productCatalog";
+import { ProductCatalogueItem } from "@/lib/quoteTypes";
+import { useAuth } from "@/hooks/useAuth";
+import { useToast } from "@/hooks/use-toast";
+import { Logo } from "@/components/ui/logo";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
+import AdminProductManager from "@/components/AdminProductManager";
 
 export default function Catalogue() {
   const { user } = useAuth();
   const { toast } = useToast();
-  const [filter, setFilter] = useState<ProductFilter>({ availability: 'all' });
-  const [selectedProduct, setSelectedProduct] = useState<ProductCatalogueItem | null>(null);
-  const [activeView, setActiveView] = useState<'grid' | 'list'>('grid');
-  const [activeCategory, setActiveCategory] = useState<string>('all');
+  const [filter, setFilter] = useState<ProductFilter>({ availability: "all" });
+  const [selectedProduct, setSelectedProduct] =
+    useState<ProductCatalogueItem | null>(null);
+  const [activeView, setActiveView] = useState<"grid" | "list">("grid");
+  const [activeCategory, setActiveCategory] = useState<string>("all");
   const [showAdminPanel, setShowAdminPanel] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
 
@@ -33,41 +66,53 @@ export default function Catalogue() {
   // Force refresh when admin panel closes
   const handleAdminPanelClose = () => {
     setShowAdminPanel(false);
-    setRefreshKey(prev => prev + 1);
+    setRefreshKey((prev) => prev + 1);
   };
 
   const updateFilter = (key: keyof ProductFilter, value: any) => {
-    setFilter(prev => ({
+    setFilter((prev) => ({
       ...prev,
       [key]: value,
-      ...(key === 'category' ? { subcategory: undefined } : {})
+      ...(key === "category" ? { subcategory: undefined } : {}),
     }));
   };
 
   const clearFilters = () => {
-    setFilter({ availability: 'all' });
-    setActiveCategory('all');
+    setFilter({ availability: "all" });
+    setActiveCategory("all");
   };
 
   const getAvailabilityStatus = (product: ProductCatalogueItem) => {
     if (product.inventory.available > 10) {
-      return { status: 'in-stock', color: 'bg-green-100 text-green-800', icon: CheckCircle };
+      return {
+        status: "in-stock",
+        color: "bg-green-100 text-green-800",
+        icon: CheckCircle,
+      };
     } else if (product.inventory.available > 0) {
-      return { status: 'low-stock', color: 'bg-yellow-100 text-yellow-800', icon: AlertTriangle };
+      return {
+        status: "low-stock",
+        color: "bg-yellow-100 text-yellow-800",
+        icon: AlertTriangle,
+      };
     } else {
-      return { status: 'back-order', color: 'bg-red-100 text-red-800', icon: Clock };
+      return {
+        status: "back-order",
+        color: "bg-red-100 text-red-800",
+        icon: Clock,
+      };
     }
   };
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case 'chargers':
+      case "chargers":
         return <Zap className="w-4 h-4" />;
-      case 'accessories':
+      case "accessories":
         return <Package className="w-4 h-4" />;
-      case 'infrastructure':
+      case "infrastructure":
         return <Settings className="w-4 h-4" />;
-      case 'services':
+      case "services":
         return <Users className="w-4 h-4" />;
       default:
         return <Package className="w-4 h-4" />;
@@ -79,13 +124,14 @@ export default function Catalogue() {
     // Later this could integrate with cart/quote functionality
     toast({
       title: "Added to Quote",
-      description: `${product.name} has been added to your quote.`
+      description: `${product.name} has been added to your quote.`,
     });
   };
 
-  const filteredProducts = activeCategory === 'all' 
-    ? products 
-    : products.filter(p => p.category === activeCategory);
+  const filteredProducts =
+    activeCategory === "all"
+      ? products
+      : products.filter((p) => p.category === activeCategory);
 
   return (
     <ProtectedRoute>
@@ -101,19 +147,28 @@ export default function Catalogue() {
             </div>
             <div className="flex items-center gap-4">
               <nav className="hidden md:flex items-center space-x-6">
-                <a href="/dashboard" className="text-sm font-medium hover:text-primary transition-colors">
+                <a
+                  href="/dashboard"
+                  className="text-sm font-medium hover:text-primary transition-colors"
+                >
                   Dashboard
                 </a>
-                <a href="/projects" className="text-sm font-medium hover:text-primary transition-colors">
+                <a
+                  href="/projects"
+                  className="text-sm font-medium hover:text-primary transition-colors"
+                >
                   Projects
                 </a>
-                <a href="/quotes" className="text-sm font-medium hover:text-primary transition-colors">
+                <a
+                  href="/quotes"
+                  className="text-sm font-medium hover:text-primary transition-colors"
+                >
                   Quotes
                 </a>
               </nav>
 
               {/* Admin Controls */}
-              {user?.role === 'admin' && (
+              {user?.role === "admin" && (
                 <Button
                   variant="outline"
                   size="sm"
@@ -131,9 +186,12 @@ export default function Catalogue() {
         <div className="container mx-auto px-4 py-6" key={refreshKey}>
           {/* Page Header */}
           <div className="mb-6">
-            <h1 className="text-3xl font-bold mb-2">EV Charging Product Catalogue</h1>
+            <h1 className="text-3xl font-bold mb-2">
+              EV Charging Product Catalogue
+            </h1>
             <p className="text-muted-foreground">
-              Browse our comprehensive range of EV charging equipment, accessories, and services
+              Browse our comprehensive range of EV charging equipment,
+              accessories, and services
             </p>
           </div>
 
@@ -141,24 +199,28 @@ export default function Catalogue() {
           <div className="mb-6">
             <div className="flex items-center gap-2 overflow-x-auto pb-2">
               <Button
-                variant={activeCategory === 'all' ? 'default' : 'outline'}
+                variant={activeCategory === "all" ? "default" : "outline"}
                 onClick={() => {
-                  setActiveCategory('all');
-                  updateFilter('category', undefined);
+                  setActiveCategory("all");
+                  updateFilter("category", undefined);
                 }}
                 className="whitespace-nowrap"
               >
                 All Products ({products.length})
               </Button>
               {categories.map((category) => {
-                const categoryProducts = productCatalog.getProducts({ category: category.id });
+                const categoryProducts = productCatalog.getProducts({
+                  category: category.id,
+                });
                 return (
                   <Button
                     key={category.id}
-                    variant={activeCategory === category.id ? 'default' : 'outline'}
+                    variant={
+                      activeCategory === category.id ? "default" : "outline"
+                    }
                     onClick={() => {
                       setActiveCategory(category.id);
-                      updateFilter('category', category.id);
+                      updateFilter("category", category.id);
                     }}
                     className="whitespace-nowrap flex items-center gap-2"
                   >
@@ -177,15 +239,20 @@ export default function Catalogue() {
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
                 <Input
                   placeholder="Search products by name, brand, or description..."
-                  value={filter.searchTerm || ''}
-                  onChange={(e) => updateFilter('searchTerm', e.target.value)}
+                  value={filter.searchTerm || ""}
+                  onChange={(e) => updateFilter("searchTerm", e.target.value)}
                   className="pl-10"
                 />
               </div>
               <div className="flex gap-2">
                 <Select
-                  value={filter.brand || 'all-brands'}
-                  onValueChange={(value) => updateFilter('brand', value === 'all-brands' ? undefined : value)}
+                  value={filter.brand || "all-brands"}
+                  onValueChange={(value) =>
+                    updateFilter(
+                      "brand",
+                      value === "all-brands" ? undefined : value,
+                    )
+                  }
                 >
                   <SelectTrigger className="w-[150px]">
                     <SelectValue placeholder="All Brands" />
@@ -201,8 +268,10 @@ export default function Catalogue() {
                 </Select>
 
                 <Select
-                  value={filter.availability || 'all'}
-                  onValueChange={(value) => updateFilter('availability', value as any)}
+                  value={filter.availability || "all"}
+                  onValueChange={(value) =>
+                    updateFilter("availability", value as any)
+                  }
                 >
                   <SelectTrigger className="w-[150px]">
                     <SelectValue placeholder="Availability" />
@@ -231,9 +300,9 @@ export default function Catalogue() {
           <div className="flex items-center justify-between mb-6">
             <p className="text-muted-foreground">
               {filteredProducts.length} products found
-              {activeCategory !== 'all' && (
+              {activeCategory !== "all" && (
                 <span className="ml-2">
-                  in {categories.find(c => c.id === activeCategory)?.name}
+                  in {categories.find((c) => c.id === activeCategory)?.name}
                 </span>
               )}
             </p>
@@ -254,7 +323,10 @@ export default function Catalogue() {
                   const AvailabilityIcon = availability.icon;
 
                   return (
-                    <Card key={product.id} className="group hover:shadow-lg transition-shadow">
+                    <Card
+                      key={product.id}
+                      className="group hover:shadow-lg transition-shadow"
+                    >
                       <CardHeader className="pb-3">
                         <div className="flex items-start justify-between">
                           <div className="flex items-center gap-2">
@@ -263,7 +335,10 @@ export default function Catalogue() {
                               {product.brand}
                             </Badge>
                           </div>
-                          <Badge className={availability.color} variant="secondary">
+                          <Badge
+                            className={availability.color}
+                            variant="secondary"
+                          >
                             <AvailabilityIcon className="w-3 h-3 mr-1" />
                             {product.inventory.available}
                           </Badge>
@@ -281,16 +356,20 @@ export default function Catalogue() {
                           {product.specifications.powerRating && (
                             <div className="flex items-center gap-2 text-sm">
                               <Zap className="w-4 h-4 text-primary" />
-                              <span className="font-medium">{product.specifications.powerRating}</span>
+                              <span className="font-medium">
+                                {product.specifications.powerRating}
+                              </span>
                             </div>
                           )}
 
                           {/* Pricing */}
                           <div className="flex items-baseline gap-2">
                             <span className="text-xl font-bold">
-                              ${product.pricing.recommendedRetail.toLocaleString()}
+                              $
+                              {product.pricing.recommendedRetail.toLocaleString()}
                             </span>
-                            {product.pricing.listPrice !== product.pricing.recommendedRetail && (
+                            {product.pricing.listPrice !==
+                              product.pricing.recommendedRetail && (
                               <span className="text-sm text-muted-foreground line-through">
                                 ${product.pricing.listPrice.toLocaleString()}
                               </span>
@@ -339,7 +418,10 @@ export default function Catalogue() {
                   const AvailabilityIcon = availability.icon;
 
                   return (
-                    <Card key={product.id} className="hover:shadow-md transition-shadow">
+                    <Card
+                      key={product.id}
+                      className="hover:shadow-md transition-shadow"
+                    >
                       <CardContent className="p-6">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center space-x-4 flex-1">
@@ -350,7 +432,9 @@ export default function Catalogue() {
                               </Badge>
                             </div>
                             <div className="flex-1">
-                              <h3 className="font-semibold text-lg">{product.name}</h3>
+                              <h3 className="font-semibold text-lg">
+                                {product.name}
+                              </h3>
                               <p className="text-sm text-muted-foreground line-clamp-1">
                                 {product.description}
                               </p>
@@ -358,19 +442,25 @@ export default function Catalogue() {
                             {product.specifications.powerRating && (
                               <div className="flex items-center gap-2 text-sm">
                                 <Zap className="w-4 h-4 text-primary" />
-                                <span className="font-medium">{product.specifications.powerRating}</span>
+                                <span className="font-medium">
+                                  {product.specifications.powerRating}
+                                </span>
                               </div>
                             )}
                             <div className="text-right">
                               <div className="text-xl font-bold">
-                                ${product.pricing.recommendedRetail.toLocaleString()}
+                                $
+                                {product.pricing.recommendedRetail.toLocaleString()}
                               </div>
                               <div className="flex items-center gap-1 text-sm text-muted-foreground">
                                 <Clock className="w-3 h-3" />
                                 <span>{product.inventory.leadTime}</span>
                               </div>
                             </div>
-                            <Badge className={availability.color} variant="secondary">
+                            <Badge
+                              className={availability.color}
+                              variant="secondary"
+                            >
                               <AvailabilityIcon className="w-3 h-3 mr-1" />
                               {product.inventory.available}
                             </Badge>
@@ -415,7 +505,7 @@ export default function Catalogue() {
         </div>
 
         {/* Admin Product Manager */}
-        {user?.role === 'admin' && (
+        {user?.role === "admin" && (
           <AdminProductManager
             isOpen={showAdminPanel}
             onClose={handleAdminPanelClose}
@@ -424,7 +514,10 @@ export default function Catalogue() {
 
         {/* Product Detail Modal */}
         {selectedProduct && (
-          <Dialog open={!!selectedProduct} onOpenChange={() => setSelectedProduct(null)}>
+          <Dialog
+            open={!!selectedProduct}
+            onOpenChange={() => setSelectedProduct(null)}
+          >
             <DialogContent className="max-w-4xl max-h-[90vh] overflow-auto">
               <DialogHeader>
                 <DialogTitle>{selectedProduct.name}</DialogTitle>
@@ -446,7 +539,9 @@ export default function Catalogue() {
                     <div className="grid grid-cols-2 gap-2 text-sm">
                       <div>
                         <span className="text-muted-foreground">SKU:</span>
-                        <span className="ml-2 font-mono">{selectedProduct.sku}</span>
+                        <span className="ml-2 font-mono">
+                          {selectedProduct.sku}
+                        </span>
                       </div>
                       <div>
                         <span className="text-muted-foreground">Brand:</span>
@@ -477,16 +572,20 @@ export default function Catalogue() {
                   <div className="space-y-2">
                     <h3 className="font-semibold">Specifications</h3>
                     <div className="grid gap-2 text-sm">
-                      {Object.entries(selectedProduct.specifications).map(([key, value]) => (
-                        <div key={key} className="flex justify-between">
-                          <span className="text-muted-foreground capitalize">
-                            {key.replace(/([A-Z])/g, ' $1').trim()}:
-                          </span>
-                          <span className="font-medium">
-                            {Array.isArray(value) ? value.join(', ') : String(value)}
-                          </span>
-                        </div>
-                      ))}
+                      {Object.entries(selectedProduct.specifications).map(
+                        ([key, value]) => (
+                          <div key={key} className="flex justify-between">
+                            <span className="text-muted-foreground capitalize">
+                              {key.replace(/([A-Z])/g, " $1").trim()}:
+                            </span>
+                            <span className="font-medium">
+                              {Array.isArray(value)
+                                ? value.join(", ")
+                                : String(value)}
+                            </span>
+                          </div>
+                        ),
+                      )}
                     </div>
                   </div>
 
@@ -495,13 +594,20 @@ export default function Catalogue() {
                     <h3 className="font-semibold">Pricing</h3>
                     <div className="grid gap-2 text-sm">
                       <div className="flex justify-between">
-                        <span className="text-muted-foreground">List Price:</span>
-                        <span>${selectedProduct.pricing.listPrice.toLocaleString()}</span>
+                        <span className="text-muted-foreground">
+                          List Price:
+                        </span>
+                        <span>
+                          ${selectedProduct.pricing.listPrice.toLocaleString()}
+                        </span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-muted-foreground">Recommended Retail:</span>
+                        <span className="text-muted-foreground">
+                          Recommended Retail:
+                        </span>
                         <span className="font-bold text-lg">
-                          ${selectedProduct.pricing.recommendedRetail.toLocaleString()}
+                          $
+                          {selectedProduct.pricing.recommendedRetail.toLocaleString()}
                         </span>
                       </div>
                     </div>
@@ -512,11 +618,17 @@ export default function Catalogue() {
                     <h3 className="font-semibold">Availability</h3>
                     <div className="grid gap-2 text-sm">
                       <div className="flex justify-between">
-                        <span className="text-muted-foreground">Available:</span>
-                        <span className="font-medium">{selectedProduct.inventory.available} units</span>
+                        <span className="text-muted-foreground">
+                          Available:
+                        </span>
+                        <span className="font-medium">
+                          {selectedProduct.inventory.available} units
+                        </span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-muted-foreground">Lead Time:</span>
+                        <span className="text-muted-foreground">
+                          Lead Time:
+                        </span>
                         <span>{selectedProduct.inventory.leadTime}</span>
                       </div>
                     </div>

@@ -12,10 +12,10 @@ export interface AIContext {
 export function useAIContext(): AIContext {
   const location = useLocation();
   const { user } = useAuth();
-  
+
   const getPageContext = (): AIContext => {
     const path = location.pathname;
-    
+
     // Dashboard
     if (path === "/dashboard") {
       return {
@@ -26,17 +26,17 @@ export function useAIContext(): AIContext {
           "How do I create a new project?",
           "Show me recent project analytics",
           "Help with quick actions",
-          "Explain the knowledge base"
+          "Explain the knowledge base",
         ],
         availableActions: [
           "create-project",
           "create-quote",
           "view-analytics",
-          "access-knowledge-base"
-        ]
+          "access-knowledge-base",
+        ],
       };
     }
-    
+
     // Projects
     if (path === "/projects" || path.startsWith("/projects")) {
       if (path === "/projects/new") {
@@ -48,14 +48,14 @@ export function useAIContext(): AIContext {
             "Help me with site assessment",
             "What charger should I select?",
             "Grid capacity requirements",
-            "Compliance checklist guidance"
+            "Compliance checklist guidance",
           ],
           availableActions: [
             "site-assessment-help",
             "charger-selection-guide",
             "grid-capacity-calculator",
-            "compliance-checker"
-          ]
+            "compliance-checker",
+          ],
         };
       }
       return {
@@ -66,20 +66,23 @@ export function useAIContext(): AIContext {
           "How to manage project status",
           "Create quotes from projects",
           "Project collaboration tips",
-          "Export project data"
+          "Export project data",
         ],
         availableActions: [
           "project-status-help",
           "create-quote-from-project",
           "collaboration-guide",
-          "export-data"
-        ]
+          "export-data",
+        ],
       };
     }
-    
+
     // Quotes
     if (path.startsWith("/quotes")) {
-      if (path === "/quotes/new" || path.includes("/quotes/") && !path.includes("new")) {
+      if (
+        path === "/quotes/new" ||
+        (path.includes("/quotes/") && !path.includes("new"))
+      ) {
         return {
           currentPage: "quote-builder",
           pageTitle: "Quote Builder",
@@ -88,14 +91,14 @@ export function useAIContext(): AIContext {
             "How to add line items?",
             "Pricing and margin setup",
             "Generate professional PDF",
-            "Send quote to client"
+            "Send quote to client",
           ],
           availableActions: [
             "line-item-help",
             "pricing-guide",
             "pdf-generation",
-            "client-portal-setup"
-          ]
+            "client-portal-setup",
+          ],
         };
       }
       return {
@@ -106,17 +109,17 @@ export function useAIContext(): AIContext {
           "Create new quote",
           "Quote approval process",
           "Client portal features",
-          "Quote analytics"
+          "Quote analytics",
         ],
         availableActions: [
           "new-quote",
           "approval-process",
           "client-portal",
-          "quote-analytics"
-        ]
+          "quote-analytics",
+        ],
       };
     }
-    
+
     // Client Portal
     if (path.startsWith("/client/quote/")) {
       return {
@@ -127,17 +130,17 @@ export function useAIContext(): AIContext {
           "How to review the quote?",
           "Accept or decline quote",
           "Download quote PDF",
-          "Contact the contractor"
+          "Contact the contractor",
         ],
         availableActions: [
           "quote-review-help",
           "quote-decision",
           "download-pdf",
-          "contact-contractor"
-        ]
+          "contact-contractor",
+        ],
       };
     }
-    
+
     // Knowledge Base or Help
     if (path.includes("/help") || path.includes("/knowledge")) {
       return {
@@ -148,17 +151,17 @@ export function useAIContext(): AIContext {
           "Find installation guides",
           "Australian standards lookup",
           "Troubleshooting help",
-          "Best practices"
+          "Best practices",
         ],
         availableActions: [
           "installation-guides",
           "standards-lookup",
           "troubleshooting",
-          "best-practices"
-        ]
+          "best-practices",
+        ],
       };
     }
-    
+
     // Login/Register
     if (path === "/login" || path === "/register") {
       return {
@@ -168,17 +171,17 @@ export function useAIContext(): AIContext {
           "Help with account setup",
           "Forgot password assistance",
           "Platform features overview",
-          "Getting started guide"
+          "Getting started guide",
         ],
         availableActions: [
           "account-help",
           "password-reset",
           "features-overview",
-          "getting-started"
-        ]
+          "getting-started",
+        ],
       };
     }
-    
+
     // Default/Unknown page
     return {
       currentPage: "unknown",
@@ -188,16 +191,16 @@ export function useAIContext(): AIContext {
         "Platform navigation help",
         "Feature overview",
         "Getting started guide",
-        "Contact support"
+        "Contact support",
       ],
       availableActions: [
         "navigation-help",
         "feature-overview",
         "getting-started",
-        "contact-support"
-      ]
+        "contact-support",
+      ],
     };
   };
-  
+
   return getPageContext();
 }

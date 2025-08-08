@@ -576,7 +576,7 @@ class QuoteService {
     try {
       return productCatalog.getProducts(category ? { category } : undefined);
     } catch (error) {
-      console.warn('Product catalog not available, using mock data');
+      console.warn("Product catalog not available, using mock data");
       return this.getMockCatalogueItems(category);
     }
   }
@@ -679,18 +679,25 @@ class QuoteService {
     productId: string,
     quantity: number = 1,
   ): Quote | null {
-    console.log('addProductToQuote called:', { quoteId, productId, quantity });
+    console.log("addProductToQuote called:", { quoteId, productId, quantity });
 
     const allProducts = productCatalog.getProducts();
-    console.log('Available products:', allProducts.length, allProducts.map(p => ({ id: p.id, name: p.name })));
+    console.log(
+      "Available products:",
+      allProducts.length,
+      allProducts.map((p) => ({ id: p.id, name: p.name })),
+    );
 
     const product = allProducts.find((p) => p.id === productId);
     if (!product) {
-      console.error(`Product not found: ${productId}. Available product IDs:`, allProducts.map(p => p.id));
+      console.error(
+        `Product not found: ${productId}. Available product IDs:`,
+        allProducts.map((p) => p.id),
+      );
       return null;
     }
 
-    console.log('Found product:', product);
+    console.log("Found product:", product);
 
     const lineItem: Omit<QuoteLineItem, "id" | "totalPrice"> = {
       type: "charger",
@@ -712,9 +719,9 @@ class QuoteService {
       },
     };
 
-    console.log('Creating line item:', lineItem);
+    console.log("Creating line item:", lineItem);
     const result = this.addLineItem(quoteId, lineItem);
-    console.log('addLineItem result:', result);
+    console.log("addLineItem result:", result);
     return result;
   }
 

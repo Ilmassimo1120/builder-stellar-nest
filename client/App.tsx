@@ -153,14 +153,8 @@ const App = () => (
             />
 
             {/* Procurement Routes */}
-            <Route
-              path="/catalogue"
-              element={<Catalogue />}
-            />
-            <Route
-              path="/admin/catalogue"
-              element={<AdminCatalogue />}
-            />
+            <Route path="/catalogue" element={<Catalogue />} />
+            <Route path="/admin/catalogue" element={<AdminCatalogue />} />
             <Route
               path="/procurement"
               element={

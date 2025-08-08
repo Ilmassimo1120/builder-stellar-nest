@@ -45,8 +45,13 @@ import { KnowledgeBaseWidget } from "@/components/KnowledgeBaseWidget";
 import { SupabaseSetup } from "@/components/SupabaseSetup";
 import { projectService, autoConfigureSupabase } from "@/lib/supabase";
 import { useAuth } from "@/hooks/useAuth";
-import RoleBasedNavigation, { RoleQuickActions } from "@/components/RoleBasedNavigation";
-import UserRoleIndicator, { PermissionGate, RoleGate } from "@/components/UserRoleIndicator";
+import RoleBasedNavigation, {
+  RoleQuickActions,
+} from "@/components/RoleBasedNavigation";
+import UserRoleIndicator, {
+  PermissionGate,
+  RoleGate,
+} from "@/components/UserRoleIndicator";
 import { UserRole } from "@/lib/rbac";
 import {
   DropdownMenu,
@@ -448,7 +453,13 @@ export default function Dashboard() {
         change: "+2 this month",
         trend: "up",
         icon: <Zap className="w-5 h-5" />,
-        roles: [UserRole.USER, UserRole.PARTNER, UserRole.SALES, UserRole.ADMIN, UserRole.GLOBAL_ADMIN]
+        roles: [
+          UserRole.USER,
+          UserRole.PARTNER,
+          UserRole.SALES,
+          UserRole.ADMIN,
+          UserRole.GLOBAL_ADMIN,
+        ],
       },
       {
         title: "Pending Quotes",
@@ -456,11 +467,17 @@ export default function Dashboard() {
         change: "3 expiring soon",
         trend: "neutral",
         icon: <FileText className="w-5 h-5" />,
-        roles: [UserRole.USER, UserRole.PARTNER, UserRole.SALES, UserRole.ADMIN, UserRole.GLOBAL_ADMIN]
-      }
+        roles: [
+          UserRole.USER,
+          UserRole.PARTNER,
+          UserRole.SALES,
+          UserRole.ADMIN,
+          UserRole.GLOBAL_ADMIN,
+        ],
+      },
     ];
 
-    if (hasPermission('analytics.view')) {
+    if (hasPermission("analytics.view")) {
       baseStats.push(
         {
           title: "Total Revenue",
@@ -468,7 +485,7 @@ export default function Dashboard() {
           change: "+15% this quarter",
           trend: "up",
           icon: <DollarSign className="w-5 h-5" />,
-          roles: [UserRole.SALES, UserRole.ADMIN, UserRole.GLOBAL_ADMIN]
+          roles: [UserRole.SALES, UserRole.ADMIN, UserRole.GLOBAL_ADMIN],
         },
         {
           title: "Avg. Project Value",
@@ -476,8 +493,8 @@ export default function Dashboard() {
           change: "+$12K from last month",
           trend: "up",
           icon: <TrendingUp className="w-5 h-5" />,
-          roles: [UserRole.SALES, UserRole.ADMIN, UserRole.GLOBAL_ADMIN]
-        }
+          roles: [UserRole.SALES, UserRole.ADMIN, UserRole.GLOBAL_ADMIN],
+        },
       );
     }
 
@@ -488,7 +505,7 @@ export default function Dashboard() {
         change: "+8 this week",
         trend: "up",
         icon: <Users className="w-5 h-5" />,
-        roles: [UserRole.ADMIN, UserRole.GLOBAL_ADMIN]
+        roles: [UserRole.ADMIN, UserRole.GLOBAL_ADMIN],
       });
     }
 
@@ -499,12 +516,12 @@ export default function Dashboard() {
         change: "All systems operational",
         trend: "up",
         icon: <CheckCircle2 className="w-5 h-5" />,
-        roles: [UserRole.GLOBAL_ADMIN]
+        roles: [UserRole.GLOBAL_ADMIN],
       });
     }
 
-    return baseStats.filter(stat =>
-      !stat.roles || stat.roles.includes(user?.role || UserRole.USER)
+    return baseStats.filter(
+      (stat) => !stat.roles || stat.roles.includes(user?.role || UserRole.USER),
     );
   };
 
@@ -691,16 +708,22 @@ export default function Dashboard() {
             <CardContent className="space-y-4">
               <div className="space-y-3">
                 <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                  <h4 className="font-medium text-blue-900 mb-1">New to EV Charging?</h4>
+                  <h4 className="font-medium text-blue-900 mb-1">
+                    New to EV Charging?
+                  </h4>
                   <p className="text-sm text-blue-700">
-                    Start with our installation basics guide to understand the fundamentals.
+                    Start with our installation basics guide to understand the
+                    fundamentals.
                   </p>
                 </div>
 
                 <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
-                  <h4 className="font-medium text-green-900 mb-1">Need Support?</h4>
+                  <h4 className="font-medium text-green-900 mb-1">
+                    Need Support?
+                  </h4>
                   <p className="text-sm text-green-700 mb-2">
-                    Our technical team is here to help with installations and troubleshooting.
+                    Our technical team is here to help with installations and
+                    troubleshooting.
                   </p>
                   <Button size="sm" variant="outline" className="w-full">
                     Contact Support
@@ -708,7 +731,9 @@ export default function Dashboard() {
                 </div>
 
                 <div className="p-3 bg-purple-50 border border-purple-200 rounded-lg">
-                  <h4 className="font-medium text-purple-900 mb-1">Training Available</h4>
+                  <h4 className="font-medium text-purple-900 mb-1">
+                    Training Available
+                  </h4>
                   <p className="text-sm text-purple-700 mb-2">
                     Join our upcoming EV charging certification courses.
                   </p>

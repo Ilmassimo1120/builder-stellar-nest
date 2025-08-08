@@ -1,15 +1,29 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { Search, Filter, Package, Zap, Settings, Users, ShoppingCart, Eye, Star, Clock, CheckCircle, AlertTriangle, BarChart3 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
+import React, { useState, useEffect, useMemo } from "react";
+import {
+  Search,
+  Filter,
+  Package,
+  Zap,
+  Settings,
+  Users,
+  ShoppingCart,
+  Eye,
+  Star,
+  Clock,
+  CheckCircle,
+  AlertTriangle,
+  BarChart3,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -17,24 +31,19 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
+} from "@/components/ui/dialog";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from '@/components/ui/tabs';
-import { Separator } from '@/components/ui/separator';
-import { Checkbox } from '@/components/ui/checkbox';
-import { productCatalog, ProductFilter } from '@/lib/productCatalog';
-import { ProductCatalogueItem } from '@/lib/quoteTypes';
+} from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Separator } from "@/components/ui/separator";
+import { Checkbox } from "@/components/ui/checkbox";
+import { productCatalog, ProductFilter } from "@/lib/productCatalog";
+import { ProductCatalogueItem } from "@/lib/quoteTypes";
 
 interface ProductCatalogBrowserProps {
   isOpen: boolean;
@@ -51,15 +60,16 @@ export default function ProductCatalogBrowser({
   onAddProduct,
   selectedCategory,
   onCompareProducts,
-  maxCompareProducts = 4
+  maxCompareProducts = 4,
 }: ProductCatalogBrowserProps) {
   const [filter, setFilter] = useState<ProductFilter>({
     category: selectedCategory,
-    availability: 'all'
+    availability: "all",
   });
-  const [selectedProduct, setSelectedProduct] = useState<ProductCatalogueItem | null>(null);
+  const [selectedProduct, setSelectedProduct] =
+    useState<ProductCatalogueItem | null>(null);
   const [quantity, setQuantity] = useState(1);
-  const [activeView, setActiveView] = useState<'grid' | 'list'>('grid');
+  const [activeView, setActiveView] = useState<"grid" | "list">("grid");
   const [compareProducts, setCompareProducts] = useState<string[]>([]);
 
   const categories = productCatalog.getCategories();
@@ -75,40 +85,52 @@ export default function ProductCatalogBrowser({
   }, [filter.category]);
 
   const updateFilter = (key: keyof ProductFilter, value: any) => {
-    setFilter(prev => ({
+    setFilter((prev) => ({
       ...prev,
       [key]: value,
       // Reset subcategory when category changes
-      ...(key === 'category' ? { subcategory: undefined } : {})
+      ...(key === "category" ? { subcategory: undefined } : {}),
     }));
   };
 
   const clearFilters = () => {
     setFilter({
       category: selectedCategory,
-      availability: 'all'
+      availability: "all",
     });
   };
 
   const getAvailabilityStatus = (product: ProductCatalogueItem) => {
     if (product.inventory.available > 10) {
-      return { status: 'in-stock', color: 'bg-green-100 text-green-800', icon: CheckCircle };
+      return {
+        status: "in-stock",
+        color: "bg-green-100 text-green-800",
+        icon: CheckCircle,
+      };
     } else if (product.inventory.available > 0) {
-      return { status: 'low-stock', color: 'bg-yellow-100 text-yellow-800', icon: AlertTriangle };
+      return {
+        status: "low-stock",
+        color: "bg-yellow-100 text-yellow-800",
+        icon: AlertTriangle,
+      };
     } else {
-      return { status: 'back-order', color: 'bg-red-100 text-red-800', icon: Clock };
+      return {
+        status: "back-order",
+        color: "bg-red-100 text-red-800",
+        icon: Clock,
+      };
     }
   };
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case 'chargers':
+      case "chargers":
         return <Zap className="w-4 h-4" />;
-      case 'accessories':
+      case "accessories":
         return <Package className="w-4 h-4" />;
-      case 'infrastructure':
+      case "infrastructure":
         return <Settings className="w-4 h-4" />;
-      case 'services':
+      case "services":
         return <Users className="w-4 h-4" />;
       default:
         return <Package className="w-4 h-4" />;
@@ -116,16 +138,20 @@ export default function ProductCatalogBrowser({
   };
 
   const handleAddToQuote = (product: ProductCatalogueItem) => {
-    console.log('Adding product to quote:', { productId: product.id, quantity, product });
+    console.log("Adding product to quote:", {
+      productId: product.id,
+      quantity,
+      product,
+    });
     onAddProduct(product.id, quantity);
     setQuantity(1);
     setSelectedProduct(null);
   };
 
   const toggleProductComparison = (productId: string) => {
-    setCompareProducts(prev => {
+    setCompareProducts((prev) => {
       if (prev.includes(productId)) {
-        return prev.filter(id => id !== productId);
+        return prev.filter((id) => id !== productId);
       } else if (prev.length < maxCompareProducts) {
         return [...prev, productId];
       } else {
@@ -161,8 +187,8 @@ export default function ProductCatalogBrowser({
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
                 <Input
                   placeholder="Search products..."
-                  value={filter.searchTerm || ''}
-                  onChange={(e) => updateFilter('searchTerm', e.target.value)}
+                  value={filter.searchTerm || ""}
+                  onChange={(e) => updateFilter("searchTerm", e.target.value)}
                   className="pl-10"
                 />
               </div>
@@ -179,8 +205,13 @@ export default function ProductCatalogBrowser({
             {/* Filter Controls */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <Select
-                value={filter.category || 'all-categories'}
-                onValueChange={(value) => updateFilter('category', value === 'all-categories' ? undefined : value)}
+                value={filter.category || "all-categories"}
+                onValueChange={(value) =>
+                  updateFilter(
+                    "category",
+                    value === "all-categories" ? undefined : value,
+                  )
+                }
               >
                 <SelectTrigger>
                   <SelectValue placeholder="All Categories" />
@@ -197,14 +228,21 @@ export default function ProductCatalogBrowser({
 
               {filteredSubcategories.length > 0 && (
                 <Select
-                  value={filter.subcategory || 'all-subcategories'}
-                  onValueChange={(value) => updateFilter('subcategory', value === 'all-subcategories' ? undefined : value)}
+                  value={filter.subcategory || "all-subcategories"}
+                  onValueChange={(value) =>
+                    updateFilter(
+                      "subcategory",
+                      value === "all-subcategories" ? undefined : value,
+                    )
+                  }
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="All Subcategories" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all-subcategories">All Subcategories</SelectItem>
+                    <SelectItem value="all-subcategories">
+                      All Subcategories
+                    </SelectItem>
                     {filteredSubcategories.map((subcategory) => (
                       <SelectItem key={subcategory.id} value={subcategory.id}>
                         {subcategory.name}
@@ -215,8 +253,13 @@ export default function ProductCatalogBrowser({
               )}
 
               <Select
-                value={filter.brand || 'all-brands'}
-                onValueChange={(value) => updateFilter('brand', value === 'all-brands' ? undefined : value)}
+                value={filter.brand || "all-brands"}
+                onValueChange={(value) =>
+                  updateFilter(
+                    "brand",
+                    value === "all-brands" ? undefined : value,
+                  )
+                }
               >
                 <SelectTrigger>
                   <SelectValue placeholder="All Brands" />
@@ -232,8 +275,10 @@ export default function ProductCatalogBrowser({
               </Select>
 
               <Select
-                value={filter.availability || 'all'}
-                onValueChange={(value) => updateFilter('availability', value as any)}
+                value={filter.availability || "all"}
+                onValueChange={(value) =>
+                  updateFilter("availability", value as any)
+                }
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Availability" />
@@ -289,7 +334,10 @@ export default function ProductCatalogBrowser({
                     const AvailabilityIcon = availability.icon;
 
                     return (
-                      <Card key={product.id} className="relative group hover:shadow-md transition-shadow">
+                      <Card
+                        key={product.id}
+                        className="relative group hover:shadow-md transition-shadow"
+                      >
                         <CardHeader className="pb-3">
                           <div className="flex items-start justify-between">
                             <div className="flex items-center gap-2">
@@ -302,11 +350,16 @@ export default function ProductCatalogBrowser({
                               {onCompareProducts && (
                                 <Checkbox
                                   checked={compareProducts.includes(product.id)}
-                                  onCheckedChange={() => toggleProductComparison(product.id)}
+                                  onCheckedChange={() =>
+                                    toggleProductComparison(product.id)
+                                  }
                                   aria-label={`Add ${product.name} to comparison`}
                                 />
                               )}
-                              <Badge className={availability.color} variant="secondary">
+                              <Badge
+                                className={availability.color}
+                                variant="secondary"
+                              >
                                 <AvailabilityIcon className="w-3 h-3 mr-1" />
                                 {product.inventory.available} available
                               </Badge>
@@ -325,16 +378,20 @@ export default function ProductCatalogBrowser({
                             {product.specifications.powerRating && (
                               <div className="flex items-center gap-2 text-sm">
                                 <Zap className="w-4 h-4 text-primary" />
-                                <span className="font-medium">{product.specifications.powerRating}</span>
+                                <span className="font-medium">
+                                  {product.specifications.powerRating}
+                                </span>
                               </div>
                             )}
 
                             {/* Pricing */}
                             <div className="flex items-baseline gap-2">
                               <span className="text-2xl font-bold">
-                                ${product.pricing.recommendedRetail.toLocaleString()}
+                                $
+                                {product.pricing.recommendedRetail.toLocaleString()}
                               </span>
-                              {product.pricing.listPrice !== product.pricing.recommendedRetail && (
+                              {product.pricing.listPrice !==
+                                product.pricing.recommendedRetail && (
                                 <span className="text-sm text-muted-foreground line-through">
                                   ${product.pricing.listPrice.toLocaleString()}
                                 </span>
@@ -387,15 +444,22 @@ export default function ProductCatalogBrowser({
                     const AvailabilityIcon = availability.icon;
 
                     return (
-                      <Card key={product.id} className="hover:shadow-sm transition-shadow">
+                      <Card
+                        key={product.id}
+                        className="hover:shadow-sm transition-shadow"
+                      >
                         <CardContent className="p-4">
                           <div className="flex items-center justify-between">
                             <div className="flex items-center space-x-4 flex-1">
                               <div className="flex items-center gap-2">
                                 {onCompareProducts && (
                                   <Checkbox
-                                    checked={compareProducts.includes(product.id)}
-                                    onCheckedChange={() => toggleProductComparison(product.id)}
+                                    checked={compareProducts.includes(
+                                      product.id,
+                                    )}
+                                    onCheckedChange={() =>
+                                      toggleProductComparison(product.id)
+                                    }
                                     aria-label={`Add ${product.name} to comparison`}
                                   />
                                 )}
@@ -405,7 +469,9 @@ export default function ProductCatalogBrowser({
                                 </Badge>
                               </div>
                               <div className="flex-1">
-                                <h3 className="font-semibold">{product.name}</h3>
+                                <h3 className="font-semibold">
+                                  {product.name}
+                                </h3>
                                 <p className="text-sm text-muted-foreground line-clamp-1">
                                   {product.description}
                                 </p>
@@ -413,19 +479,25 @@ export default function ProductCatalogBrowser({
                               {product.specifications.powerRating && (
                                 <div className="flex items-center gap-2 text-sm">
                                   <Zap className="w-4 h-4 text-primary" />
-                                  <span className="font-medium">{product.specifications.powerRating}</span>
+                                  <span className="font-medium">
+                                    {product.specifications.powerRating}
+                                  </span>
                                 </div>
                               )}
                               <div className="text-right">
                                 <div className="text-lg font-bold">
-                                  ${product.pricing.recommendedRetail.toLocaleString()}
+                                  $
+                                  {product.pricing.recommendedRetail.toLocaleString()}
                                 </div>
                                 <div className="flex items-center gap-1 text-sm text-muted-foreground">
                                   <Clock className="w-3 h-3" />
                                   <span>{product.inventory.leadTime}</span>
                                 </div>
                               </div>
-                              <Badge className={availability.color} variant="secondary">
+                              <Badge
+                                className={availability.color}
+                                variant="secondary"
+                              >
                                 <AvailabilityIcon className="w-3 h-3 mr-1" />
                                 {product.inventory.available}
                               </Badge>
@@ -460,7 +532,10 @@ export default function ProductCatalogBrowser({
 
         {/* Product Detail Modal */}
         {selectedProduct && (
-          <Dialog open={!!selectedProduct} onOpenChange={() => setSelectedProduct(null)}>
+          <Dialog
+            open={!!selectedProduct}
+            onOpenChange={() => setSelectedProduct(null)}
+          >
             <DialogContent className="max-w-4xl max-h-[90vh] overflow-auto">
               <DialogHeader>
                 <DialogTitle>{selectedProduct.name}</DialogTitle>
@@ -482,7 +557,9 @@ export default function ProductCatalogBrowser({
                     <div className="grid grid-cols-2 gap-2 text-sm">
                       <div>
                         <span className="text-muted-foreground">SKU:</span>
-                        <span className="ml-2 font-mono">{selectedProduct.sku}</span>
+                        <span className="ml-2 font-mono">
+                          {selectedProduct.sku}
+                        </span>
                       </div>
                       <div>
                         <span className="text-muted-foreground">Brand:</span>
@@ -513,16 +590,20 @@ export default function ProductCatalogBrowser({
                   <div className="space-y-2">
                     <h3 className="font-semibold">Specifications</h3>
                     <div className="grid gap-2 text-sm">
-                      {Object.entries(selectedProduct.specifications).map(([key, value]) => (
-                        <div key={key} className="flex justify-between">
-                          <span className="text-muted-foreground capitalize">
-                            {key.replace(/([A-Z])/g, ' $1').trim()}:
-                          </span>
-                          <span className="font-medium">
-                            {Array.isArray(value) ? value.join(', ') : String(value)}
-                          </span>
-                        </div>
-                      ))}
+                      {Object.entries(selectedProduct.specifications).map(
+                        ([key, value]) => (
+                          <div key={key} className="flex justify-between">
+                            <span className="text-muted-foreground capitalize">
+                              {key.replace(/([A-Z])/g, " $1").trim()}:
+                            </span>
+                            <span className="font-medium">
+                              {Array.isArray(value)
+                                ? value.join(", ")
+                                : String(value)}
+                            </span>
+                          </div>
+                        ),
+                      )}
                     </div>
                   </div>
 
@@ -531,13 +612,20 @@ export default function ProductCatalogBrowser({
                     <h3 className="font-semibold">Pricing</h3>
                     <div className="grid gap-2 text-sm">
                       <div className="flex justify-between">
-                        <span className="text-muted-foreground">List Price:</span>
-                        <span>${selectedProduct.pricing.listPrice.toLocaleString()}</span>
+                        <span className="text-muted-foreground">
+                          List Price:
+                        </span>
+                        <span>
+                          ${selectedProduct.pricing.listPrice.toLocaleString()}
+                        </span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-muted-foreground">Recommended Retail:</span>
+                        <span className="text-muted-foreground">
+                          Recommended Retail:
+                        </span>
                         <span className="font-bold text-lg">
-                          ${selectedProduct.pricing.recommendedRetail.toLocaleString()}
+                          $
+                          {selectedProduct.pricing.recommendedRetail.toLocaleString()}
                         </span>
                       </div>
                     </div>
@@ -548,11 +636,17 @@ export default function ProductCatalogBrowser({
                     <h3 className="font-semibold">Availability</h3>
                     <div className="grid gap-2 text-sm">
                       <div className="flex justify-between">
-                        <span className="text-muted-foreground">Available:</span>
-                        <span className="font-medium">{selectedProduct.inventory.available} units</span>
+                        <span className="text-muted-foreground">
+                          Available:
+                        </span>
+                        <span className="font-medium">
+                          {selectedProduct.inventory.available} units
+                        </span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-muted-foreground">Lead Time:</span>
+                        <span className="text-muted-foreground">
+                          Lead Time:
+                        </span>
                         <span>{selectedProduct.inventory.leadTime}</span>
                       </div>
                     </div>
@@ -567,7 +661,9 @@ export default function ProductCatalogBrowser({
                         min="1"
                         max={selectedProduct.inventory.available}
                         value={quantity}
-                        onChange={(e) => setQuantity(parseInt(e.target.value) || 1)}
+                        onChange={(e) =>
+                          setQuantity(parseInt(e.target.value) || 1)
+                        }
                         className="w-20"
                       />
                     </div>

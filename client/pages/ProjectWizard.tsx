@@ -418,7 +418,7 @@ export default function ProjectWizard() {
     const template = urlParams.get("template");
 
     // Check if we're in edit mode (URL contains /edit)
-    if (projectId && window.location.pathname.includes('/edit')) {
+    if (projectId && window.location.pathname.includes("/edit")) {
       setIsEditMode(true);
       setLoadingProject(true);
       loadExistingProject(projectId);
@@ -485,7 +485,7 @@ export default function ProjectWizard() {
   const loadExistingProject = async (projectId: string) => {
     try {
       // First try to get from localStorage (for now)
-      const storedProjects = localStorage.getItem('chargeSourceProjects');
+      const storedProjects = localStorage.getItem("chargeSourceProjects");
       if (storedProjects) {
         const projects = JSON.parse(storedProjects);
         const project = projects.find((p: any) => p.id === projectId);
@@ -522,9 +522,8 @@ export default function ProjectWizard() {
       //     // Load project data
       //   }
       // }
-
     } catch (error) {
-      console.error('Error loading project:', error);
+      console.error("Error loading project:", error);
     } finally {
       setLoadingProject(false);
     }
@@ -794,7 +793,7 @@ export default function ProjectWizard() {
       clientName: clientRequirements.contactPersonName,
       supabaseConnected: isSupabaseConnected,
       editMode: isEditMode,
-      projectId: projectId
+      projectId: projectId,
     });
 
     const validationErrors = validateProjectData();
@@ -865,7 +864,8 @@ export default function ProjectWizard() {
 
   const handleLocalStorageSubmit = async () => {
     try {
-      const currentProjectId = isEditMode && projectId ? projectId : `PRJ-${Date.now()}`;
+      const currentProjectId =
+        isEditMode && projectId ? projectId : `PRJ-${Date.now()}`;
       const now = new Date().toISOString();
       const recommendations = getChargerRecommendations();
 
@@ -901,7 +901,9 @@ export default function ProjectWizard() {
 
       if (isEditMode && projectId) {
         // Update existing project
-        const projectIndex = existingProjects.findIndex((p: any) => p.id === projectId);
+        const projectIndex = existingProjects.findIndex(
+          (p: any) => p.id === projectId,
+        );
         if (projectIndex !== -1) {
           // Preserve original creation date
           projectData.createdAt = existingProjects[projectIndex].createdAt;
@@ -935,7 +937,10 @@ export default function ProjectWizard() {
       }
 
       const actionType = isEditMode ? "Updated" : "Created";
-      console.log(`Project ${actionType} Successfully (localStorage):`, projectData);
+      console.log(
+        `Project ${actionType} Successfully (localStorage):`,
+        projectData,
+      );
 
       // Show success message and navigate
       console.log(

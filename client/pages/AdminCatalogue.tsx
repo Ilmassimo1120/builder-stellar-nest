@@ -1,14 +1,20 @@
-import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { useAuth } from '@/hooks/useAuth';
-import { useToast } from '@/hooks/use-toast';
-import { Logo } from '@/components/ui/logo';
-import { ProtectedRoute } from '@/components/ProtectedRoute';
-import AdminProductManager from '@/components/AdminProductManager';
-import { Shield, ArrowLeft, Package, Users, BarChart3 } from 'lucide-react';
-import { productCatalog } from '@/lib/productCatalog';
+import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { useAuth } from "@/hooks/useAuth";
+import { useToast } from "@/hooks/use-toast";
+import { Logo } from "@/components/ui/logo";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
+import AdminProductManager from "@/components/AdminProductManager";
+import { Shield, ArrowLeft, Package, Users, BarChart3 } from "lucide-react";
+import { productCatalog } from "@/lib/productCatalog";
 
 export default function AdminCatalogue() {
   const { user } = useAuth();
@@ -16,12 +22,12 @@ export default function AdminCatalogue() {
   const [showProductManager, setShowProductManager] = useState(false);
 
   const products = productCatalog.getProducts();
-  const activeProducts = products.filter(p => p.isActive);
-  const inactiveProducts = products.filter(p => !p.isActive);
-  const lowStockProducts = products.filter(p => p.inventory.available <= 5);
+  const activeProducts = products.filter((p) => p.isActive);
+  const inactiveProducts = products.filter((p) => !p.isActive);
+  const lowStockProducts = products.filter((p) => p.inventory.available <= 5);
 
   // Admin role check
-  if (user?.role !== 'admin') {
+  if (user?.role !== "admin") {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <Card className="w-96">
@@ -63,11 +69,17 @@ export default function AdminCatalogue() {
               </div>
             </div>
             <nav className="flex items-center space-x-6">
-              <a href="/catalogue" className="text-sm font-medium hover:text-primary transition-colors">
+              <a
+                href="/catalogue"
+                className="text-sm font-medium hover:text-primary transition-colors"
+              >
                 <ArrowLeft className="w-4 h-4 mr-2 inline" />
                 Back to Catalogue
               </a>
-              <a href="/dashboard" className="text-sm font-medium hover:text-primary transition-colors">
+              <a
+                href="/dashboard"
+                className="text-sm font-medium hover:text-primary transition-colors"
+              >
                 Dashboard
               </a>
             </nav>
@@ -77,7 +89,9 @@ export default function AdminCatalogue() {
         <div className="container mx-auto px-4 py-6">
           {/* Admin Dashboard */}
           <div className="mb-8">
-            <h1 className="text-3xl font-bold mb-2">Product Catalogue Administration</h1>
+            <h1 className="text-3xl font-bold mb-2">
+              Product Catalogue Administration
+            </h1>
             <p className="text-muted-foreground">
               Manage your product catalog - add, edit, and remove products
             </p>
@@ -87,24 +101,31 @@ export default function AdminCatalogue() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Total Products</CardTitle>
+                <CardTitle className="text-sm font-medium">
+                  Total Products
+                </CardTitle>
                 <Package className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{products.length}</div>
                 <p className="text-xs text-muted-foreground">
-                  {activeProducts.length} active, {inactiveProducts.length} inactive
+                  {activeProducts.length} active, {inactiveProducts.length}{" "}
+                  inactive
                 </p>
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Categories</CardTitle>
+                <CardTitle className="text-sm font-medium">
+                  Categories
+                </CardTitle>
                 <BarChart3 className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{productCatalog.getCategories().length}</div>
+                <div className="text-2xl font-bold">
+                  {productCatalog.getCategories().length}
+                </div>
                 <p className="text-xs text-muted-foreground">
                   Product categories
                 </p>
@@ -117,7 +138,9 @@ export default function AdminCatalogue() {
                 <Package className="h-4 w-4 text-yellow-600" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold text-yellow-600">{lowStockProducts.length}</div>
+                <div className="text-2xl font-bold text-yellow-600">
+                  {lowStockProducts.length}
+                </div>
                 <p className="text-xs text-muted-foreground">
                   Products with ≤5 units
                 </p>
@@ -130,17 +153,17 @@ export default function AdminCatalogue() {
                 <Users className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{productCatalog.getBrands().length}</div>
-                <p className="text-xs text-muted-foreground">
-                  Product brands
-                </p>
+                <div className="text-2xl font-bold">
+                  {productCatalog.getBrands().length}
+                </div>
+                <p className="text-xs text-muted-foreground">Product brands</p>
               </CardContent>
             </Card>
           </div>
 
           {/* Action Buttons */}
           <div className="flex gap-4 mb-8">
-            <Button 
+            <Button
               onClick={() => setShowProductManager(true)}
               className="flex items-center gap-2"
             >
@@ -164,10 +187,15 @@ export default function AdminCatalogue() {
               <CardContent>
                 <div className="space-y-2">
                   {lowStockProducts.slice(0, 5).map((product) => (
-                    <div key={product.id} className="flex items-center justify-between p-2 bg-white rounded border">
+                    <div
+                      key={product.id}
+                      className="flex items-center justify-between p-2 bg-white rounded border"
+                    >
                       <div>
                         <p className="font-medium">{product.name}</p>
-                        <p className="text-sm text-muted-foreground">SKU: {product.sku}</p>
+                        <p className="text-sm text-muted-foreground">
+                          SKU: {product.sku}
+                        </p>
                       </div>
                       <Badge variant="destructive">
                         {product.inventory.available} units
@@ -176,7 +204,8 @@ export default function AdminCatalogue() {
                   ))}
                   {lowStockProducts.length > 5 && (
                     <p className="text-sm text-muted-foreground">
-                      +{lowStockProducts.length - 5} more products with low stock
+                      +{lowStockProducts.length - 5} more products with low
+                      stock
                     </p>
                   )}
                 </div>
@@ -195,12 +224,19 @@ export default function AdminCatalogue() {
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {productCatalog.getCategories().map((category) => {
-                  const categoryProducts = productCatalog.getProducts({ category: category.id });
+                  const categoryProducts = productCatalog.getProducts({
+                    category: category.id,
+                  });
                   return (
-                    <div key={category.id} className="flex items-center justify-between p-4 border rounded-lg">
+                    <div
+                      key={category.id}
+                      className="flex items-center justify-between p-4 border rounded-lg"
+                    >
                       <div>
                         <h3 className="font-medium">{category.name}</h3>
-                        <p className="text-sm text-muted-foreground">{category.description}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {category.description}
+                        </p>
                       </div>
                       <Badge variant="outline">
                         {categoryProducts.length} products

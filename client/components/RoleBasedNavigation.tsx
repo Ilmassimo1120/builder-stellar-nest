@@ -1,19 +1,19 @@
-import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { 
-  Home, 
-  FileText, 
-  Package, 
-  Users, 
-  Settings, 
-  BarChart3, 
+import React from "react";
+import { Link, useLocation } from "react-router-dom";
+import {
+  Home,
+  FileText,
+  Package,
+  Users,
+  Settings,
+  BarChart3,
   Shield,
   Zap,
   Building,
-  UserCheck
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+  UserCheck,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,10 +21,13 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { useAuth } from '@/hooks/useAuth';
-import { UserRole } from '@/lib/rbac';
-import UserRoleIndicator, { PermissionGate, RoleGate } from './UserRoleIndicator';
+} from "@/components/ui/dropdown-menu";
+import { useAuth } from "@/hooks/useAuth";
+import { UserRole } from "@/lib/rbac";
+import UserRoleIndicator, {
+  PermissionGate,
+  RoleGate,
+} from "./UserRoleIndicator";
 
 interface NavItem {
   path: string;
@@ -37,92 +40,94 @@ interface NavItem {
 
 const navigationItems: NavItem[] = [
   {
-    path: '/dashboard',
-    label: 'Dashboard',
+    path: "/dashboard",
+    label: "Dashboard",
     icon: <Home className="w-4 h-4" />,
   },
   {
-    path: '/projects',
-    label: 'Projects',
+    path: "/projects",
+    label: "Projects",
     icon: <Building className="w-4 h-4" />,
-    permission: 'projects.view.own'
+    permission: "projects.view.own",
   },
   {
-    path: '/quotes',
-    label: 'Quotes',
+    path: "/quotes",
+    label: "Quotes",
     icon: <FileText className="w-4 h-4" />,
-    permission: 'quotes.view.own'
+    permission: "quotes.view.own",
   },
   {
-    path: '/catalogue',
-    label: 'Product Catalog',
+    path: "/catalogue",
+    label: "Product Catalog",
     icon: <Package className="w-4 h-4" />,
-    permission: 'products.view'
+    permission: "products.view",
   },
   {
-    path: '/admin/catalogue',
-    label: 'Admin Catalog',
+    path: "/admin/catalogue",
+    label: "Admin Catalog",
     icon: <Shield className="w-4 h-4" />,
-    permission: 'products.edit',
-    badge: 'Admin'
+    permission: "products.edit",
+    badge: "Admin",
   },
   {
-    path: '/analytics',
-    label: 'Analytics',
+    path: "/analytics",
+    label: "Analytics",
     icon: <BarChart3 className="w-4 h-4" />,
-    permission: 'analytics.view',
-    roles: [UserRole.ADMIN, UserRole.GLOBAL_ADMIN, UserRole.SALES]
+    permission: "analytics.view",
+    roles: [UserRole.ADMIN, UserRole.GLOBAL_ADMIN, UserRole.SALES],
   },
   {
-    path: '/users',
-    label: 'User Management',
+    path: "/users",
+    label: "User Management",
     icon: <Users className="w-4 h-4" />,
-    permission: 'users.view.all',
-    roles: [UserRole.ADMIN, UserRole.GLOBAL_ADMIN]
+    permission: "users.view.all",
+    roles: [UserRole.ADMIN, UserRole.GLOBAL_ADMIN],
   },
   {
-    path: '/settings',
-    label: 'Settings',
+    path: "/settings",
+    label: "Settings",
     icon: <Settings className="w-4 h-4" />,
-    permission: 'users.edit.own'
-  }
+    permission: "users.edit.own",
+  },
 ];
 
 interface RoleBasedNavigationProps {
-  variant?: 'sidebar' | 'header' | 'dropdown';
+  variant?: "sidebar" | "header" | "dropdown";
   className?: string;
 }
 
-export default function RoleBasedNavigation({ 
-  variant = 'header',
-  className = '' 
+export default function RoleBasedNavigation({
+  variant = "header",
+  className = "",
 }: RoleBasedNavigationProps) {
   const { user, hasPermission, logout } = useAuth();
   const location = useLocation();
 
   const isActivePath = (path: string) => {
-    return location.pathname === path || location.pathname.startsWith(path + '/');
+    return (
+      location.pathname === path || location.pathname.startsWith(path + "/")
+    );
   };
 
   const getVisibleItems = () => {
-    return navigationItems.filter(item => {
+    return navigationItems.filter((item) => {
       // Check permission if specified
       if (item.permission && !hasPermission(item.permission)) {
         return false;
       }
-      
+
       // Check roles if specified
       if (item.roles && user && !item.roles.includes(user.role)) {
         return false;
       }
-      
+
       return true;
     });
   };
 
   const visibleItems = getVisibleItems();
 
-  if (variant === 'dropdown') {
+  if (variant === "dropdown") {
     return (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -139,7 +144,7 @@ export default function RoleBasedNavigation({
             </div>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
-          
+
           {visibleItems.map((item) => (
             <DropdownMenuItem key={item.path} asChild>
               <Link to={item.path} className="flex items-center gap-2">
@@ -153,7 +158,7 @@ export default function RoleBasedNavigation({
               </Link>
             </DropdownMenuItem>
           ))}
-          
+
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={logout} className="text-red-600">
             Sign Out
@@ -163,7 +168,7 @@ export default function RoleBasedNavigation({
     );
   }
 
-  if (variant === 'sidebar') {
+  if (variant === "sidebar") {
     return (
       <nav className={`space-y-2 ${className}`}>
         {visibleItems.map((item) => {
@@ -173,9 +178,9 @@ export default function RoleBasedNavigation({
               key={item.path}
               to={item.path}
               className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors ${
-                isActive 
-                  ? 'bg-primary text-primary-foreground' 
-                  : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                isActive
+                  ? "bg-primary text-primary-foreground"
+                  : "text-muted-foreground hover:text-foreground hover:bg-muted"
               }`}
             >
               {item.icon}
@@ -200,7 +205,7 @@ export default function RoleBasedNavigation({
         return (
           <Button
             key={item.path}
-            variant={isActive ? 'default' : 'ghost'}
+            variant={isActive ? "default" : "ghost"}
             size="sm"
             asChild
             className="relative"
@@ -237,7 +242,7 @@ export function RoleQuickActions() {
           </Link>
         </Button>
       </PermissionGate>
-      
+
       <PermissionGate permission="quotes.create">
         <Button variant="outline" size="sm" asChild>
           <Link to="/quotes/new">
@@ -246,7 +251,7 @@ export function RoleQuickActions() {
           </Link>
         </Button>
       </PermissionGate>
-      
+
       <PermissionGate permission="projects.create">
         <Button variant="outline" size="sm" asChild>
           <Link to="/projects/new">
@@ -255,7 +260,7 @@ export function RoleQuickActions() {
           </Link>
         </Button>
       </PermissionGate>
-      
+
       <RoleGate roles={[UserRole.ADMIN, UserRole.GLOBAL_ADMIN]}>
         <Button variant="outline" size="sm" asChild>
           <Link to="/users">

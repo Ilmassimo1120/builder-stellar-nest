@@ -56,7 +56,8 @@ const knowledgeBase: KnowledgeItem[] = [
   {
     id: "1",
     title: "EV Charging Station Installation Guide",
-    description: "Complete step-by-step guide for installing commercial EV charging stations",
+    description:
+      "Complete step-by-step guide for installing commercial EV charging stations",
     category: "Installation",
     type: "guide",
     difficulty: "intermediate",
@@ -243,42 +244,74 @@ export function KnowledgeBaseWidget() {
 
   const categories = [
     { id: "all", name: "All Topics", icon: <BookOpen className="w-4 h-4" /> },
-    { id: "Installation", name: "Installation", icon: <Zap className="w-4 h-4" /> },
-    { id: "Regulations", name: "Regulations", icon: <Shield className="w-4 h-4" /> },
-    { id: "Technology", name: "Technology", icon: <Settings className="w-4 h-4" /> },
-    { id: "Applications", name: "Applications", icon: <Users className="w-4 h-4" /> },
-    { id: "Support", name: "Support", icon: <HelpCircle className="w-4 h-4" /> },
+    {
+      id: "Installation",
+      name: "Installation",
+      icon: <Zap className="w-4 h-4" />,
+    },
+    {
+      id: "Regulations",
+      name: "Regulations",
+      icon: <Shield className="w-4 h-4" />,
+    },
+    {
+      id: "Technology",
+      name: "Technology",
+      icon: <Settings className="w-4 h-4" />,
+    },
+    {
+      id: "Applications",
+      name: "Applications",
+      icon: <Users className="w-4 h-4" />,
+    },
+    {
+      id: "Support",
+      name: "Support",
+      icon: <HelpCircle className="w-4 h-4" />,
+    },
   ];
 
   const filteredItems = knowledgeBase.filter((item) => {
-    const matchesSearch = 
+    const matchesSearch =
       item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
-    
-    const matchesCategory = selectedCategory === "all" || item.category === selectedCategory;
-    
+      item.tags.some((tag) =>
+        tag.toLowerCase().includes(searchQuery.toLowerCase()),
+      );
+
+    const matchesCategory =
+      selectedCategory === "all" || item.category === selectedCategory;
+
     return matchesSearch && matchesCategory;
   });
 
-  const featuredItems = knowledgeBase.filter(item => item.featured);
+  const featuredItems = knowledgeBase.filter((item) => item.featured);
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case "video": return <Video className="w-4 h-4" />;
-      case "guide": return <BookOpen className="w-4 h-4" />;
-      case "regulation": return <Shield className="w-4 h-4" />;
-      case "template": return <FileText className="w-4 h-4" />;
-      default: return <FileText className="w-4 h-4" />;
+      case "video":
+        return <Video className="w-4 h-4" />;
+      case "guide":
+        return <BookOpen className="w-4 h-4" />;
+      case "regulation":
+        return <Shield className="w-4 h-4" />;
+      case "template":
+        return <FileText className="w-4 h-4" />;
+      default:
+        return <FileText className="w-4 h-4" />;
     }
   };
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
-      case "beginner": return "bg-green-100 text-green-800 border-green-200";
-      case "intermediate": return "bg-yellow-100 text-yellow-800 border-yellow-200";
-      case "advanced": return "bg-red-100 text-red-800 border-red-200";
-      default: return "bg-gray-100 text-gray-800 border-gray-200";
+      case "beginner":
+        return "bg-green-100 text-green-800 border-green-200";
+      case "intermediate":
+        return "bg-yellow-100 text-yellow-800 border-yellow-200";
+      case "advanced":
+        return "bg-red-100 text-red-800 border-red-200";
+      default:
+        return "bg-gray-100 text-gray-800 border-gray-200";
     }
   };
 
@@ -308,18 +341,27 @@ export function KnowledgeBaseWidget() {
         <div className="mb-4 p-3 bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-lg">
           <div className="flex items-center gap-2 mb-1">
             <CheckCircle2 className="w-4 h-4 text-blue-600" />
-            <span className="font-medium text-blue-900 text-sm">Expert Knowledge at Your Fingertips</span>
+            <span className="font-medium text-blue-900 text-sm">
+              Expert Knowledge at Your Fingertips
+            </span>
           </div>
           <p className="text-xs text-blue-700">
-            Access Australian standards, installation guides, and troubleshooting tips from certified EV charging professionals.
+            Access Australian standards, installation guides, and
+            troubleshooting tips from certified EV charging professionals.
           </p>
         </div>
 
         <Tabs defaultValue="featured" className="space-y-4">
           <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="featured" className="text-xs sm:text-sm">Featured</TabsTrigger>
-            <TabsTrigger value="browse" className="text-xs sm:text-sm">Browse</TabsTrigger>
-            <TabsTrigger value="search" className="text-xs sm:text-sm">Search</TabsTrigger>
+            <TabsTrigger value="featured" className="text-xs sm:text-sm">
+              Featured
+            </TabsTrigger>
+            <TabsTrigger value="browse" className="text-xs sm:text-sm">
+              Browse
+            </TabsTrigger>
+            <TabsTrigger value="search" className="text-xs sm:text-sm">
+              Search
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="featured" className="space-y-3">
@@ -338,7 +380,10 @@ export function KnowledgeBaseWidget() {
                           {item.description}
                         </p>
                         <div className="flex items-center gap-2">
-                          <Badge variant="outline" className={`text-xs ${getDifficultyColor(item.difficulty)}`}>
+                          <Badge
+                            variant="outline"
+                            className={`text-xs ${getDifficultyColor(item.difficulty)}`}
+                          >
                             {item.difficulty}
                           </Badge>
                           <span className="text-xs text-muted-foreground flex items-center gap-1">
@@ -357,9 +402,7 @@ export function KnowledgeBaseWidget() {
                       {getTypeIcon(item.type)}
                       {item.title}
                     </DialogTitle>
-                    <DialogDescription>
-                      {item.description}
-                    </DialogDescription>
+                    <DialogDescription>{item.description}</DialogDescription>
                   </DialogHeader>
                   <ScrollArea className="max-h-[60vh] pr-4">
                     <div className="prose prose-sm max-w-none">
@@ -368,11 +411,15 @@ export function KnowledgeBaseWidget() {
                   </ScrollArea>
                   <div className="flex items-center justify-between pt-4 border-t">
                     <div className="flex items-center gap-2">
-                      <Badge variant="outline" className={getDifficultyColor(item.difficulty)}>
+                      <Badge
+                        variant="outline"
+                        className={getDifficultyColor(item.difficulty)}
+                      >
                         {item.difficulty}
                       </Badge>
                       <span className="text-sm text-muted-foreground">
-                        Updated: {new Date(item.lastUpdated).toLocaleDateString()}
+                        Updated:{" "}
+                        {new Date(item.lastUpdated).toLocaleDateString()}
                       </span>
                     </div>
                     <Button variant="outline" size="sm">
@@ -390,7 +437,9 @@ export function KnowledgeBaseWidget() {
               {categories.map((category) => (
                 <Button
                   key={category.id}
-                  variant={selectedCategory === category.id ? "default" : "outline"}
+                  variant={
+                    selectedCategory === category.id ? "default" : "outline"
+                  }
                   size="sm"
                   onClick={() => setSelectedCategory(category.id)}
                   className="justify-start"
@@ -400,7 +449,7 @@ export function KnowledgeBaseWidget() {
                 </Button>
               ))}
             </div>
-            
+
             <div className="space-y-2 max-h-64 overflow-y-auto">
               {filteredItems.map((item) => (
                 <Dialog key={item.id}>
@@ -409,7 +458,9 @@ export function KnowledgeBaseWidget() {
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
                           {getTypeIcon(item.type)}
-                          <span className="font-medium text-sm">{item.title}</span>
+                          <span className="font-medium text-sm">
+                            {item.title}
+                          </span>
                         </div>
                         <div className="flex items-center gap-2">
                           <Badge variant="outline" className="text-xs">
@@ -428,22 +479,26 @@ export function KnowledgeBaseWidget() {
                         {getTypeIcon(item.type)}
                         {item.title}
                       </DialogTitle>
-                      <DialogDescription>
-                        {item.description}
-                      </DialogDescription>
+                      <DialogDescription>{item.description}</DialogDescription>
                     </DialogHeader>
                     <ScrollArea className="max-h-[60vh] pr-4">
                       <div className="prose prose-sm max-w-none">
-                        <div className="whitespace-pre-line">{item.content}</div>
+                        <div className="whitespace-pre-line">
+                          {item.content}
+                        </div>
                       </div>
                     </ScrollArea>
                     <div className="flex items-center justify-between pt-4 border-t">
                       <div className="flex items-center gap-2">
-                        <Badge variant="outline" className={getDifficultyColor(item.difficulty)}>
+                        <Badge
+                          variant="outline"
+                          className={getDifficultyColor(item.difficulty)}
+                        >
                           {item.difficulty}
                         </Badge>
                         <span className="text-sm text-muted-foreground">
-                          Updated: {new Date(item.lastUpdated).toLocaleDateString()}
+                          Updated:{" "}
+                          {new Date(item.lastUpdated).toLocaleDateString()}
                         </span>
                       </div>
                       <Button variant="outline" size="sm">
@@ -467,7 +522,7 @@ export function KnowledgeBaseWidget() {
                 className="pl-10"
               />
             </div>
-            
+
             {searchQuery && (
               <div className="space-y-2 max-h-64 overflow-y-auto">
                 {filteredItems.length > 0 ? (
@@ -479,7 +534,9 @@ export function KnowledgeBaseWidget() {
                             <div className="flex-1">
                               <div className="flex items-center gap-2 mb-1">
                                 {getTypeIcon(item.type)}
-                                <h4 className="font-medium text-sm">{item.title}</h4>
+                                <h4 className="font-medium text-sm">
+                                  {item.title}
+                                </h4>
                               </div>
                               <p className="text-xs text-muted-foreground">
                                 {item.description}
@@ -503,16 +560,22 @@ export function KnowledgeBaseWidget() {
                         </DialogHeader>
                         <ScrollArea className="max-h-[60vh] pr-4">
                           <div className="prose prose-sm max-w-none">
-                            <div className="whitespace-pre-line">{item.content}</div>
+                            <div className="whitespace-pre-line">
+                              {item.content}
+                            </div>
                           </div>
                         </ScrollArea>
                         <div className="flex items-center justify-between pt-4 border-t">
                           <div className="flex items-center gap-2">
-                            <Badge variant="outline" className={getDifficultyColor(item.difficulty)}>
+                            <Badge
+                              variant="outline"
+                              className={getDifficultyColor(item.difficulty)}
+                            >
                               {item.difficulty}
                             </Badge>
                             <span className="text-sm text-muted-foreground">
-                              Updated: {new Date(item.lastUpdated).toLocaleDateString()}
+                              Updated:{" "}
+                              {new Date(item.lastUpdated).toLocaleDateString()}
                             </span>
                           </div>
                           <Button variant="outline" size="sm">
