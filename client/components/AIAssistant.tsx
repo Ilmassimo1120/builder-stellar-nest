@@ -464,11 +464,11 @@ Could you please be more specific about what you need help with?`;
   const handleActionClick = (action: string) => {
     switch (action) {
       case "new-project":
-        setIsOpen(false); // Close the AI Assistant
+        setIsOpen(false);
         navigate("/projects/new");
         break;
       case "new-quote":
-        setIsOpen(false); // Close the AI Assistant
+        setIsOpen(false);
         navigate("/quotes/new");
         break;
       case "open-knowledge":
@@ -480,9 +480,166 @@ Could you please be more specific about what you need help with?`;
         console.log("Opening support");
         setIsOpen(false);
         break;
+      case "pricing-calculator":
+        handlePricingCalculator();
+        break;
+      case "load-calculator":
+        handleLoadCalculator();
+        break;
+      case "cable-calculator":
+        handleCableCalculator();
+        break;
+      case "breaker-guide":
+        handleBreakerGuide();
+        break;
+      case "cable-standards":
+        handleCableStandards();
+        break;
+      case "compliance-guide":
+        handleComplianceGuide();
+        break;
+      case "standards-db":
+        handleStandardsDatabase();
+        break;
+      case "diagnostic":
+        handleDiagnosticTool();
+        break;
       default:
         console.log(`Action: ${action}`);
     }
+  };
+
+  // Calculator and Tool Functions
+  const handlePricingCalculator = () => {
+    const calculatorMessage: ChatMessage = {
+      id: `calc-${Date.now()}`,
+      type: "assistant",
+      content: `🧮 **Pricing Calculator**\n\n**Project Pricing Components:**\n\n• **Equipment Costs**\n  - 7kW AC Charger: $800-1,500\n  - 22kW AC Charger: $1,200-2,500\n  - Installation Kit: $150-300\n\n• **Installation Costs**\n  - Basic Installation: $500-1,000\n  - Complex Installation: $1,000-2,500\n  - Electrical Upgrades: $500-3,000\n\n• **Additional Costs**\n  - Permits & Approvals: $200-500\n  - Site Assessment: $150-300\n  - Commissioning: $200-400\n\n**Markup Guidelines:**\n• Materials: 25-40% markup\n• Labor: $85-120/hour\n• Travel: Include for >50km\n• Contingency: 10-15%\n\n**Example Quote (7kW Home Installation):**\n• Equipment: $1,200\n• Installation: $800\n• Permits: $300\n• **Total: $2,300 + GST**`,
+      timestamp: new Date(),
+      suggestions: [
+        "Calculate specific project cost",
+        "Labor rate guidelines",
+        "Material markup standards",
+        "Create detailed quote"
+      ],
+      actions: [
+        { label: "Create Detailed Quote", action: "new-quote", icon: <Calculator className="w-4 h-4" /> },
+        { label: "Load Calculator", action: "load-calculator", icon: <Zap className="w-4 h-4" /> }
+      ]
+    };
+    setMessages(prev => [...prev, calculatorMessage]);
+  };
+
+  const handleLoadCalculator = () => {
+    const loadMessage: ChatMessage = {
+      id: `load-${Date.now()}`,
+      type: "assistant",
+      content: `⚡ **Load Calculator**\n\n**Electrical Load Calculations:**\n\n• **Single Charger Loads:**\n  - 7kW (32A): Requires 40A MCB\n  - 11kW (48A): Requires 63A MCB\n  - 22kW (96A): Requires 100A MCB\n\n• **Multiple Charger Calculations:**\n  - Diversity Factor: 0.6-0.8 for residential\n  - Simultaneous Use: 0.7-0.9 for commercial\n  - Load Management: Can reduce by 30-50%\n\n**Cable Sizing:**\n• 32A Circuit: 6mm² (short runs) to 10mm² (long runs)\n• 48A Circuit: 10mm² to 16mm²\n• 96A Circuit: 25mm² to 35mm²\n\n**Voltage Drop Limits:**\n• <3% for lighting circuits\n• <5% for power circuits\n• Consider cable length and ambient temperature\n\n**Supply Capacity Check:**\nTotal Load = Existing Load + New EV Load × Diversity Factor`,
+      timestamp: new Date(),
+      suggestions: [
+        "Calculate voltage drop",
+        "Diversity factor guidelines",
+        "Supply upgrade requirements",
+        "Load management options"
+      ]
+    };
+    setMessages(prev => [...prev, loadMessage]);
+  };
+
+  const handleCableCalculator = () => {
+    const cableMessage: ChatMessage = {
+      id: `cable-${Date.now()}`,
+      type: "assistant",
+      content: `📏 **Cable Calculator**\n\n**Cable Sizing Requirements (AS/NZS 3008):**\n\n**Current Rating Selection:**\n• Cable must carry 125% of continuous load\n• Apply derating factors for installation method\n• Consider ambient temperature (>30°C)\n\n**Common EV Cable Sizes:**\n• **6mm² TPS:** Up to 32A (short runs <20m)\n• **10mm² TPS:** Up to 40A (medium runs <50m)\n• **16mm² TPS:** Up to 63A (longer runs)\n• **25mm² TPS:** Up to 80A (commercial installations)\n\n**Voltage Drop Calculation:**\nVd = (2 × L × I × ρ) ÷ A\n• L = Length (m)\n• I = Current (A)\n• ρ = Resistivity (copper = 0.0175)\n• A = Cross-sectional area (mm²)\n\n**Installation Methods:**\n• Method 1: Conduit/trunking (highest derating)\n• Method 3: Clipped direct (medium derating)\n• Method 4: Underground (lowest derating)`,
+      timestamp: new Date(),
+      suggestions: [
+        "Calculate specific voltage drop",
+        "Derating factor table",
+        "Installation method comparison",
+        "Cable specification guide"
+      ]
+    };
+    setMessages(prev => [...prev, cableMessage]);
+  };
+
+  const handleBreakerGuide = () => {
+    const breakerMessage: ChatMessage = {
+      id: `breaker-${Date.now()}`,
+      type: "assistant",
+      content: `🔌 **Circuit Breaker Selection Guide**\n\n**Breaker Types for EV Charging:**\n\n**Curve Types:**\n• **Type B:** 3-5x In (residential, low inrush)\n• **Type C:** 5-10x In (commercial, motor loads)\n• **Type D:** 10-20x In (high inrush applications)\n\n**EV Charger Requirements:**\n• 7kW Charger: 40A Type B/C MCB\n• 11kW Charger: 63A Type C MCB\n• 22kW Charger: 100A Type C MCB\n\n**Key Specifications:**\n• Breaking capacity: Minimum 6kA (10kA preferred)\n• Earth leakage protection (RCD): Type A minimum\n• Arc fault protection: Recommended for all installations\n\n**Installation Notes:**\n• Dedicated circuit for each charger\n• Upstream RCD protection required\n• Label all circuits clearly\n• Test all protection devices after installation\n\n**Common Issues:**\n• Undersized breakers cause nuisance tripping\n• Wrong curve type affects protection coordination`,
+      timestamp: new Date(),
+      suggestions: [
+        "Breaker sizing calculator",
+        "RCD type selection",
+        "Arc fault protection",
+        "Protection coordination"
+      ]
+    };
+    setMessages(prev => [...prev, breakerMessage]);
+  };
+
+  const handleCableStandards = () => {
+    const standardsMessage: ChatMessage = {
+      id: `standards-${Date.now()}`,
+      type: "assistant",
+      content: `📋 **AS/NZS 3008 Cable Standards**\n\n**Key Standard Requirements:**\n\n**Cable Selection Criteria:**\n• Current-carrying capacity (continuous rating)\n�� Voltage drop limitations (<5% for power)\n• Short-circuit withstand capability\n• Environmental conditions\n\n**Installation Classifications:**\n• **Method 1:** Conduit on walls (Reference Method B)\n• **Method 3:** Clipped direct to surfaces\n• **Method 4:** Underground in ducts/direct burial\n• **Method 11:** Ceiling spaces with insulation\n\n**Derating Factors:**\n• Ambient temperature >30°C: Apply temperature derating\n• Grouping: Multiple cables reduce capacity\n• Thermal insulation: Significant derating required\n\n**Cable Types for EV:**\n• **V75 Single Core:** Conduit installations\n• **TPS Cable:** General purpose, not suitable for high current\n• **NYY Cable:** Underground, high current capacity\n• **Automotive Cable:** Flexible sections only\n\n**Compliance Documentation:**\nMaintain records of all cable calculations and selections.`,
+      timestamp: new Date(),
+      suggestions: [
+        "Download derating tables",
+        "Installation method guide",
+        "Cable specification sheets",
+        "Compliance checklist"
+      ]
+    };
+    setMessages(prev => [...prev, standardsMessage]);
+  };
+
+  const handleComplianceGuide = () => {
+    const complianceMessage: ChatMessage = {
+      id: `compliance-${Date.now()}`,
+      type: "assistant",
+      content: `🛡️ **Compliance Checklist**\n\n**Pre-Installation Requirements:**\n✅ Site assessment completed\n✅ Electrical design approved by authority\n✅ Permits obtained\n✅ Equipment compliance certificates verified\n\n**Installation Compliance:**\n✅ AS/NZS 3000 wiring rules followed\n✅ Cable sizing per AS/NZS 3008\n✅ RCD protection installed (Type A minimum)\n✅ Circuit protection correctly sized\n✅ Earthing system verified\n\n**Testing Requirements (AS/NZS 3017):**\n✅ Insulation resistance testing (>1MΩ)\n✅ Earth continuity verification\n✅ RCD functionality testing\n✅ Polarity verification\n✅ Voltage measurements\n\n**Documentation:**\n✅ Installation certificate completed\n✅ Test results recorded\n✅ Compliance statement issued\n✅ Client handover documentation\n\n**Ongoing Requirements:**\n✅ Periodic testing schedule established\n✅ Maintenance procedures documented\n✅ Emergency contact information provided`,
+      timestamp: new Date(),
+      suggestions: [
+        "Download test sheets",
+        "Compliance documentation",
+        "Inspection procedures",
+        "Periodic testing guide"
+      ]
+    };
+    setMessages(prev => [...prev, complianceMessage]);
+  };
+
+  const handleStandardsDatabase = () => {
+    const dbMessage: ChatMessage = {
+      id: `db-${Date.now()}`,
+      type: "assistant",
+      content: `📚 **Standards Database**\n\n**Primary Australian Standards:**\n\n**AS/NZS 61851 - EV Charging Systems:**\n• Part 1: General requirements\n• Part 21: AC charging stations\n• Part 22: AC charging stations (>32A)\n• Part 23: DC charging stations\n\n**AS/NZS 3000 - Wiring Rules:**\n• Section 8: Special installations\n• Clause 8.3: Electric vehicle supply equipment\n\n**AS/NZS 3008 - Cable Selection:**\n• Current rating tables\n• Voltage drop calculations\n• Installation method classifications\n\n**AS/NZS 3017 - Verification:**\n• Testing procedures\n• Documentation requirements\n• Compliance verification\n\n**Supporting Standards:**\n• AS/NZS 3100: Electrical equipment safety\n• AS/NZS 4755: Demand response\n• AS/NZS 61439: Switchgear assemblies\n\n**Access Information:**\nStandards Australia: www.standards.org.au\nIECA Guidelines: www.ieca.com.au`,
+      timestamp: new Date(),
+      suggestions: [
+        "Latest standard updates",
+        "Purchase standards",
+        "Industry guidelines",
+        "Technical bulletins"
+      ]
+    };
+    setMessages(prev => [...prev, dbMessage]);
+  };
+
+  const handleDiagnosticTool = () => {
+    const diagnosticMessage: ChatMessage = {
+      id: `diag-${Date.now()}`,
+      type: "assistant",
+      content: `🔧 **Diagnostic Tool**\n\n**Systematic Fault Finding:**\n\n**Step 1: Safety First**\n• Isolate power supply\n• Lock out/tag out procedures\n• Verify isolation with approved tester\n\n**Step 2: Visual Inspection**\n• Check for obvious damage\n• Verify all connections tight\n• Look for overheating signs\n• Confirm correct cable routing\n\n**Step 3: Electrical Testing**\n• Insulation resistance (>1MΩ)\n• Earth continuity (<0.5Ω)\n• RCD operation (30mA trip)\n• Voltage measurements\n• Load testing under normal conditions\n\n**Step 4: Functional Testing**\n• Charging sequence verification\n• Communication systems check\n• Safety system operation\n• User interface functionality\n\n**Common Fault Patterns:**\n• Intermittent faults: Poor connections\n• Immediate tripping: Earth fault or overload\n• No power: Supply or protection issues\n• Communication errors: Network/backend problems\n\n**Documentation:**\nRecord all test results and remedial actions taken.`,
+      timestamp: new Date(),
+      suggestions: [
+        "Fault finding flowchart",
+        "Test equipment guide",
+        "Common fault solutions",
+        "Escalation procedures"
+      ]
+    };
+    setMessages(prev => [...prev, diagnosticMessage]);
   };
 
   const formatMessage = (content: string) => {
