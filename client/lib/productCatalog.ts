@@ -26,134 +26,15 @@ export interface ProductFilter {
 }
 
 class ProductCatalogService {
-  private categories: ProductCategory[] = [];
   private products: ProductCatalogueItem[] = [];
 
   constructor() {
-    this.initializeCategories();
     this.loadFromStorage();
     // Only initialize default products if none exist in storage
     if (this.products.length === 0) {
       this.initializeProducts();
       this.saveToStorage();
     }
-  }
-
-  private initializeCategories(): void {
-    this.categories = [
-      {
-        id: "chargers",
-        name: "EV Chargers",
-        description: "Electric vehicle charging stations and equipment",
-        subcategories: [
-          {
-            id: "ac-chargers-residential",
-            name: "AC Chargers - Residential",
-            description: "Home charging solutions up to 22kW",
-            categoryId: "chargers",
-          },
-          {
-            id: "ac-chargers-commercial",
-            name: "AC Chargers - Commercial",
-            description: "Workplace and destination charging solutions",
-            categoryId: "chargers",
-          },
-          {
-            id: "dc-fast-chargers",
-            name: "DC Fast Chargers",
-            description: "High-power rapid charging stations 50kW+",
-            categoryId: "chargers",
-          },
-          {
-            id: "ultra-fast-chargers",
-            name: "Ultra-Fast Chargers",
-            description: "Ultra-high power charging 150kW+",
-            categoryId: "chargers",
-          },
-        ],
-      },
-      {
-        id: "accessories",
-        name: "Accessories & Components",
-        description: "Cables, connectors, mounting hardware, and accessories",
-        subcategories: [
-          {
-            id: "charging-cables",
-            name: "Charging Cables",
-            description: "Type 1, Type 2, CCS, CHAdeMO cables",
-            categoryId: "accessories",
-          },
-          {
-            id: "connectors",
-            name: "Connectors & Adapters",
-            description: "Charging connectors and adapter solutions",
-            categoryId: "accessories",
-          },
-          {
-            id: "mounting-hardware",
-            name: "Mounting Hardware",
-            description: "Wall mounts, pedestals, and installation hardware",
-            categoryId: "accessories",
-          },
-          {
-            id: "safety-equipment",
-            name: "Safety Equipment",
-            description: "RCBO, MCBs, surge protection devices",
-            categoryId: "accessories",
-          },
-        ],
-      },
-      {
-        id: "infrastructure",
-        name: "Infrastructure",
-        description: "Electrical infrastructure and grid connection equipment",
-        subcategories: [
-          {
-            id: "transformers",
-            name: "Transformers",
-            description: "Step-down transformers for charging installations",
-            categoryId: "infrastructure",
-          },
-          {
-            id: "switchgear",
-            name: "Switchgear",
-            description: "Electrical switchgear and distribution",
-            categoryId: "infrastructure",
-          },
-          {
-            id: "load-management",
-            name: "Load Management",
-            description: "Dynamic load balancing and smart grid integration",
-            categoryId: "infrastructure",
-          },
-        ],
-      },
-      {
-        id: "services",
-        name: "Services",
-        description: "Installation, maintenance, and support services",
-        subcategories: [
-          {
-            id: "installation",
-            name: "Installation Services",
-            description: "Professional installation and commissioning",
-            categoryId: "services",
-          },
-          {
-            id: "maintenance",
-            name: "Maintenance",
-            description: "Ongoing maintenance and support contracts",
-            categoryId: "services",
-          },
-          {
-            id: "consulting",
-            name: "Consulting",
-            description: "Site assessment and design consulting",
-            categoryId: "services",
-          },
-        ],
-      },
-    ];
   }
 
   private initializeProducts(): void {
