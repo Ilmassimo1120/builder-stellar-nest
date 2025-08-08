@@ -145,6 +145,23 @@ export default function EnhancedFileStorage() {
 
   return (
     <div className="container mx-auto py-8 space-y-8">
+      {/* Navigation Header */}
+      <div className="flex items-center space-x-4 mb-6">
+        <Button variant="outline" size="sm" asChild>
+          <Link to="/dashboard" className="flex items-center space-x-2">
+            <ArrowLeft className="h-4 w-4" />
+            <span>Back to Dashboard</span>
+          </Link>
+        </Button>
+        <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+          <Link to="/dashboard" className="hover:text-primary transition-colors">
+            <Home className="h-4 w-4" />
+          </Link>
+          <span>/</span>
+          <span className="text-primary font-medium">File Storage</span>
+        </div>
+      </div>
+
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
