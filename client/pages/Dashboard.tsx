@@ -840,10 +840,8 @@ export default function Dashboard() {
                                 value={project.progress}
                                 className="h-2 w-[90%]"
                               />
-                              <div className="flex items-center text-sm mt-1">
+                              <div className="flex items-center justify-between text-sm mt-1 w-[90%]">
                                 <span>Progress</span>
-                              </div>
-                              <div className="text-sm mt-1">
                                 <span>{project.progress}%</span>
                               </div>
                             </div>
