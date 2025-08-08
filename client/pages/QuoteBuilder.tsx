@@ -283,19 +283,33 @@ export default function QuoteBuilder() {
 
   // Add product from catalogue
   const addProduct = (productId: string, quantity: number = 1) => {
-    if (!quote) return;
+    if (!quote) {
+      console.error('No quote available');
+      return;
+    }
+
+    console.log('Adding product to quote:', { quoteId: quote.id, productId, quantity });
 
     const updatedQuote = quoteService.addProductToQuote(
       quote.id,
       productId,
       quantity,
     );
+
     if (updatedQuote) {
+      console.log('Product added successfully, updating quote:', updatedQuote);
       setQuote(updatedQuote);
       setShowProductCatalogue(false);
       toast({
         title: "Product added",
         description: "Product has been added to the quote.",
+      });
+    } else {
+      console.error('Failed to add product to quote');
+      toast({
+        title: "Error",
+        description: "Failed to add product to quote. Please try again.",
+        variant: "destructive",
       });
     }
   };
