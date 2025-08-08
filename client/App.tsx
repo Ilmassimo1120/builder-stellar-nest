@@ -65,6 +65,14 @@ const App = () => (
                 </ProtectedRoute>
               }
             />
+            <Route
+              path="/users"
+              element={
+                <ProtectedRoute>
+                  <Users />
+                </ProtectedRoute>
+              }
+            />
 
             {/* Project Management Routes */}
             <Route
