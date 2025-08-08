@@ -604,27 +604,33 @@ class EnhancedFileStorageService {
 
       if (error) throw error;
 
-      const totalFiles = data.length;
-      const totalSize = data.reduce((sum, file) => sum + file.file_size, 0);
+      const totalFiles = data?.length || 0;
+      const totalSize = data?.reduce((sum, file) => {
+        const fileSize = Number(file.file_size) || 0;
+        return sum + fileSize;
+      }, 0) || 0;
 
       const bucketBreakdown = this.buckets.reduce((acc, bucket) => {
-        const bucketFiles = data.filter(f => f.bucket_name === bucket);
+        const bucketFiles = data?.filter(f => f.bucket_name === bucket) || [];
         acc[bucket] = {
           files: bucketFiles.length,
-          size: bucketFiles.reduce((sum, f) => sum + f.file_size, 0)
+          size: bucketFiles.reduce((sum, f) => {
+            const fileSize = Number(f.file_size) || 0;
+            return sum + fileSize;
+          }, 0)
         };
         return acc;
       }, {} as Record<BucketName, { files: number; size: number }>);
 
-      const categoryBreakdown = data.reduce((acc, file) => {
+      const categoryBreakdown = data?.reduce((acc, file) => {
         const category = file.category || 'uncategorized';
         if (!acc[category]) {
           acc[category] = { files: 0, size: 0 };
         }
         acc[category].files++;
-        acc[category].size += file.file_size;
+        acc[category].size += Number(file.file_size) || 0;
         return acc;
-      }, {} as Record<string, { files: number; size: number }>);
+      }, {} as Record<string, { files: number; size: number }>) || {};
 
       return {
         totalFiles,
