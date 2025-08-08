@@ -45,7 +45,7 @@ import { KnowledgeBaseWidget } from "@/components/KnowledgeBaseWidget";
 import { SupabaseSetup } from "@/components/SupabaseSetup";
 import SupabaseMigration from "@/components/SupabaseMigration";
 import SupabaseTest from "@/components/SupabaseTest";
-import { projectService, autoConfigureSupabase } from "@/lib/supabase";
+import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/hooks/useAuth";
 import RoleBasedNavigation, {
   RoleQuickActions,
