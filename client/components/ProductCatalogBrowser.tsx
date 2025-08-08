@@ -48,7 +48,9 @@ export default function ProductCatalogBrowser({
   isOpen,
   onClose,
   onAddProduct,
-  selectedCategory
+  selectedCategory,
+  onCompareProducts,
+  maxCompareProducts = 4
 }: ProductCatalogBrowserProps) {
   const [filter, setFilter] = useState<ProductFilter>({
     category: selectedCategory,
