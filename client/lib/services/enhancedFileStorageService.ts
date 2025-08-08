@@ -415,11 +415,20 @@ class EnhancedFileStorageService {
       // Order by creation date (newest first)
       query = query.order('created_at', { ascending: false });
 
-      const { data, error } = await query;
+      // Try to execute query, but handle gracefully if database unavailable
+      try {
+        const { data, error } = await query;
 
-      if (error) throw error;
+        if (error) {
+          console.warn('Database query failed for search, returning empty results:', error.message);
+          return [];
+        }
 
-      return (data || []).map(this.mapToFileAsset);
+        return (data || []).map(this.mapToFileAsset);
+      } catch (queryError) {
+        console.warn('Database connection failed for search, returning empty results:', this.formatError(queryError, 'Database unavailable'));
+        return [];
+      }
     } catch (error) {
       const errorMessage = this.formatError(error, 'Unknown search error');
       console.error('Search error:', errorMessage, error);
