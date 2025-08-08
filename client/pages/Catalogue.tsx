@@ -414,6 +414,14 @@ export default function Catalogue() {
           )}
         </div>
 
+        {/* Admin Product Manager */}
+        {user?.role === 'admin' && (
+          <AdminProductManager
+            isOpen={showAdminPanel}
+            onClose={handleAdminPanelClose}
+          />
+        )}
+
         {/* Product Detail Modal */}
         {selectedProduct && (
           <Dialog open={!!selectedProduct} onOpenChange={() => setSelectedProduct(null)}>
