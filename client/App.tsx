@@ -196,23 +196,9 @@ const App = () => (
               }
             />
 
-            {/* Client Management */}
-            <Route
-              path="/clients"
-              element={
-                <Placeholder
-                  title="Client Management"
-                  description="Manage client relationships and project portfolios"
-                  features={[
-                    "Client dashboard",
-                    "Project history",
-                    "Communication logs",
-                    "Contact management",
-                    "Billing information",
-                  ]}
-                />
-              }
-            />
+            {/* Customer Management */}
+            <Route path="/clients" element={<Customers />} />
+            <Route path="/customers" element={<Customers />} />
 
             {/* Document Management */}
             <Route
