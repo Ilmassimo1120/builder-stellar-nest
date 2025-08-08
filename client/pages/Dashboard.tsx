@@ -497,12 +497,19 @@ export default function Dashboard() {
           </div>
           <RoleBasedNavigation variant="header" className="hidden md:flex" />
           <div className="flex items-center space-x-3">
-            <Button variant="ghost" size="icon">
-              <Bell className="w-5 h-5" />
-            </Button>
-            <Button variant="ghost" size="icon">
-              <Settings className="w-5 h-5" />
-            </Button>
+            <PermissionGate permission="analytics.view">
+              <Button variant="ghost" size="icon">
+                <Bell className="w-5 h-5" />
+              </Button>
+            </PermissionGate>
+            <PermissionGate permission="settings.view">
+              <Button variant="ghost" size="icon" asChild>
+                <Link to="/settings">
+                  <Settings className="w-5 h-5" />
+                </Link>
+              </Button>
+            </PermissionGate>
+            <RoleBasedNavigation variant="dropdown" />
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
