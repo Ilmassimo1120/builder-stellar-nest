@@ -410,6 +410,120 @@ class CategoryService {
     }
   }
 
+  // Reordering methods
+  reorderCategories(categoryIds: string[]): boolean {
+    try {
+      // Create a map of current categories
+      const categoryMap = new Map(this.categories.map(cat => [cat.id, cat]));
+
+      // Validate that all IDs exist
+      for (const id of categoryIds) {
+        if (!categoryMap.has(id)) {
+          throw new Error(`Category with ID ${id} not found`);
+        }
+      }
+
+      // Update categories with new order
+      this.categories = categoryIds.map((id, index) => ({
+        ...categoryMap.get(id)!,
+        order: index,
+      }));
+
+      this.saveToStorage();
+      return true;
+    } catch (error) {
+      console.error("Error reordering categories:", error);
+      return false;
+    }
+  }
+
+  reorderSubcategories(categoryId: string, subcategoryIds: string[]): boolean {
+    try {
+      const categoryIndex = this.categories.findIndex(cat => cat.id === categoryId);
+      if (categoryIndex === -1) {
+        throw new Error("Category not found");
+      }
+
+      const category = this.categories[categoryIndex];
+      const subcategoryMap = new Map(category.subcategories.map(sub => [sub.id, sub]));
+
+      // Validate that all IDs exist
+      for (const id of subcategoryIds) {
+        if (!subcategoryMap.has(id)) {
+          throw new Error(`Subcategory with ID ${id} not found`);
+        }
+      }
+
+      // Update subcategories with new order
+      this.categories[categoryIndex].subcategories = subcategoryIds.map((id, index) => ({
+        ...subcategoryMap.get(id)!,
+        order: index,
+      }));
+
+      this.saveToStorage();
+      return true;
+    } catch (error) {
+      console.error("Error reordering subcategories:", error);
+      return false;
+    }
+  }
+
+  // Move category up or down
+  moveCategoryUp(categoryId: string): boolean {
+    const sortedCategories = this.getCategories();
+    const currentIndex = sortedCategories.findIndex(cat => cat.id === categoryId);
+
+    if (currentIndex <= 0) return false; // Already at top or not found
+
+    const newOrder = [...sortedCategories];
+    [newOrder[currentIndex - 1], newOrder[currentIndex]] = [newOrder[currentIndex], newOrder[currentIndex - 1]];
+
+    return this.reorderCategories(newOrder.map(cat => cat.id));
+  }
+
+  moveCategoryDown(categoryId: string): boolean {
+    const sortedCategories = this.getCategories();
+    const currentIndex = sortedCategories.findIndex(cat => cat.id === categoryId);
+
+    if (currentIndex >= sortedCategories.length - 1 || currentIndex === -1) return false; // Already at bottom or not found
+
+    const newOrder = [...sortedCategories];
+    [newOrder[currentIndex], newOrder[currentIndex + 1]] = [newOrder[currentIndex + 1], newOrder[currentIndex]];
+
+    return this.reorderCategories(newOrder.map(cat => cat.id));
+  }
+
+  // Move subcategory up or down
+  moveSubcategoryUp(subcategoryId: string): boolean {
+    const subcategory = this.getSubcategory(subcategoryId);
+    if (!subcategory) return false;
+
+    const sortedSubcategories = this.getSubcategories(subcategory.categoryId);
+    const currentIndex = sortedSubcategories.findIndex(sub => sub.id === subcategoryId);
+
+    if (currentIndex <= 0) return false; // Already at top or not found
+
+    const newOrder = [...sortedSubcategories];
+    [newOrder[currentIndex - 1], newOrder[currentIndex]] = [newOrder[currentIndex], newOrder[currentIndex - 1]];
+
+    return this.reorderSubcategories(subcategory.categoryId, newOrder.map(sub => sub.id));
+  }
+
+  moveSubcategoryDown(subcategoryId: string): boolean {
+    const subcategory = this.getSubcategory(subcategoryId);
+    if (!subcategory) return false;
+
+    const sortedSubcategories = this.getSubcategories(subcategory.categoryId);
+    const currentIndex = sortedSubcategories.findIndex(sub => sub.id === subcategoryId);
+
+    if (currentIndex >= sortedSubcategories.length - 1 || currentIndex === -1) return false; // Already at bottom or not found
+
+    const newOrder = [...sortedSubcategories];
+    [newOrder[currentIndex], newOrder[currentIndex + 1]] = [newOrder[currentIndex + 1], newOrder[currentIndex]];
+
+    return this.reorderSubcategories(subcategory.categoryId, newOrder.map(sub => sub.id));
+  }
+
   // Reset to defaults
   resetToDefaults(): void {
     this.categories = [];
