@@ -39,6 +39,8 @@ import {
   User,
   LogOut,
   HelpCircle,
+  Upload,
+  FolderOpen,
 } from "lucide-react";
 import { Logo } from "@/components/ui/logo";
 import { KnowledgeBaseWidget } from "@/components/KnowledgeBaseWidget";
