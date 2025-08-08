@@ -460,6 +460,16 @@ const App = () => (
               }
             />
 
+            {/* Settings Routes */}
+            <Route
+              path="/settings"
+              element={
+                <ProtectedRoute>
+                  <Settings />
+                </ProtectedRoute>
+              }
+            />
+
             {/* Catch-all route */}
             <Route path="*" element={<NotFound />} />
           </Routes>
