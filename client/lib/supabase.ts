@@ -436,21 +436,15 @@ export const checkSupabaseConnection = async (): Promise<boolean> => {
 };
 
 export const autoConfigureSupabase = async (): Promise<boolean> => {
-  try {
-    // Test connection to users table
-    const { data, error } = await supabase.from('users').select('count').limit(1);
-
-    if (!error) {
-      console.log("✅ Supabase connection successful");
-      return true;
-    } else {
-      console.log("⚠️ Supabase connection failed:", error.message);
-      return false;
-    }
-  } catch (error) {
-    console.error("❌ Supabase auto-configuration failed:", error);
-    return false;
+  // Return cached connection state if available
+  if (isSupabaseConnected) {
+    return true;
   }
+
+  // Try to establish connection
+  const connected = await initializeSupabase();
+  isSupabaseConnected = connected;
+  return connected;
 };
 
 // Project service functions
