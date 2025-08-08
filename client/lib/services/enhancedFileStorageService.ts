@@ -158,10 +158,20 @@ class EnhancedFileStorageService {
    */
   async uploadFile(request: FileUploadRequest): Promise<FileAsset> {
     try {
+      // More robust authentication check
       const { data: { user }, error: userError } = await supabase.auth.getUser();
-      if (userError || !user) {
-        throw new Error('User must be authenticated to upload files');
+
+      if (userError) {
+        console.error('Authentication error:', userError);
+        throw new Error(`Authentication failed: ${userError.message}`);
       }
+
+      if (!user) {
+        console.error('No authenticated user found');
+        throw new Error('Please log in to upload files');
+      }
+
+      console.log('User authenticated for upload:', user.email);
 
       // Validate file
       const validation = this.validateFile(request.file, request.bucket);
