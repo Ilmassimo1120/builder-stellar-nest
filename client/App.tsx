@@ -208,6 +208,14 @@ const App = () => (
               path="/files"
               element={
                 <ProtectedRoute>
+                  <EnhancedFileStorage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/files/legacy"
+              element={
+                <ProtectedRoute>
                   <FileStorage />
                 </ProtectedRoute>
               }
