@@ -411,13 +411,18 @@ export default function ProjectWizard() {
     };
   }, [user, throttledAutoSave, currentStep]);
 
-  // Check for draft from URL params, load existing, or show template selector
+  // Check for edit mode, draft from URL params, load existing, or show template selector
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const draftId = urlParams.get("draft");
     const template = urlParams.get("template");
 
-    if (draftId && user) {
+    // Check if we're in edit mode (URL contains /edit)
+    if (projectId && window.location.pathname.includes('/edit')) {
+      setIsEditMode(true);
+      setLoadingProject(true);
+      loadExistingProject(projectId);
+    } else if (draftId && user) {
       getDraftById(draftId).then((draft) => {
         if (draft && draft.userId === user.id) {
           loadDraft(draft);
@@ -427,11 +432,11 @@ export default function ProjectWizard() {
       // Load specific template from URL
       // This allows direct linking to templates
       setShowTemplateSelector(false);
-    } else if (!draftId && user) {
+    } else if (!draftId && user && !projectId) {
       // Show template selector for new projects
       setShowTemplateSelector(true);
     }
-  }, [user]);
+  }, [user, projectId]);
 
   // Quietly check for cloud storage availability (optional)
   useEffect(() => {
