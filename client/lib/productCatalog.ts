@@ -6,6 +6,15 @@ export interface ProductCategory {
   name: string;
   description: string;
   subcategories: ProductSubcategory[];
+  order: number;
+}
+
+export interface ProductSubcategory {
+  id: string;
+  name: string;
+  description: string;
+  categoryId: string;
+  order: number;
 }
 
 export interface ProductSubcategory {
