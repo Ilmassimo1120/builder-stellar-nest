@@ -157,20 +157,32 @@ class EnhancedFileStorageService {
     if (error instanceof Error) {
       // Handle specific error types
       if (error.name === "TypeError" && error.message.includes("fetch")) {
-        return "Network connection failed. Please check your internet connection and try again.";
+        return "Network connection failed. This appears to be a CORS or network connectivity issue. Please check your internet connection and Supabase CORS settings.";
+      }
+      if (error.message.includes("Failed to fetch")) {
+        return "Upload failed due to network issues. This might be a CORS problem. Please check your Supabase project settings and ensure CORS is properly configured.";
+      }
+      if (error.message.includes("CORS")) {
+        return "CORS (Cross-Origin Resource Sharing) error detected. Please check your Supabase project settings and add your domain to the allowed origins.";
       }
       return error.message;
     }
     if (typeof error === "string") {
+      if (error.includes("Failed to fetch")) {
+        return "Upload failed due to network issues. This might be a CORS problem. Please check your Supabase project settings.";
+      }
       return error;
     }
     if (error && typeof error === "object") {
       // Handle fetch/network errors
       if ("name" in error && error.name === "TypeError") {
-        return "Network connection failed. Please check your internet connection and try again.";
+        return "Network connection failed. This appears to be a CORS or network connectivity issue.";
       }
       // Handle Supabase error format
       if ("message" in error && typeof error.message === "string") {
+        if (error.message.includes("Failed to fetch")) {
+          return "Upload failed due to network issues. This might be a CORS problem. Please check your Supabase project settings.";
+        }
         return error.message;
       }
       // Handle PostgreSQL/database errors
