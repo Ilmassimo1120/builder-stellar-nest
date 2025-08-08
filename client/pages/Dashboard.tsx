@@ -751,10 +751,11 @@ export default function Dashboard() {
 
         {/* Main Content Tabs */}
         <Tabs defaultValue="projects" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3 lg:w-[400px]">
+          <TabsList className="grid w-full grid-cols-4 lg:w-[500px]">
             <TabsTrigger value="projects">Recent Projects</TabsTrigger>
             <TabsTrigger value="analytics">Analytics</TabsTrigger>
             <TabsTrigger value="activity">Activity Feed</TabsTrigger>
+            <TabsTrigger value="database">Database Test</TabsTrigger>
           </TabsList>
 
           <TabsContent value="projects" className="space-y-6">
