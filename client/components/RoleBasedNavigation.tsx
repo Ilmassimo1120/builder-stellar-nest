@@ -84,7 +84,7 @@ const navigationItems: NavItem[] = [
     path: '/settings',
     label: 'Settings',
     icon: <Settings className="w-4 h-4" />,
-    permission: 'settings.view'
+    permission: 'users.edit.own'
   }
 ];
 
