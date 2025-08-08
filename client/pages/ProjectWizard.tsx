@@ -939,7 +939,7 @@ export default function ProjectWizard() {
 
       // Show success message and navigate
       console.log(
-        "✅ Project created successfully in localStorage:",
+        `✅ Project ${actionType.toLowerCase()} successfully in localStorage:`,
         projectData,
       );
 
