@@ -526,6 +526,9 @@ export default function Dashboard() {
                   <p className="text-xs text-muted-foreground">
                     {user?.company}
                   </p>
+                  <div className="mt-2">
+                    <UserRoleIndicator size="sm" />
+                  </div>
                 </div>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
