@@ -393,4 +393,115 @@ export const setupDatabase = async () => {
   }
 };
 
+// Connection testing functions
+export const checkSupabaseConnection = async (): Promise<boolean> => {
+  try {
+    const { data, error } = await supabase.from('users').select('count').limit(1);
+    return !error;
+  } catch (error) {
+    console.error("Supabase connection test failed:", error);
+    return false;
+  }
+};
+
+export const autoConfigureSupabase = async (): Promise<boolean> => {
+  try {
+    // Test connection to users table
+    const { data, error } = await supabase.from('users').select('count').limit(1);
+
+    if (!error) {
+      console.log("✅ Supabase connection successful");
+      return true;
+    } else {
+      console.log("⚠️ Supabase connection failed:", error.message);
+      return false;
+    }
+  } catch (error) {
+    console.error("❌ Supabase auto-configuration failed:", error);
+    return false;
+  }
+};
+
+// Project service functions
+export const projectService = {
+  getAllProjects: async () => {
+    try {
+      const { data, error } = await supabase
+        .from('projects')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      return data || [];
+    } catch (error) {
+      console.error("Error fetching projects:", error);
+      return [];
+    }
+  },
+
+  getProject: async (id: string) => {
+    try {
+      const { data, error } = await supabase
+        .from('projects')
+        .select('*')
+        .eq('id', id)
+        .single();
+
+      if (error) throw error;
+      return data;
+    } catch (error) {
+      console.error("Error fetching project:", error);
+      return null;
+    }
+  },
+
+  createProject: async (projectData: any) => {
+    try {
+      const { data, error } = await supabase
+        .from('projects')
+        .insert([projectData])
+        .select()
+        .single();
+
+      if (error) throw error;
+      return data;
+    } catch (error) {
+      console.error("Error creating project:", error);
+      throw error;
+    }
+  },
+
+  updateProject: async (id: string, updates: any) => {
+    try {
+      const { data, error } = await supabase
+        .from('projects')
+        .update(updates)
+        .eq('id', id)
+        .select()
+        .single();
+
+      if (error) throw error;
+      return data;
+    } catch (error) {
+      console.error("Error updating project:", error);
+      throw error;
+    }
+  },
+
+  deleteProject: async (id: string) => {
+    try {
+      const { error } = await supabase
+        .from('projects')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+      return true;
+    } catch (error) {
+      console.error("Error deleting project:", error);
+      throw error;
+    }
+  }
+};
+
 export type { Database };
