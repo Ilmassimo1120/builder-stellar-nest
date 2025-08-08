@@ -1035,6 +1035,59 @@ export default function Dashboard() {
           </TabsContent>
         </Tabs>
 
+        {/* Admin Knowledge Base Management */}
+        {(isAdmin || isGlobalAdmin) && (
+          <Card className="mb-6">
+            <CardHeader>
+              <CardTitle className="flex items-center space-x-2">
+                <FileText className="h-5 w-5 text-blue-500" />
+                <span>Knowledge Base Management</span>
+                <Badge variant="secondary" className="ml-2">Admin Only</Badge>
+              </CardTitle>
+              <CardDescription>
+                Manage and upload documents, manuals, and training materials to the knowledge base
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <Button asChild className="h-auto p-4">
+                  <Link to="/files" className="flex flex-col items-start space-y-2">
+                    <div className="flex items-center space-x-2">
+                      <Upload className="h-5 w-5" />
+                      <span className="font-medium">Upload Files</span>
+                    </div>
+                    <span className="text-sm text-left opacity-90">
+                      Add documents, manuals, and training videos to the knowledge base
+                    </span>
+                  </Link>
+                </Button>
+                <Button variant="outline" asChild className="h-auto p-4">
+                  <Link to="/files?tab=documents" className="flex flex-col items-start space-y-2">
+                    <div className="flex items-center space-x-2">
+                      <FolderOpen className="h-5 w-5" />
+                      <span className="font-medium">Manage Documents</span>
+                    </div>
+                    <span className="text-sm text-left text-muted-foreground">
+                      Organize existing documents and approve uploads
+                    </span>
+                  </Link>
+                </Button>
+                <Button variant="outline" asChild className="h-auto p-4">
+                  <Link to="/files?tab=approval" className="flex flex-col items-start space-y-2">
+                    <div className="flex items-center space-x-2">
+                      <CheckCircle2 className="h-5 w-5" />
+                      <span className="font-medium">Approval Queue</span>
+                    </div>
+                    <span className="text-sm text-left text-muted-foreground">
+                      Review and approve pending knowledge base submissions
+                    </span>
+                  </Link>
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
         {/* Knowledge Base & Quick Help - placed under Recent Projects */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
           <div className="lg:col-span-2">
