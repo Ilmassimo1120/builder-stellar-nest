@@ -13,6 +13,14 @@ export default function ConnectionStatus() {
     checkConnection();
   }, []);
 
+  const forceRecheck = async () => {
+    setIsLoading(true);
+    // Reset the auto initialization
+    (autoInit as any).initialized = false;
+    (autoInit as any).supabaseConnected = false;
+    await checkConnection();
+  };
+
   const checkConnection = async () => {
     try {
       console.log("🔄 ConnectionStatus: Starting connection check...");
