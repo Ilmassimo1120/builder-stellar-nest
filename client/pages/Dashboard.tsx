@@ -1049,6 +1049,7 @@ export default function Dashboard() {
           </TabsContent>
 
           <TabsContent value="database" className="space-y-6">
+            <SupabaseConnectionTest />
             <SupabaseTest />
           </TabsContent>
         </Tabs>
