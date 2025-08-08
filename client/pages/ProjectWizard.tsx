@@ -787,11 +787,14 @@ export default function ProjectWizard() {
   };
 
   const handleSubmit = async () => {
-    console.log("🚀 Creating project...", {
+    const actionType = isEditMode ? "Updating" : "Creating";
+    console.log(`🚀 ${actionType} project...`, {
       step: currentStep,
       projectName: siteAssessment.projectName,
       clientName: clientRequirements.contactPersonName,
       supabaseConnected: isSupabaseConnected,
+      editMode: isEditMode,
+      projectId: projectId
     });
 
     const validationErrors = validateProjectData();
