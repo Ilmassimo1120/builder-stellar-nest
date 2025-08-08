@@ -430,6 +430,16 @@ class EnhancedFileStorageService {
         return [];
       }
     } catch (error) {
+      // Handle authentication and network errors gracefully
+      if (error instanceof Error && (
+        error.message.includes('Network connection failed') ||
+        error.message.includes('No active session') ||
+        error.message.includes('Database unavailable')
+      )) {
+        console.log('Search unavailable due to:', error.message);
+        return []; // Return empty results instead of throwing
+      }
+
       const errorMessage = this.formatError(error, 'Unknown search error');
       console.error('Search error:', errorMessage, error);
       throw new Error(`Search failed: ${errorMessage}`);
