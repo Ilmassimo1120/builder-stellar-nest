@@ -478,6 +478,14 @@ const App = () => (
                 </ProtectedRoute>
               }
             />
+            <Route
+              path="/cloud-status"
+              element={
+                <ProtectedRoute>
+                  <CloudStatus />
+                </ProtectedRoute>
+              }
+            />
 
             {/* Catch-all route */}
             <Route path="*" element={<NotFound />} />
