@@ -88,7 +88,7 @@ export default function QuoteBuilder() {
   useEffect(() => {
     const loadQuote = async () => {
       try {
-        if (quoteId === "new") {
+        if (isNewQuote) {
           // Create new quote
           const projectId = searchParams.get("project");
           const templateId = searchParams.get("template");
@@ -128,9 +128,14 @@ export default function QuoteBuilder() {
             navigate("/quotes");
           }
         } else {
-          // No quote ID provided
-          console.error("No quote ID provided");
-          setLoading(false);
+          // This should not happen with proper routing
+          console.error("Invalid quote route - no ID provided");
+          toast({
+            title: "Invalid route",
+            description: "Invalid quote route. Redirecting to quotes page.",
+            variant: "destructive",
+          });
+          navigate("/quotes");
         }
 
         // Load templates and product catalogue
