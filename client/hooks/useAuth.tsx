@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { UserRole, rbacService } from '@/lib/rbac';
 
 export interface User {
   id: string;
@@ -14,10 +15,12 @@ export interface User {
   servicesOffered?: string[];
   businessAddress?: string;
   website?: string;
-  role: string;
+  role: UserRole;
   registrationDate?: string;
   loginTime?: string;
   verified?: boolean;
+  department?: string;
+  permissions?: string[];
 }
 
 interface AuthContextType {
