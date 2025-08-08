@@ -74,6 +74,12 @@ export default function CategoryManager({
   const [editCategory, setEditCategory] = useState<ProductCategory | null>(null);
   const [newSubcategory, setNewSubcategory] = useState({ name: "", description: "" });
 
+  // Drag and drop state
+  const [draggedCategory, setDraggedCategory] = useState<string | null>(null);
+  const [dragOverCategory, setDragOverCategory] = useState<string | null>(null);
+  const [draggedSubcategory, setDraggedSubcategory] = useState<string | null>(null);
+  const [dragOverSubcategory, setDragOverSubcategory] = useState<string | null>(null);
+
   const refreshCategories = () => {
     const updatedCategories = categoryService.getCategories();
     setCategories(updatedCategories);
