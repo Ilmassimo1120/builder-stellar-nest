@@ -393,6 +393,37 @@ export const setupDatabase = async () => {
   }
 };
 
+// Auto-initialize Supabase connection on app startup
+export const initializeSupabase = async () => {
+  try {
+    console.log("🚀 Initializing ChargeSource Supabase connection...");
+
+    // Test connection
+    const { data, error } = await supabase.from('users').select('count').limit(1);
+
+    if (error) {
+      console.warn("⚠️ Supabase connection not available, using local mode:", error.message);
+      return false;
+    }
+
+    console.log("✅ Supabase connected successfully");
+    return true;
+  } catch (error) {
+    console.warn("⚠️ Supabase initialization failed, using local mode:", error);
+    return false;
+  }
+};
+
+// Global connection state
+let isSupabaseConnected = false;
+
+// Initialize on module load
+initializeSupabase().then(connected => {
+  isSupabaseConnected = connected;
+});
+
+export const isConnectedToSupabase = () => isSupabaseConnected;
+
 // Connection testing functions
 export const checkSupabaseConnection = async (): Promise<boolean> => {
   try {
