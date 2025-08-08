@@ -164,7 +164,7 @@ class CategoryService {
       .replace(/[^a-z0-9\s]/g, '')
       .replace(/\s+/g, '-')
       .substring(0, 50);
-    
+
     // Ensure ID is unique
     let finalId = id;
     let counter = 1;
@@ -173,16 +173,20 @@ class CategoryService {
       counter++;
     }
 
+    // Assign the next order value
+    const maxOrder = Math.max(...this.categories.map(cat => cat.order), -1);
+
     const newCategory: ProductCategory = {
       id: finalId,
       name: name.trim(),
       description: description.trim(),
       subcategories: [],
+      order: maxOrder + 1,
     };
 
     this.categories.push(newCategory);
     this.saveToStorage();
-    
+
     return newCategory;
   }
 
