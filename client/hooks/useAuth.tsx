@@ -74,19 +74,44 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       // For demo purposes, accept any email/password combination
       // In a real app, this would validate against a backend
-      const isAdmin = email.includes('admin') || email === 'admin@chargesource.com.au';
+      let role: UserRole = UserRole.USER;
+      let company = 'Demo Electrical Services';
+      let department = 'General';
+
+      // Determine role based on email patterns
+      if (email.includes('globaladmin') || email === 'globaladmin@chargesource.com.au') {
+        role = UserRole.GLOBAL_ADMIN;
+        company = 'ChargeSource Global';
+        department = 'Global Administration';
+      } else if (email.includes('admin') || email === 'admin@chargesource.com.au') {
+        role = UserRole.ADMIN;
+        company = 'ChargeSource Administration';
+        department = 'Administration';
+      } else if (email.includes('sales') || email.includes('sale')) {
+        role = UserRole.SALES;
+        company = 'ChargeSource Sales';
+        department = 'Sales & Marketing';
+      } else if (email.includes('partner')) {
+        role = UserRole.PARTNER;
+        company = 'Partner Organization';
+        department = 'Partnership';
+      }
+
       const userData: User = {
         id: `user-${Date.now()}`,
         email,
         name: email.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
-        company: isAdmin ? 'ChargeSource Administration' : 'Demo Electrical Services',
-        role: isAdmin ? 'admin' : 'contractor',
-        loginTime: new Date().toISOString()
+        company,
+        department,
+        role,
+        loginTime: new Date().toISOString(),
+        permissions: rbacService.getRolePermissions(role),
+        verified: true
       };
 
       setUser(userData);
       localStorage.setItem('chargeSourceUser', JSON.stringify(userData));
-      
+
       if (rememberMe) {
         localStorage.setItem('chargeSourceRememberMe', 'true');
       }
