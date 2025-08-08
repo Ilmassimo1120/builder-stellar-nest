@@ -22,6 +22,7 @@ import NotFound from "./pages/NotFound";
 import Catalogue from "./pages/Catalogue";
 import AdminCatalogue from "./pages/AdminCatalogue";
 import Settings from "./pages/Settings";
+import Analytics from "./pages/Analytics";
 import { AuthProvider } from "./hooks/useAuth";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { AIAssistant } from "./components/AIAssistant";
