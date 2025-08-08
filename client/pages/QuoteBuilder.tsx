@@ -81,44 +81,68 @@ export default function QuoteBuilder() {
 
   // Load quote data
   useEffect(() => {
-    if (quoteId === "new") {
-      // Create new quote
-      const projectId = searchParams.get("project");
-      const templateId = searchParams.get("template");
-      const newQuote = quoteService.createQuote(
-        projectId || undefined,
-        templateId || undefined,
-      );
+    const loadQuote = async () => {
+      try {
+        if (quoteId === "new") {
+          // Create new quote
+          const projectId = searchParams.get("project");
+          const templateId = searchParams.get("template");
 
-      if (user) {
-        newQuote.createdBy = user.id;
-        quoteService.updateQuote(newQuote);
-      }
+          console.log("Creating new quote with projectId:", projectId, "templateId:", templateId);
 
-      setQuote(newQuote);
-      setLoading(false);
+          const newQuote = quoteService.createQuote(
+            projectId || undefined,
+            templateId || undefined,
+          );
 
-      // Update URL to use the actual quote ID
-      navigate(`/quotes/${newQuote.id}`, { replace: true });
-    } else if (quoteId) {
-      // Load existing quote
-      const existingQuote = quoteService.getQuote(quoteId);
-      if (existingQuote) {
-        setQuote(existingQuote);
-      } else {
+          if (user) {
+            newQuote.createdBy = user.id;
+            quoteService.updateQuote(newQuote);
+          }
+
+          console.log("New quote created:", newQuote);
+          setQuote(newQuote);
+          setLoading(false);
+
+          // Update URL to use the actual quote ID
+          navigate(`/quotes/${newQuote.id}`, { replace: true });
+        } else if (quoteId) {
+          // Load existing quote
+          console.log("Loading existing quote:", quoteId);
+          const existingQuote = quoteService.getQuote(quoteId);
+          if (existingQuote) {
+            setQuote(existingQuote);
+            setLoading(false);
+          } else {
+            console.error("Quote not found:", quoteId);
+            toast({
+              title: "Quote not found",
+              description: "The quote you're looking for doesn't exist.",
+              variant: "destructive",
+            });
+            navigate("/quotes");
+          }
+        } else {
+          // No quote ID provided
+          console.error("No quote ID provided");
+          setLoading(false);
+        }
+
+        // Load templates and product catalogue
+        setTemplates(quoteService.getAllTemplates());
+        setProductCatalogue(quoteService.getProductCatalogueItems());
+      } catch (error) {
+        console.error("Error loading quote:", error);
         toast({
-          title: "Quote not found",
-          description: "The quote you're looking for doesn't exist.",
+          title: "Error loading quote",
+          description: "There was an error loading the quote. Please try again.",
           variant: "destructive",
         });
-        navigate("/quotes");
+        setLoading(false);
       }
-      setLoading(false);
-    }
+    };
 
-    // Load templates and product catalogue
-    setTemplates(quoteService.getAllTemplates());
-    setProductCatalogue(quoteService.getProductCatalogueItems());
+    loadQuote();
   }, [quoteId, searchParams, navigate, user, toast]);
 
   // Auto-save functionality
