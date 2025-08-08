@@ -178,8 +178,19 @@ export default function Catalogue() {
                 </a>
               </nav>
 
+              {/* User Preferences */}
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowPreferences(true)}
+                className="flex items-center gap-2"
+              >
+                <Settings className="w-4 h-4" />
+                My Preferences
+              </Button>
+
               {/* Admin Controls */}
-              {user?.role === "admin" && (
+              {(user?.role === "admin" || user?.role === "global_admin") && (
                 <Button
                   variant="outline"
                   size="sm"
