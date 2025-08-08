@@ -28,6 +28,7 @@ import UserRoleIndicator, {
   PermissionGate,
   RoleGate,
 } from "./UserRoleIndicator";
+import ConnectionStatus from "./ConnectionStatus";
 
 interface NavItem {
   path: string;
@@ -143,6 +144,13 @@ export default function RoleBasedNavigation({
               <UserRoleIndicator size="sm" />
             </div>
           </DropdownMenuLabel>
+          <DropdownMenuSeparator />
+
+          {/* ChargeSource Cloud Status */}
+          <div className="px-2 py-1">
+            <ConnectionStatus />
+          </div>
+
           <DropdownMenuSeparator />
 
           {visibleItems.map((item) => (
