@@ -294,8 +294,9 @@ class EnhancedFileStorageService {
         query = query.lte('created_at', filters.dateTo.toISOString());
       }
 
-      if (filters.searchQuery) {
-        query = query.or(`title.ilike.%${filters.searchQuery}%,description.ilike.%${filters.searchQuery}%,file_name.ilike.%${filters.searchQuery}%`);
+      if (filters.searchQuery && filters.searchQuery.trim()) {
+        const searchTerm = filters.searchQuery.trim().replace(/[%_]/g, '\\$&'); // Escape SQL wildcards
+        query = query.or(`title.ilike.%${searchTerm}%,description.ilike.%${searchTerm}%,file_name.ilike.%${searchTerm}%`);
       }
 
       // Only show current versions by default
