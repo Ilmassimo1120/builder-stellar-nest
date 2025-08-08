@@ -330,7 +330,7 @@ export default function AdminCatalogue() {
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {productCatalog.getCategories().map((category) => {
+                {productCatalog.getCategories(user?.id).map((category) => {
                   const categoryProducts = productCatalog.getProducts({
                     category: category.id,
                   });
