@@ -814,6 +814,25 @@ class EnhancedFileStorageService {
         categoryBreakdown
       };
     } catch (error) {
+      // Handle authentication and network errors gracefully
+      if (error instanceof Error && (
+        error.message.includes('Network connection failed') ||
+        error.message.includes('No active session') ||
+        error.message.includes('Database unavailable')
+      )) {
+        console.log('Storage usage unavailable due to:', error.message);
+        // Return empty stats instead of throwing
+        return {
+          totalFiles: 0,
+          totalSize: 0,
+          bucketBreakdown: this.buckets.reduce((acc, bucket) => {
+            acc[bucket] = { files: 0, size: 0 };
+            return acc;
+          }, {} as Record<BucketName, { files: number; size: number }>),
+          categoryBreakdown: {}
+        };
+      }
+
       const errorMessage = this.formatError(error, 'Unknown storage usage error');
       console.error('Get storage usage error:', errorMessage, error);
       throw new Error(`Failed to get storage usage: ${errorMessage}`);
