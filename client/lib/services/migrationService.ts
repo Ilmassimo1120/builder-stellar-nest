@@ -301,7 +301,7 @@ class MigrationService {
     }
   }
 
-  private clearMigratedData(userRole?: string) {
+  private async clearMigratedData(userRole?: string) {
     try {
       // Clear migrated localStorage data
       const keysToRemove = [
@@ -319,9 +319,13 @@ class MigrationService {
       }
 
       // Remove partner-specific configs
-      const { data: { user } } = await supabase.auth.getUser()
-      if (user) {
-        keysToRemove.push(`chargeSourcePartnerConfig_${user.id}`)
+      try {
+        const { data: { user } } = await supabase.auth.getUser()
+        if (user) {
+          keysToRemove.push(`chargeSourcePartnerConfig_${user.id}`)
+        }
+      } catch (authError) {
+        console.warn('Could not get user for clearing partner configs:', authError)
       }
 
       keysToRemove.forEach(key => {
