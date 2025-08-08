@@ -504,28 +504,19 @@ export const autoConfigureSupabase = async (): Promise<boolean> => {
   console.log("🔄 autoConfigureSupabase called");
 
   try {
-    // Check for problematic environments first
-    if (typeof window !== 'undefined' && window.fetch && window.fetch.toString().includes('messageHandler')) {
-      console.log("🔄 FullStory or similar monitoring tool detected, using local mode to prevent errors");
+    // Immediate check for problematic environments - don't make any async calls
+    if (isProblematicEnvironment()) {
+      console.log("🔄 Monitoring tools detected, immediately using local mode");
       isSupabaseConnected = false;
       return false;
     }
 
-    // Use a timeout to prevent hanging
-    const timeoutPromise = new Promise<boolean>((resolve) => {
-      setTimeout(() => {
-        console.log("⏰ autoConfigureSupabase timed out, using local mode");
-        resolve(false);
-      }, 5000);
-    });
-
-    const connectionPromise = initializeSupabase();
-    const connected = await Promise.race([connectionPromise, timeoutPromise]);
-
+    // Call initializeSupabase synchronously since it no longer makes fetch calls
+    const connected = await initializeSupabase();
     isSupabaseConnected = connected;
 
     if (connected) {
-      console.log("✅ Supabase connection established");
+      console.log("✅ Supabase connection enabled");
     } else {
       console.log("💾 Operating in local storage mode");
     }
