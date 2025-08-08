@@ -24,6 +24,7 @@ import Catalogue from "./pages/Catalogue";
 import AdminCatalogue from "./pages/AdminCatalogue";
 import Settings from "./pages/Settings";
 import Analytics from "./pages/Analytics";
+import TestConnection from "./pages/TestConnection";
 import { AuthProvider } from "./hooks/useAuth";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { AIAssistant } from "./components/AIAssistant";
