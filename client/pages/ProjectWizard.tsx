@@ -2981,7 +2981,7 @@ export default function ProjectWizard() {
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 text-green-600">
               <CheckCircle2 className="w-6 h-6" />
-              Project Created Successfully!
+              Project {isEditMode ? "Updated" : "Created"} Successfully!
             </DialogTitle>
             <DialogDescription className="text-base">
               Your EV infrastructure project has been created and is ready for
