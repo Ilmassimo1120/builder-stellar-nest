@@ -507,8 +507,8 @@ const App = () => (
             <Route path="*" element={<NotFound />} />
           </Routes>
 
-          {/* AI Assistant - Available throughout the platform */}
-          <AIAssistant />
+          {/* Enhanced AI Assistant - Available throughout the platform */}
+          <EnhancedAIAssistant />
         </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
