@@ -13,7 +13,8 @@ import { useToast } from "@/hooks/use-toast";
 import { Logo } from "@/components/ui/logo";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import AdminProductManager from "@/components/AdminProductManager";
-import { Shield, ArrowLeft, Package, Users, BarChart3 } from "lucide-react";
+import CategoryManager from "@/components/CategoryManager";
+import { Shield, ArrowLeft, Package, Users, BarChart3, Folder } from "lucide-react";
 import { productCatalog } from "@/lib/productCatalog";
 
 export default function AdminCatalogue() {
