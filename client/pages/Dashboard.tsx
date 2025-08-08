@@ -703,10 +703,9 @@ export default function Dashboard() {
           </CardContent>
         </Card>
 
-        {/* Supabase Migration & Knowledge Base */}
+        {/* Knowledge Base Widget */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
           <div className="lg:col-span-2 space-y-6">
-            <SupabaseMigration />
             <KnowledgeBaseWidget />
           </div>
           <Card>
