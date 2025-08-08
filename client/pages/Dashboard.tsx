@@ -495,35 +495,7 @@ export default function Dashboard() {
           <div className="flex items-center space-x-2">
             <Logo size="xl" />
           </div>
-          <nav className="hidden md:flex items-center space-x-6">
-            <Link to="/dashboard" className="text-sm font-medium text-primary">
-              Dashboard
-            </Link>
-            <Link
-              to="/projects"
-              className="text-sm font-medium hover:text-primary transition-colors"
-            >
-              Projects
-            </Link>
-            <Link
-              to="/quotes"
-              className="text-sm font-medium hover:text-primary transition-colors"
-            >
-              Quotes
-            </Link>
-            <Link
-              to="/catalogue"
-              className="text-sm font-medium hover:text-primary transition-colors"
-            >
-              Catalogue
-            </Link>
-            <Link
-              to="/clients"
-              className="text-sm font-medium hover:text-primary transition-colors"
-            >
-              Clients
-            </Link>
-          </nav>
+          <RoleBasedNavigation variant="header" className="hidden md:flex" />
           <div className="flex items-center space-x-3">
             <Button variant="ghost" size="icon">
               <Bell className="w-5 h-5" />
