@@ -9,28 +9,18 @@ class AutoInitializationService {
     console.log("🚀 ChargeSource Auto-Initialization Starting...");
 
     try {
-      // Always test the connection fresh
-      console.log("🔄 AutoInit: Testing Supabase connection...");
+      // Test connection without making network calls that could be problematic
+      console.log("🔄 AutoInit: Checking environment safety...");
 
-      // Use a timeout to prevent hanging
-      const timeoutPromise = new Promise<boolean>((resolve) => {
-        setTimeout(() => {
-          console.log("⏰ Connection test timed out, using local mode");
-          resolve(false);
-        }, 8000); // 8 second timeout
-      });
-
-      const connectionPromise = initializeSupabase();
-
-      this.supabaseConnected = await Promise.race([connectionPromise, timeoutPromise]);
+      this.supabaseConnected = await initializeSupabase();
 
       console.log(
-        "🔄 AutoInit: Connection test result:",
+        "🔄 AutoInit: Environment check result:",
         this.supabaseConnected,
       );
 
       if (this.supabaseConnected) {
-        console.log("✅ ChargeSource connected to cloud database");
+        console.log("✅ ChargeSource cloud mode enabled");
 
         // Step 2: Auto-migrate localStorage data if it exists
         try {
