@@ -128,7 +128,7 @@ export default function Catalogue() {
           </div>
         </header>
 
-        <div className="container mx-auto px-4 py-6">
+        <div className="container mx-auto px-4 py-6" key={refreshKey}>
           {/* Page Header */}
           <div className="mb-6">
             <h1 className="text-3xl font-bold mb-2">EV Charging Product Catalogue</h1>
