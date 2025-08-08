@@ -540,12 +540,18 @@ class ProductCatalogService {
   getSubcategories(categoryId?: string, userId?: string): ProductSubcategory[] {
     const subcategories = categoryService.getSubcategories(categoryId);
     if (userId && categoryId) {
-      return userPreferencesService.applySubcategoryOrder(userId, categoryId, subcategories);
+      return userPreferencesService.applySubcategoryOrder(
+        userId,
+        categoryId,
+        subcategories,
+      );
     }
     return subcategories;
   }
 
-  getProducts(filter?: ProductFilter & { userId?: string }): ProductCatalogueItem[] {
+  getProducts(
+    filter?: ProductFilter & { userId?: string },
+  ): ProductCatalogueItem[] {
     let filteredProducts = [...this.products];
 
     if (filter) {
@@ -617,9 +623,9 @@ class ProductCatalogService {
     if (filter?.userId && (filter?.category || filter?.subcategory)) {
       return userPreferencesService.applyProductOrder(
         filter.userId,
-        filter.category || '',
+        filter.category || "",
         filter.subcategory,
-        activeProducts
+        activeProducts,
       );
     }
 
@@ -744,20 +750,58 @@ class ProductCatalogService {
   }
 
   // Product reordering methods (user preferences)
-  reorderProducts(userId: string, categoryId: string, subcategoryId: string | undefined, productIds: string[]): boolean {
-    return userPreferencesService.setProductOrder(userId, categoryId, subcategoryId, productIds);
+  reorderProducts(
+    userId: string,
+    categoryId: string,
+    subcategoryId: string | undefined,
+    productIds: string[],
+  ): boolean {
+    return userPreferencesService.setProductOrder(
+      userId,
+      categoryId,
+      subcategoryId,
+      productIds,
+    );
   }
 
-  moveProductUp(userId: string, productId: string, categoryId: string, subcategoryId?: string): boolean {
-    const allProducts = this.getProducts({ category: categoryId, subcategory: subcategoryId });
-    const allProductIds = allProducts.map(p => p.id);
-    return userPreferencesService.moveProductUp(userId, productId, categoryId, subcategoryId, allProductIds);
+  moveProductUp(
+    userId: string,
+    productId: string,
+    categoryId: string,
+    subcategoryId?: string,
+  ): boolean {
+    const allProducts = this.getProducts({
+      category: categoryId,
+      subcategory: subcategoryId,
+    });
+    const allProductIds = allProducts.map((p) => p.id);
+    return userPreferencesService.moveProductUp(
+      userId,
+      productId,
+      categoryId,
+      subcategoryId,
+      allProductIds,
+    );
   }
 
-  moveProductDown(userId: string, productId: string, categoryId: string, subcategoryId?: string): boolean {
-    const allProducts = this.getProducts({ category: categoryId, subcategory: subcategoryId });
-    const allProductIds = allProducts.map(p => p.id);
-    return userPreferencesService.moveProductDown(userId, productId, categoryId, subcategoryId, allProductIds);
+  moveProductDown(
+    userId: string,
+    productId: string,
+    categoryId: string,
+    subcategoryId?: string,
+  ): boolean {
+    const allProducts = this.getProducts({
+      category: categoryId,
+      subcategory: subcategoryId,
+    });
+    const allProductIds = allProducts.map((p) => p.id);
+    return userPreferencesService.moveProductDown(
+      userId,
+      productId,
+      categoryId,
+      subcategoryId,
+      allProductIds,
+    );
   }
 
   // Category reordering methods (user preferences)
@@ -767,31 +811,65 @@ class ProductCatalogService {
 
   moveCategoryUpForUser(userId: string, categoryId: string): boolean {
     const allCategories = this.getCategories();
-    const allCategoryIds = allCategories.map(c => c.id);
-    return userPreferencesService.moveCategoryUp(userId, categoryId, allCategoryIds);
+    const allCategoryIds = allCategories.map((c) => c.id);
+    return userPreferencesService.moveCategoryUp(
+      userId,
+      categoryId,
+      allCategoryIds,
+    );
   }
 
   moveCategoryDownForUser(userId: string, categoryId: string): boolean {
     const allCategories = this.getCategories();
-    const allCategoryIds = allCategories.map(c => c.id);
-    return userPreferencesService.moveCategoryDown(userId, categoryId, allCategoryIds);
+    const allCategoryIds = allCategories.map((c) => c.id);
+    return userPreferencesService.moveCategoryDown(
+      userId,
+      categoryId,
+      allCategoryIds,
+    );
   }
 
   // Subcategory reordering methods (user preferences)
-  reorderSubcategoriesForUser(userId: string, categoryId: string, subcategoryIds: string[]): boolean {
-    return userPreferencesService.setSubcategoryOrder(userId, categoryId, subcategoryIds);
+  reorderSubcategoriesForUser(
+    userId: string,
+    categoryId: string,
+    subcategoryIds: string[],
+  ): boolean {
+    return userPreferencesService.setSubcategoryOrder(
+      userId,
+      categoryId,
+      subcategoryIds,
+    );
   }
 
-  moveSubcategoryUpForUser(userId: string, subcategoryId: string, categoryId: string): boolean {
+  moveSubcategoryUpForUser(
+    userId: string,
+    subcategoryId: string,
+    categoryId: string,
+  ): boolean {
     const allSubcategories = this.getSubcategories(categoryId);
-    const allSubcategoryIds = allSubcategories.map(s => s.id);
-    return userPreferencesService.moveSubcategoryUp(userId, subcategoryId, categoryId, allSubcategoryIds);
+    const allSubcategoryIds = allSubcategories.map((s) => s.id);
+    return userPreferencesService.moveSubcategoryUp(
+      userId,
+      subcategoryId,
+      categoryId,
+      allSubcategoryIds,
+    );
   }
 
-  moveSubcategoryDownForUser(userId: string, subcategoryId: string, categoryId: string): boolean {
+  moveSubcategoryDownForUser(
+    userId: string,
+    subcategoryId: string,
+    categoryId: string,
+  ): boolean {
     const allSubcategories = this.getSubcategories(categoryId);
-    const allSubcategoryIds = allSubcategories.map(s => s.id);
-    return userPreferencesService.moveSubcategoryDown(userId, subcategoryId, categoryId, allSubcategoryIds);
+    const allSubcategoryIds = allSubcategories.map((s) => s.id);
+    return userPreferencesService.moveSubcategoryDown(
+      userId,
+      subcategoryId,
+      categoryId,
+      allSubcategoryIds,
+    );
   }
 }
 

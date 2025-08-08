@@ -16,12 +16,7 @@ import {
   DialogTrigger,
   DialogFooter,
 } from "@/components/ui/dialog";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
@@ -61,18 +56,18 @@ export default function UserPreferencesManager({
   const userId = user?.id || "anonymous";
 
   const refreshData = () => {
-    setRefreshKey(prev => prev + 1);
+    setRefreshKey((prev) => prev + 1);
   };
 
   // Category handlers
   const handleCategoryDragStart = (e: React.DragEvent, categoryId: string) => {
     setDraggedItem(categoryId);
-    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.effectAllowed = "move";
   };
 
   const handleCategoryDragOver = (e: React.DragEvent, categoryId: string) => {
     e.preventDefault();
-    e.dataTransfer.dropEffect = 'move';
+    e.dataTransfer.dropEffect = "move";
     setDragOverItem(categoryId);
   };
 
@@ -83,19 +78,26 @@ export default function UserPreferencesManager({
   const handleCategoryDrop = (e: React.DragEvent, targetCategoryId: string) => {
     e.preventDefault();
     setDragOverItem(null);
-    
+
     if (draggedItem && draggedItem !== targetCategoryId) {
       const categories = productCatalog.getCategories(userId);
       const newOrder = [...categories];
-      
-      const draggedIndex = newOrder.findIndex(cat => cat.id === draggedItem);
-      const targetIndex = newOrder.findIndex(cat => cat.id === targetCategoryId);
-      
+
+      const draggedIndex = newOrder.findIndex((cat) => cat.id === draggedItem);
+      const targetIndex = newOrder.findIndex(
+        (cat) => cat.id === targetCategoryId,
+      );
+
       if (draggedIndex !== -1 && targetIndex !== -1) {
         const [draggedCat] = newOrder.splice(draggedIndex, 1);
         newOrder.splice(targetIndex, 0, draggedCat);
-        
-        if (productCatalog.reorderCategoriesForUser(userId, newOrder.map(cat => cat.id))) {
+
+        if (
+          productCatalog.reorderCategoriesForUser(
+            userId,
+            newOrder.map((cat) => cat.id),
+          )
+        ) {
           refreshData();
           toast({
             title: "Success",
@@ -104,7 +106,7 @@ export default function UserPreferencesManager({
         }
       }
     }
-    
+
     setDraggedItem(null);
   };
 
@@ -129,27 +131,48 @@ export default function UserPreferencesManager({
   };
 
   // Subcategory handlers
-  const handleSubcategoryDragStart = (e: React.DragEvent, subcategoryId: string) => {
+  const handleSubcategoryDragStart = (
+    e: React.DragEvent,
+    subcategoryId: string,
+  ) => {
     setDraggedItem(subcategoryId);
-    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.effectAllowed = "move";
   };
 
-  const handleSubcategoryDrop = (e: React.DragEvent, targetSubcategoryId: string) => {
+  const handleSubcategoryDrop = (
+    e: React.DragEvent,
+    targetSubcategoryId: string,
+  ) => {
     e.preventDefault();
     setDragOverItem(null);
-    
-    if (draggedItem && draggedItem !== targetSubcategoryId && selectedCategory) {
-      const subcategories = productCatalog.getSubcategories(selectedCategory, userId);
+
+    if (
+      draggedItem &&
+      draggedItem !== targetSubcategoryId &&
+      selectedCategory
+    ) {
+      const subcategories = productCatalog.getSubcategories(
+        selectedCategory,
+        userId,
+      );
       const newOrder = [...subcategories];
-      
-      const draggedIndex = newOrder.findIndex(sub => sub.id === draggedItem);
-      const targetIndex = newOrder.findIndex(sub => sub.id === targetSubcategoryId);
-      
+
+      const draggedIndex = newOrder.findIndex((sub) => sub.id === draggedItem);
+      const targetIndex = newOrder.findIndex(
+        (sub) => sub.id === targetSubcategoryId,
+      );
+
       if (draggedIndex !== -1 && targetIndex !== -1) {
         const [draggedSub] = newOrder.splice(draggedIndex, 1);
         newOrder.splice(targetIndex, 0, draggedSub);
-        
-        if (productCatalog.reorderSubcategoriesForUser(userId, selectedCategory, newOrder.map(sub => sub.id))) {
+
+        if (
+          productCatalog.reorderSubcategoriesForUser(
+            userId,
+            selectedCategory,
+            newOrder.map((sub) => sub.id),
+          )
+        ) {
           refreshData();
           toast({
             title: "Success",
@@ -158,12 +181,19 @@ export default function UserPreferencesManager({
         }
       }
     }
-    
+
     setDraggedItem(null);
   };
 
   const handleMoveSubcategoryUp = (subcategoryId: string) => {
-    if (selectedCategory && productCatalog.moveSubcategoryUpForUser(userId, subcategoryId, selectedCategory)) {
+    if (
+      selectedCategory &&
+      productCatalog.moveSubcategoryUpForUser(
+        userId,
+        subcategoryId,
+        selectedCategory,
+      )
+    ) {
       refreshData();
       toast({
         title: "Success",
@@ -173,7 +203,14 @@ export default function UserPreferencesManager({
   };
 
   const handleMoveSubcategoryDown = (subcategoryId: string) => {
-    if (selectedCategory && productCatalog.moveSubcategoryDownForUser(userId, subcategoryId, selectedCategory)) {
+    if (
+      selectedCategory &&
+      productCatalog.moveSubcategoryDownForUser(
+        userId,
+        subcategoryId,
+        selectedCategory,
+      )
+    ) {
       refreshData();
       toast({
         title: "Success",
@@ -185,28 +222,39 @@ export default function UserPreferencesManager({
   // Product handlers
   const handleProductDragStart = (e: React.DragEvent, productId: string) => {
     setDraggedItem(productId);
-    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.effectAllowed = "move";
   };
 
   const handleProductDrop = (e: React.DragEvent, targetProductId: string) => {
     e.preventDefault();
     setDragOverItem(null);
-    
+
     if (draggedItem && draggedItem !== targetProductId && selectedCategory) {
-      const products = productCatalog.getProducts({ 
-        category: selectedCategory, 
-        userId 
+      const products = productCatalog.getProducts({
+        category: selectedCategory,
+        userId,
       });
       const newOrder = [...products];
-      
-      const draggedIndex = newOrder.findIndex(prod => prod.id === draggedItem);
-      const targetIndex = newOrder.findIndex(prod => prod.id === targetProductId);
-      
+
+      const draggedIndex = newOrder.findIndex(
+        (prod) => prod.id === draggedItem,
+      );
+      const targetIndex = newOrder.findIndex(
+        (prod) => prod.id === targetProductId,
+      );
+
       if (draggedIndex !== -1 && targetIndex !== -1) {
         const [draggedProd] = newOrder.splice(draggedIndex, 1);
         newOrder.splice(targetIndex, 0, draggedProd);
-        
-        if (productCatalog.reorderProducts(userId, selectedCategory, undefined, newOrder.map(prod => prod.id))) {
+
+        if (
+          productCatalog.reorderProducts(
+            userId,
+            selectedCategory,
+            undefined,
+            newOrder.map((prod) => prod.id),
+          )
+        ) {
           refreshData();
           toast({
             title: "Success",
@@ -215,12 +263,15 @@ export default function UserPreferencesManager({
         }
       }
     }
-    
+
     setDraggedItem(null);
   };
 
   const handleMoveProductUp = (productId: string) => {
-    if (selectedCategory && productCatalog.moveProductUp(userId, productId, selectedCategory)) {
+    if (
+      selectedCategory &&
+      productCatalog.moveProductUp(userId, productId, selectedCategory)
+    ) {
       refreshData();
       toast({
         title: "Success",
@@ -230,7 +281,10 @@ export default function UserPreferencesManager({
   };
 
   const handleMoveProductDown = (productId: string) => {
-    if (selectedCategory && productCatalog.moveProductDown(userId, productId, selectedCategory)) {
+    if (
+      selectedCategory &&
+      productCatalog.moveProductDown(userId, productId, selectedCategory)
+    ) {
       refreshData();
       toast({
         title: "Success",
@@ -251,17 +305,18 @@ export default function UserPreferencesManager({
   };
 
   const handleExportPreferences = () => {
-    const preferencesJson = userPreferencesService.exportUserPreferences(userId);
-    const blob = new Blob([preferencesJson], { type: 'application/json' });
+    const preferencesJson =
+      userPreferencesService.exportUserPreferences(userId);
+    const blob = new Blob([preferencesJson], { type: "application/json" });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
-    a.download = `chargesource-preferences-${user?.name || 'user'}.json`;
+    a.download = `chargesource-preferences-${user?.name || "user"}.json`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-    
+
     toast({
       title: "Success",
       description: "Preferences exported successfully",
@@ -271,8 +326,12 @@ export default function UserPreferencesManager({
   if (!isOpen) return null;
 
   const categories = productCatalog.getCategories(userId);
-  const subcategories = selectedCategory ? productCatalog.getSubcategories(selectedCategory, userId) : [];
-  const products = selectedCategory ? productCatalog.getProducts({ category: selectedCategory, userId }) : [];
+  const subcategories = selectedCategory
+    ? productCatalog.getSubcategories(selectedCategory, userId)
+    : [];
+  const products = selectedCategory
+    ? productCatalog.getProducts({ category: selectedCategory, userId })
+    : [];
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -283,7 +342,8 @@ export default function UserPreferencesManager({
             My Preferences - Organize Categories & Products
           </DialogTitle>
           <DialogDescription>
-            Customize how categories and products are ordered in your view. Drag items to reorder or use the arrow buttons.
+            Customize how categories and products are ordered in your view. Drag
+            items to reorder or use the arrow buttons.
           </DialogDescription>
         </DialogHeader>
 
@@ -299,7 +359,8 @@ export default function UserPreferencesManager({
               <CardHeader>
                 <CardTitle>Category Order</CardTitle>
                 <CardDescription>
-                  Organize categories in your preferred order. This affects how they appear throughout the app.
+                  Organize categories in your preferred order. This affects how
+                  they appear throughout the app.
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -308,14 +369,20 @@ export default function UserPreferencesManager({
                     <Card
                       key={`${category.id}-${refreshKey}`}
                       draggable
-                      onDragStart={(e) => handleCategoryDragStart(e, category.id)}
+                      onDragStart={(e) =>
+                        handleCategoryDragStart(e, category.id)
+                      }
                       onDragOver={(e) => handleCategoryDragOver(e, category.id)}
                       onDragLeave={handleCategoryDragLeave}
                       onDrop={(e) => handleCategoryDrop(e, category.id)}
                       className={`cursor-move transition-all ${
-                        draggedItem === category.id ? 'opacity-50 scale-105' : ''
+                        draggedItem === category.id
+                          ? "opacity-50 scale-105"
+                          : ""
                       } ${
-                        dragOverItem === category.id ? 'border-primary bg-primary/5' : 'hover:border-muted-foreground'
+                        dragOverItem === category.id
+                          ? "border-primary bg-primary/5"
+                          : "hover:border-muted-foreground"
                       }`}
                     >
                       <CardContent className="p-4">
@@ -340,7 +407,9 @@ export default function UserPreferencesManager({
                                 variant="ghost"
                                 size="sm"
                                 className="h-6 w-6 p-0"
-                                onClick={() => handleMoveCategoryUp(category.id)}
+                                onClick={() =>
+                                  handleMoveCategoryUp(category.id)
+                                }
                                 disabled={index === 0}
                               >
                                 <ChevronUp className="w-3 h-3" />
@@ -349,7 +418,9 @@ export default function UserPreferencesManager({
                                 variant="ghost"
                                 size="sm"
                                 className="h-6 w-6 p-0"
-                                onClick={() => handleMoveCategoryDown(category.id)}
+                                onClick={() =>
+                                  handleMoveCategoryDown(category.id)
+                                }
                                 disabled={index === categories.length - 1}
                               >
                                 <ChevronDown className="w-3 h-3" />
@@ -406,16 +477,14 @@ export default function UserPreferencesManager({
               <Card>
                 <CardHeader>
                   <CardTitle>
-                    {selectedCategory 
-                      ? `${categories.find(c => c.id === selectedCategory)?.name} Subcategories`
-                      : "Subcategory Order"
-                    }
+                    {selectedCategory
+                      ? `${categories.find((c) => c.id === selectedCategory)?.name} Subcategories`
+                      : "Subcategory Order"}
                   </CardTitle>
                   <CardDescription>
-                    {selectedCategory 
+                    {selectedCategory
                       ? "Drag to reorder subcategories within this category"
-                      : "Select a category to organize its subcategories"
-                    }
+                      : "Select a category to organize its subcategories"}
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -425,14 +494,24 @@ export default function UserPreferencesManager({
                         <Card
                           key={`${subcategory.id}-${refreshKey}`}
                           draggable
-                          onDragStart={(e) => handleSubcategoryDragStart(e, subcategory.id)}
-                          onDragOver={(e) => handleCategoryDragOver(e, subcategory.id)}
+                          onDragStart={(e) =>
+                            handleSubcategoryDragStart(e, subcategory.id)
+                          }
+                          onDragOver={(e) =>
+                            handleCategoryDragOver(e, subcategory.id)
+                          }
                           onDragLeave={handleCategoryDragLeave}
-                          onDrop={(e) => handleSubcategoryDrop(e, subcategory.id)}
+                          onDrop={(e) =>
+                            handleSubcategoryDrop(e, subcategory.id)
+                          }
                           className={`cursor-move transition-all ${
-                            draggedItem === subcategory.id ? 'opacity-50 scale-105' : ''
+                            draggedItem === subcategory.id
+                              ? "opacity-50 scale-105"
+                              : ""
                           } ${
-                            dragOverItem === subcategory.id ? 'border-primary bg-primary/5' : ''
+                            dragOverItem === subcategory.id
+                              ? "border-primary bg-primary/5"
+                              : ""
                           }`}
                         >
                           <CardContent className="p-3">
@@ -440,7 +519,9 @@ export default function UserPreferencesManager({
                               <div className="flex items-center gap-3 flex-1">
                                 <GripVertical className="w-4 h-4 text-muted-foreground" />
                                 <div>
-                                  <h5 className="font-medium">{subcategory.name}</h5>
+                                  <h5 className="font-medium">
+                                    {subcategory.name}
+                                  </h5>
                                   <p className="text-sm text-muted-foreground">
                                     {subcategory.description}
                                   </p>
@@ -451,7 +532,9 @@ export default function UserPreferencesManager({
                                   variant="ghost"
                                   size="sm"
                                   className="h-6 w-6 p-0"
-                                  onClick={() => handleMoveSubcategoryUp(subcategory.id)}
+                                  onClick={() =>
+                                    handleMoveSubcategoryUp(subcategory.id)
+                                  }
                                   disabled={index === 0}
                                 >
                                   <ChevronUp className="w-3 h-3" />
@@ -460,7 +543,9 @@ export default function UserPreferencesManager({
                                   variant="ghost"
                                   size="sm"
                                   className="h-6 w-6 p-0"
-                                  onClick={() => handleMoveSubcategoryDown(subcategory.id)}
+                                  onClick={() =>
+                                    handleMoveSubcategoryDown(subcategory.id)
+                                  }
                                   disabled={index === subcategories.length - 1}
                                 >
                                   <ChevronDown className="w-3 h-3" />
@@ -494,7 +579,9 @@ export default function UserPreferencesManager({
                 <CardContent>
                   <div className="space-y-2 max-h-[350px] overflow-y-auto">
                     {categories.map((category) => {
-                      const productCount = productCatalog.getProducts({ category: category.id }).length;
+                      const productCount = productCatalog.getProducts({
+                        category: category.id,
+                      }).length;
                       return (
                         <Card
                           key={category.id}
@@ -526,16 +613,14 @@ export default function UserPreferencesManager({
               <Card>
                 <CardHeader>
                   <CardTitle>
-                    {selectedCategory 
-                      ? `${categories.find(c => c.id === selectedCategory)?.name} Products`
-                      : "Product Order"
-                    }
+                    {selectedCategory
+                      ? `${categories.find((c) => c.id === selectedCategory)?.name} Products`
+                      : "Product Order"}
                   </CardTitle>
                   <CardDescription>
-                    {selectedCategory 
+                    {selectedCategory
                       ? "Drag to reorder products within this category"
-                      : "Select a category to organize its products"
-                    }
+                      : "Select a category to organize its products"}
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -545,14 +630,22 @@ export default function UserPreferencesManager({
                         <Card
                           key={`${product.id}-${refreshKey}`}
                           draggable
-                          onDragStart={(e) => handleProductDragStart(e, product.id)}
-                          onDragOver={(e) => handleCategoryDragOver(e, product.id)}
+                          onDragStart={(e) =>
+                            handleProductDragStart(e, product.id)
+                          }
+                          onDragOver={(e) =>
+                            handleCategoryDragOver(e, product.id)
+                          }
                           onDragLeave={handleCategoryDragLeave}
                           onDrop={(e) => handleProductDrop(e, product.id)}
                           className={`cursor-move transition-all ${
-                            draggedItem === product.id ? 'opacity-50 scale-105' : ''
+                            draggedItem === product.id
+                              ? "opacity-50 scale-105"
+                              : ""
                           } ${
-                            dragOverItem === product.id ? 'border-primary bg-primary/5' : ''
+                            dragOverItem === product.id
+                              ? "border-primary bg-primary/5"
+                              : ""
                           }`}
                         >
                           <CardContent className="p-3">
@@ -560,7 +653,9 @@ export default function UserPreferencesManager({
                               <div className="flex items-center gap-3 flex-1">
                                 <GripVertical className="w-4 h-4 text-muted-foreground" />
                                 <div>
-                                  <h5 className="font-medium">{product.name}</h5>
+                                  <h5 className="font-medium">
+                                    {product.name}
+                                  </h5>
                                   <p className="text-sm text-muted-foreground">
                                     {product.brand} - {product.sku}
                                   </p>
@@ -571,7 +666,9 @@ export default function UserPreferencesManager({
                                   variant="ghost"
                                   size="sm"
                                   className="h-6 w-6 p-0"
-                                  onClick={() => handleMoveProductUp(product.id)}
+                                  onClick={() =>
+                                    handleMoveProductUp(product.id)
+                                  }
                                   disabled={index === 0}
                                 >
                                   <ChevronUp className="w-3 h-3" />
@@ -580,7 +677,9 @@ export default function UserPreferencesManager({
                                   variant="ghost"
                                   size="sm"
                                   className="h-6 w-6 p-0"
-                                  onClick={() => handleMoveProductDown(product.id)}
+                                  onClick={() =>
+                                    handleMoveProductDown(product.id)
+                                  }
                                   disabled={index === products.length - 1}
                                 >
                                   <ChevronDown className="w-3 h-3" />
