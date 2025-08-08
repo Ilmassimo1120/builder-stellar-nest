@@ -574,7 +574,8 @@ class QuoteService {
   getProductCatalogueItems(category?: string): ProductCatalogueItem[] {
     // Import the product catalog service for better organization
     try {
-      const { productCatalog } = require('./productCatalog');
+      // Dynamic import for product catalog
+      const { productCatalog } = await import('./productCatalog');
       return productCatalog.getProducts(category ? { category } : undefined);
     } catch (error) {
       console.warn('Product catalog not available, using mock data');
