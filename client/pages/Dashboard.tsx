@@ -602,6 +602,14 @@ export default function Dashboard() {
                 <Bell className="w-5 h-5" />
               </Button>
             </PermissionGate>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setShowPreferences(true)}
+              title="My Preferences"
+            >
+              <Settings className="w-5 h-5" />
+            </Button>
             <PermissionGate permission="settings.view">
               <Button variant="ghost" size="icon" asChild>
                 <Link to="/settings">
