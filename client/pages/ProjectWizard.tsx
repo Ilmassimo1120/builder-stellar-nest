@@ -481,6 +481,55 @@ export default function ProjectWizard() {
     setSelectedTemplate(null);
   };
 
+  // Load existing project for edit mode
+  const loadExistingProject = async (projectId: string) => {
+    try {
+      // First try to get from localStorage (for now)
+      const storedProjects = localStorage.getItem('chargeSourceProjects');
+      if (storedProjects) {
+        const projects = JSON.parse(storedProjects);
+        const project = projects.find((p: any) => p.id === projectId);
+
+        if (project) {
+          // Map project data to form state
+          if (project.clientRequirements) {
+            setClientRequirements(project.clientRequirements);
+          }
+          if (project.siteAssessment) {
+            setSiteAssessment(project.siteAssessment);
+          }
+          if (project.chargerSelection) {
+            setChargerSelection(project.chargerSelection);
+          }
+          if (project.gridCapacity) {
+            setGridCapacity(project.gridCapacity);
+          }
+          if (project.compliance) {
+            setCompliance(project.compliance);
+          }
+
+          // Set current step to last completed step or first step
+          if (project.currentStep) {
+            setCurrentStep(project.currentStep);
+          }
+        }
+      }
+
+      // TODO: Later integrate with Supabase for cloud storage
+      // if (isSupabaseConnected) {
+      //   const project = await projectService.getProject(projectId);
+      //   if (project) {
+      //     // Load project data
+      //   }
+      // }
+
+    } catch (error) {
+      console.error('Error loading project:', error);
+    } finally {
+      setLoadingProject(false);
+    }
+  };
+
   const getStepTitle = (step: number) => {
     switch (step) {
       case 1:
