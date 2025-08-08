@@ -130,6 +130,7 @@ const App = () => (
             {/* Development/Testing Routes */}
             <Route path="/test-connection" element={<ConnectionTest />} />
             <Route path="/test-supabase" element={<TestConnection />} />
+            <Route path="/test-status" element={<TestStatus />} />
 
             {/* Quoting Routes */}
             <Route
