@@ -142,7 +142,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         servicesOffered: userData.servicesOffered,
         businessAddress: userData.businessAddress,
         website: userData.website,
-        role: 'contractor',
+        role: UserRole.USER,
+        permissions: rbacService.getRolePermissions(UserRole.USER),
         registrationDate: new Date().toISOString(),
         verified: false
       };
