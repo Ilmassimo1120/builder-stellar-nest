@@ -3,23 +3,34 @@ import { supabaseQuoteService } from "./supabaseQuoteService";
 import { supabaseProductService } from "./supabaseProductService";
 
 class MigrationService {
-  async migrateLocalStorageToSupabase(): Promise<{
+  async migrateLocalStorageToSupabase(currentUser?: any): Promise<{
     success: boolean;
     message: string;
   }> {
     try {
       console.log("Starting migration from localStorage to Supabase...");
 
-      // Check if user is authenticated
-      const {
-        data: { user },
-        error: authError,
-      } = await supabase.auth.getUser();
-      if (authError || !user) {
-        return {
-          success: false,
-          message: "User must be authenticated to migrate data",
-        };
+      // Use provided user or check Supabase auth
+      let user = currentUser;
+      if (!user) {
+        const {
+          data: { user: supabaseUser },
+          error: authError,
+        } = await supabase.auth.getUser();
+        if (authError || !supabaseUser) {
+          // Try to get user from localStorage auth system
+          const localUser = localStorage.getItem("chargeSourceUser");
+          if (localUser) {
+            user = JSON.parse(localUser);
+          } else {
+            return {
+              success: false,
+              message: "User must be authenticated to migrate data",
+            };
+          }
+        } else {
+          user = supabaseUser;
+        }
       }
 
       let migratedItems = 0;
