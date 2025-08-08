@@ -14,10 +14,13 @@ export default function ConnectionStatus() {
 
   const checkConnection = async () => {
     try {
-      await autoInit.initialize();
-      setIsConnected(autoInit.isSupabaseConnected());
+      console.log("🔄 ConnectionStatus: Starting connection check...");
+      const connected = await autoInit.initialize();
+      console.log("🔄 ConnectionStatus: autoInit.initialize() returned:", connected);
+      console.log("🔄 ConnectionStatus: autoInit.isSupabaseConnected():", autoInit.isSupabaseConnected());
+      setIsConnected(connected);
     } catch (error) {
-      console.warn("Connection check failed:", error);
+      console.error("❌ ConnectionStatus: Connection check failed:", error);
       setIsConnected(false);
     } finally {
       setIsLoading(false);
