@@ -424,7 +424,7 @@ export default function CategoryManager({
             Category Management
           </DialogTitle>
           <DialogDescription>
-            Manage product categories and subcategories. Categories help organize your product catalog.
+            Manage product categories and subcategories. Drag items to reorder or use the up/down buttons.
           </DialogDescription>
         </DialogHeader>
 
