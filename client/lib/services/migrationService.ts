@@ -159,8 +159,11 @@ class MigrationService {
       });
 
       if (error) throw error;
+      console.log(`Successfully migrated project: ${project.name || project.id}`);
     } catch (error) {
-      console.error("Error migrating project:", error);
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      console.error(`Error migrating project "${project.name || project.id}":`, errorMessage);
+      throw new Error(`Failed to migrate project "${project.name || project.id}": ${errorMessage}`);
     }
   }
 
