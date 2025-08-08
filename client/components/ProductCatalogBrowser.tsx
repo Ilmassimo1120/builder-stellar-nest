@@ -253,12 +253,31 @@ export default function ProductCatalogBrowser({
               <p className="text-sm text-muted-foreground">
                 {products.length} products found
               </p>
-              <Tabs value={activeView} onValueChange={setActiveView as any}>
-                <TabsList>
-                  <TabsTrigger value="grid">Grid</TabsTrigger>
-                  <TabsTrigger value="list">List</TabsTrigger>
-                </TabsList>
-              </Tabs>
+              <div className="flex items-center gap-4">
+                {compareProducts.length > 0 && (
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm text-muted-foreground">
+                      {compareProducts.length} selected for comparison
+                    </span>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={handleCompareProducts}
+                      disabled={compareProducts.length < 2}
+                      className="flex items-center gap-2"
+                    >
+                      <BarChart3 className="w-4 h-4" />
+                      Compare ({compareProducts.length})
+                    </Button>
+                  </div>
+                )}
+                <Tabs value={activeView} onValueChange={setActiveView as any}>
+                  <TabsList>
+                    <TabsTrigger value="grid">Grid</TabsTrigger>
+                    <TabsTrigger value="list">List</TabsTrigger>
+                  </TabsList>
+                </Tabs>
+              </div>
             </div>
 
             <Tabs value={activeView}>
