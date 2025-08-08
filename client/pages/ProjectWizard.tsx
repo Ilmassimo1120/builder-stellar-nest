@@ -934,7 +934,8 @@ export default function ProjectWizard() {
         );
       }
 
-      console.log("Project Created Successfully (localStorage):", projectData);
+      const actionType = isEditMode ? "Updated" : "Created";
+      console.log(`Project ${actionType} Successfully (localStorage):`, projectData);
 
       // Show success message and navigate
       console.log(
