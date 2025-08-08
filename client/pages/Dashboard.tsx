@@ -44,6 +44,7 @@ import { Logo } from "@/components/ui/logo";
 import { KnowledgeBaseWidget } from "@/components/KnowledgeBaseWidget";
 import SupabaseTest from "@/components/SupabaseTest";
 import ConnectionStatus from "@/components/ConnectionStatus";
+import SupabaseConnectionTest from "@/components/SupabaseConnectionTest";
 import { supabase, autoConfigureSupabase } from "@/lib/supabase";
 import { useAuth } from "@/hooks/useAuth";
 import RoleBasedNavigation, {
