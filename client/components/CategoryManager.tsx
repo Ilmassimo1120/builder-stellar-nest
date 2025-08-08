@@ -703,7 +703,19 @@ export default function CategoryManager({
                     const isEditing = editingSubcategory?.id === subcategory.id;
                     
                     return (
-                      <Card key={subcategory.id}>
+                      <Card
+                        key={subcategory.id}
+                        draggable={!isEditing}
+                        onDragStart={(e) => !isEditing && handleSubcategoryDragStart(e, subcategory.id)}
+                        onDragOver={(e) => !isEditing && handleSubcategoryDragOver(e, subcategory.id)}
+                        onDragLeave={!isEditing ? handleSubcategoryDragLeave : undefined}
+                        onDrop={(e) => !isEditing && handleSubcategoryDrop(e, subcategory.id)}
+                        className={`transition-colors ${
+                          draggedSubcategory === subcategory.id ? "opacity-50 scale-105" : ""
+                        } ${
+                          dragOverSubcategory === subcategory.id ? "border-primary bg-primary/5" : ""
+                        }`}
+                      >
                         <CardContent className="p-4">
                           {isEditing ? (
                             <div className="space-y-3">
