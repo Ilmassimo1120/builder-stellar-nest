@@ -715,12 +715,10 @@ export default function Dashboard() {
           </CardContent>
         </Card>
 
-        {/* Knowledge Base */}
+        {/* Quick Help */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-          <div className="lg:col-span-2 space-y-6">
-            <KnowledgeBaseWidget />
-          </div>
-          <Card>
+          <div className="lg:col-span-1"></div>
+          <Card className="lg:col-span-2">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <HelpCircle className="w-5 h-5 text-primary" />
@@ -1073,6 +1071,11 @@ export default function Dashboard() {
             <SupabaseTest />
           </TabsContent>
         </Tabs>
+
+        {/* Knowledge Base - placed under Recent Projects */}
+        <div className="mb-8">
+          <KnowledgeBaseWidget />
+        </div>
       </div>
     </div>
   );
