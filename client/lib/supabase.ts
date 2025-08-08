@@ -398,15 +398,15 @@ export const initializeSupabase = async () => {
   try {
     console.log("🚀 Initializing ChargeSource Supabase connection...");
 
-    // Test connection
-    const { data, error } = await supabase.from('users').select('count').limit(1);
+    // Test connection using health check function
+    const { data, error } = await supabase.rpc('health_check');
 
     if (error) {
       console.warn("⚠️ Supabase connection not available, using local mode:", error.message);
       return false;
     }
 
-    console.log("✅ Supabase connected successfully");
+    console.log("✅ Supabase connected successfully", data);
     return true;
   } catch (error) {
     console.warn("⚠️ Supabase initialization failed, using local mode:", error);
