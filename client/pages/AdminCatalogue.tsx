@@ -14,7 +14,7 @@ import { Logo } from "@/components/ui/logo";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import AdminProductManager from "@/components/AdminProductManager";
 import CategoryManager from "@/components/CategoryManager";
-import { Shield, ArrowLeft, Package, Users, BarChart3, Folder } from "lucide-react";
+import { Shield, ArrowLeft, Package, Users, BarChart3, Folder, GripVertical, ChevronUp, ChevronDown } from "lucide-react";
 import { productCatalog } from "@/lib/productCatalog";
 
 export default function AdminCatalogue() {
