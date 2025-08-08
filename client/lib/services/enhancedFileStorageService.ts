@@ -321,6 +321,10 @@ class EnhancedFileStorageService {
       let uploadSuccess = false;
 
       try {
+        console.log(`🔄 Attempting to upload file to bucket: ${request.bucket}`);
+        console.log(`📁 File path: ${filePath}`);
+        console.log(`📦 File size: ${(request.file.size / 1024 / 1024).toFixed(2)} MB`);
+
         const { data, error: uploadError } = await supabase.storage
           .from(request.bucket)
           .upload(filePath, request.file, {
