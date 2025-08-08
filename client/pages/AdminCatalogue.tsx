@@ -32,6 +32,67 @@ export default function AdminCatalogue() {
     setRefreshKey(prev => prev + 1);
   };
 
+  // Category reordering handlers
+  const handleDragStart = (e: React.DragEvent, categoryId: string) => {
+    setDraggedCategory(categoryId);
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/html', categoryId);
+  };
+
+  const handleDragOver = (e: React.DragEvent, categoryId: string) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    setDragOverCategory(categoryId);
+  };
+
+  const handleDragLeave = () => {
+    setDragOverCategory(null);
+  };
+
+  const handleDrop = (e: React.DragEvent, targetCategoryId: string) => {
+    e.preventDefault();
+    setDragOverCategory(null);
+
+    if (draggedCategory && draggedCategory !== targetCategoryId) {
+      const categories = productCatalog.getCategories();
+      const newOrder = [...categories];
+
+      const draggedIndex = newOrder.findIndex(cat => cat.id === draggedCategory);
+      const targetIndex = newOrder.findIndex(cat => cat.id === targetCategoryId);
+
+      if (draggedIndex !== -1 && targetIndex !== -1) {
+        // Remove dragged item and insert at target position
+        const [draggedItem] = newOrder.splice(draggedIndex, 1);
+        newOrder.splice(targetIndex, 0, draggedItem);
+
+        // Update order in categoryService
+        categoryService.reorderCategories(newOrder.map(cat => cat.id));
+        handleCategoriesChanged();
+
+        toast({
+          title: "Success",
+          description: "Category order updated successfully",
+        });
+      }
+    }
+
+    setDraggedCategory(null);
+  };
+
+  const handleMoveCategory = (categoryId: string, direction: 'up' | 'down') => {
+    const success = direction === 'up'
+      ? categoryService.moveCategoryUp(categoryId)
+      : categoryService.moveCategoryDown(categoryId);
+
+    if (success) {
+      handleCategoriesChanged();
+      toast({
+        title: "Success",
+        description: `Category moved ${direction} successfully`,
+      });
+    }
+  };
+
   const products = productCatalog.getProducts();
   const activeProducts = products.filter((p) => p.isActive);
   const inactiveProducts = products.filter((p) => !p.isActive);
