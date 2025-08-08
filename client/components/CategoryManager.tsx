@@ -488,28 +488,66 @@ export default function CategoryManager({
                 return (
                   <Card
                     key={category.id}
+                    draggable
+                    onDragStart={(e) => handleCategoryDragStart(e, category.id)}
+                    onDragOver={(e) => handleCategoryDragOver(e, category.id)}
+                    onDragLeave={handleCategoryDragLeave}
+                    onDrop={(e) => handleCategoryDrop(e, category.id)}
                     className={`cursor-pointer transition-colors ${
                       selectedCategory?.id === category.id
                         ? "ring-2 ring-primary bg-primary/5"
                         : "hover:bg-muted/50"
+                    } ${
+                      draggedCategory === category.id ? "opacity-50 scale-105" : ""
+                    } ${
+                      dragOverCategory === category.id ? "border-primary bg-primary/5" : ""
                     }`}
                     onClick={() => setSelectedCategory(category)}
                   >
                     <CardContent className="p-4">
                       <div className="flex items-center justify-between">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2">
-                            <h4 className="font-medium">{category.name}</h4>
-                            <Badge variant="outline">{productCount} products</Badge>
+                        <div className="flex items-center gap-3 flex-1">
+                          <GripVertical className="w-4 h-4 text-muted-foreground cursor-move" />
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2">
+                              <h4 className="font-medium">{category.name}</h4>
+                              <Badge variant="outline">{productCount} products</Badge>
+                            </div>
+                            <p className="text-sm text-muted-foreground mt-1">
+                              {category.description}
+                            </p>
+                            <p className="text-xs text-muted-foreground mt-1">
+                              {category.subcategories.length} subcategories
+                            </p>
                           </div>
-                          <p className="text-sm text-muted-foreground mt-1">
-                            {category.description}
-                          </p>
-                          <p className="text-xs text-muted-foreground mt-1">
-                            {category.subcategories.length} subcategories
-                          </p>
                         </div>
                         <div className="flex items-center gap-1">
+                          <div className="flex flex-col gap-1">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="h-6 w-6 p-0"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleMoveCategoryUp(category.id);
+                              }}
+                              disabled={categories.findIndex(c => c.id === category.id) === 0}
+                            >
+                              <ChevronUp className="w-3 h-3" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="h-6 w-6 p-0"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleMoveCategoryDown(category.id);
+                              }}
+                              disabled={categories.findIndex(c => c.id === category.id) === categories.length - 1}
+                            >
+                              <ChevronDown className="w-3 h-3" />
+                            </Button>
+                          </div>
                           <Dialog open={isEditingCategory && editCategory?.id === category.id} onOpenChange={(open) => {
                             setIsEditingCategory(open);
                             if (open) setEditCategory({ ...category });
