@@ -464,17 +464,21 @@ Could you please be more specific about what you need help with?`;
   const handleActionClick = (action: string) => {
     switch (action) {
       case "new-project":
-        window.location.href = "/projects/new";
+        setIsOpen(false); // Close the AI Assistant
+        navigate("/projects/new");
         break;
       case "new-quote":
-        window.location.href = "/quotes/new";
+        setIsOpen(false); // Close the AI Assistant
+        navigate("/quotes/new");
         break;
       case "open-knowledge":
         // Scroll to knowledge base or open knowledge section
         console.log("Opening knowledge base");
+        setIsOpen(false);
         break;
       case "support":
         console.log("Opening support");
+        setIsOpen(false);
         break;
       default:
         console.log(`Action: ${action}`);
