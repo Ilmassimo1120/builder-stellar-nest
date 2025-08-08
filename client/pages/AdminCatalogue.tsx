@@ -270,6 +270,13 @@ export default function AdminCatalogue() {
           isOpen={showProductManager}
           onClose={() => setShowProductManager(false)}
         />
+
+        {/* Category Manager */}
+        <CategoryManager
+          isOpen={showCategoryManager}
+          onClose={() => setShowCategoryManager(false)}
+          onCategoriesChanged={handleCategoriesChanged}
+        />
       </div>
     </ProtectedRoute>
   );
