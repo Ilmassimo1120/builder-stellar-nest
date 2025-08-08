@@ -21,6 +21,7 @@ import Placeholder from "./pages/Placeholder";
 import NotFound from "./pages/NotFound";
 import Catalogue from "./pages/Catalogue";
 import AdminCatalogue from "./pages/AdminCatalogue";
+import Settings from "./pages/Settings";
 import { AuthProvider } from "./hooks/useAuth";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { AIAssistant } from "./components/AIAssistant";
