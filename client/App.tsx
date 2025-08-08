@@ -52,6 +52,14 @@ const App = () => (
                 </ProtectedRoute>
               }
             />
+            <Route
+              path="/analytics"
+              element={
+                <ProtectedRoute>
+                  <Analytics />
+                </ProtectedRoute>
+              }
+            />
 
             {/* Project Management Routes */}
             <Route
