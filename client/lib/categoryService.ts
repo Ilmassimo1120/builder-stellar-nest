@@ -11,6 +11,34 @@ class CategoryService {
     if (this.categories.length === 0) {
       this.initializeDefaultCategories();
       this.saveToStorage();
+    } else {
+      // Migrate existing categories to add order field if missing
+      this.migrateCategoriesOrder();
+    }
+  }
+
+  private migrateCategoriesOrder(): void {
+    let needsMigration = false;
+
+    // Check if categories need order field
+    this.categories.forEach((category, index) => {
+      if (category.order === undefined) {
+        (category as any).order = index;
+        needsMigration = true;
+      }
+
+      // Check subcategories
+      category.subcategories.forEach((subcategory, subIndex) => {
+        if (subcategory.order === undefined) {
+          (subcategory as any).order = subIndex;
+          needsMigration = true;
+        }
+      });
+    });
+
+    if (needsMigration) {
+      console.log("Migrating categories to add order fields");
+      this.saveToStorage();
     }
   }
 
