@@ -46,6 +46,7 @@ import {
 } from "lucide-react";
 import { useAIContext } from "@/hooks/useAIContext";
 import { findAIResponse } from "@/lib/aiKnowledge";
+import { useNavigate } from "react-router-dom";
 
 interface ChatMessage {
   id: string;
@@ -273,7 +274,7 @@ What specific issue are you experiencing?`;
 • Take detailed site photos
 • Verify electrical capacity early
 • Consider future expansion needs
-• Include load management for multiple units
+�� Include load management for multiple units
 
 Would you like me to guide you through creating a project?`;
         suggestions = [
