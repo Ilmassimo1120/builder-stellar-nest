@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Separator } from '@/components/ui/separator';
 import EnhancedFileManager from '@/components/EnhancedFileManager';
+import FileStorageDebug from '@/components/FileStorageDebug';
 import { enhancedFileStorageService, BucketName } from '@/lib/services/enhancedFileStorageService';
 import { useAuth } from '@/hooks/useAuth';
 
