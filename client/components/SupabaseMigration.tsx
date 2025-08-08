@@ -79,7 +79,7 @@ function MigrationModal({ isOpen, onClose, onSuccess }: MigrationModalProps) {
       }
 
       // Perform actual migration
-      const result = await migrationService.migrateLocalStorageToSupabase();
+      const result = await migrationService.migrateLocalStorageToSupabase(user);
 
       setProgress(100);
       setCurrentStep("Migration completed!");
