@@ -31,6 +31,14 @@ interface AuthContextType {
   register: (userData: any) => Promise<boolean>;
   logout: () => void;
   updateUser: (userData: Partial<User>) => void;
+  hasPermission: (permission: string) => boolean;
+  hasAnyPermission: (permissions: string[]) => boolean;
+  hasAllPermissions: (permissions: string[]) => boolean;
+  canAccessResource: (resource: string, action: string) => boolean;
+  isAdmin: boolean;
+  isGlobalAdmin: boolean;
+  isSales: boolean;
+  isPartner: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
