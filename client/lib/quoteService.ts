@@ -679,10 +679,13 @@ class QuoteService {
     productId: string,
     quantity: number = 1,
   ): Quote | null {
-    const product = this.getProductCatalogueItems().find(
+    const product = productCatalog.getProducts().find(
       (p) => p.id === productId,
     );
-    if (!product) return null;
+    if (!product) {
+      console.error(`Product not found: ${productId}`);
+      return null;
+    }
 
     const lineItem: Omit<QuoteLineItem, "id" | "totalPrice"> = {
       type: "charger",
