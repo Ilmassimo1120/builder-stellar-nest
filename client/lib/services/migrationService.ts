@@ -1,10 +1,8 @@
 import { supabase } from '../supabase'
 import { supabaseQuoteService } from './supabaseQuoteService'
 import { supabaseProductService } from './supabaseProductService'
-import { useToast } from '@/hooks/use-toast'
 
 class MigrationService {
-  private toast = useToast()
 
   async migrateLocalStorageToSupabase(): Promise<{ success: boolean; message: string }> {
     try {
