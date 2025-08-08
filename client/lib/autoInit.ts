@@ -1,5 +1,5 @@
-import { initializeSupabase, isConnectedToSupabase } from './supabase';
-import { migrationService } from './services/migrationService';
+import { initializeSupabase, isConnectedToSupabase } from "./supabase";
+import { migrationService } from "./services/migrationService";
 
 class AutoInitializationService {
   private initialized = false;
@@ -12,7 +12,10 @@ class AutoInitializationService {
       // Always test the connection fresh
       console.log("🔄 AutoInit: Calling initializeSupabase()...");
       this.supabaseConnected = await initializeSupabase();
-      console.log("🔄 AutoInit: initializeSupabase() returned:", this.supabaseConnected);
+      console.log(
+        "🔄 AutoInit: initializeSupabase() returned:",
+        this.supabaseConnected,
+      );
 
       if (this.supabaseConnected) {
         console.log("✅ ChargeSource connected to cloud database");
@@ -28,7 +31,10 @@ class AutoInitializationService {
       }
 
       this.initialized = true;
-      console.log("🔄 AutoInit: Initialization complete, result:", this.supabaseConnected);
+      console.log(
+        "🔄 AutoInit: Initialization complete, result:",
+        this.supabaseConnected,
+      );
       return this.supabaseConnected;
     } catch (error) {
       console.error("❌ Auto-initialization failed with error:", error);
@@ -42,21 +48,22 @@ class AutoInitializationService {
     try {
       // Check if there's localStorage data to migrate
       const hasLocalData = migrationService.checkMigrationNeeded();
-      
+
       if (await hasLocalData) {
         console.log("📦 Automatically migrating local data to cloud...");
-        
+
         // Try to get current user for migration
         const localUser = localStorage.getItem("chargeSourceUser");
         let user = null;
-        
+
         if (localUser) {
           user = JSON.parse(localUser);
         }
-        
+
         // Perform silent migration
-        const result = await migrationService.migrateLocalStorageToSupabase(user);
-        
+        const result =
+          await migrationService.migrateLocalStorageToSupabase(user);
+
         if (result.success) {
           console.log("✅ Auto-migration completed successfully");
         } else {
@@ -64,7 +71,10 @@ class AutoInitializationService {
         }
       }
     } catch (error) {
-      console.warn("⚠️ Auto-migration failed, continuing in hybrid mode:", error);
+      console.warn(
+        "⚠️ Auto-migration failed, continuing in hybrid mode:",
+        error,
+      );
     }
   }
 

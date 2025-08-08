@@ -103,7 +103,9 @@ export default function Analytics() {
     },
     {
       title: "Average Deal Size",
-      value: analytics ? `$${analytics.averageQuoteValue.toLocaleString()}` : "$0",
+      value: analytics
+        ? `$${analytics.averageQuoteValue.toLocaleString()}`
+        : "$0",
       change: "+8.7%",
       trend: "up",
       icon: <TrendingUp className="w-5 h-5" />,
@@ -138,7 +140,8 @@ export default function Analytics() {
               </div>
               <h3 className="font-medium mb-2">Access Restricted</h3>
               <p className="text-sm text-muted-foreground">
-                You don't have permission to view analytics. Contact your administrator to request access.
+                You don't have permission to view analytics. Contact your
+                administrator to request access.
               </p>
             </CardContent>
           </Card>
@@ -239,7 +242,9 @@ export default function Analytics() {
                     <div className="text-center">
                       <BarChart3 className="w-12 h-12 mx-auto mb-2 opacity-50" />
                       <p>Revenue chart would be rendered here</p>
-                      <p className="text-xs">Connect to chart library like Recharts</p>
+                      <p className="text-xs">
+                        Connect to chart library like Recharts
+                      </p>
                     </div>
                   </div>
                 </CardContent>
@@ -254,7 +259,9 @@ export default function Analytics() {
                   {chartData.projects.map((item, index) => (
                     <div key={index}>
                       <div className="flex items-center justify-between mb-2">
-                        <span className="text-sm font-medium">{item.status}</span>
+                        <span className="text-sm font-medium">
+                          {item.status}
+                        </span>
                         <span className="text-sm text-muted-foreground">
                           {item.count} projects
                         </span>
@@ -269,7 +276,9 @@ export default function Analytics() {
             <Card>
               <CardHeader>
                 <CardTitle>Top Performing Products</CardTitle>
-                <CardDescription>Best selling products by category</CardDescription>
+                <CardDescription>
+                  Best selling products by category
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
@@ -306,14 +315,21 @@ export default function Analytics() {
             <Card>
               <CardHeader>
                 <CardTitle>Revenue Analytics</CardTitle>
-                <CardDescription>Detailed revenue breakdown and trends</CardDescription>
+                <CardDescription>
+                  Detailed revenue breakdown and trends
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="h-96 flex items-center justify-center text-muted-foreground">
                   <div className="text-center">
                     <DollarSign className="w-16 h-16 mx-auto mb-4 opacity-50" />
-                    <p className="text-lg font-medium mb-2">Revenue Analytics</p>
-                    <p>Detailed revenue charts and forecasting would be displayed here</p>
+                    <p className="text-lg font-medium mb-2">
+                      Revenue Analytics
+                    </p>
+                    <p>
+                      Detailed revenue charts and forecasting would be displayed
+                      here
+                    </p>
                   </div>
                 </div>
               </CardContent>
@@ -324,14 +340,21 @@ export default function Analytics() {
             <Card>
               <CardHeader>
                 <CardTitle>Project Analytics</CardTitle>
-                <CardDescription>Project performance metrics and insights</CardDescription>
+                <CardDescription>
+                  Project performance metrics and insights
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="h-96 flex items-center justify-center text-muted-foreground">
                   <div className="text-center">
                     <Zap className="w-16 h-16 mx-auto mb-4 opacity-50" />
-                    <p className="text-lg font-medium mb-2">Project Analytics</p>
-                    <p>Project timeline, completion rates, and performance metrics</p>
+                    <p className="text-lg font-medium mb-2">
+                      Project Analytics
+                    </p>
+                    <p>
+                      Project timeline, completion rates, and performance
+                      metrics
+                    </p>
                   </div>
                 </div>
               </CardContent>
@@ -342,14 +365,20 @@ export default function Analytics() {
             <Card>
               <CardHeader>
                 <CardTitle>Performance Metrics</CardTitle>
-                <CardDescription>Team and system performance indicators</CardDescription>
+                <CardDescription>
+                  Team and system performance indicators
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="h-96 flex items-center justify-center text-muted-foreground">
                   <div className="text-center">
                     <TrendingUp className="w-16 h-16 mx-auto mb-4 opacity-50" />
-                    <p className="text-lg font-medium mb-2">Performance Dashboard</p>
-                    <p>KPIs, team productivity, and system performance metrics</p>
+                    <p className="text-lg font-medium mb-2">
+                      Performance Dashboard
+                    </p>
+                    <p>
+                      KPIs, team productivity, and system performance metrics
+                    </p>
                   </div>
                 </div>
               </CardContent>

@@ -1,6 +1,12 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 import ConnectionStatus from "@/components/ConnectionStatus";
@@ -41,7 +47,8 @@ export default function CloudStatus() {
               <CardHeader>
                 <CardTitle>ChargeSource Cloud Connection</CardTitle>
                 <CardDescription>
-                  Real-time status of your cloud database connection and sync services
+                  Real-time status of your cloud database connection and sync
+                  services
                 </CardDescription>
               </CardHeader>
               <CardContent>

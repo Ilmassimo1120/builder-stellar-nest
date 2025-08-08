@@ -1,79 +1,86 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
+  <head>
     <title>Supabase Connection Test</title>
-</head>
-<body>
+  </head>
+  <body>
     <h1>Direct Supabase Connection Test</h1>
     <div id="results"></div>
-    
+
     <script>
-        const log = (message) => {
-            console.log(message);
-            document.getElementById('results').innerHTML += '<div>' + message + '</div>';
-        };
-        
-        const testSupabase = async () => {
-            const supabaseUrl = "https://tepmkljodsifaexmrinl.supabase.co";
-            const apiKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlcG1rbGpvZHNpZmFleG1yaW5sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ2MDQwMjUsImV4cCI6MjA3MDE4MDAyNX0.n4WdeHUHHc5PuJV8-2oDn826CoNxNzHHbt4KxeAhOYc";
-            
-            log("🚀 Testing Supabase connection...");
-            log("🔧 URL: " + supabaseUrl);
-            
-            try {
-                // Test basic connectivity
-                const response = await fetch(supabaseUrl + "/rest/v1/", {
-                    method: 'GET',
-                    headers: {
-                        'apikey': apiKey,
-                        'Authorization': 'Bearer ' + apiKey,
-                        'Content-Type': 'application/json'
-                    }
-                });
-                
-                log("✅ Basic connectivity: " + response.status);
-                
-                // Test health check function
-                const healthResponse = await fetch(supabaseUrl + "/rest/v1/rpc/health_check", {
-                    method: 'POST',
-                    headers: {
-                        'apikey': apiKey,
-                        'Authorization': 'Bearer ' + apiKey,
-                        'Content-Type': 'application/json'
-                    }
-                });
-                
-                if (healthResponse.ok) {
-                    const data = await healthResponse.json();
-                    log("✅ Health check: " + JSON.stringify(data));
-                } else {
-                    log("❌ Health check failed: " + healthResponse.status);
-                }
-                
-                // Test health_status table
-                const tableResponse = await fetch(supabaseUrl + "/rest/v1/health_status?select=*", {
-                    method: 'GET',
-                    headers: {
-                        'apikey': apiKey,
-                        'Authorization': 'Bearer ' + apiKey,
-                        'Content-Type': 'application/json'
-                    }
-                });
-                
-                if (tableResponse.ok) {
-                    const data = await tableResponse.json();
-                    log("✅ Table query: " + JSON.stringify(data));
-                } else {
-                    log("❌ Table query failed: " + tableResponse.status);
-                }
-                
-            } catch (error) {
-                log("❌ Error: " + error.message);
-                log("❌ Stack: " + error.stack);
-            }
-        };
-        
-        testSupabase();
+      const log = (message) => {
+        console.log(message);
+        document.getElementById("results").innerHTML +=
+          "<div>" + message + "</div>";
+      };
+
+      const testSupabase = async () => {
+        const supabaseUrl = "https://tepmkljodsifaexmrinl.supabase.co";
+        const apiKey =
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlcG1rbGpvZHNpZmFleG1yaW5sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ2MDQwMjUsImV4cCI6MjA3MDE4MDAyNX0.n4WdeHUHHc5PuJV8-2oDn826CoNxNzHHbt4KxeAhOYc";
+
+        log("🚀 Testing Supabase connection...");
+        log("🔧 URL: " + supabaseUrl);
+
+        try {
+          // Test basic connectivity
+          const response = await fetch(supabaseUrl + "/rest/v1/", {
+            method: "GET",
+            headers: {
+              apikey: apiKey,
+              Authorization: "Bearer " + apiKey,
+              "Content-Type": "application/json",
+            },
+          });
+
+          log("✅ Basic connectivity: " + response.status);
+
+          // Test health check function
+          const healthResponse = await fetch(
+            supabaseUrl + "/rest/v1/rpc/health_check",
+            {
+              method: "POST",
+              headers: {
+                apikey: apiKey,
+                Authorization: "Bearer " + apiKey,
+                "Content-Type": "application/json",
+              },
+            },
+          );
+
+          if (healthResponse.ok) {
+            const data = await healthResponse.json();
+            log("✅ Health check: " + JSON.stringify(data));
+          } else {
+            log("❌ Health check failed: " + healthResponse.status);
+          }
+
+          // Test health_status table
+          const tableResponse = await fetch(
+            supabaseUrl + "/rest/v1/health_status?select=*",
+            {
+              method: "GET",
+              headers: {
+                apikey: apiKey,
+                Authorization: "Bearer " + apiKey,
+                "Content-Type": "application/json",
+              },
+            },
+          );
+
+          if (tableResponse.ok) {
+            const data = await tableResponse.json();
+            log("✅ Table query: " + JSON.stringify(data));
+          } else {
+            log("❌ Table query failed: " + tableResponse.status);
+          }
+        } catch (error) {
+          log("❌ Error: " + error.message);
+          log("❌ Stack: " + error.stack);
+        }
+      };
+
+      testSupabase();
     </script>
-</body>
+  </body>
 </html>

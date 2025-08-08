@@ -13,11 +13,14 @@ export default function TestStatus() {
   const [connectionState, setConnectionState] = useState({
     autoInit: false,
     autoConfig: false,
-    manual: false
+    manual: false,
   });
 
   const addResult = (message: string) => {
-    setResults(prev => [...prev, `${new Date().toLocaleTimeString()}: ${message}`]);
+    setResults((prev) => [
+      ...prev,
+      `${new Date().toLocaleTimeString()}: ${message}`,
+    ]);
   };
 
   const testAllConnections = async () => {
@@ -29,17 +32,22 @@ export default function TestStatus() {
       addResult("🔄 Testing autoInit.initialize()...");
       const autoInitResult = await autoInit.initialize();
       addResult(`autoInit result: ${autoInitResult}`);
-      addResult(`autoInit.isSupabaseConnected(): ${autoInit.isSupabaseConnected()}`);
-      
+      addResult(
+        `autoInit.isSupabaseConnected(): ${autoInit.isSupabaseConnected()}`,
+      );
+
       // Test 2: autoConfigureSupabase
       addResult("🔄 Testing autoConfigureSupabase()...");
       const autoConfigResult = await autoConfigureSupabase();
       addResult(`autoConfigureSupabase result: ${autoConfigResult}`);
-      
+
       // Test 3: Manual check
       addResult("🔄 Testing manual connection...");
       const { supabase } = await import("@/lib/supabase");
-      const { data, error } = await supabase.from('health_status').select('*').limit(1);
+      const { data, error } = await supabase
+        .from("health_status")
+        .select("*")
+        .limit(1);
       const manualResult = !error;
       addResult(`Manual check result: ${manualResult}`);
       if (error) {
@@ -47,18 +55,17 @@ export default function TestStatus() {
       } else {
         addResult(`Manual check data: ${JSON.stringify(data)}`);
       }
-      
+
       setConnectionState({
         autoInit: autoInitResult,
         autoConfig: autoConfigResult,
-        manual: manualResult
+        manual: manualResult,
       });
-      
+
       addResult("🎯 Summary:");
-      addResult(`  autoInit: ${autoInitResult ? '✅' : '❌'}`);
-      addResult(`  autoConfig: ${autoConfigResult ? '✅' : '❌'}`);
-      addResult(`  manual: ${manualResult ? '✅' : '❌'}`);
-      
+      addResult(`  autoInit: ${autoInitResult ? "✅" : "❌"}`);
+      addResult(`  autoConfig: ${autoConfigResult ? "✅" : "❌"}`);
+      addResult(`  manual: ${manualResult ? "✅" : "❌"}`);
     } catch (error) {
       addResult(`❌ Test failed: ${error}`);
     } finally {
@@ -79,21 +86,31 @@ export default function TestStatus() {
           </CardHeader>
           <CardContent>
             <div className="flex gap-4 mb-4">
-              <Badge variant={connectionState.autoInit ? "default" : "destructive"}>
+              <Badge
+                variant={connectionState.autoInit ? "default" : "destructive"}
+              >
                 AutoInit: {connectionState.autoInit ? "✅" : "❌"}
               </Badge>
-              <Badge variant={connectionState.autoConfig ? "default" : "destructive"}>
+              <Badge
+                variant={connectionState.autoConfig ? "default" : "destructive"}
+              >
                 AutoConfig: {connectionState.autoConfig ? "✅" : "❌"}
               </Badge>
-              <Badge variant={connectionState.manual ? "default" : "destructive"}>
+              <Badge
+                variant={connectionState.manual ? "default" : "destructive"}
+              >
                 Manual: {connectionState.manual ? "✅" : "❌"}
               </Badge>
             </div>
-            
-            <Button onClick={testAllConnections} disabled={testing} className="mb-4">
+
+            <Button
+              onClick={testAllConnections}
+              disabled={testing}
+              className="mb-4"
+            >
               {testing ? "Testing..." : "Run All Tests"}
             </Button>
-            
+
             {results.length > 0 && (
               <div className="bg-black text-green-400 p-4 rounded font-mono text-sm max-h-96 overflow-y-auto">
                 {results.map((result, index) => (
@@ -105,7 +122,7 @@ export default function TestStatus() {
             )}
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardHeader>
             <CardTitle>🔧 Actual ConnectionStatus Component</CardTitle>

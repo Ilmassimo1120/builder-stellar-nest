@@ -154,19 +154,26 @@ export default function Dashboard() {
         // Load from Supabase
         try {
           const { data: supabaseProjects, error } = await supabase
-            .from('projects')
-            .select('*')
-            .order('created_at', { ascending: false });
+            .from("projects")
+            .select("*")
+            .order("created_at", { ascending: false });
 
           if (!error && supabaseProjects) {
             loadedProjects = supabaseProjects.map((project) => ({
               id: project.id?.slice(0, 8) || "PRJ-NEW",
               name: project.name,
-              client: project.client_info?.company || project.client_info?.name || "Unknown Client",
+              client:
+                project.client_info?.company ||
+                project.client_info?.name ||
+                "Unknown Client",
               status: project.status,
               progress: project.progress || 0,
-              value: project.estimated_budget ? `$${project.estimated_budget.toLocaleString()}` : "TBD",
-              deadline: new Date(project.created_at || Date.now()).toLocaleDateString(),
+              value: project.estimated_budget
+                ? `$${project.estimated_budget.toLocaleString()}`
+                : "TBD",
+              deadline: new Date(
+                project.created_at || Date.now(),
+              ).toLocaleDateString(),
               location: project.client_info?.address || "TBD",
               type: project.description || "EV Charging Project",
             }));

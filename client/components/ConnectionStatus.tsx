@@ -30,7 +30,10 @@ export default function ConnectionStatus() {
       (autoInit as any).supabaseConnected = false;
 
       const connected = await autoInit.initialize();
-      console.log("🔄 ConnectionStatus: autoInit.initialize() returned:", connected);
+      console.log(
+        "🔄 ConnectionStatus: autoInit.initialize() returned:",
+        connected,
+      );
 
       // Double check the state
       const finalState = autoInit.isSupabaseConnected();
@@ -72,8 +75,10 @@ export default function ConnectionStatus() {
             onClick={forceRecheck}
             disabled={isLoading}
           >
-            <RefreshCw className={`w-4 h-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
-            {isLoading ? 'Checking...' : 'Refresh'}
+            <RefreshCw
+              className={`w-4 h-4 mr-2 ${isLoading ? "animate-spin" : ""}`}
+            />
+            {isLoading ? "Checking..." : "Refresh"}
           </Button>
         </div>
       </CardHeader>
@@ -120,12 +125,14 @@ export default function ConnectionStatus() {
             )}
           </Badge>
         </div>
-        
+
         {isConnected && (
           <div className="mt-4 grid grid-cols-3 gap-4 text-center">
             <div>
               <div className="text-lg font-bold text-green-600">✓</div>
-              <div className="text-xs text-muted-foreground">Real-time Sync</div>
+              <div className="text-xs text-muted-foreground">
+                Real-time Sync
+              </div>
             </div>
             <div>
               <div className="text-lg font-bold text-green-600">✓</div>

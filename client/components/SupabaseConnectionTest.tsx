@@ -8,40 +8,50 @@ export default function SupabaseConnectionTest() {
   const [testing, setTesting] = useState(false);
 
   const addResult = (message: string) => {
-    setTestResults(prev => [...prev, `${new Date().toLocaleTimeString()}: ${message}`]);
+    setTestResults((prev) => [
+      ...prev,
+      `${new Date().toLocaleTimeString()}: ${message}`,
+    ]);
   };
 
   const testConnection = async () => {
     setTesting(true);
     setTestResults([]);
-    
+
     try {
       // Test 1: Check environment variables
       addResult(`🔧 VITE_SUPABASE_URL: ${import.meta.env.VITE_SUPABASE_URL}`);
-      addResult(`🔧 VITE_SUPABASE_ANON_KEY: ${import.meta.env.VITE_SUPABASE_ANON_KEY ? 'Present' : 'Missing'}`);
-      
+      addResult(
+        `🔧 VITE_SUPABASE_ANON_KEY: ${import.meta.env.VITE_SUPABASE_ANON_KEY ? "Present" : "Missing"}`,
+      );
+
       // Test 2: Check supabase client configuration
       addResult(`📡 Supabase URL: ${supabase.supabaseUrl}`);
-      addResult(`🔑 Supabase Key: ${supabase.supabaseKey ? 'Present' : 'Missing'}`);
-      
+      addResult(
+        `🔑 Supabase Key: ${supabase.supabaseKey ? "Present" : "Missing"}`,
+      );
+
       // Test 3: Try a simple connection test using health check
       addResult("🚀 Testing connection with health check...");
-      const { data, error } = await supabase.rpc('health_check');
-      
+      const { data, error } = await supabase.rpc("health_check");
+
       if (error) {
-        addResult(`❌ Connection failed: ${error.message || 'Unknown error'}`);
-        addResult(`📋 Error code: ${error.code || 'No code'}`);
-        addResult(`📋 Error details: ${error.details || 'No details'}`);
-        addResult(`💡 Error hint: ${error.hint || 'No hint'}`);
+        addResult(`❌ Connection failed: ${error.message || "Unknown error"}`);
+        addResult(`📋 Error code: ${error.code || "No code"}`);
+        addResult(`📋 Error details: ${error.details || "No details"}`);
+        addResult(`💡 Error hint: ${error.hint || "No hint"}`);
         addResult(`🔍 Full error: ${JSON.stringify(error, null, 2)}`);
       } else {
         addResult("✅ Connection successful!");
         addResult(`📊 Query result: ${JSON.stringify(data)}`);
       }
-      
+
       // Test 4: Test RLS and permissions
       addResult("🔐 Testing authentication status...");
-      const { data: { user }, error: authError } = await supabase.auth.getUser();
+      const {
+        data: { user },
+        error: authError,
+      } = await supabase.auth.getUser();
       if (authError) {
         addResult(`⚠️ Auth status: ${authError.message}`);
       } else if (user) {
@@ -49,9 +59,10 @@ export default function SupabaseConnectionTest() {
       } else {
         addResult("ℹ️ No user authenticated (using anonymous access)");
       }
-      
     } catch (error) {
-      addResult(`💥 Unexpected error: ${error instanceof Error ? error.message : String(error)}`);
+      addResult(
+        `💥 Unexpected error: ${error instanceof Error ? error.message : String(error)}`,
+      );
       addResult(`🔍 Exception details: ${JSON.stringify(error, null, 2)}`);
     } finally {
       setTesting(false);
@@ -67,7 +78,7 @@ export default function SupabaseConnectionTest() {
         <Button onClick={testConnection} disabled={testing} className="mb-4">
           {testing ? "Testing..." : "Run Connection Test"}
         </Button>
-        
+
         {testResults.length > 0 && (
           <div className="bg-black text-green-400 p-4 rounded font-mono text-sm max-h-96 overflow-y-auto">
             {testResults.map((result, index) => (

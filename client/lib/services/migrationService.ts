@@ -27,7 +27,7 @@ class MigrationService {
             console.log("Creating temporary user for auto-migration");
             user = {
               id: `temp-${Date.now()}`,
-              email: "auto-migrated@chargesource.local"
+              email: "auto-migrated@chargesource.local",
             };
           }
         } else {
@@ -50,7 +50,8 @@ class MigrationService {
             await this.migrateProject(project, userId);
             migratedItems++;
           } catch (error) {
-            const errorMessage = error instanceof Error ? error.message : String(error);
+            const errorMessage =
+              error instanceof Error ? error.message : String(error);
             errors.push(`Project: ${errorMessage}`);
           }
         }
@@ -65,7 +66,8 @@ class MigrationService {
             await this.migrateProjectDraft(draft, userId);
             migratedItems++;
           } catch (error) {
-            const errorMessage = error instanceof Error ? error.message : String(error);
+            const errorMessage =
+              error instanceof Error ? error.message : String(error);
             errors.push(`Draft: ${errorMessage}`);
           }
         }
@@ -80,7 +82,8 @@ class MigrationService {
             await this.migrateQuote(quote, userId);
             migratedItems++;
           } catch (error) {
-            const errorMessage = error instanceof Error ? error.message : String(error);
+            const errorMessage =
+              error instanceof Error ? error.message : String(error);
             errors.push(`Quote: ${errorMessage}`);
           }
         }
@@ -138,12 +141,17 @@ class MigrationService {
       let success = true;
 
       if (errors.length > 0) {
-        console.warn(`Migration completed with ${errors.length} errors:`, errors);
+        console.warn(
+          `Migration completed with ${errors.length} errors:`,
+          errors,
+        );
         message += ` ${errors.length} items failed to migrate. Check console for details.`;
         success = migratedItems > 0; // Success if at least some items migrated
       }
 
-      console.log(`Migration summary: ${migratedItems} successful, ${errors.length} failed`);
+      console.log(
+        `Migration summary: ${migratedItems} successful, ${errors.length} failed`,
+      );
       return {
         success,
         message,
@@ -185,11 +193,19 @@ class MigrationService {
       });
 
       if (error) throw error;
-      console.log(`Successfully migrated project: ${project.name || project.id}`);
+      console.log(
+        `Successfully migrated project: ${project.name || project.id}`,
+      );
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : String(error);
-      console.error(`Error migrating project "${project.name || project.id}":`, errorMessage);
-      throw new Error(`Failed to migrate project "${project.name || project.id}": ${errorMessage}`);
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
+      console.error(
+        `Error migrating project "${project.name || project.id}":`,
+        errorMessage,
+      );
+      throw new Error(
+        `Failed to migrate project "${project.name || project.id}": ${errorMessage}`,
+      );
     }
   }
 
@@ -210,11 +226,19 @@ class MigrationService {
       });
 
       if (error) throw error;
-      console.log(`Successfully migrated project draft: ${draft.draftName || draft.id}`);
+      console.log(
+        `Successfully migrated project draft: ${draft.draftName || draft.id}`,
+      );
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : String(error);
-      console.error(`Error migrating project draft "${draft.draftName || draft.id}":`, errorMessage);
-      throw new Error(`Failed to migrate project draft "${draft.draftName || draft.id}": ${errorMessage}`);
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
+      console.error(
+        `Error migrating project draft "${draft.draftName || draft.id}":`,
+        errorMessage,
+      );
+      throw new Error(
+        `Failed to migrate project draft "${draft.draftName || draft.id}": ${errorMessage}`,
+      );
     }
   }
 
@@ -244,9 +268,15 @@ class MigrationService {
       if (error) throw error;
       console.log(`Successfully migrated quote: ${quote.title || quote.id}`);
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : String(error);
-      console.error(`Error migrating quote "${quote.title || quote.id}":`, errorMessage);
-      throw new Error(`Failed to migrate quote "${quote.title || quote.id}": ${errorMessage}`);
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
+      console.error(
+        `Error migrating quote "${quote.title || quote.id}":`,
+        errorMessage,
+      );
+      throw new Error(
+        `Failed to migrate quote "${quote.title || quote.id}": ${errorMessage}`,
+      );
     }
   }
 

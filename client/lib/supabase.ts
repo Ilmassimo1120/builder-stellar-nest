@@ -2,15 +2,17 @@ import { createClient } from "@supabase/supabase-js";
 
 // Supabase configuration - automatically configured for ChargeSource
 const supabaseUrl =
-  import.meta.env.VITE_SUPABASE_URL || "https://tepmkljodsifaexmrinl.supabase.co";
+  import.meta.env.VITE_SUPABASE_URL ||
+  "https://tepmkljodsifaexmrinl.supabase.co";
 const supabaseAnonKey =
-  import.meta.env.VITE_SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlcG1rbGpvZHNpZmFleG1yaW5sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ2MDQwMjUsImV4cCI6MjA3MDE4MDAyNX0.n4WdeHUHHc5PuJV8-2oDn826CoNxNzHHbt4KxeAhOYc";
+  import.meta.env.VITE_SUPABASE_ANON_KEY ||
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlcG1rbGpvZHNpZmFleG1yaW5sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ2MDQwMjUsImV4cCI6MjA3MDE4MDAyNX0.n4WdeHUHHc5PuJV8-2oDn826CoNxNzHHbt4KxeAhOYc";
 
 // Validate configuration
-if (!supabaseUrl || supabaseUrl.includes('your-project')) {
+if (!supabaseUrl || supabaseUrl.includes("your-project")) {
   console.error("❌ Invalid Supabase URL configuration:", supabaseUrl);
 }
-if (!supabaseAnonKey || supabaseAnonKey.includes('your-anon-key')) {
+if (!supabaseAnonKey || supabaseAnonKey.includes("your-anon-key")) {
   console.error("❌ Invalid Supabase API key configuration");
 }
 
@@ -408,14 +410,17 @@ export const initializeSupabase = async () => {
 
     // Try using direct fetch first (we know this works)
     try {
-      const response = await fetch(`${supabaseUrl}/rest/v1/health_status?select=*`, {
-        method: 'GET',
-        headers: {
-          'apikey': supabaseAnonKey,
-          'Authorization': `Bearer ${supabaseAnonKey}`,
-          'Content-Type': 'application/json'
-        }
-      });
+      const response = await fetch(
+        `${supabaseUrl}/rest/v1/health_status?select=*`,
+        {
+          method: "GET",
+          headers: {
+            apikey: supabaseAnonKey,
+            Authorization: `Bearer ${supabaseAnonKey}`,
+            "Content-Type": "application/json",
+          },
+        },
+      );
 
       if (response.ok) {
         const data = await response.json();
@@ -429,19 +434,27 @@ export const initializeSupabase = async () => {
     }
 
     // Fallback to Supabase client
-    const { data, error } = await supabase.from('health_status').select('*').limit(1);
+    const { data, error } = await supabase
+      .from("health_status")
+      .select("*")
+      .limit(1);
 
     if (error) {
       console.error("❌ Supabase client failed:", error.message);
       // Since we know the connection works via direct test, return true anyway
-      console.log("⚠️ Supabase client has issues but connection works - returning true");
+      console.log(
+        "⚠️ Supabase client has issues but connection works - returning true",
+      );
       return true;
     }
 
     console.log("✅ Supabase client succeeded:", data);
     return true;
   } catch (error) {
-    console.error("❌ Supabase initialization failed:", error instanceof Error ? error.message : String(error));
+    console.error(
+      "❌ Supabase initialization failed:",
+      error instanceof Error ? error.message : String(error),
+    );
     // Since we know the connection works, return true
     console.log("⚠️ Exception occurred but connection works - returning true");
     return true;
@@ -452,7 +465,7 @@ export const initializeSupabase = async () => {
 let isSupabaseConnected = false;
 
 // Initialize on module load
-initializeSupabase().then(connected => {
+initializeSupabase().then((connected) => {
   isSupabaseConnected = connected;
   console.log("🔄 Module load initialization complete:", connected);
 });
@@ -463,17 +476,20 @@ export const isConnectedToSupabase = () => isSupabaseConnected;
 export const checkSupabaseConnection = async (): Promise<boolean> => {
   try {
     // Try function first
-    let { data, error } = await supabase.rpc('health_check');
+    let { data, error } = await supabase.rpc("health_check");
 
     if (error) {
       // Try table method as fallback
-      const result = await supabase.from('health_status').select('*').limit(1);
+      const result = await supabase.from("health_status").select("*").limit(1);
       return !result.error;
     }
 
     return true;
   } catch (error) {
-    console.error("Supabase connection test failed:", error instanceof Error ? error.message : String(error));
+    console.error(
+      "Supabase connection test failed:",
+      error instanceof Error ? error.message : String(error),
+    );
     return false;
   }
 };
@@ -494,9 +510,9 @@ export const projectService = {
   getAllProjects: async () => {
     try {
       const { data, error } = await supabase
-        .from('projects')
-        .select('*')
-        .order('created_at', { ascending: false });
+        .from("projects")
+        .select("*")
+        .order("created_at", { ascending: false });
 
       if (error) throw error;
       return data || [];
@@ -509,9 +525,9 @@ export const projectService = {
   getProject: async (id: string) => {
     try {
       const { data, error } = await supabase
-        .from('projects')
-        .select('*')
-        .eq('id', id)
+        .from("projects")
+        .select("*")
+        .eq("id", id)
         .single();
 
       if (error) throw error;
@@ -525,7 +541,7 @@ export const projectService = {
   createProject: async (projectData: any) => {
     try {
       const { data, error } = await supabase
-        .from('projects')
+        .from("projects")
         .insert([projectData])
         .select()
         .single();
@@ -541,9 +557,9 @@ export const projectService = {
   updateProject: async (id: string, updates: any) => {
     try {
       const { data, error } = await supabase
-        .from('projects')
+        .from("projects")
         .update(updates)
-        .eq('id', id)
+        .eq("id", id)
         .select()
         .single();
 
@@ -557,10 +573,7 @@ export const projectService = {
 
   deleteProject: async (id: string) => {
     try {
-      const { error } = await supabase
-        .from('projects')
-        .delete()
-        .eq('id', id);
+      const { error } = await supabase.from("projects").delete().eq("id", id);
 
       if (error) throw error;
       return true;
@@ -568,7 +581,7 @@ export const projectService = {
       console.error("Error deleting project:", error);
       throw error;
     }
-  }
+  },
 };
 
 export type { Database };
