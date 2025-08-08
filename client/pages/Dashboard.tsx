@@ -1102,6 +1102,12 @@ export default function Dashboard() {
             </CardContent>
           </Card>
         </div>
+
+        {/* User Preferences Manager */}
+        <UserPreferencesManager
+          isOpen={showPreferences}
+          onClose={() => setShowPreferences(false)}
+        />
       </div>
     </div>
   );
