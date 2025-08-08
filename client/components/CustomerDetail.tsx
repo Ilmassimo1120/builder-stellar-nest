@@ -1,18 +1,18 @@
-import { useState, useEffect } from 'react';
-import { Customer, CustomerDeal, CustomerContact } from '@shared/customer';
-import { customerService } from '@/lib/services/customerService';
-import { Button } from '@/components/ui/button';
+import { useState, useEffect } from "react";
+import { Customer, CustomerDeal, CustomerContact } from "@shared/customer";
+import { customerService } from "@/lib/services/customerService";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Badge } from '@/components/ui/badge';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Separator } from '@/components/ui/separator';
+} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Separator } from "@/components/ui/separator";
 import {
   Dialog,
   DialogContent,
@@ -20,7 +20,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
+} from "@/components/ui/dialog";
 import {
   Building2,
   Mail,
@@ -34,10 +34,10 @@ import {
   Plus,
   ExternalLink,
   Tag,
-} from 'lucide-react';
-import { CustomerForm } from './CustomerForm';
-import { LoadingSpinner } from './LoadingSpinner';
-import { cn } from '@/lib/utils';
+} from "lucide-react";
+import { CustomerForm } from "./CustomerForm";
+import { LoadingSpinner } from "./LoadingSpinner";
+import { cn } from "@/lib/utils";
 
 interface CustomerDetailProps {
   customer: Customer;
@@ -64,7 +64,7 @@ export function CustomerDetail({ customer, onUpdate }: CustomerDetailProps) {
       setDeals(dealsData);
       setContacts(contactsData);
     } catch (error) {
-      console.error('Error loading customer data:', error);
+      console.error("Error loading customer data:", error);
     } finally {
       setLoading(false);
     }
@@ -80,46 +80,64 @@ export function CustomerDetail({ customer, onUpdate }: CustomerDetailProps) {
 
   const getInitials = (name: string) => {
     return name
-      .split(' ')
-      .map(n => n[0])
-      .join('')
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
       .toUpperCase()
       .slice(0, 2);
   };
 
   const getSourceBadgeColor = (source: string) => {
     switch (source) {
-      case 'hubspot': return 'bg-orange-100 text-orange-800';
-      case 'pipedrive': return 'bg-green-100 text-green-800';
-      case 'native': return 'bg-blue-100 text-blue-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case "hubspot":
+        return "bg-orange-100 text-orange-800";
+      case "pipedrive":
+        return "bg-green-100 text-green-800";
+      case "native":
+        return "bg-blue-100 text-blue-800";
+      default:
+        return "bg-gray-100 text-gray-800";
     }
   };
 
   const getDealStageColor = (stage: string) => {
     switch (stage.toLowerCase()) {
-      case 'new': return 'bg-blue-100 text-blue-800';
-      case 'qualified': return 'bg-yellow-100 text-yellow-800';
-      case 'proposal': return 'bg-orange-100 text-orange-800';
-      case 'negotiation': return 'bg-purple-100 text-purple-800';
-      case 'closed_won': return 'bg-green-100 text-green-800';
-      case 'closed_lost': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case "new":
+        return "bg-blue-100 text-blue-800";
+      case "qualified":
+        return "bg-yellow-100 text-yellow-800";
+      case "proposal":
+        return "bg-orange-100 text-orange-800";
+      case "negotiation":
+        return "bg-purple-100 text-purple-800";
+      case "closed_won":
+        return "bg-green-100 text-green-800";
+      case "closed_lost":
+        return "bg-red-100 text-red-800";
+      default:
+        return "bg-gray-100 text-gray-800";
     }
   };
 
   const getContactTypeIcon = (type: string) => {
     switch (type) {
-      case 'email': return <Mail className="w-4 h-4" />;
-      case 'phone': return <Phone className="w-4 h-4" />;
-      case 'meeting': return <Calendar className="w-4 h-4" />;
-      case 'note': return <MessageSquare className="w-4 h-4" />;
-      default: return <MessageSquare className="w-4 h-4" />;
+      case "email":
+        return <Mail className="w-4 h-4" />;
+      case "phone":
+        return <Phone className="w-4 h-4" />;
+      case "meeting":
+        return <Calendar className="w-4 h-4" />;
+      case "note":
+        return <MessageSquare className="w-4 h-4" />;
+      default:
+        return <MessageSquare className="w-4 h-4" />;
     }
   };
 
   const totalDealValue = deals.reduce((sum, deal) => sum + deal.value, 0);
-  const activeDealCount = deals.filter(deal => !['closed_won', 'closed_lost'].includes(deal.stage)).length;
+  const activeDealCount = deals.filter(
+    (deal) => !["closed_won", "closed_lost"].includes(deal.stage),
+  ).length;
 
   return (
     <div className="space-y-6">
@@ -136,16 +154,16 @@ export function CustomerDetail({ customer, onUpdate }: CustomerDetailProps) {
               <div>
                 <h2 className="text-2xl font-bold">{customer.name}</h2>
                 {customer.company && (
-                  <p className="text-lg text-muted-foreground">{customer.company}</p>
+                  <p className="text-lg text-muted-foreground">
+                    {customer.company}
+                  </p>
                 )}
                 <div className="flex items-center gap-2 mt-2">
                   <Badge className={getSourceBadgeColor(customer.source)}>
                     {customer.source}
                   </Badge>
                   {customer.externalId && (
-                    <Badge variant="outline">
-                      ID: {customer.externalId}
-                    </Badge>
+                    <Badge variant="outline">ID: {customer.externalId}</Badge>
                   )}
                 </div>
               </div>
@@ -164,8 +182,8 @@ export function CustomerDetail({ customer, onUpdate }: CustomerDetailProps) {
                     Update customer information
                   </DialogDescription>
                 </DialogHeader>
-                <CustomerForm 
-                  customer={customer} 
+                <CustomerForm
+                  customer={customer}
                   onSave={handleCustomerUpdated}
                   onCancel={() => setShowEditForm(false)}
                 />
@@ -176,7 +194,9 @@ export function CustomerDetail({ customer, onUpdate }: CustomerDetailProps) {
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div>
-              <h4 className="font-medium text-sm text-muted-foreground mb-2">Contact Information</h4>
+              <h4 className="font-medium text-sm text-muted-foreground mb-2">
+                Contact Information
+              </h4>
               <div className="space-y-2">
                 {customer.email && (
                   <div className="flex items-center gap-2">
@@ -195,26 +215,36 @@ export function CustomerDetail({ customer, onUpdate }: CustomerDetailProps) {
 
             {customer.address && (
               <div>
-                <h4 className="font-medium text-sm text-muted-foreground mb-2">Address</h4>
+                <h4 className="font-medium text-sm text-muted-foreground mb-2">
+                  Address
+                </h4>
                 <div className="flex items-start gap-2">
                   <MapPin className="w-4 h-4 text-muted-foreground mt-0.5" />
                   <div className="text-sm">
-                    {customer.address.street && <div>{customer.address.street}</div>}
+                    {customer.address.street && (
+                      <div>{customer.address.street}</div>
+                    )}
                     {(customer.address.city || customer.address.state) && (
                       <div>
                         {customer.address.city}
-                        {customer.address.city && customer.address.state && ', '}
+                        {customer.address.city &&
+                          customer.address.state &&
+                          ", "}
                         {customer.address.state} {customer.address.postalCode}
                       </div>
                     )}
-                    {customer.address.country && <div>{customer.address.country}</div>}
+                    {customer.address.country && (
+                      <div>{customer.address.country}</div>
+                    )}
                   </div>
                 </div>
               </div>
             )}
 
             <div>
-              <h4 className="font-medium text-sm text-muted-foreground mb-2">Activity</h4>
+              <h4 className="font-medium text-sm text-muted-foreground mb-2">
+                Activity
+              </h4>
               <div className="space-y-2">
                 <div className="flex items-center gap-2 text-sm">
                   <Calendar className="w-4 h-4 text-muted-foreground" />
@@ -229,7 +259,9 @@ export function CustomerDetail({ customer, onUpdate }: CustomerDetailProps) {
 
             {customer.tags.length > 0 && (
               <div>
-                <h4 className="font-medium text-sm text-muted-foreground mb-2">Tags</h4>
+                <h4 className="font-medium text-sm text-muted-foreground mb-2">
+                  Tags
+                </h4>
                 <div className="flex flex-wrap gap-1">
                   {customer.tags.map((tag, index) => (
                     <Badge key={index} variant="secondary" className="text-xs">
@@ -250,8 +282,12 @@ export function CustomerDetail({ customer, onUpdate }: CustomerDetailProps) {
             <div className="flex items-center gap-2">
               <DollarSign className="w-5 h-5 text-green-600" />
               <div>
-                <p className="text-sm text-muted-foreground">Total Deal Value</p>
-                <p className="text-xl font-semibold">${totalDealValue.toLocaleString()}</p>
+                <p className="text-sm text-muted-foreground">
+                  Total Deal Value
+                </p>
+                <p className="text-xl font-semibold">
+                  ${totalDealValue.toLocaleString()}
+                </p>
               </div>
             </div>
           </CardContent>
@@ -286,7 +322,9 @@ export function CustomerDetail({ customer, onUpdate }: CustomerDetailProps) {
       <Tabs defaultValue="deals" className="space-y-4">
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="deals">Deals ({deals.length})</TabsTrigger>
-          <TabsTrigger value="contacts">Activity ({contacts.length})</TabsTrigger>
+          <TabsTrigger value="contacts">
+            Activity ({contacts.length})
+          </TabsTrigger>
           <TabsTrigger value="projects">Projects</TabsTrigger>
         </TabsList>
 
@@ -311,14 +349,19 @@ export function CustomerDetail({ customer, onUpdate }: CustomerDetailProps) {
                         <div className="flex items-center gap-2 mb-2">
                           <h4 className="font-medium">{deal.title}</h4>
                           <Badge className={getDealStageColor(deal.stage)}>
-                            {deal.stage.replace('_', ' ')}
+                            {deal.stage.replace("_", " ")}
                           </Badge>
                         </div>
                         <div className="flex items-center gap-4 text-sm text-muted-foreground">
                           <span>${deal.value.toLocaleString()}</span>
                           <span>{deal.probability}% probability</span>
                           {deal.expectedCloseDate && (
-                            <span>Expected: {new Date(deal.expectedCloseDate).toLocaleDateString()}</span>
+                            <span>
+                              Expected:{" "}
+                              {new Date(
+                                deal.expectedCloseDate,
+                              ).toLocaleDateString()}
+                            </span>
                           )}
                         </div>
                       </div>

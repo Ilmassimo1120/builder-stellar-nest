@@ -1,13 +1,13 @@
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { Customer } from '@shared/customer';
-import { customerService } from '@/lib/services/customerService';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { Customer } from "@shared/customer";
+import { customerService } from "@/lib/services/customerService";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Form,
   FormControl,
@@ -16,32 +16,34 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
+} from "@/components/ui/form";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
-import { Badge } from '@/components/ui/badge';
-import { X, Building2, MapPin, Phone, Mail, Tag } from 'lucide-react';
-import { LoadingSpinner } from './LoadingSpinner';
+} from "@/components/ui/select";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
+import { X, Building2, MapPin, Phone, Mail, Tag } from "lucide-react";
+import { LoadingSpinner } from "./LoadingSpinner";
 
 const customerFormSchema = z.object({
-  name: z.string().min(1, 'Name is required'),
-  email: z.string().email('Invalid email address'),
+  name: z.string().min(1, "Name is required"),
+  email: z.string().email("Invalid email address"),
   phone: z.string().optional(),
   company: z.string().optional(),
-  address: z.object({
-    street: z.string().optional(),
-    city: z.string().optional(),
-    state: z.string().optional(),
-    postalCode: z.string().optional(),
-    country: z.string().optional(),
-  }).optional(),
+  address: z
+    .object({
+      street: z.string().optional(),
+      city: z.string().optional(),
+      state: z.string().optional(),
+      postalCode: z.string().optional(),
+      country: z.string().optional(),
+    })
+    .optional(),
   tags: z.array(z.string()).default([]),
   notes: z.string().optional(),
 });
@@ -54,27 +56,31 @@ interface CustomerFormProps {
   onCancel?: () => void;
 }
 
-export function CustomerForm({ customer, onSave, onCancel }: CustomerFormProps) {
+export function CustomerForm({
+  customer,
+  onSave,
+  onCancel,
+}: CustomerFormProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [newTag, setNewTag] = useState('');
+  const [newTag, setNewTag] = useState("");
 
   const form = useForm<CustomerFormData>({
     resolver: zodResolver(customerFormSchema),
     defaultValues: {
-      name: customer?.name || '',
-      email: customer?.email || '',
-      phone: customer?.phone || '',
-      company: customer?.company || '',
+      name: customer?.name || "",
+      email: customer?.email || "",
+      phone: customer?.phone || "",
+      company: customer?.company || "",
       address: {
-        street: customer?.address?.street || '',
-        city: customer?.address?.city || '',
-        state: customer?.address?.state || '',
-        postalCode: customer?.address?.postalCode || '',
-        country: customer?.address?.country || '',
+        street: customer?.address?.street || "",
+        city: customer?.address?.city || "",
+        state: customer?.address?.state || "",
+        postalCode: customer?.address?.postalCode || "",
+        country: customer?.address?.country || "",
       },
       tags: customer?.tags || [],
-      notes: '',
+      notes: "",
     },
   });
 
@@ -94,7 +100,10 @@ export function CustomerForm({ customer, onSave, onCancel }: CustomerFormProps) 
 
       if (customer) {
         // Update existing customer
-        savedCustomer = await customerService.updateCustomer(customer.id, customerData);
+        savedCustomer = await customerService.updateCustomer(
+          customer.id,
+          customerData,
+        );
       } else {
         // Create new customer
         savedCustomer = await customerService.createCustomer(customerData);
@@ -102,27 +111,30 @@ export function CustomerForm({ customer, onSave, onCancel }: CustomerFormProps) 
 
       onSave(savedCustomer);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to save customer');
+      setError(err instanceof Error ? err.message : "Failed to save customer");
     } finally {
       setLoading(false);
     }
   };
 
   const addTag = () => {
-    if (newTag.trim() && !form.getValues('tags').includes(newTag.trim())) {
-      const currentTags = form.getValues('tags');
-      form.setValue('tags', [...currentTags, newTag.trim()]);
-      setNewTag('');
+    if (newTag.trim() && !form.getValues("tags").includes(newTag.trim())) {
+      const currentTags = form.getValues("tags");
+      form.setValue("tags", [...currentTags, newTag.trim()]);
+      setNewTag("");
     }
   };
 
   const removeTag = (tagToRemove: string) => {
-    const currentTags = form.getValues('tags');
-    form.setValue('tags', currentTags.filter(tag => tag !== tagToRemove));
+    const currentTags = form.getValues("tags");
+    form.setValue(
+      "tags",
+      currentTags.filter((tag) => tag !== tagToRemove),
+    );
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       e.preventDefault();
       addTag();
     }
@@ -171,7 +183,11 @@ export function CustomerForm({ customer, onSave, onCancel }: CustomerFormProps) 
                   <FormItem>
                     <FormLabel>Email *</FormLabel>
                     <FormControl>
-                      <Input placeholder="john@example.com" type="email" {...field} />
+                      <Input
+                        placeholder="john@example.com"
+                        type="email"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -315,10 +331,14 @@ export function CustomerForm({ customer, onSave, onCancel }: CustomerFormProps) 
               </Button>
             </div>
 
-            {form.watch('tags').length > 0 && (
+            {form.watch("tags").length > 0 && (
               <div className="flex flex-wrap gap-2">
-                {form.watch('tags').map((tag, index) => (
-                  <Badge key={index} variant="secondary" className="flex items-center gap-1">
+                {form.watch("tags").map((tag, index) => (
+                  <Badge
+                    key={index}
+                    variant="secondary"
+                    className="flex items-center gap-1"
+                  >
                     {tag}
                     <Button
                       type="button"
@@ -373,7 +393,7 @@ export function CustomerForm({ customer, onSave, onCancel }: CustomerFormProps) 
           )}
           <Button type="submit" disabled={loading}>
             {loading && <LoadingSpinner className="w-4 h-4 mr-2" />}
-            {customer ? 'Update Customer' : 'Create Customer'}
+            {customer ? "Update Customer" : "Create Customer"}
           </Button>
         </div>
       </form>

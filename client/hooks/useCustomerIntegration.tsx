@@ -1,13 +1,16 @@
-import { useState, useEffect, useCallback } from 'react';
-import { Customer } from '@shared/customer';
-import { customerService } from '@/lib/services/customerService';
+import { useState, useEffect, useCallback } from "react";
+import { Customer } from "@shared/customer";
+import { customerService } from "@/lib/services/customerService";
 
 interface UseCustomerIntegrationProps {
   projectId?: string;
   quoteId?: string;
 }
 
-export function useCustomerIntegration({ projectId, quoteId }: UseCustomerIntegrationProps = {}) {
+export function useCustomerIntegration({
+  projectId,
+  quoteId,
+}: UseCustomerIntegrationProps = {}) {
   const [customer, setCustomer] = useState<Customer | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -30,115 +33,135 @@ export function useCustomerIntegration({ projectId, quoteId }: UseCustomerIntegr
 
       setCustomer(linkedCustomer);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load customer');
-      console.error('Error loading linked customer:', err);
+      setError(err instanceof Error ? err.message : "Failed to load customer");
+      console.error("Error loading linked customer:", err);
     } finally {
       setLoading(false);
     }
   }, [projectId, quoteId]);
 
   // Link customer to project
-  const linkToProject = useCallback(async (customerId: string, targetProjectId: string) => {
-    try {
-      setError(null);
-      const success = await customerService.linkProjectToCustomer(targetProjectId, customerId);
-      
-      if (success) {
-        // Reload customer if this is the current project
-        if (targetProjectId === projectId) {
-          await loadLinkedCustomer();
+  const linkToProject = useCallback(
+    async (customerId: string, targetProjectId: string) => {
+      try {
+        setError(null);
+        const success = await customerService.linkProjectToCustomer(
+          targetProjectId,
+          customerId,
+        );
+
+        if (success) {
+          // Reload customer if this is the current project
+          if (targetProjectId === projectId) {
+            await loadLinkedCustomer();
+          }
+          return true;
+        } else {
+          setError("Failed to link customer to project");
+          return false;
         }
-        return true;
-      } else {
-        setError('Failed to link customer to project');
+      } catch (err) {
+        setError(
+          err instanceof Error ? err.message : "Failed to link customer",
+        );
+        console.error("Error linking customer to project:", err);
         return false;
       }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to link customer');
-      console.error('Error linking customer to project:', err);
-      return false;
-    }
-  }, [projectId, loadLinkedCustomer]);
+    },
+    [projectId, loadLinkedCustomer],
+  );
 
   // Link customer to quote
-  const linkToQuote = useCallback(async (customerId: string, targetQuoteId: string) => {
-    try {
-      setError(null);
-      const success = await customerService.linkQuoteToCustomer(targetQuoteId, customerId);
-      
-      if (success) {
-        // Reload customer if this is the current quote
-        if (targetQuoteId === quoteId) {
-          await loadLinkedCustomer();
+  const linkToQuote = useCallback(
+    async (customerId: string, targetQuoteId: string) => {
+      try {
+        setError(null);
+        const success = await customerService.linkQuoteToCustomer(
+          targetQuoteId,
+          customerId,
+        );
+
+        if (success) {
+          // Reload customer if this is the current quote
+          if (targetQuoteId === quoteId) {
+            await loadLinkedCustomer();
+          }
+          return true;
+        } else {
+          setError("Failed to link customer to quote");
+          return false;
         }
-        return true;
-      } else {
-        setError('Failed to link customer to quote');
+      } catch (err) {
+        setError(
+          err instanceof Error ? err.message : "Failed to link customer",
+        );
+        console.error("Error linking customer to quote:", err);
         return false;
       }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to link customer');
-      console.error('Error linking customer to quote:', err);
-      return false;
-    }
-  }, [quoteId, loadLinkedCustomer]);
+    },
+    [quoteId, loadLinkedCustomer],
+  );
 
   // Notify customer of quote status change
-  const notifyQuoteStatusChange = useCallback(async (
-    targetQuoteId: string,
-    status: string,
-    customerId?: string
-  ) => {
-    try {
-      const targetCustomerId = customerId || customer?.id;
-      if (!targetCustomerId) {
+  const notifyQuoteStatusChange = useCallback(
+    async (targetQuoteId: string, status: string, customerId?: string) => {
+      try {
+        const targetCustomerId = customerId || customer?.id;
+        if (!targetCustomerId) {
+          return false;
+        }
+
+        return await customerService.notifyQuoteStatusChange(
+          targetQuoteId,
+          status,
+          targetCustomerId,
+        );
+      } catch (err) {
+        console.error("Error notifying customer of quote status change:", err);
         return false;
       }
-
-      return await customerService.notifyQuoteStatusChange(
-        targetQuoteId,
-        status,
-        targetCustomerId
-      );
-    } catch (err) {
-      console.error('Error notifying customer of quote status change:', err);
-      return false;
-    }
-  }, [customer]);
+    },
+    [customer],
+  );
 
   // Auto-sync quote status to CRM
-  const syncQuoteStatus = useCallback(async (
-    targetQuoteId: string,
-    status: string,
-    customerId?: string
-  ) => {
-    const config = customerService.getConfig();
-    if (!config.autoSyncQuotes) {
-      return;
-    }
+  const syncQuoteStatus = useCallback(
+    async (targetQuoteId: string, status: string, customerId?: string) => {
+      const config = customerService.getConfig();
+      if (!config.autoSyncQuotes) {
+        return;
+      }
 
-    return await notifyQuoteStatusChange(targetQuoteId, status, customerId);
-  }, [notifyQuoteStatusChange]);
+      return await notifyQuoteStatusChange(targetQuoteId, status, customerId);
+    },
+    [notifyQuoteStatusChange],
+  );
 
   // Get customer for external use
-  const getCustomer = useCallback(async (customerId: string): Promise<Customer | null> => {
-    try {
-      return await customerService.getCustomer(customerId);
-    } catch (err) {
-      console.error('Error fetching customer:', err);
-      return null;
-    }
-  }, []);
+  const getCustomer = useCallback(
+    async (customerId: string): Promise<Customer | null> => {
+      try {
+        return await customerService.getCustomer(customerId);
+      } catch (err) {
+        console.error("Error fetching customer:", err);
+        return null;
+      }
+    },
+    [],
+  );
 
   // Search customers
-  const searchCustomers = useCallback(async (query: string): Promise<Customer[]> => {
-    try {
-      return await customerService.searchCustomers(query);
-    } catch (err) {
-      console.error('Error searching customers:', err);
-      return [];
-    }
-  }, []);
+  const searchCustomers = useCallback(
+    async (query: string): Promise<Customer[]> => {
+      try {
+        return await customerService.searchCustomers(query);
+      } catch (err) {
+        console.error("Error searching customers:", err);
+        return [];
+      }
+    },
+    [],
+  );
 
   // Load customer on component mount
   useEffect(() => {
@@ -179,15 +202,20 @@ export function useQuoteCustomer(quoteId?: string) {
 // Hook for CRM configuration
 export function useCRMConfig() {
   const [config, setConfig] = useState(customerService.getConfig());
-  const [providers, setProviders] = useState(customerService.getAvailableProviders());
+  const [providers, setProviders] = useState(
+    customerService.getAvailableProviders(),
+  );
 
-  const updateConfig = useCallback(async (newConfig: Partial<typeof config>) => {
-    const success = await customerService.setConfig(newConfig);
-    if (success) {
-      setConfig(customerService.getConfig());
-    }
-    return success;
-  }, []);
+  const updateConfig = useCallback(
+    async (newConfig: Partial<typeof config>) => {
+      const success = await customerService.setConfig(newConfig);
+      if (success) {
+        setConfig(customerService.getConfig());
+      }
+      return success;
+    },
+    [],
+  );
 
   const testConnection = useCallback(async () => {
     const provider = customerService.getActiveProvider();

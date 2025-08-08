@@ -261,7 +261,6 @@ export function RoleQuickActions() {
         </Button>
       </PermissionGate>
 
-
       <RoleGate roles={[UserRole.ADMIN, UserRole.GLOBAL_ADMIN]}>
         <Button variant="outline" size="sm" asChild>
           <Link to="/users">

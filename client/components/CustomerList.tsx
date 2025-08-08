@@ -1,15 +1,15 @@
-import { useState, useEffect } from 'react';
-import { Customer, CustomerListOptions } from '@shared/customer';
-import { customerService } from '@/lib/services/customerService';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { useState, useEffect } from "react";
+import { Customer, CustomerListOptions } from "@shared/customer";
+import { customerService } from "@/lib/services/customerService";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -17,22 +17,22 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
+} from "@/components/ui/table";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+} from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from "@/components/ui/dropdown-menu";
 import {
   Dialog,
   DialogContent,
@@ -40,8 +40,8 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+} from "@/components/ui/dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Search,
   Plus,
@@ -58,11 +58,11 @@ import {
   Eye,
   Edit,
   Trash,
-} from 'lucide-react';
-import { CustomerForm } from './CustomerForm';
-import { CustomerDetail } from './CustomerDetail';
-import { LoadingSpinner } from './LoadingSpinner';
-import { cn } from '@/lib/utils';
+} from "lucide-react";
+import { CustomerForm } from "./CustomerForm";
+import { CustomerDetail } from "./CustomerDetail";
+import { LoadingSpinner } from "./LoadingSpinner";
+import { cn } from "@/lib/utils";
 
 interface CustomerListProps {
   onCustomerSelect?: (customer: Customer) => void;
@@ -78,12 +78,14 @@ export function CustomerList({
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [sourceFilter, setSourceFilter] = useState<string>('all');
-  const [sortBy, setSortBy] = useState<string>('name');
-  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
-  const [viewMode, setViewMode] = useState<'grid' | 'table'>('table');
-  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sourceFilter, setSourceFilter] = useState<string>("all");
+  const [sortBy, setSortBy] = useState<string>("name");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+  const [viewMode, setViewMode] = useState<"grid" | "table">("table");
+  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(
+    null,
+  );
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [showDetail, setShowDetail] = useState(false);
   const [syncing, setSyncing] = useState(false);
@@ -100,7 +102,7 @@ export function CustomerList({
       const options: CustomerListOptions = {
         filters: {
           query: searchQuery || undefined,
-          source: sourceFilter === 'all' ? 'all' : sourceFilter as any,
+          source: sourceFilter === "all" ? "all" : (sourceFilter as any),
         },
         sortBy: sortBy as any,
         sortOrder,
@@ -110,7 +112,7 @@ export function CustomerList({
       const result = await customerService.getCustomers(options);
       setCustomers(result);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load customers');
+      setError(err instanceof Error ? err.message : "Failed to load customers");
     } finally {
       setLoading(false);
     }
@@ -122,7 +124,7 @@ export function CustomerList({
       await customerService.sync();
       await loadCustomers();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Sync failed');
+      setError(err instanceof Error ? err.message : "Sync failed");
     } finally {
       setSyncing(false);
     }
@@ -145,7 +147,9 @@ export function CustomerList({
       await customerService.deleteCustomer(customerId);
       await loadCustomers();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to delete customer');
+      setError(
+        err instanceof Error ? err.message : "Failed to delete customer",
+      );
     }
   };
 
@@ -159,19 +163,23 @@ export function CustomerList({
 
   const getInitials = (name: string) => {
     return name
-      .split(' ')
-      .map(n => n[0])
-      .join('')
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
       .toUpperCase()
       .slice(0, 2);
   };
 
   const getSourceBadgeColor = (source: string) => {
     switch (source) {
-      case 'hubspot': return 'bg-orange-100 text-orange-800';
-      case 'pipedrive': return 'bg-green-100 text-green-800';
-      case 'native': return 'bg-blue-100 text-blue-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case "hubspot":
+        return "bg-orange-100 text-orange-800";
+      case "pipedrive":
+        return "bg-green-100 text-green-800";
+      case "native":
+        return "bg-blue-100 text-blue-800";
+      default:
+        return "bg-gray-100 text-gray-800";
     }
   };
 
@@ -196,7 +204,9 @@ export function CustomerList({
             onClick={handleSync}
             disabled={syncing}
           >
-            <RefreshCw className={cn("w-4 h-4 mr-2", syncing && "animate-spin")} />
+            <RefreshCw
+              className={cn("w-4 h-4 mr-2", syncing && "animate-spin")}
+            />
             Sync
           </Button>
           <Dialog open={showCreateForm} onOpenChange={setShowCreateForm}>
@@ -232,7 +242,7 @@ export function CustomerList({
                 className="pl-10"
               />
             </div>
-            
+
             <Select value={sourceFilter} onValueChange={setSourceFilter}>
               <SelectTrigger className="w-[150px]">
                 <SelectValue placeholder="Source" />
@@ -260,24 +270,24 @@ export function CustomerList({
             <Button
               variant="outline"
               size="sm"
-              onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
+              onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
             >
-              {sortOrder === 'asc' ? '↑' : '↓'}
+              {sortOrder === "asc" ? "↑" : "↓"}
             </Button>
 
             <div className="flex border rounded-md">
               <Button
-                variant={viewMode === 'table' ? 'default' : 'ghost'}
+                variant={viewMode === "table" ? "default" : "ghost"}
                 size="sm"
-                onClick={() => setViewMode('table')}
+                onClick={() => setViewMode("table")}
                 className="border-0 rounded-none rounded-l-md"
               >
                 <List className="w-4 h-4" />
               </Button>
               <Button
-                variant={viewMode === 'grid' ? 'default' : 'ghost'}
+                variant={viewMode === "grid" ? "default" : "ghost"}
                 size="sm"
-                onClick={() => setViewMode('grid')}
+                onClick={() => setViewMode("grid")}
                 className="border-0 rounded-none rounded-r-md"
               >
                 <Grid className="w-4 h-4" />
@@ -297,7 +307,7 @@ export function CustomerList({
       )}
 
       {/* Customer List */}
-      {viewMode === 'table' ? (
+      {viewMode === "table" ? (
         <Card>
           <Table>
             <TableHeader>
@@ -316,7 +326,7 @@ export function CustomerList({
                   key={customer.id}
                   className={cn(
                     "cursor-pointer hover:bg-muted/50",
-                    selectedCustomerId === customer.id && "bg-muted"
+                    selectedCustomerId === customer.id && "bg-muted",
                   )}
                   onClick={() => handleViewCustomer(customer)}
                 >
@@ -373,7 +383,9 @@ export function CustomerList({
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={() => handleViewCustomer(customer)}>
+                        <DropdownMenuItem
+                          onClick={() => handleViewCustomer(customer)}
+                        >
                           <Eye className="w-4 h-4 mr-2" />
                           View Details
                         </DropdownMenuItem>
@@ -403,7 +415,7 @@ export function CustomerList({
               key={customer.id}
               className={cn(
                 "cursor-pointer hover:shadow-md transition-shadow",
-                selectedCustomerId === customer.id && "ring-2 ring-primary"
+                selectedCustomerId === customer.id && "ring-2 ring-primary",
               )}
               onClick={() => handleViewCustomer(customer)}
             >

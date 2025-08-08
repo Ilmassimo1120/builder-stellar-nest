@@ -1,17 +1,17 @@
-import { 
-  Customer, 
-  CustomerProvider, 
-  CustomerDeal, 
-  CustomerContact, 
+import {
+  Customer,
+  CustomerProvider,
+  CustomerDeal,
+  CustomerContact,
   CRMConfig,
   SyncResult,
-  SyncStatus
-} from '@shared/customer';
+  SyncStatus,
+} from "@shared/customer";
 
 export class NativeCustomerProvider implements CustomerProvider {
-  readonly name = 'native';
+  readonly name = "native";
   readonly requiresAuth = false;
-  
+
   private customers: Customer[] = [];
   private deals: CustomerDeal[] = [];
   private contacts: CustomerContact[] = [];
@@ -36,15 +36,17 @@ export class NativeCustomerProvider implements CustomerProvider {
   }
 
   async getCustomer(id: string): Promise<Customer | null> {
-    return this.customers.find(c => c.id === id) || null;
+    return this.customers.find((c) => c.id === id) || null;
   }
 
-  async createCustomer(customerData: Omit<Customer, 'id' | 'createdAt' | 'updatedAt' | 'source'>): Promise<Customer> {
+  async createCustomer(
+    customerData: Omit<Customer, "id" | "createdAt" | "updatedAt" | "source">,
+  ): Promise<Customer> {
     const now = new Date().toISOString();
     const customer: Customer = {
       ...customerData,
       id: `native_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-      source: 'native',
+      source: "native",
       createdAt: now,
       updatedAt: now,
     };
@@ -54,8 +56,11 @@ export class NativeCustomerProvider implements CustomerProvider {
     return customer;
   }
 
-  async updateCustomer(id: string, updates: Partial<Customer>): Promise<Customer> {
-    const index = this.customers.findIndex(c => c.id === id);
+  async updateCustomer(
+    id: string,
+    updates: Partial<Customer>,
+  ): Promise<Customer> {
+    const index = this.customers.findIndex((c) => c.id === id);
     if (index === -1) {
       throw new Error(`Customer with id ${id} not found`);
     }
@@ -72,31 +77,33 @@ export class NativeCustomerProvider implements CustomerProvider {
   }
 
   async deleteCustomer(id: string): Promise<boolean> {
-    const index = this.customers.findIndex(c => c.id === id);
+    const index = this.customers.findIndex((c) => c.id === id);
     if (index === -1) {
       return false;
     }
 
     this.customers.splice(index, 1);
-    
+
     // Also remove associated deals and contacts
-    this.deals = this.deals.filter(d => d.customerId !== id);
-    this.contacts = this.contacts.filter(c => c.customerId !== id);
-    
+    this.deals = this.deals.filter((d) => d.customerId !== id);
+    this.contacts = this.contacts.filter((c) => c.customerId !== id);
+
     this.saveToStorage();
     return true;
   }
 
   async getCustomerDeals(customerId: string): Promise<CustomerDeal[]> {
-    return this.deals.filter(d => d.customerId === customerId);
+    return this.deals.filter((d) => d.customerId === customerId);
   }
 
-  async createDeal(dealData: Omit<CustomerDeal, 'id' | 'createdAt' | 'updatedAt' | 'source'>): Promise<CustomerDeal> {
+  async createDeal(
+    dealData: Omit<CustomerDeal, "id" | "createdAt" | "updatedAt" | "source">,
+  ): Promise<CustomerDeal> {
     const now = new Date().toISOString();
     const deal: CustomerDeal = {
       ...dealData,
       id: `native_deal_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-      source: 'native',
+      source: "native",
       createdAt: now,
       updatedAt: now,
     };
@@ -106,8 +113,11 @@ export class NativeCustomerProvider implements CustomerProvider {
     return deal;
   }
 
-  async updateDeal(id: string, updates: Partial<CustomerDeal>): Promise<CustomerDeal> {
-    const index = this.deals.findIndex(d => d.id === id);
+  async updateDeal(
+    id: string,
+    updates: Partial<CustomerDeal>,
+  ): Promise<CustomerDeal> {
+    const index = this.deals.findIndex((d) => d.id === id);
     if (index === -1) {
       throw new Error(`Deal with id ${id} not found`);
     }
@@ -124,10 +134,12 @@ export class NativeCustomerProvider implements CustomerProvider {
   }
 
   async getCustomerContacts(customerId: string): Promise<CustomerContact[]> {
-    return this.contacts.filter(c => c.customerId === customerId);
+    return this.contacts.filter((c) => c.customerId === customerId);
   }
 
-  async addContact(contactData: Omit<CustomerContact, 'id'>): Promise<CustomerContact> {
+  async addContact(
+    contactData: Omit<CustomerContact, "id">,
+  ): Promise<CustomerContact> {
     const contact: CustomerContact = {
       ...contactData,
       id: `native_contact_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
@@ -193,28 +205,38 @@ export class NativeCustomerProvider implements CustomerProvider {
     };
   }
 
-  async linkProjectToCustomer(projectId: string, customerId: string): Promise<boolean> {
+  async linkProjectToCustomer(
+    projectId: string,
+    customerId: string,
+  ): Promise<boolean> {
     // For native provider, we'll store project links in local storage
     const projectLinks = this.getProjectLinks();
     projectLinks[projectId] = customerId;
-    localStorage.setItem('customerProjectLinks', JSON.stringify(projectLinks));
+    localStorage.setItem("customerProjectLinks", JSON.stringify(projectLinks));
     return true;
   }
 
-  async linkQuoteToCustomer(quoteId: string, customerId: string): Promise<boolean> {
+  async linkQuoteToCustomer(
+    quoteId: string,
+    customerId: string,
+  ): Promise<boolean> {
     // For native provider, we'll store quote links in local storage
     const quoteLinks = this.getQuoteLinks();
     quoteLinks[quoteId] = customerId;
-    localStorage.setItem('customerQuoteLinks', JSON.stringify(quoteLinks));
+    localStorage.setItem("customerQuoteLinks", JSON.stringify(quoteLinks));
     return true;
   }
 
-  async notifyQuoteStatusChange(quoteId: string, status: string, customerId: string): Promise<boolean> {
+  async notifyQuoteStatusChange(
+    quoteId: string,
+    status: string,
+    customerId: string,
+  ): Promise<boolean> {
     // Add a contact record for the status change
     await this.addContact({
       customerId,
-      type: 'note',
-      subject: 'Quote Status Updated',
+      type: "note",
+      subject: "Quote Status Updated",
       content: `Quote ${quoteId} status changed to: ${status}`,
       timestamp: new Date().toISOString(),
     });
@@ -224,46 +246,46 @@ export class NativeCustomerProvider implements CustomerProvider {
   // Helper methods for storage
   private loadFromStorage(): void {
     try {
-      const customersData = localStorage.getItem('nativeCustomers');
+      const customersData = localStorage.getItem("nativeCustomers");
       if (customersData) {
         this.customers = JSON.parse(customersData);
       }
 
-      const dealsData = localStorage.getItem('nativeDeals');
+      const dealsData = localStorage.getItem("nativeDeals");
       if (dealsData) {
         this.deals = JSON.parse(dealsData);
       }
 
-      const contactsData = localStorage.getItem('nativeContacts');
+      const contactsData = localStorage.getItem("nativeContacts");
       if (contactsData) {
         this.contacts = JSON.parse(contactsData);
       }
 
-      const lastSync = localStorage.getItem('nativeLastSync');
+      const lastSync = localStorage.getItem("nativeLastSync");
       if (lastSync) {
         this.lastSyncTime = lastSync;
       }
     } catch (error) {
-      console.warn('Error loading customer data from storage:', error);
+      console.warn("Error loading customer data from storage:", error);
     }
   }
 
   private saveToStorage(): void {
     try {
-      localStorage.setItem('nativeCustomers', JSON.stringify(this.customers));
-      localStorage.setItem('nativeDeals', JSON.stringify(this.deals));
-      localStorage.setItem('nativeContacts', JSON.stringify(this.contacts));
+      localStorage.setItem("nativeCustomers", JSON.stringify(this.customers));
+      localStorage.setItem("nativeDeals", JSON.stringify(this.deals));
+      localStorage.setItem("nativeContacts", JSON.stringify(this.contacts));
       if (this.lastSyncTime) {
-        localStorage.setItem('nativeLastSync', this.lastSyncTime);
+        localStorage.setItem("nativeLastSync", this.lastSyncTime);
       }
     } catch (error) {
-      console.warn('Error saving customer data to storage:', error);
+      console.warn("Error saving customer data to storage:", error);
     }
   }
 
   private getProjectLinks(): Record<string, string> {
     try {
-      const links = localStorage.getItem('customerProjectLinks');
+      const links = localStorage.getItem("customerProjectLinks");
       return links ? JSON.parse(links) : {};
     } catch {
       return {};
@@ -272,7 +294,7 @@ export class NativeCustomerProvider implements CustomerProvider {
 
   private getQuoteLinks(): Record<string, string> {
     try {
-      const links = localStorage.getItem('customerQuoteLinks');
+      const links = localStorage.getItem("customerQuoteLinks");
       return links ? JSON.parse(links) : {};
     } catch {
       return {};

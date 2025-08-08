@@ -1,20 +1,20 @@
-import { useState, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { CRMConfig } from '@shared/customer';
-import { customerService } from '@/lib/services/customerService';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Switch } from '@/components/ui/switch';
+import { useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { CRMConfig } from "@shared/customer";
+import { customerService } from "@/lib/services/customerService";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -23,21 +23,17 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
+} from "@/components/ui/form";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Badge } from '@/components/ui/badge';
-import {
-  Alert,
-  AlertDescription,
-  AlertTitle,
-} from '@/components/ui/alert';
+} from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
   Settings,
   Check,
@@ -48,15 +44,15 @@ import {
   Cloud,
   Link as LinkIcon,
   Shield,
-} from 'lucide-react';
-import { LoadingSpinner } from './LoadingSpinner';
+} from "lucide-react";
+import { LoadingSpinner } from "./LoadingSpinner";
 
 const crmConfigSchema = z.object({
-  provider: z.enum(['native', 'hubspot', 'pipedrive']),
+  provider: z.enum(["native", "hubspot", "pipedrive"]),
   apiKey: z.string().optional(),
   domain: z.string().optional(),
   syncEnabled: z.boolean(),
-  syncFrequency: z.enum(['realtime', 'hourly', 'daily']),
+  syncFrequency: z.enum(["realtime", "hourly", "daily"]),
   autoCreateProjects: z.boolean(),
   autoSyncQuotes: z.boolean(),
 });
@@ -68,16 +64,18 @@ export function CRMSettings() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [testing, setTesting] = useState(false);
-  const [connectionStatus, setConnectionStatus] = useState<'unknown' | 'connected' | 'disconnected'>('unknown');
+  const [connectionStatus, setConnectionStatus] = useState<
+    "unknown" | "connected" | "disconnected"
+  >("unknown");
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
   const form = useForm<CRMConfigData>({
     resolver: zodResolver(crmConfigSchema),
     defaultValues: {
-      provider: 'native',
+      provider: "native",
       syncEnabled: false,
-      syncFrequency: 'hourly',
+      syncFrequency: "hourly",
       autoCreateProjects: false,
       autoSyncQuotes: false,
     },
@@ -93,12 +91,14 @@ export function CRMSettings() {
       const currentConfig = customerService.getConfig();
       setConfig(currentConfig);
       form.reset(currentConfig);
-      
+
       // Check connection status
       const provider = customerService.getActiveProvider();
-      setConnectionStatus(provider.isAuthenticated() ? 'connected' : 'disconnected');
+      setConnectionStatus(
+        provider.isAuthenticated() ? "connected" : "disconnected",
+      );
     } catch (err) {
-      setError('Failed to load CRM configuration');
+      setError("Failed to load CRM configuration");
     } finally {
       setLoading(false);
     }
@@ -108,21 +108,21 @@ export function CRMSettings() {
     try {
       setTesting(true);
       setError(null);
-      
+
       const formData = form.getValues();
       const provider = customerService.getActiveProvider();
-      
+
       const success = await provider.authenticate(formData);
-      setConnectionStatus(success ? 'connected' : 'disconnected');
-      
+      setConnectionStatus(success ? "connected" : "disconnected");
+
       if (success) {
-        setSuccess('Connection successful!');
+        setSuccess("Connection successful!");
       } else {
-        setError('Connection failed. Please check your credentials.');
+        setError("Connection failed. Please check your credentials.");
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Connection test failed');
-      setConnectionStatus('disconnected');
+      setError(err instanceof Error ? err.message : "Connection test failed");
+      setConnectionStatus("disconnected");
     } finally {
       setTesting(false);
     }
@@ -133,21 +133,25 @@ export function CRMSettings() {
       setSaving(true);
       setError(null);
       setSuccess(null);
-      
+
       const success = await customerService.setConfig(data);
-      
+
       if (success) {
         setConfig(data);
-        setSuccess('Configuration saved successfully!');
-        
+        setSuccess("Configuration saved successfully!");
+
         // Update connection status
         const provider = customerService.getActiveProvider();
-        setConnectionStatus(provider.isAuthenticated() ? 'connected' : 'disconnected');
+        setConnectionStatus(
+          provider.isAuthenticated() ? "connected" : "disconnected",
+        );
       } else {
-        setError('Failed to save configuration. Please check your settings.');
+        setError("Failed to save configuration. Please check your settings.");
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to save configuration');
+      setError(
+        err instanceof Error ? err.message : "Failed to save configuration",
+      );
     } finally {
       setSaving(false);
     }
@@ -155,42 +159,43 @@ export function CRMSettings() {
 
   const getProviderInfo = (provider: string) => {
     switch (provider) {
-      case 'hubspot':
+      case "hubspot":
         return {
-          name: 'HubSpot',
-          description: 'Connect to your HubSpot CRM for customer and deal management',
+          name: "HubSpot",
+          description:
+            "Connect to your HubSpot CRM for customer and deal management",
           requiresApiKey: true,
           requiresDomain: false,
-          icon: '🟠',
+          icon: "🟠",
         };
-      case 'pipedrive':
+      case "pipedrive":
         return {
-          name: 'Pipedrive',
-          description: 'Integrate with Pipedrive for sales pipeline management',
+          name: "Pipedrive",
+          description: "Integrate with Pipedrive for sales pipeline management",
           requiresApiKey: true,
           requiresDomain: true,
-          icon: '🟢',
+          icon: "🟢",
         };
-      case 'native':
+      case "native":
         return {
-          name: 'Native Storage',
-          description: 'Use built-in customer management with local storage',
+          name: "Native Storage",
+          description: "Use built-in customer management with local storage",
           requiresApiKey: false,
           requiresDomain: false,
-          icon: '🔵',
+          icon: "🔵",
         };
       default:
         return {
           name: provider,
-          description: 'Unknown provider',
+          description: "Unknown provider",
           requiresApiKey: false,
           requiresDomain: false,
-          icon: '⚪',
+          icon: "⚪",
         };
     }
   };
 
-  const currentProvider = getProviderInfo(form.watch('provider'));
+  const currentProvider = getProviderInfo(form.watch("provider"));
 
   if (loading) {
     return <LoadingSpinner />;
@@ -220,7 +225,9 @@ export function CRMSettings() {
             <Alert className="border-green-200 bg-green-50">
               <Check className="h-4 w-4 text-green-600" />
               <AlertTitle className="text-green-800">Success</AlertTitle>
-              <AlertDescription className="text-green-700">{success}</AlertDescription>
+              <AlertDescription className="text-green-700">
+                {success}
+              </AlertDescription>
             </Alert>
           )}
 
@@ -249,7 +256,10 @@ export function CRMSettings() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Provider</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
                           <FormControl>
                             <SelectTrigger>
                               <SelectValue placeholder="Select a CRM provider" />
@@ -287,19 +297,28 @@ export function CRMSettings() {
                   {/* Connection Status */}
                   <div className="flex items-center gap-2 p-3 border rounded-lg">
                     <div className="flex items-center gap-2">
-                      {connectionStatus === 'connected' ? (
+                      {connectionStatus === "connected" ? (
                         <Check className="w-4 h-4 text-green-600" />
-                      ) : connectionStatus === 'disconnected' ? (
+                      ) : connectionStatus === "disconnected" ? (
                         <X className="w-4 h-4 text-red-600" />
                       ) : (
                         <AlertTriangle className="w-4 h-4 text-yellow-600" />
                       )}
                       <span className="text-sm font-medium">
-                        {connectionStatus === 'connected' ? 'Connected' : 
-                         connectionStatus === 'disconnected' ? 'Disconnected' : 'Unknown'}
+                        {connectionStatus === "connected"
+                          ? "Connected"
+                          : connectionStatus === "disconnected"
+                            ? "Disconnected"
+                            : "Unknown"}
                       </span>
                     </div>
-                    <Badge variant={connectionStatus === 'connected' ? 'default' : 'destructive'}>
+                    <Badge
+                      variant={
+                        connectionStatus === "connected"
+                          ? "default"
+                          : "destructive"
+                      }
+                    >
                       {currentProvider.name}
                     </Badge>
                   </div>
@@ -307,7 +326,8 @@ export function CRMSettings() {
               </Card>
 
               {/* API Configuration */}
-              {(currentProvider.requiresApiKey || currentProvider.requiresDomain) && (
+              {(currentProvider.requiresApiKey ||
+                currentProvider.requiresDomain) && (
                 <Card>
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
@@ -334,7 +354,8 @@ export function CRMSettings() {
                               />
                             </FormControl>
                             <FormDescription>
-                              Your {currentProvider.name} API key for authentication
+                              Your {currentProvider.name} API key for
+                              authentication
                             </FormDescription>
                             <FormMessage />
                           </FormItem>
@@ -404,7 +425,8 @@ export function CRMSettings() {
                             Enable Sync
                           </FormLabel>
                           <FormDescription>
-                            Automatically synchronize customer data with your CRM
+                            Automatically synchronize customer data with your
+                            CRM
                           </FormDescription>
                         </div>
                         <FormControl>
@@ -417,21 +439,26 @@ export function CRMSettings() {
                     )}
                   />
 
-                  {form.watch('syncEnabled') && (
+                  {form.watch("syncEnabled") && (
                     <FormField
                       control={form.control}
                       name="syncFrequency"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Sync Frequency</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                          >
                             <FormControl>
                               <SelectTrigger>
                                 <SelectValue placeholder="Select sync frequency" />
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                              <SelectItem value="realtime">Real-time</SelectItem>
+                              <SelectItem value="realtime">
+                                Real-time
+                              </SelectItem>
                               <SelectItem value="hourly">Hourly</SelectItem>
                               <SelectItem value="daily">Daily</SelectItem>
                             </SelectContent>
@@ -456,7 +483,8 @@ export function CRMSettings() {
                     Integration Settings
                   </CardTitle>
                   <CardDescription>
-                    Configure how the CRM integrates with your projects and quotes
+                    Configure how the CRM integrates with your projects and
+                    quotes
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
@@ -470,7 +498,8 @@ export function CRMSettings() {
                             Auto-create Projects
                           </FormLabel>
                           <FormDescription>
-                            Automatically create projects when new deals are created in CRM
+                            Automatically create projects when new deals are
+                            created in CRM
                           </FormDescription>
                         </div>
                         <FormControl>
@@ -493,7 +522,8 @@ export function CRMSettings() {
                             Auto-sync Quotes
                           </FormLabel>
                           <FormDescription>
-                            Automatically update CRM deals when quote status changes
+                            Automatically update CRM deals when quote status
+                            changes
                           </FormDescription>
                         </div>
                         <FormControl>

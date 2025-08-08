@@ -1,4 +1,4 @@
-import { CustomerList } from '@/components/CustomerList';
+import { CustomerList } from "@/components/CustomerList";
 
 export default function Customers() {
   return (

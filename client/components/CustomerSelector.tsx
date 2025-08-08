@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
-import { Customer } from '@shared/customer';
-import { customerService } from '@/lib/services/customerService';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { useState, useEffect } from "react";
+import { Customer } from "@shared/customer";
+import { customerService } from "@/lib/services/customerService";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Dialog,
   DialogContent,
@@ -10,7 +10,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
+} from "@/components/ui/dialog";
 import {
   Command,
   CommandEmpty,
@@ -18,27 +18,27 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from '@/components/ui/command';
+} from "@/components/ui/command";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
-import { 
-  Building2, 
-  Plus, 
-  Search, 
-  User, 
-  Check, 
+} from "@/components/ui/popover";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import {
+  Building2,
+  Plus,
+  Search,
+  User,
+  Check,
   ChevronsUpDown,
   Mail,
-  Phone 
-} from 'lucide-react';
-import { CustomerForm } from './CustomerForm';
-import { LoadingSpinner } from './LoadingSpinner';
-import { cn } from '@/lib/utils';
+  Phone,
+} from "lucide-react";
+import { CustomerForm } from "./CustomerForm";
+import { LoadingSpinner } from "./LoadingSpinner";
+import { cn } from "@/lib/utils";
 
 interface CustomerSelectorProps {
   selectedCustomerId?: string;
@@ -58,9 +58,11 @@ export function CustomerSelector({
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [showCreateForm, setShowCreateForm] = useState(false);
-  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
+  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(
+    null,
+  );
 
   useEffect(() => {
     loadCustomers();
@@ -68,7 +70,7 @@ export function CustomerSelector({
 
   useEffect(() => {
     if (selectedCustomerId) {
-      const customer = customers.find(c => c.id === selectedCustomerId);
+      const customer = customers.find((c) => c.id === selectedCustomerId);
       setSelectedCustomer(customer || null);
     } else {
       setSelectedCustomer(null);
@@ -86,7 +88,7 @@ export function CustomerSelector({
       });
       setCustomers(result);
     } catch (error) {
-      console.error('Error loading customers:', error);
+      console.error("Error loading customers:", error);
     } finally {
       setLoading(false);
     }
@@ -107,26 +109,32 @@ export function CustomerSelector({
 
   const getInitials = (name: string) => {
     return name
-      .split(' ')
-      .map(n => n[0])
-      .join('')
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
       .toUpperCase()
       .slice(0, 2);
   };
 
   const getSourceBadgeColor = (source: string) => {
     switch (source) {
-      case 'hubspot': return 'bg-orange-100 text-orange-800';
-      case 'pipedrive': return 'bg-green-100 text-green-800';
-      case 'native': return 'bg-blue-100 text-blue-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case "hubspot":
+        return "bg-orange-100 text-orange-800";
+      case "pipedrive":
+        return "bg-green-100 text-green-800";
+      case "native":
+        return "bg-blue-100 text-blue-800";
+      default:
+        return "bg-gray-100 text-gray-800";
     }
   };
 
-  const filteredCustomers = customers.filter(customer =>
-    customer.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    customer.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    (customer.company && customer.company.toLowerCase().includes(searchQuery.toLowerCase()))
+  const filteredCustomers = customers.filter(
+    (customer) =>
+      customer.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      customer.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (customer.company &&
+        customer.company.toLowerCase().includes(searchQuery.toLowerCase())),
   );
 
   return (
@@ -148,14 +156,21 @@ export function CustomerSelector({
                   </AvatarFallback>
                 </Avatar>
                 <div className="flex-1 min-w-0 text-left">
-                  <div className="truncate font-medium">{selectedCustomer.name}</div>
+                  <div className="truncate font-medium">
+                    {selectedCustomer.name}
+                  </div>
                   {selectedCustomer.company && (
                     <div className="truncate text-xs text-muted-foreground">
                       {selectedCustomer.company}
                     </div>
                   )}
                 </div>
-                <Badge className={cn("text-xs", getSourceBadgeColor(selectedCustomer.source))}>
+                <Badge
+                  className={cn(
+                    "text-xs",
+                    getSourceBadgeColor(selectedCustomer.source),
+                  )}
+                >
                   {selectedCustomer.source}
                 </Badge>
               </div>
@@ -197,8 +212,15 @@ export function CustomerSelector({
                       </Avatar>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1">
-                          <span className="font-medium truncate">{customer.name}</span>
-                          <Badge className={cn("text-xs", getSourceBadgeColor(customer.source))}>
+                          <span className="font-medium truncate">
+                            {customer.name}
+                          </span>
+                          <Badge
+                            className={cn(
+                              "text-xs",
+                              getSourceBadgeColor(customer.source),
+                            )}
+                          >
                             {customer.source}
                           </Badge>
                         </div>
@@ -226,7 +248,9 @@ export function CustomerSelector({
                       <Check
                         className={cn(
                           "ml-auto h-4 w-4",
-                          selectedCustomer?.id === customer.id ? "opacity-100" : "opacity-0"
+                          selectedCustomer?.id === customer.id
+                            ? "opacity-100"
+                            : "opacity-0",
                         )}
                       />
                     </CommandItem>
@@ -237,11 +261,13 @@ export function CustomerSelector({
                   <User className="w-8 h-8 mx-auto mb-2 text-muted-foreground" />
                   <div className="font-medium">No customers found</div>
                   <div className="text-muted-foreground">
-                    {searchQuery ? 'Try a different search term' : 'No customers available'}
+                    {searchQuery
+                      ? "Try a different search term"
+                      : "No customers available"}
                   </div>
                 </CommandEmpty>
               )}
-              
+
               {/* Create New Customer Option */}
               <div className="border-t p-2">
                 <Dialog open={showCreateForm} onOpenChange={setShowCreateForm}>
@@ -266,8 +292,8 @@ export function CustomerSelector({
               {/* Clear Selection Option */}
               {selectedCustomer && (
                 <div className="border-t p-2">
-                  <Button 
-                    variant="ghost" 
+                  <Button
+                    variant="ghost"
                     className="w-full justify-start text-muted-foreground"
                     onClick={() => handleCustomerSelect(null)}
                   >
