@@ -145,7 +145,7 @@ class AIKnowledgeSearchService {
   /**
    * Extracts meaningful search terms from query
    */
-  private extractSearchTerms(query: string): string[] => {
+  private extractSearchTerms(query: string): string[] {
     const stopWords = [
       'find', 'search', 'show', 'me', 'get', 'looking', 'for', 'about', 
       'the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'of'
@@ -162,7 +162,7 @@ class AIKnowledgeSearchService {
   /**
    * Extracts bucket hints from query
    */
-  private extractBucketHints(query: string): BucketName[] => {
+  private extractBucketHints(query: string): BucketName[] {
     const buckets: BucketName[] = [];
     
     if (/videos?|training|demonstration|tutorial/i.test(query)) {
@@ -181,7 +181,7 @@ class AIKnowledgeSearchService {
   /**
    * Extracts categories from query
    */
-  private extractCategories(query: string): string[] => {
+  private extractCategories(query: string): string[] {
     const categories: string[] = [];
     
     if (this.queryPatterns.installation.test(query)) categories.push('Installation Guide');
@@ -327,16 +327,6 @@ class AIKnowledgeSearchService {
       icon: "folder"
     });
 
-    if (metadata.buckets.length === 1) {
-      const bucketName = this.getBucketDisplayName(metadata.buckets[0]);
-      actions.push({
-        label: `Browse ${bucketName}`,
-        action: "browse-bucket",
-        icon: "folder-open",
-        data: { bucket: metadata.buckets[0] }
-      });
-    }
-
     return actions.slice(0, 4);
   }
 
@@ -381,58 +371,6 @@ What specific information are you looking for?`;
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-  }
-
-  /**
-   * Gets related knowledge items based on current query
-   */
-  async getRelatedKnowledge(query: string): Promise<AIKnowledgeItem[]> {
-    const queryTerms = this.extractSearchTerms(query.toLowerCase());
-    
-    return aiKnowledgeBase.filter(item => 
-      item.keywords.some(keyword => 
-        queryTerms.some(term => 
-          keyword.toLowerCase().includes(term) || term.includes(keyword.toLowerCase())
-        )
-      )
-    ).slice(0, 3);
-  }
-
-  /**
-   * Suggests file uploads based on missing content
-   */
-  async suggestFileUploads(query: string): Promise<{
-    category: string;
-    suggestions: string[];
-  }[]> {
-    const categories = this.extractCategories(query);
-    const suggestions = [];
-
-    if (categories.includes('Installation Guide')) {
-      suggestions.push({
-        category: 'Installation',
-        suggestions: [
-          'Installation procedure videos',
-          'Wiring diagrams and schematics', 
-          'Tool and material checklists',
-          'Site assessment templates'
-        ]
-      });
-    }
-
-    if (categories.includes('Compliance')) {
-      suggestions.push({
-        category: 'Compliance',
-        suggestions: [
-          'AS/NZS standard documents',
-          'Compliance checklists',
-          'Test result templates',
-          'Certification procedures'
-        ]
-      });
-    }
-
-    return suggestions;
   }
 }
 
