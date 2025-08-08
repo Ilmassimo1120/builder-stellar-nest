@@ -67,7 +67,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 export default function Dashboard() {
-  const { user, logout, hasPermission } = useAuth();
+  const { user, logout, hasPermission, isAdmin, isGlobalAdmin } = useAuth();
   const navigate = useNavigate();
   const [projects, setProjects] = useState<any[]>([]);
   const [isSupabaseConnected, setIsSupabaseConnected] = useState(false);
