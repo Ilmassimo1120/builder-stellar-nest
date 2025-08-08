@@ -74,6 +74,12 @@ export default function Catalogue() {
     setRefreshKey((prev) => prev + 1);
   };
 
+  // Force refresh when preferences close
+  const handlePreferencesClose = () => {
+    setShowPreferences(false);
+    setRefreshKey((prev) => prev + 1);
+  };
+
   const updateFilter = (key: keyof ProductFilter, value: any) => {
     setFilter((prev) => ({
       ...prev,
