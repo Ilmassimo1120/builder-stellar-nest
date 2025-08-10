@@ -53,6 +53,7 @@ import { useAuth } from "@/hooks/useAuth";
 import RoleBasedNavigation, {
   RoleQuickActions,
 } from "@/components/RoleBasedNavigation";
+import { CleanQuickActions } from "@/components/CleanAdminNavigation";
 import UserRoleIndicator, {
   PermissionGate,
   RoleGate,
