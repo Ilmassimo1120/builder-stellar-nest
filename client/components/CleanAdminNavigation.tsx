@@ -49,7 +49,12 @@ const navigationGroups: NavGroup[] = [
       {
         path: "/dashboard",
         label: "Dashboard",
-        icon: <Home className="w-4 h-4" style={{display: 'flex', flexDirection: 'column'}} />,
+        icon: (
+          <Home
+            className="w-4 h-4"
+            style={{ display: "flex", flexDirection: "column" }}
+          />
+        ),
       },
       {
         path: "/projects",
@@ -115,7 +120,9 @@ export default function CleanAdminNavigation() {
   const location = useLocation();
 
   const isActivePath = (path: string) => {
-    return location.pathname === path || location.pathname.startsWith(path + "/");
+    return (
+      location.pathname === path || location.pathname.startsWith(path + "/")
+    );
   };
 
   const isItemVisible = (item: any) => {
@@ -130,25 +137,37 @@ export default function CleanAdminNavigation() {
 
   const getVisibleGroups = () => {
     return navigationGroups
-      .map(group => ({
+      .map((group) => ({
         ...group,
-        items: group.items.filter(isItemVisible)
+        items: group.items.filter(isItemVisible),
       }))
-      .filter(group => group.items.length > 0);
+      .filter((group) => group.items.length > 0);
   };
 
   const visibleGroups = getVisibleGroups();
-  
+
   // Get primary navigation items (Core group)
-  const primaryItems = visibleGroups.find(g => g.label === "Core")?.items || [];
-  
+  const primaryItems =
+    visibleGroups.find((g) => g.label === "Core")?.items || [];
+
   // Get secondary groups (everything except Core)
-  const secondaryGroups = visibleGroups.filter(g => g.label !== "Core");
+  const secondaryGroups = visibleGroups.filter((g) => g.label !== "Core");
 
   return (
-    <nav className="flex items-center justify-end w-full" style={{maxWidth: '500px', marginLeft: 'auto'}}>
+    <nav
+      className="flex items-center justify-end w-full"
+      style={{ maxWidth: "500px", marginLeft: "auto" }}
+    >
       {/* All Navigation Items - Right Side */}
-      <div className="flex items-center space-x-4" style={{justifyContent: 'flex-start', marginLeft: 'auto', width: 'auto', flexGrow: '0'}}>
+      <div
+        className="flex items-center space-x-4"
+        style={{
+          justifyContent: "flex-start",
+          marginLeft: "auto",
+          width: "auto",
+          flexGrow: "0",
+        }}
+      >
         {/* Primary Navigation - Core Items */}
         {primaryItems.map((item) => {
           const isActive = isActivePath(item.path);
@@ -169,12 +188,14 @@ export default function CleanAdminNavigation() {
         })}
 
         {/* Catalog Dropdown */}
-        {visibleGroups.find(g => g.label === "Catalog") && (
+        {visibleGroups.find((g) => g.label === "Catalog") && (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
                 variant={
-                  visibleGroups.find(g => g.label === "Catalog")?.items.some(item => isActivePath(item.path))
+                  visibleGroups
+                    .find((g) => g.label === "Catalog")
+                    ?.items.some((item) => isActivePath(item.path))
                     ? "default"
                     : "ghost"
                 }
@@ -189,30 +210,37 @@ export default function CleanAdminNavigation() {
             <DropdownMenuContent align="start" className="w-48">
               <DropdownMenuLabel>Product Catalog</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              {visibleGroups.find(g => g.label === "Catalog")?.items.map((item) => (
-                <DropdownMenuItem key={item.path} asChild>
-                  <Link to={item.path} className="flex items-center gap-2 w-full">
-                    {item.icon}
-                    <span>{item.label}</span>
-                    {item.badge && (
-                      <Badge variant="secondary" className="ml-auto text-xs">
-                        {item.badge}
-                      </Badge>
-                    )}
-                  </Link>
-                </DropdownMenuItem>
-              ))}
+              {visibleGroups
+                .find((g) => g.label === "Catalog")
+                ?.items.map((item) => (
+                  <DropdownMenuItem key={item.path} asChild>
+                    <Link
+                      to={item.path}
+                      className="flex items-center gap-2 w-full"
+                    >
+                      {item.icon}
+                      <span>{item.label}</span>
+                      {item.badge && (
+                        <Badge variant="secondary" className="ml-auto text-xs">
+                          {item.badge}
+                        </Badge>
+                      )}
+                    </Link>
+                  </DropdownMenuItem>
+                ))}
             </DropdownMenuContent>
           </DropdownMenu>
         )}
 
         {/* Admin Tools Dropdown */}
-        {visibleGroups.find(g => g.label === "Admin") && (
+        {visibleGroups.find((g) => g.label === "Admin") && (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
                 variant={
-                  visibleGroups.find(g => g.label === "Admin")?.items.some(item => isActivePath(item.path))
+                  visibleGroups
+                    .find((g) => g.label === "Admin")
+                    ?.items.some((item) => isActivePath(item.path))
                     ? "default"
                     : "ghost"
                 }
@@ -227,19 +255,24 @@ export default function CleanAdminNavigation() {
             <DropdownMenuContent align="start" className="w-48">
               <DropdownMenuLabel>Administration</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              {visibleGroups.find(g => g.label === "Admin")?.items.map((item) => (
-                <DropdownMenuItem key={item.path} asChild>
-                  <Link to={item.path} className="flex items-center gap-2 w-full">
-                    {item.icon}
-                    <span>{item.label}</span>
-                    {item.badge && (
-                      <Badge variant="secondary" className="ml-auto text-xs">
-                        {item.badge}
-                      </Badge>
-                    )}
-                  </Link>
-                </DropdownMenuItem>
-              ))}
+              {visibleGroups
+                .find((g) => g.label === "Admin")
+                ?.items.map((item) => (
+                  <DropdownMenuItem key={item.path} asChild>
+                    <Link
+                      to={item.path}
+                      className="flex items-center gap-2 w-full"
+                    >
+                      {item.icon}
+                      <span>{item.label}</span>
+                      {item.badge && (
+                        <Badge variant="secondary" className="ml-auto text-xs">
+                          {item.badge}
+                        </Badge>
+                      )}
+                    </Link>
+                  </DropdownMenuItem>
+                ))}
             </DropdownMenuContent>
           </DropdownMenu>
         )}
@@ -252,7 +285,9 @@ export default function CleanAdminNavigation() {
           <DropdownMenuTrigger asChild>
             <Button size="sm" className="flex items-center gap-1">
               <Plus className="w-4 h-4" />
-              <span className="hidden md:inline" style={{marginLeft: 'auto'}}>Create</span>
+              <span className="hidden md:inline" style={{ marginLeft: "auto" }}>
+                Create
+              </span>
               <ChevronDown className="w-3 h-3" />
             </Button>
           </DropdownMenuTrigger>
@@ -308,7 +343,7 @@ export function CleanQuickActions() {
           New Project
         </Link>
       </Button>
-      
+
       <Button variant="outline" size="sm" asChild>
         <Link to="/quotes/new">
           <FileText className="w-4 h-4 mr-2" />
@@ -316,7 +351,8 @@ export function CleanQuickActions() {
         </Link>
       </Button>
 
-      {(user.role === UserRole.ADMIN || user.role === UserRole.GLOBAL_ADMIN) && (
+      {(user.role === UserRole.ADMIN ||
+        user.role === UserRole.GLOBAL_ADMIN) && (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" size="sm">

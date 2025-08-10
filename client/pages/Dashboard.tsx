@@ -669,7 +669,8 @@ export default function Dashboard() {
             </div>
           </div>
           <div className="flex items-center gap-3 mt-4 md:mt-0">
-            {user?.role === UserRole.ADMIN || user?.role === UserRole.GLOBAL_ADMIN ? (
+            {user?.role === UserRole.ADMIN ||
+            user?.role === UserRole.GLOBAL_ADMIN ? (
               <CleanQuickActions />
             ) : (
               <RoleQuickActions />

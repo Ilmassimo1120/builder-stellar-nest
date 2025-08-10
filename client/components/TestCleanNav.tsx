@@ -4,7 +4,7 @@ import { useAuth } from "@/hooks/useAuth";
 
 export default function TestCleanNav() {
   const { user } = useAuth();
-  
+
   if (!user || (user.role !== "admin" && user.role !== "global_admin")) {
     return (
       <Card>
@@ -30,10 +30,14 @@ export default function TestCleanNav() {
           <CleanAdminNavigation />
         </div>
         <div className="mt-4 text-sm text-muted-foreground">
-          <p><strong>Improvements:</strong></p>
+          <p>
+            <strong>Improvements:</strong>
+          </p>
           <ul className="list-disc list-inside space-y-1">
             <li>Grouped related items into logical dropdowns</li>
-            <li>Primary actions (Dashboard, Projects, Quotes) always visible</li>
+            <li>
+              Primary actions (Dashboard, Projects, Quotes) always visible
+            </li>
             <li>Catalog items grouped under "Catalog" dropdown</li>
             <li>Admin tools grouped under "Admin" dropdown</li>
             <li>Quick create actions in organized dropdown</li>
