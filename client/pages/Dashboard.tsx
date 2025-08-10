@@ -669,7 +669,11 @@ export default function Dashboard() {
             </div>
           </div>
           <div className="flex items-center gap-3 mt-4 md:mt-0">
-            <RoleQuickActions />
+            {user?.role === UserRole.ADMIN || user?.role === UserRole.GLOBAL_ADMIN ? (
+              <CleanQuickActions />
+            ) : (
+              <RoleQuickActions />
+            )}
             <Button variant="outline" size="sm">
               <Download className="w-4 h-4 mr-2" />
               Export Report
