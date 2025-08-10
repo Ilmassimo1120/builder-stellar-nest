@@ -241,6 +241,14 @@ const AppRoutes = () => (
         </ProtectedLazyRoute>
       }
     />
+    <Route
+      path="/auth-test"
+      element={
+        <PublicLazyRoute>
+          <AuthTest />
+        </PublicLazyRoute>
+      }
+    />
 
     {/* Placeholder Routes for Future Features */}
     <Route
