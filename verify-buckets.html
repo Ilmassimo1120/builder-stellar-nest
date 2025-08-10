@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Bucket Check</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: 0 auto; }
+        .result { margin: 10px 0; padding: 10px; border-radius: 5px; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .warning { background: #fff3cd; color: #856404; }
+        .create-link { display: inline-block; margin: 10px 0; padding: 10px 20px; background: #007bff; color: white; text-decoration: none; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Quick Bucket Status Check</h1>
+    <div id="status">Checking...</div>
+    <div id="results"></div>
+
+    <script>
+        const SUPABASE_URL = 'https://tepmkljodsifaexmrinl.supabase.co';
+        const ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlcG1rbGpvZHNpZmFheG1yaW5sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ2MDQwMjUsImV4cCI6MjA3MDE4MDAyNX0.n4WdeHUHHc5PuJV8-2oDn826CoNxNzHHbt4KxeAhOYc';
+
+        const supabase = window.supabase.createClient(SUPABASE_URL, ANON_KEY);
+
+        async function checkBuckets() {
+            const requiredBuckets = ['product-images', 'documents', 'quote-attachments'];
+            
+            try {
+                const { data: buckets, error } = await supabase.storage.listBuckets();
+                
+                if (error) {
+                    document.getElementById('status').innerHTML = '<div class="error">❌ Cannot access storage API</div>';
+                    document.getElementById('results').innerHTML = `<div class="error">Error: ${error.message}</div>`;
+                    return;
+                }
+
+                const existingNames = buckets.map(b => b.name);
+                const missing = requiredBuckets.filter(name => !existingNames.includes(name));
+                const found = requiredBuckets.filter(name => existingNames.includes(name));
+
+                let html = `<h3>📊 Status: ${found.length}/${requiredBuckets.length} buckets ready</h3>`;
+                
+                if (missing.length === 0) {
+                    document.getElementById('status').innerHTML = '<div class="success">✅ All buckets exist!</div>';
+                    html += '<div class="success">🎉 All required storage buckets are ready for use!</div>';
+                } else {
+                    document.getElementById('status').innerHTML = '<div class="warning">⚠️ Missing buckets</div>';
+                    html += `<div class="warning">Missing: ${missing.join(', ')}</div>`;
+                    html += '<a href="test-create-buckets.html" class="create-link">🚀 Create Missing Buckets</a>';
+                }
+
+                html += '<h4>📋 Bucket Details:</h4>';
+                requiredBuckets.forEach(name => {
+                    const exists = existingNames.includes(name);
+                    html += `<div class="${exists ? 'success' : 'warning'}">${exists ? '���' : '❌'} ${name}</div>`;
+                });
+
+                document.getElementById('results').innerHTML = html;
+
+            } catch (error) {
+                document.getElementById('status').innerHTML = '<div class="error">❌ Check failed</div>';
+                document.getElementById('results').innerHTML = `<div class="error">Exception: ${error.message}</div>`;
+            }
+        }
+
+        // Auto-run check
+        checkBuckets();
+    </script>
+</body>
+</html>
