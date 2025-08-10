@@ -43,7 +43,7 @@ export default function StorageBucketTest() {
 
   const addResult = (test: string, status: TestResult['status'], message: string, details?: string) => {
     const timestamp = new Date().toLocaleTimeString();
-    const emoji = status === 'success' ? '✅' : status === 'error' ? '❌' : status === 'warning' ? '⚠️' : 'ℹ️';
+    const emoji = status === 'success' ? '✅' : status === 'error' ? '❌' : status === 'warning' ? '⚠️' : 'ℹ���';
     setTestResults(prev => [...prev, {
       test: `${timestamp} ${emoji} ${test}`,
       status,
@@ -210,6 +210,10 @@ export default function StorageBucketTest() {
               <TabsTrigger value="upload">File Upload</TabsTrigger>
               <TabsTrigger value="diagnostics">Diagnostics</TabsTrigger>
             </TabsList>
+
+            <TabsContent value="cors-fix" className="space-y-4">
+              <CORSFixGuide />
+            </TabsContent>
 
             <TabsContent value="test" className="space-y-4">
               <div className="flex gap-2">
