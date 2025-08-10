@@ -1,9 +1,9 @@
 import { supabase } from "../supabase";
 
 export type BucketName =
-  | "charge-source-user-files"
-  | "charge-source-documents"
-  | "charge-source-videos";
+  | "product-images"
+  | "documents"
+  | "quote-attachments";
 export type AssetStatus =
   | "draft"
   | "pending_approval"
