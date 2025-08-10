@@ -148,7 +148,7 @@ export default function CleanAdminNavigation() {
   return (
     <nav className="flex items-center justify-end w-full">
       {/* All Navigation Items - Right Side */}
-      <div className="flex items-center space-x-4">
+      <div className="flex items-center space-x-4" style={{justifyContent: 'flex-start', marginLeft: 'auto', width: 'auto', flexGrow: '0'}}>
         {/* Primary Navigation - Core Items */}
         {primaryItems.map((item) => {
           const isActive = isActivePath(item.path);
