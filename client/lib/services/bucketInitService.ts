@@ -10,27 +10,20 @@ export class BucketInitService {
     fileSizeLimit?: number;
   }> = [
     {
-      id: "charge-source-user-files",
-      name: "charge-source-user-files",
-      public: false,
+      id: "product-images",
+      name: "product-images",
+      public: true,
       allowedMimeTypes: [
         "image/jpeg",
-        "image/png", 
+        "image/png",
         "image/gif",
-        "image/webp",
-        "application/pdf",
-        "text/plain",
-        "text/csv",
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-        "application/msword",
-        "application/vnd.ms-excel",
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        "image/webp"
       ],
-      fileSizeLimit: 50 * 1024 * 1024 // 50MB
+      fileSizeLimit: 10 * 1024 * 1024 // 10MB
     },
     {
-      id: "charge-source-documents", 
-      name: "charge-source-documents",
+      id: "documents",
+      name: "documents",
       public: false,
       allowedMimeTypes: [
         "application/pdf",
@@ -46,22 +39,18 @@ export class BucketInitService {
         "image/jpeg",
         "image/png"
       ],
-      fileSizeLimit: 100 * 1024 * 1024 // 100MB
+      fileSizeLimit: 50 * 1024 * 1024 // 50MB
     },
     {
-      id: "charge-source-videos",
-      name: "charge-source-videos", 
+      id: "quote-attachments",
+      name: "quote-attachments",
       public: false,
       allowedMimeTypes: [
-        "video/mp4",
-        "video/quicktime",
-        "video/x-msvideo",
-        "video/webm",
-        "video/x-ms-wmv",
-        "video/3gpp",
-        "video/x-flv"
+        "application/pdf",
+        "image/jpeg",
+        "image/png"
       ],
-      fileSizeLimit: 500 * 1024 * 1024 // 500MB
+      fileSizeLimit: 20 * 1024 * 1024 // 20MB
     }
   ];
 
