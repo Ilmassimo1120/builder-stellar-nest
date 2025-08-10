@@ -304,6 +304,13 @@ export default function Index() {
         </div>
       </section>
 
+      {/* Development Navigation Helper */}
+      <section className="py-16 bg-slate-50">
+        <div className="container mx-auto px-4">
+          <DevNavigationHelper />
+        </div>
+      </section>
+
       {/* Footer */}
       <footer className="border-t bg-muted/30 py-12 px-4">
         <div className="container mx-auto">
