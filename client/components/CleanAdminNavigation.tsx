@@ -146,9 +146,10 @@ export default function CleanAdminNavigation() {
   const secondaryGroups = visibleGroups.filter(g => g.label !== "Core");
 
   return (
-    <nav className="flex items-center justify-between w-full">
-      {/* Primary Navigation - Core Items */}
-      <div className="flex items-center space-x-1">
+    <nav className="flex items-center justify-end w-full">
+      {/* All Navigation Items - Right Side */}
+      <div className="flex items-center space-x-4">
+        {/* Primary Navigation - Core Items */}
         {primaryItems.map((item) => {
           const isActive = isActivePath(item.path);
           return (
@@ -171,12 +172,12 @@ export default function CleanAdminNavigation() {
         {visibleGroups.find(g => g.label === "Catalog") && (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button 
+              <Button
                 variant={
                   visibleGroups.find(g => g.label === "Catalog")?.items.some(item => isActivePath(item.path))
-                    ? "default" 
+                    ? "default"
                     : "ghost"
-                } 
+                }
                 size="sm"
                 className="flex items-center gap-1"
               >
@@ -209,12 +210,12 @@ export default function CleanAdminNavigation() {
         {visibleGroups.find(g => g.label === "Admin") && (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button 
+              <Button
                 variant={
                   visibleGroups.find(g => g.label === "Admin")?.items.some(item => isActivePath(item.path))
-                    ? "default" 
+                    ? "default"
                     : "ghost"
-                } 
+                }
                 size="sm"
                 className="flex items-center gap-1"
               >
@@ -242,10 +243,10 @@ export default function CleanAdminNavigation() {
             </DropdownMenuContent>
           </DropdownMenu>
         )}
-      </div>
 
-      {/* Quick Actions & Secondary Navigation */}
-      <div className="flex items-center space-x-2">
+        {/* Separator */}
+        <div className="w-px h-4 bg-border mx-2" />
+
         {/* Quick Create Dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
