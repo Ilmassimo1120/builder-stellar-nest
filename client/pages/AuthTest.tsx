@@ -64,6 +64,10 @@ export default function AuthTest() {
             <StorageBucketTest />
           </TabsContent>
 
+          <TabsContent value="navigation" className="space-y-4">
+            <TestCleanNav />
+          </TabsContent>
+
           <TabsContent value="config" className="space-y-4">
             <Card>
               <CardHeader>
