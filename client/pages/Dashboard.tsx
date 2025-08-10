@@ -655,13 +655,15 @@ export default function Dashboard() {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
           <div>
             <h1 className="text-3xl font-bold mb-2">Dashboard</h1>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-5 justify-start">
               <p className="text-muted-foreground">
-                Welcome back, {user?.name || user?.firstName || "User"}. Here's
-                your EV project overview.
+                Welcome back, {user?.name || user?.firstName || "User"}.
+                <p>
+                  <br />
+                </p>
               </p>
               {!loading && (
-                <Badge variant="secondary" className="text-xs">
+                <Badge variant="secondary" className="text-xs ml-auto">
                   {isSupabaseConnected ? "☁️ Cloud Connected" : "💾 Local Mode"}
                 </Badge>
               )}
