@@ -43,7 +43,7 @@ export default function StorageBucketTest() {
 
   const addResult = (test: string, status: TestResult['status'], message: string, details?: string) => {
     const timestamp = new Date().toLocaleTimeString();
-    const emoji = status === 'success' ? '✅' : status === 'error' ? '❌' : status === 'warning' ? '⚠️' : 'ℹ���';
+    const emoji = status === 'success' ? '✅' : status === 'error' ? '❌' : status === 'warning' ? '⚠️' : 'ℹ️';
     setTestResults(prev => [...prev, {
       test: `${timestamp} ${emoji} ${test}`,
       status,
@@ -66,9 +66,10 @@ export default function StorageBucketTest() {
         const { data: buckets, error } = await supabase.storage.listBuckets();
         
         if (error) {
-          addResult("API Connectivity", "error", `Storage API error: ${error.message}`, 
-            "Cannot access storage API. Check CORS settings and project configuration.");
-        } else {
+        const isCORSError = error.message.includes('Failed to fetch') || error.message.includes('CORS');
+        addResult("API Connectivity", "error", `Storage API error: ${error.message}`,
+          isCORSError ? "CORS Issue: Go to 'Fix CORS' tab for step-by-step instructions." : "Cannot access storage API. Check project configuration.");
+      } else {
           addResult("API Connectivity", "success", "Storage API accessible", 
             `Found ${buckets?.length || 0} existing buckets`);
           
