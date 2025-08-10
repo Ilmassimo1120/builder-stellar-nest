@@ -8,6 +8,7 @@ import { supabase } from "@/lib/supabase";
 import { bucketInitService } from "@/lib/services/bucketInitService";
 import FileUpload from "./FileUpload";
 import SupabaseStorageDiagnostics from "./SupabaseStorageDiagnostics";
+import CORSFixGuide from "./CORSFixGuide";
 import { 
   Folder, 
   Upload, 
