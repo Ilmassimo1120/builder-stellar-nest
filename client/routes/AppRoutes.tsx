@@ -25,6 +25,7 @@ const FileStorage = lazy(() => import("../pages/FileStorage"));
 const CloudStatus = lazy(() => import("../pages/CloudStatus"));
 const NotFound = lazy(() => import("../pages/NotFound"));
 const Placeholder = lazy(() => import("../pages/Placeholder"));
+const AuthTest = lazy(() => import("../pages/AuthTest"));
 
 // Loading component for Suspense fallback
 const PageLoading = () => (
