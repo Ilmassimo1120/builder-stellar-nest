@@ -55,6 +55,10 @@ export default function AuthTest() {
             </SupabaseAuthProvider>
           </TabsContent>
 
+          <TabsContent value="storage" className="space-y-4">
+            <StorageBucketTest />
+          </TabsContent>
+
           <TabsContent value="config" className="space-y-4">
             <Card>
               <CardHeader>
