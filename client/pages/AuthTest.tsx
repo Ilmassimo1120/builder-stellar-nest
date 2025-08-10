@@ -4,8 +4,9 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import AuthTestComponent from "@/components/AuthTestComponent";
 import StorageBucketTest from "@/components/StorageBucketTest";
+import TestCleanNav from "@/components/TestCleanNav";
 import { SupabaseAuthProvider } from "@/hooks/useSupabaseAuth";
-import { Info, Database, Key, Users, HardDrive } from "lucide-react";
+import { Info, Database, Key, Users, HardDrive, Layout } from "lucide-react";
 
 export default function AuthTest() {
   return (
