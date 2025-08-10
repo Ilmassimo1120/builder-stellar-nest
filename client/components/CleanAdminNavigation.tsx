@@ -146,7 +146,7 @@ export default function CleanAdminNavigation() {
   const secondaryGroups = visibleGroups.filter(g => g.label !== "Core");
 
   return (
-    <nav className="flex items-center justify-end w-full">
+    <nav className="flex items-center justify-end w-full" style={{maxWidth: '500px', marginLeft: 'auto'}}>
       {/* All Navigation Items - Right Side */}
       <div className="flex items-center space-x-4" style={{justifyContent: 'flex-start', marginLeft: 'auto', width: 'auto', flexGrow: '0'}}>
         {/* Primary Navigation - Core Items */}
