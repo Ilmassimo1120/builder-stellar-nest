@@ -249,6 +249,30 @@ const AppRoutes = () => (
         </PublicLazyRoute>
       }
     />
+    <Route
+      path="/AuthTest"
+      element={
+        <PublicLazyRoute>
+          <AuthTest />
+        </PublicLazyRoute>
+      }
+    />
+    <Route
+      path="/authtest"
+      element={
+        <PublicLazyRoute>
+          <AuthTest />
+        </PublicLazyRoute>
+      }
+    />
+    <Route
+      path="/auth_test"
+      element={
+        <PublicLazyRoute>
+          <AuthTest />
+        </PublicLazyRoute>
+      }
+    />
 
     {/* Placeholder Routes for Future Features */}
     <Route
