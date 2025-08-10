@@ -658,9 +658,7 @@ export default function Dashboard() {
             <div className="flex items-center gap-5 justify-start">
               <p className="text-muted-foreground">
                 Welcome back, {user?.name || user?.firstName || "User"}.
-                <p>
-                  <br />
-                </p>
+                <br />
               </p>
               {!loading && (
                 <Badge variant="secondary" className="text-xs ml-auto">
