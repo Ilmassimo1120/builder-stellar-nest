@@ -28,7 +28,7 @@ export default function AuthTest() {
         </Alert>
 
         <Tabs defaultValue="supabase-auth" className="w-full">
-          <TabsList className="grid w-full grid-cols-5">
+          <TabsList className="grid w-full grid-cols-6">
             <TabsTrigger value="supabase-auth">
               <Database className="w-4 h-4 mr-2" />
               Auth
@@ -36,6 +36,10 @@ export default function AuthTest() {
             <TabsTrigger value="storage">
               <HardDrive className="w-4 h-4 mr-2" />
               Storage
+            </TabsTrigger>
+            <TabsTrigger value="navigation">
+              <Layout className="w-4 h-4 mr-2" />
+              Nav UI
             </TabsTrigger>
             <TabsTrigger value="config">
               <Key className="w-4 h-4 mr-2" />
