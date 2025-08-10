@@ -29,6 +29,7 @@ import UserRoleIndicator, {
   PermissionGate,
   RoleGate,
 } from "./UserRoleIndicator";
+import CleanAdminNavigation from "./CleanAdminNavigation";
 
 interface NavItem {
   path: string;
