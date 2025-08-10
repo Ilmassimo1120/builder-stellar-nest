@@ -215,6 +215,11 @@ export default function RoleBasedNavigation({
   }
 
   // Header variant (default)
+  // Use clean navigation for admin users to reduce clutter
+  if (user?.role === UserRole.ADMIN || user?.role === UserRole.GLOBAL_ADMIN) {
+    return <CleanAdminNavigation />;
+  }
+
   return (
     <nav className={`flex items-center space-x-1 ${className}`}>
       {visibleItems.map((item) => {
