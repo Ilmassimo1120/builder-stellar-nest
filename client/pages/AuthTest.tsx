@@ -3,8 +3,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import AuthTestComponent from "@/components/AuthTestComponent";
+import StorageBucketTest from "@/components/StorageBucketTest";
 import { SupabaseAuthProvider } from "@/hooks/useSupabaseAuth";
-import { Info, Database, Key, Users } from "lucide-react";
+import { Info, Database, Key, Users, HardDrive } from "lucide-react";
 
 export default function AuthTest() {
   return (
