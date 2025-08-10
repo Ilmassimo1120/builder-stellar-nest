@@ -49,7 +49,7 @@ const navigationGroups: NavGroup[] = [
       {
         path: "/dashboard",
         label: "Dashboard",
-        icon: <Home className="w-4 h-4" />,
+        icon: <Home className="w-4 h-4" style={{display: 'flex', flexDirection: 'column'}} />,
       },
       {
         path: "/projects",
@@ -252,7 +252,7 @@ export default function CleanAdminNavigation() {
           <DropdownMenuTrigger asChild>
             <Button size="sm" className="flex items-center gap-1">
               <Plus className="w-4 h-4" />
-              <span className="hidden md:inline">Create</span>
+              <span className="hidden md:inline" style={{marginLeft: 'auto'}}>Create</span>
               <ChevronDown className="w-3 h-3" />
             </Button>
           </DropdownMenuTrigger>
