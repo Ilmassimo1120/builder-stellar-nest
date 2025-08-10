@@ -1,19 +1,29 @@
 import { createClient } from "@supabase/supabase-js";
 
-// Supabase configuration - automatically configured for ChargeSource
-const supabaseUrl =
-  import.meta.env.VITE_SUPABASE_URL ||
-  "https://tepmkljodsifaexmrinl.supabase.co";
-const supabaseAnonKey =
-  import.meta.env.VITE_SUPABASE_ANON_KEY ||
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlcG1rbGpvZHNpZmFleG1yaW5sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ2MDQwMjUsImV4cCI6MjA3MDE4MDAyNX0.n4WdeHUHHc5PuJV8-2oDn826CoNxNzHHbt4KxeAhOYc";
+// Supabase configuration - requires environment variables
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 // Validate configuration
-if (!supabaseUrl || supabaseUrl.includes("your-project")) {
-  console.error("❌ Invalid Supabase URL configuration:", supabaseUrl);
+if (!supabaseUrl) {
+  console.error("❌ VITE_SUPABASE_URL environment variable is required");
+  console.error("Please set VITE_SUPABASE_URL in your .env file");
+  throw new Error("Missing VITE_SUPABASE_URL environment variable");
 }
-if (!supabaseAnonKey || supabaseAnonKey.includes("your-anon-key")) {
+if (!supabaseAnonKey) {
+  console.error("❌ VITE_SUPABASE_ANON_KEY environment variable is required");
+  console.error("Please set VITE_SUPABASE_ANON_KEY in your .env file");
+  throw new Error("Missing VITE_SUPABASE_ANON_KEY environment variable");
+}
+
+// Additional validation for placeholder values
+if (supabaseUrl.includes("your-project") || supabaseUrl.includes("localhost")) {
+  console.error("❌ Invalid Supabase URL configuration:", supabaseUrl);
+  throw new Error("Invalid Supabase URL - please use your actual project URL");
+}
+if (supabaseAnonKey.includes("your-anon-key") || supabaseAnonKey.length < 100) {
   console.error("❌ Invalid Supabase API key configuration");
+  throw new Error("Invalid Supabase anon key - please use your actual anon key");
 }
 
 // Create Supabase client
