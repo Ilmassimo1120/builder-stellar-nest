@@ -82,7 +82,7 @@ export const SupabaseStorageDiagnostics: React.FC = () => {
           });
         }
       } else {
-        const requiredBuckets = ['charge-source-user-files', 'charge-source-documents', 'charge-source-videos'];
+        const requiredBuckets = ['product-images', 'documents', 'quote-attachments'];
         const existingBuckets = buckets?.map(b => b.name) || [];
         const missingBuckets = requiredBuckets.filter(b => !existingBuckets.includes(b));
         
