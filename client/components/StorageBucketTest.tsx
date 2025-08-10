@@ -202,8 +202,9 @@ export default function StorageBucketTest() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <Tabs defaultValue="test" className="w-full">
-            <TabsList className="grid w-full grid-cols-4">
+          <Tabs defaultValue="cors-fix" className="w-full">
+            <TabsList className="grid w-full grid-cols-5">
+              <TabsTrigger value="cors-fix">🔧 Fix CORS</TabsTrigger>
               <TabsTrigger value="test">Connection Test</TabsTrigger>
               <TabsTrigger value="buckets">Bucket Status</TabsTrigger>
               <TabsTrigger value="upload">File Upload</TabsTrigger>
