@@ -34,7 +34,7 @@ export interface UploadProgress {
 export type UploadProgressCallback = (progress: UploadProgress) => void;
 
 class FileStorageService {
-  private readonly bucketName = 'chargesource';
+  private readonly bucketName = 'documents';
   private readonly maxFileSize = 50 * 1024 * 1024; // 50MB
   private readonly allowedMimeTypes = [
     'image/jpeg',
