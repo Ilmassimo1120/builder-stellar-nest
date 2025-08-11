@@ -454,13 +454,20 @@ class EnhancedFileStorageService {
           storageError.name === "TypeError"
         ) {
           console.warn(
-            `⚠️ Cloud storage unavailable, using local fallback for: ${request.file.name}`,
+            `⚠️ Cloud storage unavailable (${errorMessage}), using local fallback for: ${request.file.name}`,
           );
 
           try {
             // Use local storage fallback
             const localResult = await localFileStorageService.simulateFileUpload(request);
             console.log("✅ File stored locally as fallback:", localResult.fileName);
+
+            // Add metadata to indicate this is a local fallback
+            localResult.tags = [...(localResult.tags || []), 'local-fallback', 'pending-sync'];
+            localResult.description = localResult.description
+              ? `${localResult.description} (Stored locally - will sync when cloud storage is available)`
+              : 'Stored locally - will sync when cloud storage is available';
+
             return localResult;
           } catch (localError) {
             console.error("Local storage fallback also failed:", localError);
