@@ -445,6 +445,11 @@ export const initializeSupabase = async (): Promise<boolean> => {
   try {
     console.log("🚀 Initializing ChargeSource Supabase connection...");
 
+    // Make service role key available for bucket operations (development only)
+    if (typeof window !== "undefined" && import.meta.env.DEV) {
+      (window as any).SUPABASE_SERVICE_ROLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlcG1rbGpvZHNpZmFleG1yaW5sIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NDYwNDAyNSwiZXhwIjoyMDcwMTgwMDI1fQ.4jnYA3rg3IKPyQT5e_Dng9oKr7eF1p8QI4s88K4n5XY";
+    }
+
     // Check for problematic environments first - this is critical
     if (isProblematicEnvironment()) {
       console.log(
