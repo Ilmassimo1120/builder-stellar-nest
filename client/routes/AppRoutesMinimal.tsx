@@ -5,6 +5,8 @@ import { Routes, Route } from "react-router-dom";
 const IndexWorking = lazy(() => import("../pages/IndexWorking"));
 const LoginWorking = lazy(() => import("../pages/LoginWorking"));
 const DashboardWorking = lazy(() => import("../pages/DashboardWorking"));
+const ProjectsWorking = lazy(() => import("../pages/ProjectsWorking"));
+const QuoteBuilderWorking = lazy(() => import("../pages/QuoteBuilderWorking"));
 
 // Loading component
 const LoadingPage = () => (
@@ -44,6 +46,35 @@ const AppRoutesMinimal = () => (
       element={
         <Suspense fallback={<LoadingPage />}>
           <DashboardWorking />
+        </Suspense>
+      }
+    />
+
+    {/* Projects */}
+    <Route
+      path="/projects"
+      element={
+        <Suspense fallback={<LoadingPage />}>
+          <ProjectsWorking />
+        </Suspense>
+      }
+    />
+
+    {/* Quote Builder */}
+    <Route
+      path="/quotes/new"
+      element={
+        <Suspense fallback={<LoadingPage />}>
+          <QuoteBuilderWorking />
+        </Suspense>
+      }
+    />
+
+    <Route
+      path="/quotes/:quoteId"
+      element={
+        <Suspense fallback={<LoadingPage />}>
+          <QuoteBuilderWorking />
         </Suspense>
       }
     />
