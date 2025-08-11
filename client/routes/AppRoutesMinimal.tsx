@@ -18,15 +18,37 @@ const LoadingPage = () => (
 
 const AppRoutesMinimal = () => (
   <Routes>
+    {/* Home Page */}
     <Route
       path="/"
       element={
-        <div className="min-h-screen bg-background p-8">
-          <h1 className="text-2xl font-bold">Home Page</h1>
-          <p>Basic routing is working!</p>
-        </div>
+        <Suspense fallback={<LoadingPage />}>
+          <IndexWorking />
+        </Suspense>
       }
     />
+
+    {/* Login */}
+    <Route
+      path="/login"
+      element={
+        <Suspense fallback={<LoadingPage />}>
+          <LoginWorking />
+        </Suspense>
+      }
+    />
+
+    {/* Dashboard */}
+    <Route
+      path="/dashboard"
+      element={
+        <Suspense fallback={<LoadingPage />}>
+          <DashboardWorking />
+        </Suspense>
+      }
+    />
+
+    {/* Test Page */}
     <Route
       path="/test"
       element={
@@ -36,6 +58,8 @@ const AppRoutesMinimal = () => (
         </div>
       }
     />
+
+    {/* 404 */}
     <Route
       path="*"
       element={
