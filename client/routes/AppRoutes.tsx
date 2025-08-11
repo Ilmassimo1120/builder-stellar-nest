@@ -173,17 +173,17 @@ const AppRoutes = () => (
     <Route
       path="/document-test"
       element={
-        <ProtectedLazyRoute>
+        <PublicLazyRoute>
           <DocumentTest />
-        </ProtectedLazyRoute>
+        </PublicLazyRoute>
       }
     />
     <Route
       path="/DocumentTest"
       element={
-        <ProtectedLazyRoute>
+        <PublicLazyRoute>
           <DocumentTest />
-        </ProtectedLazyRoute>
+        </PublicLazyRoute>
       }
     />
     <Route
