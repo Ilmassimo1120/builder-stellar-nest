@@ -2,6 +2,7 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import { handleDemo } from "./routes/demo";
+import { createStorageBuckets } from "./routes/create-storage-buckets";
 
 export function createServer() {
   const app = express();
@@ -18,6 +19,9 @@ export function createServer() {
   });
 
   app.get("/api/demo", handleDemo);
+
+  // ChargeSource storage bucket creation
+  app.post("/api/create-storage-buckets", createStorageBuckets);
 
   return app;
 }
