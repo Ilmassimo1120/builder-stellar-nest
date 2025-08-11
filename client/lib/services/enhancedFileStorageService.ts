@@ -1,4 +1,5 @@
 import { supabase } from "../supabase";
+import { localFileStorageService } from "./localFileStorageService";
 
 export type BucketName =
   | "product-images"
@@ -421,18 +422,25 @@ class EnhancedFileStorageService {
         );
         console.error("Storage upload failed:", errorMessage);
 
-        // For development/demo purposes, we'll simulate success but warn about storage
+        // For development/demo purposes, use local storage fallback
         if (
           errorMessage.includes("Network connection failed") ||
-          errorMessage.includes("not found")
+          errorMessage.includes("not found") ||
+          errorMessage.includes("Authentication required")
         ) {
           console.warn(
-            `⚠️ File upload simulated - storage not available. File: ${request.file.name}`,
+            `⚠️ Cloud storage unavailable, using local fallback for: ${request.file.name}`,
           );
-          console.warn(
-            "To enable real file uploads, set up Supabase storage buckets.",
-          );
-          uploadSuccess = false; // We'll track this but continue
+
+          try {
+            // Use local storage fallback
+            const localResult = await localFileStorageService.simulateFileUpload(request);
+            console.log("✅ File stored locally as fallback:", localResult.fileName);
+            return localResult;
+          } catch (localError) {
+            console.error("Local storage fallback also failed:", localError);
+            throw new Error(`Both cloud and local storage failed: ${errorMessage}`);
+          }
         } else {
           throw storageError; // Re-throw for unexpected errors
         }
