@@ -44,7 +44,7 @@ export default function DocumentTest() {
   const bucketOptions = [
     { value: 'charge-source-user-files', label: '👤 User Files', description: 'Personal files (50MB max)' },
     { value: 'charge-source-documents', label: '📄 Documents', description: 'Official documents (100MB max)' },
-    { value: 'charge-source-videos', label: '🎥 Videos', description: 'Training videos (500MB max)' }
+    { value: 'charge-source-videos', label: '�� Videos', description: 'Training videos (500MB max)' }
   ];
 
   const categoryOptions = [
@@ -232,24 +232,156 @@ export default function DocumentTest() {
           {error.includes('not found') || error.includes('create the storage buckets') ? (
             <BucketSetupGuide />
           ) : error.includes('document_metadata') || error.includes('schema cache') ? (
-            <Alert variant="destructive">
-              <AlertTriangle className="h-4 w-4" />
-              <AlertDescription>
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2 text-red-600">
+                  <AlertTriangle className="h-5 w-5" />
+                  <span>Database Setup Required</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <Alert variant="destructive">
+                  <AlertTriangle className="h-4 w-4" />
+                  <AlertDescription>
+                    The document metadata tables don't exist yet. You need to create them in your Supabase database.
+                  </AlertDescription>
+                </Alert>
+
                 <div className="space-y-3">
-                  <p><strong>Database Setup Required:</strong> The document metadata tables don't exist yet.</p>
-                  <p className="text-sm">To fix this:</p>
+                  <h4 className="font-medium">Quick Setup:</h4>
                   <ol className="text-sm list-decimal list-inside space-y-1">
-                    <li>Open your <a href="https://supabase.com/dashboard" target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">Supabase Dashboard</a></li>
-                    <li>Go to SQL Editor</li>
-                    <li>Copy and run the SQL script from <code>SETUP_DATABASE_TABLES.sql</code></li>
+                    <li>Open your <Button variant="link" className="p-0 h-auto" asChild><a href="https://supabase.com/dashboard" target="_blank" rel="noopener noreferrer">Supabase Dashboard</a></Button></li>
+                    <li>Go to <strong>SQL Editor</strong></li>
+                    <li>Copy and paste the SQL script below</li>
+                    <li>Click <strong>Run</strong> to execute it</li>
                     <li>Refresh this page</li>
                   </ol>
-                  <p className="text-xs text-muted-foreground mt-2">
-                    This creates the <code>document_metadata</code> and <code>document_versions</code> tables with proper security policies.
-                  </p>
                 </div>
-              </AlertDescription>
-            </Alert>
+
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <h4 className="font-medium">SQL Setup Script:</h4>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        const sql = `-- ChargeSource Database Setup
+CREATE TABLE IF NOT EXISTS document_metadata (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
+  organization_id UUID DEFAULT NULL,
+  bucket_name TEXT NOT NULL,
+  file_path TEXT NOT NULL,
+  original_filename TEXT NOT NULL,
+  file_size BIGINT NOT NULL,
+  mime_type TEXT NOT NULL,
+  category TEXT DEFAULT 'uncategorized',
+  tags TEXT[] DEFAULT '{}',
+  description TEXT,
+  status TEXT DEFAULT 'draft' CHECK (status IN ('draft', 'pending_approval', 'approved', 'rejected', 'archived')),
+  version INTEGER DEFAULT 1,
+  metadata JSONB DEFAULT '{}',
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  approved_by UUID REFERENCES auth.users(id) DEFAULT NULL,
+  approved_at TIMESTAMP WITH TIME ZONE DEFAULT NULL,
+  UNIQUE(bucket_name, file_path)
+);
+
+-- Enable RLS
+ALTER TABLE document_metadata ENABLE ROW LEVEL SECURITY;
+
+-- Create policies
+CREATE POLICY "Users can view their own documents" ON document_metadata
+  FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY "Users can insert their own documents" ON document_metadata
+  FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY "Users can update their own documents" ON document_metadata
+  FOR UPDATE USING (auth.uid() = user_id);
+CREATE POLICY "Users can delete their own documents" ON document_metadata
+  FOR DELETE USING (auth.uid() = user_id);
+
+-- Create storage buckets
+INSERT INTO storage.buckets (id, name, public) VALUES
+  ('charge-source-user-files', 'charge-source-user-files', false),
+  ('charge-source-documents', 'charge-source-documents', false),
+  ('charge-source-videos', 'charge-source-videos', false)
+ON CONFLICT (id) DO NOTHING;
+
+-- Storage policies for charge-source-documents
+CREATE POLICY "Users can view their own documents storage" ON storage.objects
+FOR SELECT USING (bucket_id = 'charge-source-documents' AND auth.uid()::text = (storage.foldername(name))[1]);
+CREATE POLICY "Users can upload their own documents storage" ON storage.objects
+FOR INSERT WITH CHECK (bucket_id = 'charge-source-documents' AND auth.uid()::text = (storage.foldername(name))[1]);
+CREATE POLICY "Users can update their own documents storage" ON storage.objects
+FOR UPDATE USING (bucket_id = 'charge-source-documents' AND auth.uid()::text = (storage.foldername(name))[1]);
+CREATE POLICY "Users can delete their own documents storage" ON storage.objects
+FOR DELETE USING (bucket_id = 'charge-source-documents' AND auth.uid()::text = (storage.foldername(name))[1]);`;
+                        navigator.clipboard.writeText(sql);
+                        setSuccess('SQL script copied to clipboard!');
+                      }}
+                    >
+                      <Copy className="h-3 w-3 mr-1" />
+                      Copy SQL
+                    </Button>
+                  </div>
+                  <div className="bg-gray-100 p-3 rounded text-xs font-mono overflow-x-auto max-h-60 overflow-y-auto border">
+                    <pre>{`-- ChargeSource Database Setup
+CREATE TABLE IF NOT EXISTS document_metadata (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
+  organization_id UUID DEFAULT NULL,
+  bucket_name TEXT NOT NULL,
+  file_path TEXT NOT NULL,
+  original_filename TEXT NOT NULL,
+  file_size BIGINT NOT NULL,
+  mime_type TEXT NOT NULL,
+  category TEXT DEFAULT 'uncategorized',
+  tags TEXT[] DEFAULT '{}',
+  description TEXT,
+  status TEXT DEFAULT 'draft',
+  version INTEGER DEFAULT 1,
+  metadata JSONB DEFAULT '{}',
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  approved_by UUID REFERENCES auth.users(id) DEFAULT NULL,
+  approved_at TIMESTAMP WITH TIME ZONE DEFAULT NULL,
+  UNIQUE(bucket_name, file_path)
+);
+
+-- Enable Row Level Security
+ALTER TABLE document_metadata ENABLE ROW LEVEL SECURITY;
+
+-- Create RLS policies
+CREATE POLICY "Users can view their own documents" ON document_metadata
+  FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY "Users can insert their own documents" ON document_metadata
+  FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY "Users can update their own documents" ON document_metadata
+  FOR UPDATE USING (auth.uid() = user_id);
+CREATE POLICY "Users can delete their own documents" ON document_metadata
+  FOR DELETE USING (auth.uid() = user_id);
+
+-- Create storage buckets
+INSERT INTO storage.buckets (id, name, public) VALUES
+  ('charge-source-user-files', 'charge-source-user-files', false),
+  ('charge-source-documents', 'charge-source-documents', false),
+  ('charge-source-videos', 'charge-source-videos', false)
+ON CONFLICT (id) DO NOTHING;
+
+-- Storage policies for charge-source-documents
+CREATE POLICY "Users can view their own documents storage" ON storage.objects
+FOR SELECT USING (bucket_id = 'charge-source-documents' AND auth.uid()::text = (storage.foldername(name))[1]);
+CREATE POLICY "Users can upload their own documents storage" ON storage.objects
+FOR INSERT WITH CHECK (bucket_id = 'charge-source-documents' AND auth.uid()::text = (storage.foldername(name))[1]);
+CREATE POLICY "Users can update their own documents storage" ON storage.objects
+FOR UPDATE USING (bucket_id = 'charge-source-documents' AND auth.uid()::text = (storage.foldername(name))[1]);
+CREATE POLICY "Users can delete their own documents storage" ON storage.objects
+FOR DELETE USING (bucket_id = 'charge-source-documents' AND auth.uid()::text = (storage.foldername(name))[1]);`}</pre>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           ) : (
             <Alert variant="destructive">
               <AlertTriangle className="h-4 w-4" />
