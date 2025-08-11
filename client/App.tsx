@@ -3,7 +3,7 @@ import { BrowserRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/sonner";
 import ErrorBoundary from "@/components/ErrorBoundary";
-import AppRoutesMinimal from "@/routes/AppRoutesMinimal";
+import AppRoutes from "@/routes/AppRoutes";
 import { AuthProvider } from "@/hooks/useAuth";
 import { appConfig } from "@/lib/config";
 import { preloadCriticalResources } from "@/lib/bundleOptimization";
