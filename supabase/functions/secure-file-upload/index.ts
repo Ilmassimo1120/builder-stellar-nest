@@ -38,10 +38,19 @@ Deno.serve(async (req: Request) => {
     const fileExtension = file.name.split('.').pop();
     const uniqueFilename = `${crypto.randomUUID()}.${fileExtension}`;
     
-    // Upload to user-specific folder in chargesource bucket
+    // Get bucket from form data or default to documents
+    const bucket = formData.get('bucket') as string || 'charge-source-documents';
+    const organizationId = formData.get('organizationId') as string;
+
+    // Determine upload path: organization files vs user files
+    const uploadPath = organizationId
+      ? `${organizationId}/${uniqueFilename}`
+      : `${user.id}/${uniqueFilename}`;
+
+    // Upload to specified bucket with proper path structure
     const { data, error } = await supabase.storage
-      .from('chargesource')
-      .upload(`${user.id}/${uniqueFilename}`, file, {
+      .from(bucket)
+      .upload(uploadPath, file, {
         upsert: true
       });
 
@@ -53,10 +62,13 @@ Deno.serve(async (req: Request) => {
       });
     }
 
-    return new Response(JSON.stringify({ 
+    return new Response(JSON.stringify({
       message: 'File uploaded successfully',
-      path: data.path 
-    }), { 
+      path: data.path,
+      bucket: bucket,
+      organizationId: organizationId || null,
+      userId: user.id
+    }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' }
     });
