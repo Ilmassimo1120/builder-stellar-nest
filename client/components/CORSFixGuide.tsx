@@ -1,204 +1,126 @@
-import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
-  AlertTriangle, 
-  ExternalLink, 
-  Copy, 
-  CheckCircle,
-  Globe,
-  Settings,
-  Shield
-} from "lucide-react";
+import React from 'react';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { AlertTriangle, CheckCircle, Globe, Settings, ExternalLink } from 'lucide-react';
 
-export default function CORSFixGuide() {
-  const [copied, setCopied] = useState<string | null>(null);
-  
-  const currentDomain = window.location.origin;
-  const supabaseUrl = "https://tepmkljodsifaexmrinl.supabase.co";
-  
-  const copyToClipboard = (text: string, label: string) => {
-    navigator.clipboard.writeText(text);
-    setCopied(label);
-    setTimeout(() => setCopied(null), 2000);
-  };
+interface CORSFixGuideProps {
+  showDetailed?: boolean;
+  className?: string;
+}
 
-  const corsOrigins = [
-    "http://localhost:8080",
-    "http://localhost:5173", 
-    "http://localhost:3000",
-    currentDomain,
-    "https://*.fly.dev"
-  ];
+export default function CORSFixGuide({ showDetailed = false, className }: CORSFixGuideProps) {
+  const currentDomain = typeof window !== 'undefined' ? window.location.hostname : 'your-domain.com';
+  const currentOrigin = typeof window !== 'undefined' ? window.location.origin : 'https://your-domain.com';
+
+  if (!showDetailed) {
+    return (
+      <Alert className={className}>
+        <Globe className="h-4 w-4" />
+        <AlertTitle>Network Connection Issue</AlertTitle>
+        <AlertDescription>
+          File upload is using local storage as fallback. Files are safely stored and will sync when cloud storage is available.
+        </AlertDescription>
+      </Alert>
+    );
+  }
 
   return (
-    <Card className="w-full">
+    <Card className={className}>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <AlertTriangle className="w-5 h-5 text-orange-500" />
-          CORS Configuration Fix Required
+        <CardTitle className="flex items-center space-x-2">
+          <AlertTriangle className="h-5 w-5 text-yellow-500" />
+          <span>Cloud Storage Connection Guide</span>
         </CardTitle>
+        <p className="text-sm text-muted-foreground">
+          Having trouble uploading to cloud storage? Here's how to fix common connection issues.
+        </p>
       </CardHeader>
-      <CardContent>
-        <Tabs defaultValue="problem" className="w-full">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="problem">Problem</TabsTrigger>
-            <TabsTrigger value="fix">Fix Steps</TabsTrigger>
-            <TabsTrigger value="test">Test Fix</TabsTrigger>
-          </TabsList>
+      <CardContent className="space-y-6">
+        {/* Current Status */}
+        <div className="space-y-2">
+          <h4 className="font-medium">Current Status</h4>
+          <div className="flex items-center space-x-2">
+            <CheckCircle className="h-4 w-4 text-green-500" />
+            <span className="text-sm">Local storage working</span>
+            <Badge variant="secondary">Files saved locally</Badge>
+          </div>
+          <div className="flex items-center space-x-2">
+            <AlertTriangle className="h-4 w-4 text-yellow-500" />
+            <span className="text-sm">Cloud storage connection issues</span>
+            <Badge variant="outline">Using fallback</Badge>
+          </div>
+        </div>
 
-          <TabsContent value="problem" className="space-y-4">
-            <Alert variant="destructive">
-              <AlertTriangle className="h-4 w-4" />
-              <AlertDescription>
-                <strong>CORS Error Detected:</strong> Your Supabase project is blocking requests from this domain.
-              </AlertDescription>
-            </Alert>
+        {/* What's happening */}
+        <div className="space-y-2">
+          <h4 className="font-medium">What's Happening</h4>
+          <div className="text-sm text-muted-foreground space-y-1">
+            <p>• Files are being saved locally in your browser's storage</p>
+            <p>• Cloud storage connection is temporarily unavailable</p>
+            <p>• This might be due to network settings or CORS configuration</p>
+            <p>• Your files are safe and will sync when connection is restored</p>
+          </div>
+        </div>
+
+        {/* For Developers */}
+        <div className="space-y-2">
+          <h4 className="font-medium flex items-center space-x-2">
+            <Settings className="h-4 w-4" />
+            <span>For Developers</span>
+          </h4>
+          <div className="text-sm space-y-2 bg-muted p-3 rounded-lg">
+            <p className="font-medium">Current domain: <code className="text-xs bg-background px-1 rounded">{currentDomain}</code></p>
+            <p className="font-medium">Current origin: <code className="text-xs bg-background px-1 rounded">{currentOrigin}</code></p>
             
-            <div className="space-y-3">
-              <div>
-                <strong>Current Domain:</strong>
-                <div className="flex items-center gap-2 mt-1">
-                  <code className="bg-gray-100 px-2 py-1 rounded text-sm">{currentDomain}</code>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => copyToClipboard(currentDomain, "domain")}
-                  >
-                    {copied === "domain" ? <CheckCircle className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
-                  </Button>
-                </div>
-              </div>
-              
-              <div>
-                <strong>Supabase Project:</strong>
-                <div className="flex items-center gap-2 mt-1">
-                  <code className="bg-gray-100 px-2 py-1 rounded text-sm">{supabaseUrl}</code>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => window.open(`${supabaseUrl.replace('https://', 'https://supabase.com/dashboard/project/')}/settings/api`, '_blank')}
-                  >
-                    <ExternalLink className="w-3 h-3" />
-                  </Button>
-                </div>
-              </div>
+            <div className="space-y-1">
+              <p className="font-medium text-foreground">To fix CORS issues:</p>
+              <ol className="list-decimal list-inside space-y-1 text-muted-foreground">
+                <li>Log into your Supabase dashboard</li>
+                <li>Go to Settings → API</li>
+                <li>Add <code className="text-xs bg-background px-1 rounded">{currentOrigin}</code> to allowed origins</li>
+                <li>Save the settings and wait a few minutes</li>
+                <li>Refresh this page and try uploading again</li>
+              </ol>
             </div>
 
-            <Alert>
-              <Globe className="h-4 w-4" />
-              <AlertDescription>
-                CORS (Cross-Origin Resource Sharing) prevents your browser from making requests to Supabase from unauthorized domains.
-              </AlertDescription>
-            </Alert>
-          </TabsContent>
-
-          <TabsContent value="fix" className="space-y-4">
-            <Alert>
-              <Settings className="h-4 w-4" />
-              <AlertDescription>
-                Follow these steps to fix CORS in your Supabase dashboard:
-              </AlertDescription>
-            </Alert>
-
-            <div className="space-y-4">
-              <div className="border-l-4 border-blue-500 pl-4">
-                <h4 className="font-semibold mb-2">Step 1: Open Supabase Dashboard</h4>
-                <Button
-                  onClick={() => window.open('https://supabase.com/dashboard', '_blank')}
-                  className="mb-2"
-                >
-                  <ExternalLink className="w-4 h-4 mr-2" />
-                  Open Supabase Dashboard
-                </Button>
-                <p className="text-sm text-muted-foreground">Click to open in a new tab</p>
-              </div>
-
-              <div className="border-l-4 border-blue-500 pl-4">
-                <h4 className="font-semibold mb-2">Step 2: Navigate to API Settings</h4>
-                <p className="text-sm text-muted-foreground mb-2">
-                  In your project dashboard: <strong>Settings → API</strong>
-                </p>
-                <Button
-                  onClick={() => window.open(`https://supabase.com/dashboard/project/tepmkljodsifaexmrinl/settings/api`, '_blank')}
-                  variant="outline"
-                  size="sm"
-                >
-                  <ExternalLink className="w-3 h-3 mr-2" />
-                  Direct Link to API Settings
-                </Button>
-              </div>
-
-              <div className="border-l-4 border-green-500 pl-4">
-                <h4 className="font-semibold mb-2">Step 3: Add CORS Origins</h4>
-                <p className="text-sm text-muted-foreground mb-3">
-                  Scroll down to <strong>"CORS Origins"</strong> section and add these domains:
-                </p>
-                
-                <div className="space-y-2">
-                  {corsOrigins.map((origin, index) => (
-                    <div key={index} className="flex items-center gap-2">
-                      <code className="bg-gray-100 px-2 py-1 rounded text-sm flex-1">{origin}</code>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => copyToClipboard(origin, `origin-${index}`)}
-                      >
-                        {copied === `origin-${index}` ? <CheckCircle className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
-                      </Button>
-                    </div>
-                  ))}
-                </div>
-
-                <Alert className="mt-3">
-                  <AlertDescription>
-                    <strong>Pro Tip:</strong> Add each origin on a separate line in the CORS Origins field.
-                  </AlertDescription>
-                </Alert>
-              </div>
-
-              <div className="border-l-4 border-purple-500 pl-4">
-                <h4 className="font-semibold mb-2">Step 4: Save Changes</h4>
-                <p className="text-sm text-muted-foreground">
-                  Click <strong>"Save"</strong> and wait 2-3 minutes for changes to take effect.
-                </p>
-              </div>
+            <div className="space-y-1">
+              <p className="font-medium text-foreground">Alternative fixes:</p>
+              <ul className="list-disc list-inside space-y-1 text-muted-foreground">
+                <li>Check your network connection and firewall settings</li>
+                <li>Try uploading from a different network or device</li>
+                <li>Contact your system administrator about proxy settings</li>
+              </ul>
             </div>
-          </TabsContent>
+          </div>
+        </div>
 
-          <TabsContent value="test" className="space-y-4">
-            <Alert>
-              <Shield className="h-4 w-4" />
-              <AlertDescription>
-                After updating CORS settings, test the connection here:
-              </AlertDescription>
-            </Alert>
+        {/* User guidance */}
+        <div className="space-y-2">
+          <h4 className="font-medium">What You Can Do</h4>
+          <div className="text-sm text-muted-foreground space-y-1">
+            <p>✅ <strong>Continue working normally</strong> - Files are safely stored locally</p>
+            <p>✅ <strong>Your data is safe</strong> - Local storage prevents data loss</p>
+            <p>✅ <strong>Files will sync</strong> - When cloud storage is available again</p>
+            <p>⏳ <strong>Try again later</strong> - Connection issues are often temporary</p>
+          </div>
+        </div>
 
-            <div className="space-y-3">
-              <Button 
-                onClick={() => window.location.reload()} 
-                className="w-full"
-              >
-                🔄 Refresh Page to Test Connection
-              </Button>
-              
-              <div className="text-sm text-muted-foreground space-y-1">
-                <div>✅ If CORS is fixed: Bucket creation and auth will work</div>
-                <div>❌ If still failing: Double-check CORS origins and wait a few more minutes</div>
-              </div>
-            </div>
-
-            <Alert>
-              <AlertDescription>
-                <strong>Alternative Test:</strong> Try the standalone test file:
-                <code className="ml-1">test-create-buckets.html</code>
-              </AlertDescription>
-            </Alert>
-          </TabsContent>
-        </Tabs>
+        {/* External resources */}
+        <div className="space-y-2">
+          <h4 className="font-medium">Learn More</h4>
+          <div className="flex space-x-2">
+            <a
+              href="https://supabase.com/docs/guides/api/cors"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm text-primary hover:underline flex items-center space-x-1"
+            >
+              <ExternalLink className="h-3 w-3" />
+              <span>Supabase CORS Guide</span>
+            </a>
+          </div>
+        </div>
       </CardContent>
     </Card>
   );
