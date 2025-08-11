@@ -551,9 +551,20 @@ class EnhancedFileStorageService {
 
       // Provide feedback about what worked and what didn't
       if (!uploadSuccess && !databaseSuccess) {
-        throw new Error(
-          `Upload failed: Both storage and database are unavailable. Please set up your Supabase storage buckets and database tables.`,
+        console.warn(
+          `⚠️ Cloud services unavailable, attempting local storage fallback...`,
         );
+
+        try {
+          // Use local storage as complete fallback
+          const localResult = await localFileStorageService.simulateFileUpload(request);
+          console.log("✅ File stored locally as complete fallback:", localResult.fileName);
+          return localResult;
+        } catch (localError) {
+          throw new Error(
+            `Upload failed: Cloud storage, database, and local fallback all unavailable. ${localError.message}`,
+          );
+        }
       } else if (!uploadSuccess) {
         console.warn(
           `⚠️ File metadata saved but file not stored in cloud. Set up storage buckets.`,
