@@ -231,6 +231,25 @@ export default function DocumentTest() {
         <>
           {error.includes('not found') || error.includes('create the storage buckets') ? (
             <BucketSetupGuide />
+          ) : error.includes('document_metadata') || error.includes('schema cache') ? (
+            <Alert variant="destructive">
+              <AlertTriangle className="h-4 w-4" />
+              <AlertDescription>
+                <div className="space-y-3">
+                  <p><strong>Database Setup Required:</strong> The document metadata tables don't exist yet.</p>
+                  <p className="text-sm">To fix this:</p>
+                  <ol className="text-sm list-decimal list-inside space-y-1">
+                    <li>Open your <a href="https://supabase.com/dashboard" target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">Supabase Dashboard</a></li>
+                    <li>Go to SQL Editor</li>
+                    <li>Copy and run the SQL script from <code>SETUP_DATABASE_TABLES.sql</code></li>
+                    <li>Refresh this page</li>
+                  </ol>
+                  <p className="text-xs text-muted-foreground mt-2">
+                    This creates the <code>document_metadata</code> and <code>document_versions</code> tables with proper security policies.
+                  </p>
+                </div>
+              </AlertDescription>
+            </Alert>
           ) : (
             <Alert variant="destructive">
               <AlertTriangle className="h-4 w-4" />
