@@ -119,7 +119,7 @@ export class BucketInitService {
           }
 
           console.log(`🆕 Creating bucket '${bucket.id}'...`);
-          const { data: createData, error: createError } = await supabase.storage.createBucket(
+          const { data: createData, error: createError } = await serviceClient.storage.createBucket(
             bucket.id,
             {
               public: bucket.public,
