@@ -48,6 +48,7 @@ import SupabaseTest from "@/components/SupabaseTest";
 import SupabaseConnectionTest from "@/components/SupabaseConnectionTest";
 import NetworkTest from "@/components/NetworkTest";
 import UserPreferencesManager from "@/components/UserPreferencesManager";
+import BucketInitializer from "@/components/BucketInitializer";
 import { supabase, autoConfigureSupabase } from "@/lib/supabase";
 import { useAuth } from "@/hooks/useAuth";
 import RoleBasedNavigation, {
