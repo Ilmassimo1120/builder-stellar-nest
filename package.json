@@ -15,10 +15,13 @@
     "build": "npm run build:client && npm run build:server",
     "build:client": "vite build",
     "build:server": "vite build --config vite.config.server.ts",
+    "build:optimized": "node scripts/optimize-build.js",
     "start": "node dist/server/node-build.mjs",
     "test": "vitest --run",
     "format.fix": "prettier --write .",
     "typecheck": "tsc",
+    "analyze": "npm run build && npx vite-bundle-analyzer dist/spa",
+    "preview": "npm run build && npm start",
     "supabase:setup": "node scripts/setup-supabase.js",
     "supabase:types": "supabase gen types typescript --local > client/lib/database.types.ts"
   },
