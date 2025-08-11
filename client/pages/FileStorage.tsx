@@ -28,12 +28,10 @@ interface StorageStats {
 }
 
 export default function FileStorage() {
-  const { user, userProfile } = useAuth();
+  const { user, isAdmin, isGlobalAdmin } = useAuth();
   const [storageStats, setStorageStats] = useState<StorageStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
-  const isAdmin = userProfile?.role === 'admin' || userProfile?.role === 'global_admin';
 
   useEffect(() => {
     loadStorageStats();
