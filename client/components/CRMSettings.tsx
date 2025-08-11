@@ -134,7 +134,10 @@ export function CRMSettings() {
       setError(null);
       setSuccess(null);
 
-      const success = await customerService.setConfig(data);
+      const success = await customerService.setConfig({
+        provider: data.provider || 'native',
+        ...data
+      });
 
       if (success) {
         setConfig(data);
