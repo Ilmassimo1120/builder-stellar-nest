@@ -132,7 +132,7 @@ class AdvancedPDFGenerator {
     pageHeight: number,
   ): void {
     pdf.saveGraphicsState();
-    pdf.setGState(new pdf.GState({ opacity: 0.1 }));
+    pdf.setGState({ opacity: 0.1 });
     pdf.setTextColor(128, 128, 128);
     pdf.setFontSize(72);
 
