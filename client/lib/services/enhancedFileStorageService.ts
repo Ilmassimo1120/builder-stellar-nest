@@ -118,6 +118,28 @@ class EnhancedFileStorageService {
   };
 
   private readonly allowedMimeTypes: Record<BucketName, string[]> = {
+    "product-images": [
+      "image/jpeg",
+      "image/png",
+      "image/gif",
+      "image/webp",
+    ],
+    "documents": [
+      "application/pdf",
+      "text/plain",
+      "text/csv",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "application/msword",
+      "application/vnd.ms-excel",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    ],
+    "quote-attachments": [
+      "application/pdf",
+      "image/jpeg",
+      "image/png",
+      "text/plain",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    ],
     "charge-source-user-files": [
       "image/jpeg",
       "image/png",
