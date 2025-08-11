@@ -33,6 +33,7 @@ import EnhancedFileManager from "@/components/EnhancedFileManager";
 import FileStorageDebug from "@/components/FileStorageDebug";
 import AuthTest from "@/components/AuthTest";
 import StorageStatusIndicator from "@/components/StorageStatusIndicator";
+import ChargeSourceStorageSetup from "@/components/ChargeSourceStorageSetup";
 import { safeFileStorageService } from "@/lib/services/safeFileStorageService";
 import { BucketName } from "@/lib/services/enhancedFileStorageService";
 import { useAuth } from "@/hooks/useAuth";
@@ -250,6 +251,9 @@ export default function EnhancedFileStorage() {
 
         {/* Storage Status */}
         <StorageStatusIndicator showDetails={true} />
+
+        {/* ChargeSource Storage Setup */}
+        <ChargeSourceStorageSetup />
 
         {/* Debug Section - Admin Only */}
         {isAdmin && (
