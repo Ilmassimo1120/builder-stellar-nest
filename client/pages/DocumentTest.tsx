@@ -25,6 +25,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { documentMetadataService, DocumentMetadata } from '@/lib/services/documentMetadataService';
 import { simpleDocumentService, FileInfo } from '@/lib/services/simpleDocumentService';
+import BucketSetupGuide from '@/components/BucketSetupGuide';
 
 export default function DocumentTest() {
   const { user } = useAuth();
@@ -227,10 +228,16 @@ export default function DocumentTest() {
       </div>
 
       {error && (
-        <Alert variant="destructive">
-          <AlertTriangle className="h-4 w-4" />
-          <AlertDescription>{error}</AlertDescription>
-        </Alert>
+        <>
+          {error.includes('not found') || error.includes('create the storage buckets') ? (
+            <BucketSetupGuide />
+          ) : (
+            <Alert variant="destructive">
+              <AlertTriangle className="h-4 w-4" />
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
+        </>
       )}
 
       {success && (
