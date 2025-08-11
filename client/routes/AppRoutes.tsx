@@ -26,6 +26,7 @@ const CloudStatus = lazy(() => import("../pages/CloudStatus"));
 const NotFound = lazy(() => import("../pages/NotFound"));
 const Placeholder = lazy(() => import("../pages/Placeholder"));
 const AuthTest = lazy(() => import("../pages/AuthTest"));
+const DocumentTest = lazy(() => import("../pages/DocumentTest"));
 
 // Loading component for Suspense fallback
 const PageLoading = () => (
@@ -158,6 +159,22 @@ const AppRoutes = () => (
       element={
         <ProtectedLazyRoute>
           <EnhancedFileStorage />
+        </ProtectedLazyRoute>
+      }
+    />
+    <Route
+      path="/enhanced-file-storage"
+      element={
+        <ProtectedLazyRoute>
+          <EnhancedFileStorage />
+        </ProtectedLazyRoute>
+      }
+    />
+    <Route
+      path="/document-test"
+      element={
+        <ProtectedLazyRoute>
+          <DocumentTest />
         </ProtectedLazyRoute>
       }
     />
