@@ -56,6 +56,27 @@ export class BucketInitService {
   ];
 
   /**
+   * Get service role client for admin operations
+   */
+  private getServiceRoleClient() {
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+    const serviceRoleKey = import.meta.env.SUPABASE_SERVICE_ROLE_KEY ||
+                          (import.meta as any).env?.SUPABASE_SERVICE_ROLE_KEY ||
+                          (window as any).SUPABASE_SERVICE_ROLE_KEY;
+
+    if (!serviceRoleKey) {
+      throw new Error("Service role key not found. Please set SUPABASE_SERVICE_ROLE_KEY environment variable.");
+    }
+
+    return createClient(supabaseUrl, serviceRoleKey, {
+      auth: {
+        autoRefreshToken: false,
+        persistSession: false
+      }
+    });
+  }
+
+  /**
    * Initialize storage buckets - creates them if they don't exist
    */
   async initializeBuckets(): Promise<{
