@@ -4,7 +4,10 @@ import { localFileStorageService } from "./localFileStorageService";
 export type BucketName =
   | "product-images"
   | "documents"
-  | "quote-attachments";
+  | "quote-attachments"
+  | "charge-source-user-files"
+  | "charge-source-documents"
+  | "charge-source-videos";
 export type AssetStatus =
   | "draft"
   | "pending_approval"
