@@ -13,7 +13,7 @@ import {
   FileText, 
   DollarSign, 
   BarChart3,
-  Projects,
+  FolderOpen,
   Calculator
 } from "lucide-react";
 
@@ -21,7 +21,7 @@ export default function DashboardWorking() {
   const { user, logout } = useAuth();
 
   const stats = [
-    { title: "Active Projects", value: "12", icon: Projects, trend: "+2" },
+    { title: "Active Projects", value: "12", icon: FolderOpen, trend: "+2" },
     { title: "Pending Quotes", value: "8", icon: Calculator, trend: "+3" },
     { title: "This Month Revenue", value: "$45,200", icon: DollarSign, trend: "+12%" },
     { title: "Completed Projects", value: "34", icon: Package, trend: "+5" },
@@ -108,7 +108,7 @@ export default function DashboardWorking() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Projects className="h-5 w-5" />
+                <FolderOpen className="h-5 w-5" />
                 Recent Projects
               </CardTitle>
               <CardDescription>Your latest project activity</CardDescription>
