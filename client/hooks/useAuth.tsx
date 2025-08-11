@@ -169,7 +169,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       await new Promise((resolve) => setTimeout(resolve, 1500));
 
       const newUser: User = {
-        id: `user-${Date.now()}`,
+        id: generateUUID(),
         firstName: userData.firstName,
         lastName: userData.lastName,
         name: `${userData.firstName} ${userData.lastName}`,
