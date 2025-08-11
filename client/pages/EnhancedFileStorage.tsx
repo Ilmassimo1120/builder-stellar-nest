@@ -34,6 +34,7 @@ import FileStorageDebug from "@/components/FileStorageDebug";
 import AuthTest from "@/components/AuthTest";
 import StorageStatusIndicator from "@/components/StorageStatusIndicator";
 import ChargeSourceStorageSetup from "@/components/ChargeSourceStorageSetup";
+import BucketSetupGuide from "@/components/BucketSetupGuide";
 import { safeFileStorageService } from "@/lib/services/safeFileStorageService";
 import { BucketName } from "@/lib/services/enhancedFileStorageService";
 import { useAuth } from "@/hooks/useAuth";
@@ -250,9 +251,15 @@ export default function EnhancedFileStorage() {
         </div>
 
         {error && (
-          <Alert variant="destructive">
-            <AlertDescription>{error}</AlertDescription>
-          </Alert>
+          <>
+            {error.includes('not found') || error.includes('create the storage buckets') ? (
+              <BucketSetupGuide />
+            ) : (
+              <Alert variant="destructive">
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
+          </>
         )}
 
         {/* Storage Status */}
