@@ -68,27 +68,30 @@ export default function ChargeSourceStorageSetup() {
   const createBuckets = async () => {
     setLoading(true);
     setError(null);
-    
-    try {
-      const missingBuckets = buckets.filter(bucket => !bucket.exists);
-      
-      for (const bucket of missingBuckets) {
-        console.log(`Creating bucket: ${bucket.name}`);
-        
-        const { error } = await supabase.storage.createBucket(bucket.name, {
-          public: false,
-          allowedMimeTypes: getBucketMimeTypes(bucket.name),
-          fileSizeLimit: getBucketSizeLimit(bucket.name)
-        });
 
-        if (error && !error.message.includes('already exists')) {
-          throw new Error(`Failed to create ${bucket.name}: ${error.message}`);
-        }
+    try {
+      // Use server endpoint to create buckets with service role privileges
+      const response = await fetch('/api/create-storage-buckets', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to create buckets');
       }
-      
+
+      const result = await response.json();
+
+      if (!result.success) {
+        throw new Error(result.message || 'Failed to create some buckets');
+      }
+
       // Recheck buckets after creation
       await checkBuckets();
-      
+
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to create buckets');
     } finally {
