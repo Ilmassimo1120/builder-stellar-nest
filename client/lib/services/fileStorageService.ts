@@ -1,4 +1,5 @@
 import { supabase } from '../supabase';
+import { localFileStorageService } from './localFileStorageService';
 
 export interface FileUpload {
   file: File;
@@ -192,10 +193,32 @@ class FileStorageService {
           uploadData = { path: uploadResult.path };
           uploadError = null;
         } catch (edgeFunctionError) {
-          // If both methods fail, create a simulated upload for local auth
-          console.warn('Both storage methods failed, creating simulated upload for local auth user');
-          uploadData = { path: filePath };
-          uploadError = null;
+          // If both methods fail, use local storage fallback
+          console.warn('Both cloud storage methods failed, using local storage fallback');
+
+          try {
+            // Convert to enhanced upload format for local storage
+            const localUpload = {
+              file: upload.file,
+              bucket: 'documents' as any,
+              metadata: {
+                title: upload.file.name.replace(/\.[^/.]+$/, ''),
+                description: upload.metadata?.description,
+                tags: [],
+                category: upload.category,
+                subcategory: undefined,
+                visibility: 'private' as any
+              }
+            };
+
+            const localResult = await localFileStorageService.simulateBasicFileUpload(upload, onProgress);
+            uploadData = { path: localResult.path };
+            uploadError = null;
+            console.log('✅ File stored locally as fallback:', localResult.name);
+          } catch (localError) {
+            console.error('Local storage fallback failed:', localError);
+            throw new Error(`All storage methods failed: ${edgeFunctionError.message}`);
+          }
         }
       }
 
