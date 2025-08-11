@@ -288,12 +288,86 @@ export default function AdminProductManager({
   };
 
   const handleImageUpload = () => {
-    // Placeholder for image upload functionality
-    toast({
-      title: "Image Upload",
-      description:
-        "Image upload functionality will be implemented with cloud storage integration.",
-    });
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+    if (!allowedTypes.includes(file.type)) {
+      toast({
+        title: "Invalid File Type",
+        description: "Please upload a JPEG, PNG, GIF, or WebP image.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Validate file size (10MB limit)
+    const maxSize = 10 * 1024 * 1024;
+    if (file.size > maxSize) {
+      toast({
+        title: "File Too Large",
+        description: "Please upload an image smaller than 10MB.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      setImageUploading(true);
+
+      const uploadResult = await enhancedFileStorageService.uploadFile(
+        file,
+        "product-images",
+        {
+          title: `Product image for ${formData.name || 'new product'}`,
+          description: `Product catalog image`,
+          tags: ["product", "catalog", formData.category].filter(Boolean),
+          category: "product-image",
+          subcategory: formData.category,
+          visibility: "public",
+        }
+      );
+
+      if (uploadResult.success && uploadResult.data) {
+        // Add the uploaded image URL to the form data
+        setFormData(prev => ({
+          ...prev,
+          images: [...prev.images, uploadResult.data.publicUrl || uploadResult.data.filePath]
+        }));
+
+        toast({
+          title: "Image Uploaded",
+          description: "Product image has been uploaded successfully.",
+        });
+      } else {
+        throw new Error(uploadResult.error || "Upload failed");
+      }
+    } catch (error) {
+      console.error("Image upload error:", error);
+      toast({
+        title: "Upload Failed",
+        description: error instanceof Error ? error.message : "Failed to upload image. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setImageUploading(false);
+      // Clear the file input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
+  };
+
+  const removeImage = (imageIndex: number) => {
+    setFormData(prev => ({
+      ...prev,
+      images: prev.images.filter((_, index) => index !== imageIndex)
+    }));
   };
 
   if (!isOpen) return null;
