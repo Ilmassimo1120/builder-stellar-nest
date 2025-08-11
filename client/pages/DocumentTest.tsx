@@ -29,6 +29,7 @@ import { simpleDocumentService, FileInfo } from '@/lib/services/simpleDocumentSe
 import BucketSetupGuide from '@/components/BucketSetupGuide';
 import StorageSetupWizard from '@/components/StorageSetupWizard';
 import ClearStorageButton from '@/components/ClearStorageButton';
+import SupabaseDebugger from '@/components/SupabaseDebugger';
 
 export default function DocumentTest() {
   const { user } = useAuth();
@@ -290,6 +291,9 @@ export default function DocumentTest() {
 
       {/* Storage Setup Wizard - Always show for setup assistance */}
       <StorageSetupWizard />
+
+      {/* Supabase Connection Debugger */}
+      <SupabaseDebugger />
 
       {error && (
         <>
