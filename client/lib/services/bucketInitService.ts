@@ -1,4 +1,5 @@
 import { supabase } from "../supabase";
+import { createClient } from "@supabase/supabase-js";
 import { BucketName } from "./enhancedFileStorageService";
 
 export class BucketInitService {
