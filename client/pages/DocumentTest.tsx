@@ -23,6 +23,7 @@ import {
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { documentMetadataService, DocumentMetadata } from '@/lib/services/documentMetadataService';
+import { simpleDocumentService, FileInfo } from '@/lib/services/simpleDocumentService';
 
 export default function DocumentTest() {
   const { user } = useAuth();
@@ -33,6 +34,7 @@ export default function DocumentTest() {
   const [category, setCategory] = useState<string>('uncategorized');
   const [uploading, setUploading] = useState(false);
   const [documents, setDocuments] = useState<DocumentMetadata[]>([]);
+  const [simpleFiles, setSimpleFiles] = useState<FileInfo[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -56,8 +58,31 @@ export default function DocumentTest() {
   useEffect(() => {
     if (user) {
       loadDocuments();
+      loadSimpleDocuments();
     }
   }, [user, bucket]);
+
+  const loadSimpleDocuments = async () => {
+    if (!user) return;
+
+    setLoading(true);
+    try {
+      const { files, error } = await simpleDocumentService.listDocuments({
+        bucket: bucket,
+        organizationId: organizationId || undefined
+      });
+
+      if (error) {
+        setError(`Failed to load files: ${error}`);
+      } else {
+        setSimpleFiles(files);
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load files');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const loadDocuments = async () => {
     if (!user) return;
@@ -89,67 +114,46 @@ export default function DocumentTest() {
     setSuccess(null);
 
     try {
-      // Create form data for Edge Function
-      const formData = new FormData();
-      formData.append('file', selectedFile);
-      formData.append('bucket', bucket);
-      if (organizationId) {
-        formData.append('organizationId', organizationId);
-      }
-
-      // Get auth token
-      const { data: { session } } = await import('@/lib/supabase').then(m => m.supabase.auth.getSession());
-      
-      if (!session?.access_token) {
-        throw new Error('Not authenticated');
-      }
-
-      // Upload file via Edge Function
-      const uploadResponse = await fetch('/api/functions/secure-file-upload', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${session.access_token}`,
-        },
-        body: formData
+      // Use the simple document service (based on user's sample code)
+      const uploadResult = await simpleDocumentService.uploadDocument(selectedFile, {
+        bucket: bucket as any,
+        organizationId: organizationId || undefined,
+        upsert: true
       });
 
-      if (!uploadResponse.ok) {
-        const errorData = await uploadResponse.text();
-        throw new Error(`Upload failed: ${errorData}`);
+      if (!uploadResult.success) {
+        throw new Error(uploadResult.error || 'Upload failed');
       }
 
-      const uploadResult = await uploadResponse.json();
+      // Try to create document metadata (optional - won't block upload)
+      try {
+        const metadata: Omit<DocumentMetadata, 'id' | 'created_at' | 'updated_at'> = {
+          user_id: user.id,
+          organization_id: organizationId || null,
+          bucket_name: bucket,
+          file_path: uploadResult.data!.path,
+          original_filename: selectedFile.name,
+          file_size: selectedFile.size,
+          mime_type: selectedFile.type,
+          category: category,
+          description: description || undefined,
+          status: 'draft'
+        };
 
-      // Create document metadata
-      const metadata: Omit<DocumentMetadata, 'id' | 'created_at' | 'updated_at'> = {
-        user_id: user.id,
-        organization_id: organizationId || null,
-        bucket_name: bucket,
-        file_path: uploadResult.path,
-        original_filename: selectedFile.name,
-        file_size: selectedFile.size,
-        mime_type: selectedFile.type,
-        category: category,
-        description: description || undefined,
-        status: 'draft'
-      };
-
-      const { error: metadataError } = await documentMetadataService.createDocumentMetadata(metadata);
-
-      if (metadataError) {
+        await documentMetadataService.createDocumentMetadata(metadata);
+      } catch (metadataError) {
         console.warn('File uploaded but metadata creation failed:', metadataError);
-        setSuccess(`File uploaded successfully to ${uploadResult.path}, but metadata creation failed. File is still accessible.`);
-      } else {
-        setSuccess(`Document uploaded successfully! File: ${selectedFile.name}`);
       }
+
+      setSuccess(`Document uploaded successfully! File: ${selectedFile.name} to ${uploadResult.data!.path}`);
 
       // Reset form
       setSelectedFile(null);
       setDescription('');
       setCategory('uncategorized');
-      
+
       // Reload documents
-      await loadDocuments();
+      await loadSimpleDocuments();
 
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Upload failed');
@@ -357,9 +361,12 @@ export default function DocumentTest() {
                 <div className="flex items-center space-x-2">
                   <FileText className="h-5 w-5" />
                   <span>My Documents</span>
-                  <Badge variant="outline">{documents.length}</Badge>
+                  <Badge variant="outline">{simpleFiles.length} files</Badge>
+                  {documents.length > 0 && (
+                    <Badge variant="secondary">{documents.length} with metadata</Badge>
+                  )}
                 </div>
-                <Button onClick={loadDocuments} variant="outline" size="sm" disabled={loading}>
+                <Button onClick={() => { loadDocuments(); loadSimpleDocuments(); }} variant="outline" size="sm" disabled={loading}>
                   {loading ? 'Loading...' : 'Refresh'}
                 </Button>
               </CardTitle>
@@ -368,7 +375,7 @@ export default function DocumentTest() {
               </p>
             </CardHeader>
             <CardContent>
-              {documents.length === 0 ? (
+              {simpleFiles.length === 0 ? (
                 <div className="text-center py-8 text-muted-foreground">
                   <FileText className="h-12 w-12 mx-auto mb-4 opacity-50" />
                   <p>No documents found in this bucket</p>
@@ -376,54 +383,97 @@ export default function DocumentTest() {
                 </div>
               ) : (
                 <div className="space-y-3">
-                  {documents.map((doc) => (
-                    <div key={doc.id} className="border rounded-lg p-4">
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1">
-                          <div className="flex items-center space-x-2 mb-2">
-                            <FileText className="h-4 w-4" />
-                            <span className="font-medium">{doc.original_filename}</span>
-                            <Badge variant="outline">{doc.category}</Badge>
-                            <Badge variant={doc.status === 'approved' ? 'default' : 'secondary'}>
-                              {doc.status}
-                            </Badge>
-                            {doc.organization_id ? (
-                              <Badge variant="outline">
-                                <Building2 className="h-3 w-3 mr-1" />
-                                Org
-                              </Badge>
-                            ) : (
-                              <Badge variant="outline">
-                                <Users className="h-3 w-3 mr-1" />
-                                User
-                              </Badge>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Showing files from {bucketOptions.find(b => b.value === bucket)?.label} bucket
+                  </p>
+
+                  {simpleFiles.map((file) => {
+                    // Try to find corresponding metadata
+                    const metadata = documents.find(doc =>
+                      doc.original_filename === file.name || doc.file_path.endsWith(file.name)
+                    );
+
+                    return (
+                      <div key={file.id} className="border rounded-lg p-4">
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <div className="flex items-center space-x-2 mb-2">
+                              <FileText className="h-4 w-4" />
+                              <span className="font-medium">{file.name}</span>
+
+                              {metadata ? (
+                                <>
+                                  <Badge variant="outline">{metadata.category}</Badge>
+                                  <Badge variant={metadata.status === 'approved' ? 'default' : 'secondary'}>
+                                    {metadata.status}
+                                  </Badge>
+                                  <Badge variant="default">
+                                    <Database className="h-3 w-3 mr-1" />
+                                    Metadata
+                                  </Badge>
+                                </>
+                              ) : (
+                                <Badge variant="outline">No metadata</Badge>
+                              )}
+
+                              {organizationId ? (
+                                <Badge variant="outline">
+                                  <Building2 className="h-3 w-3 mr-1" />
+                                  Org
+                                </Badge>
+                              ) : (
+                                <Badge variant="outline">
+                                  <Users className="h-3 w-3 mr-1" />
+                                  User
+                                </Badge>
+                              )}
+                            </div>
+
+                            {metadata?.description && (
+                              <p className="text-sm text-muted-foreground mb-2">{metadata.description}</p>
                             )}
+
+                            <div className="flex items-center space-x-4 text-xs text-muted-foreground">
+                              <span>Updated: {formatDate(file.updated_at)}</span>
+                              <span>Bucket: {file.bucket}</span>
+                              <span>Path: {file.fullPath}</span>
+                              {file.signedUrl && (
+                                <a
+                                  href={file.signedUrl}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="text-blue-500 hover:underline"
+                                >
+                                  Download
+                                </a>
+                              )}
+                            </div>
                           </div>
-                          
-                          {doc.description && (
-                            <p className="text-sm text-muted-foreground mb-2">{doc.description}</p>
-                          )}
-                          
-                          <div className="flex items-center space-x-4 text-xs text-muted-foreground">
-                            <span>Size: {formatFileSize(doc.file_size)}</span>
-                            <span>Type: {doc.mime_type}</span>
-                            <span>Uploaded: {formatDate(doc.created_at!)}</span>
-                            <span>Path: {doc.file_path}</span>
+
+                          <div className="flex items-center space-x-2 ml-4">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={async () => {
+                                const result = await simpleDocumentService.deleteDocument(file.name, {
+                                  bucket: bucket,
+                                  organizationId: organizationId || undefined
+                                });
+                                if (result.success) {
+                                  setSuccess('File deleted successfully');
+                                  await loadSimpleDocuments();
+                                } else {
+                                  setError(result.error || 'Failed to delete file');
+                                }
+                              }}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
                           </div>
-                        </div>
-                        
-                        <div className="flex items-center space-x-2 ml-4">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleDeleteDocument(doc.id!)}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               )}
             </CardContent>
