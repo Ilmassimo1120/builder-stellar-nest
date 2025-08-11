@@ -26,21 +26,24 @@ Deno.serve(async (req: Request) => {
       return new Response('Authentication failed', { status: 403 });
     }
 
-    // Get filename from URL path
+    // Get parameters from URL
     const url = new URL(req.url);
     const filename = url.searchParams.get('filename');
-    
+    const bucket = url.searchParams.get('bucket') || 'charge-source-documents';
+    const organizationId = url.searchParams.get('organizationId');
+
     if (!filename) {
       return new Response('Filename parameter required', { status: 400 });
     }
 
-    // Verify the file belongs to the user (security check)
-    const filePath = `${user.id}/${filename}`;
-    
-    // Check if file exists and belongs to user
+    // Determine folder path: organization files vs user files
+    const folderPath = organizationId || user.id;
+    const filePath = `${folderPath}/${filename}`;
+
+    // Check if file exists and belongs to user/organization
     const { data: fileInfo, error: fileError } = await supabase.storage
-      .from('chargesource')
-      .list(user.id, {
+      .from(bucket)
+      .list(folderPath, {
         search: filename
       });
 
@@ -59,7 +62,7 @@ Deno.serve(async (req: Request) => {
 
     // Delete the file
     const { error: deleteError } = await supabase.storage
-      .from('chargesource')
+      .from(bucket)
       .remove([filePath]);
 
     if (deleteError) {
@@ -70,10 +73,13 @@ Deno.serve(async (req: Request) => {
       });
     }
 
-    return new Response(JSON.stringify({ 
+    return new Response(JSON.stringify({
       message: 'File deleted successfully',
-      filename: filename 
-    }), { 
+      filename: filename,
+      bucket: bucket,
+      organizationId: organizationId || null,
+      userId: user.id
+    }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' }
     });
