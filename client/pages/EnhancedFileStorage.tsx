@@ -248,6 +248,9 @@ export default function EnhancedFileStorage() {
           </Alert>
         )}
 
+        {/* Storage Status */}
+        <StorageStatusIndicator showDetails={true} />
+
         {/* Debug Section - Admin Only */}
         {isAdmin && (
           <Card>
