@@ -1,32 +1,32 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Badge } from '@/components/ui/badge';
-import { 
-  Upload, 
-  FileText, 
-  CheckCircle, 
-  AlertTriangle, 
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import {
+  Upload,
+  FileText,
+  CheckCircle,
+  AlertTriangle,
   Loader2,
   Users,
-  Download
-} from 'lucide-react';
-import { 
-  directSupabase, 
-  testBucketAccess, 
-  testLogin, 
-  testLogout, 
+  Download,
+} from "lucide-react";
+import {
+  directSupabase,
+  testBucketAccess,
+  testLogin,
+  testLogout,
   getTestUser,
   testFileUpload,
-  testFileList
-} from '@/lib/directSupabase';
+  testFileList,
+} from "@/lib/directSupabase";
 
 export default function DirectStorageTest() {
   const [testUser, setTestUser] = useState<any>(null);
-  const [email, setEmail] = useState('test@chargesource.com');
+  const [email, setEmail] = useState("test@chargesource.com");
   const [bucketStatus, setBucketStatus] = useState<any>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploadResult, setUploadResult] = useState<any>(null);
@@ -38,7 +38,7 @@ export default function DirectStorageTest() {
     // Check for existing test user
     const user = getTestUser();
     setTestUser(user);
-    
+
     // Test bucket access immediately
     checkBuckets();
   }, []);
@@ -48,14 +48,14 @@ export default function DirectStorageTest() {
     try {
       const result = await testBucketAccess();
       setBucketStatus(result);
-      
+
       if (!result.success) {
         setError(`Bucket access failed: ${result.error}`);
       } else {
         setError(null);
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unknown error');
+      setError(err instanceof Error ? err.message : "Unknown error");
     } finally {
       setLoading(false);
     }
@@ -66,11 +66,11 @@ export default function DirectStorageTest() {
       const user = await testLogin(email);
       setTestUser(user);
       setError(null);
-      
+
       // Load files after login
       await loadFiles();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Login failed');
+      setError(err instanceof Error ? err.message : "Login failed");
     }
   };
 
@@ -86,10 +86,13 @@ export default function DirectStorageTest() {
 
     setLoading(true);
     setError(null);
-    
+
     try {
-      const result = await testFileUpload(selectedFile, 'charge-source-documents');
-      
+      const result = await testFileUpload(
+        selectedFile,
+        "charge-source-documents",
+      );
+
       if (result.success) {
         setUploadResult(result);
         setSelectedFile(null);
@@ -98,7 +101,7 @@ export default function DirectStorageTest() {
         setError(`Upload failed: ${result.error}`);
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Upload failed');
+      setError(err instanceof Error ? err.message : "Upload failed");
     } finally {
       setLoading(false);
     }
@@ -108,15 +111,15 @@ export default function DirectStorageTest() {
     if (!testUser) return;
 
     try {
-      const result = await testFileList('charge-source-documents');
-      
+      const result = await testFileList("charge-source-documents");
+
       if (result.success) {
         setFiles(result.files);
       } else {
         setError(`Failed to load files: ${result.error}`);
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load files');
+      setError(err instanceof Error ? err.message : "Failed to load files");
     }
   };
 
@@ -136,17 +139,24 @@ export default function DirectStorageTest() {
         <div>
           <h4 className="font-medium mb-3">Storage Bucket Status</h4>
           <div className="flex items-center space-x-2 mb-3">
-            <Button variant="outline" size="sm" onClick={checkBuckets} disabled={loading}>
-              {loading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={checkBuckets}
+              disabled={loading}
+            >
+              {loading ? (
+                <Loader2 className="h-4 w-4 animate-spin mr-2" />
+              ) : null}
               Check Buckets
             </Button>
             {bucketStatus && (
               <Badge variant={bucketStatus.success ? "default" : "destructive"}>
-                {bucketStatus.success ? 'Connected' : 'Failed'}
+                {bucketStatus.success ? "Connected" : "Failed"}
               </Badge>
             )}
           </div>
-          
+
           {bucketStatus && (
             <div className="space-y-2">
               {bucketStatus.success ? (
@@ -155,15 +165,17 @@ export default function DirectStorageTest() {
                     ✅ Found {bucketStatus.buckets.length} total buckets
                   </div>
                   <div className="text-sm">
-                    <strong>Required buckets found:</strong> {bucketStatus.foundRequired.join(', ') || 'none'}
+                    <strong>Required buckets found:</strong>{" "}
+                    {bucketStatus.foundRequired.join(", ") || "none"}
                   </div>
                   {bucketStatus.missingRequired.length > 0 && (
                     <div className="text-sm text-red-600">
-                      <strong>Missing:</strong> {bucketStatus.missingRequired.join(', ')}
+                      <strong>Missing:</strong>{" "}
+                      {bucketStatus.missingRequired.join(", ")}
                     </div>
                   )}
                   <div className="text-xs text-muted-foreground">
-                    All buckets: {bucketStatus.buckets.join(', ')}
+                    All buckets: {bucketStatus.buckets.join(", ")}
                   </div>
                 </div>
               ) : (
@@ -225,9 +237,9 @@ export default function DirectStorageTest() {
                   onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
                 />
               </div>
-              
-              <Button 
-                onClick={handleFileUpload} 
+
+              <Button
+                onClick={handleFileUpload}
                 disabled={!selectedFile || loading}
                 className="w-full"
               >
@@ -245,7 +257,8 @@ export default function DirectStorageTest() {
                   <AlertDescription>
                     ✅ File uploaded successfully!
                     <br />
-                    Path: <code className="text-xs">{uploadResult.data.path}</code>
+                    Path:{" "}
+                    <code className="text-xs">{uploadResult.data.path}</code>
                   </AlertDescription>
                 </Alert>
               )}
@@ -256,10 +269,15 @@ export default function DirectStorageTest() {
         {/* File List */}
         {testUser && files.length > 0 && (
           <div>
-            <h4 className="font-medium mb-3">Uploaded Files ({files.length})</h4>
+            <h4 className="font-medium mb-3">
+              Uploaded Files ({files.length})
+            </h4>
             <div className="space-y-2">
               {files.map((file, index) => (
-                <div key={index} className="flex items-center justify-between p-2 border rounded">
+                <div
+                  key={index}
+                  className="flex items-center justify-between p-2 border rounded"
+                >
                   <div>
                     <div className="font-medium text-sm">{file.name}</div>
                     <div className="text-xs text-muted-foreground">
@@ -268,7 +286,11 @@ export default function DirectStorageTest() {
                   </div>
                   {file.signedUrl && (
                     <Button variant="outline" size="sm" asChild>
-                      <a href={file.signedUrl} target="_blank" rel="noopener noreferrer">
+                      <a
+                        href={file.signedUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
                         <Download className="h-3 w-3 mr-1" />
                         Download
                       </a>
@@ -293,7 +315,8 @@ export default function DirectStorageTest() {
           <Alert>
             <CheckCircle className="h-4 w-4" />
             <AlertDescription>
-              🎉 Storage test is working! You can upload files and they're being stored correctly in Supabase.
+              🎉 Storage test is working! You can upload files and they're being
+              stored correctly in Supabase.
             </AlertDescription>
           </Alert>
         )}

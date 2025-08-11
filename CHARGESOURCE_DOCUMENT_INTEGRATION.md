@@ -14,26 +14,30 @@ Your ChargeSource app now has a fully functional document storage system that su
 ## Architecture
 
 ### Storage Buckets
+
 ```
 charge-source-user-files     - Personal files (50MB max)
-charge-source-documents      - Official documents (100MB max)  
+charge-source-documents      - Official documents (100MB max)
 charge-source-videos         - Training videos (500MB max)
 ```
 
 ### File Path Structure
+
 ```
 User files:         ${user.id}/${filename}
 Organization files: ${organizationId}/${filename}
 ```
 
 ### Edge Functions
+
 ```
 POST /api/functions/secure-file-upload   - Upload documents
-GET  /api/functions/secure-file-list     - List user/org documents  
+GET  /api/functions/secure-file-list     - List user/org documents
 DELETE /api/functions/secure-file-delete - Delete documents
 ```
 
 ### Database Tables
+
 ```sql
 document_metadata    - File metadata, categories, status, descriptions
 document_versions    - Version history and change tracking
@@ -50,36 +54,36 @@ The storage buckets and database tables are ready. Use the **ChargeSource Storag
 ```typescript
 // Example: Upload a document with organization context
 const formData = new FormData();
-formData.append('file', selectedFile);
-formData.append('bucket', 'charge-source-documents');
-formData.append('organizationId', 'org-123'); // Optional
+formData.append("file", selectedFile);
+formData.append("bucket", "charge-source-documents");
+formData.append("organizationId", "org-123"); // Optional
 
-const response = await fetch('/api/functions/secure-file-upload', {
-  method: 'POST',
+const response = await fetch("/api/functions/secure-file-upload", {
+  method: "POST",
   headers: {
-    'Authorization': `Bearer ${session.access_token}`,
+    Authorization: `Bearer ${session.access_token}`,
   },
-  body: formData
+  body: formData,
 });
 ```
 
 ### 3. Track Document Metadata
 
 ```typescript
-import { documentMetadataService } from '@/lib/services/documentMetadataService';
+import { documentMetadataService } from "@/lib/services/documentMetadataService";
 
 // Create document metadata after upload
 await documentMetadataService.createDocumentMetadata({
   user_id: user.id,
   organization_id: organizationId,
-  bucket_name: 'charge-source-documents',
+  bucket_name: "charge-source-documents",
   file_path: uploadResult.path,
   original_filename: file.name,
   file_size: file.size,
   mime_type: file.type,
-  category: 'specification',
-  description: 'EV charger installation specs',
-  status: 'draft'
+  category: "specification",
+  description: "EV charger installation specs",
+  status: "draft",
 });
 ```
 
@@ -88,68 +92,75 @@ await documentMetadataService.createDocumentMetadata({
 ```typescript
 // Get all documents for a user
 const { data: documents } = await documentMetadataService.getDocumentsByUser(
-  user.id, 
+  user.id,
   {
-    bucket: 'charge-source-documents',
-    organizationId: 'org-123',
-    status: 'approved'
-  }
+    bucket: "charge-source-documents",
+    organizationId: "org-123",
+    status: "approved",
+  },
 );
 ```
 
 ### 5. Integration with ChargeSource Features
 
 #### Project Documents
+
 ```typescript
 // When creating a project, associate documents
 const projectDocuments = await documentMetadataService.getDocumentsByUser(
   user.id,
-  { 
-    bucket: 'charge-source-documents',
+  {
+    bucket: "charge-source-documents",
     organizationId: project.organizationId,
-    status: 'approved'
-  }
+    status: "approved",
+  },
 );
 ```
 
 #### Quote Attachments
+
 ```typescript
 // Attach documents to quotes
-const quoteAttachments = documents.filter(doc => 
-  doc.category === 'specification' || doc.category === 'manual'
+const quoteAttachments = documents.filter(
+  (doc) => doc.category === "specification" || doc.category === "manual",
 );
 ```
 
 #### Customer Portal Access
+
 ```typescript
 // Share approved documents with customers
 const customerDocuments = await documentMetadataService.getDocumentsByUser(
   user.id,
-  { 
+  {
     organizationId: customer.organizationId,
-    status: 'approved'
-  }
+    status: "approved",
+  },
 );
 ```
 
 ## Available Components
 
 ### 1. EnhancedFileStorage
+
 - **Path**: `/enhanced-file-storage`
 - **Purpose**: Full document management interface
 - **Features**: Upload, categorize, approve, organize documents
 
 ### 2. ChargeSourceStorageSetup
+
 - **Component**: `<ChargeSourceStorageSetup />`
 - **Purpose**: One-click bucket creation and verification
 - **Usage**: Include in admin or setup pages
 
 ### 3. DocumentTest
+
 - **Path**: `/document-test`
 - **Purpose**: Test upload/download functionality
 - **Features**: Upload to any bucket, view metadata, test Edge Functions
 
 ### 4. EnhancedFileManager
+
 - **Component**: `<EnhancedFileManager />`
 - **Purpose**: File browsing and management
 - **Features**: Filtering, approval workflows, version control
@@ -157,6 +168,7 @@ const customerDocuments = await documentMetadataService.getDocumentsByUser(
 ## API Endpoints
 
 ### Upload Document
+
 ```http
 POST /api/functions/secure-file-upload
 Content-Type: multipart/form-data
@@ -168,12 +180,14 @@ organizationId: org-123 (optional)
 ```
 
 ### List Documents
+
 ```http
 GET /api/functions/secure-file-list?bucket=charge-source-documents&organizationId=org-123
 Authorization: Bearer {token}
 ```
 
 ### Delete Document
+
 ```http
 DELETE /api/functions/secure-file-delete?filename=document.pdf&bucket=charge-source-documents&organizationId=org-123
 Authorization: Bearer {token}
@@ -182,6 +196,7 @@ Authorization: Bearer {token}
 ## Database Schema
 
 ### document_metadata
+
 ```sql
 id              UUID PRIMARY KEY
 user_id         UUID REFERENCES auth.users(id)
@@ -204,6 +219,7 @@ approved_at     TIMESTAMP WITH TIME ZONE
 ```
 
 ### document_versions
+
 ```sql
 id              UUID PRIMARY KEY
 document_id     UUID REFERENCES document_metadata(id)
@@ -227,26 +243,31 @@ change_notes    TEXT
 ## Usage in ChargeSource App
 
 ### 1. Project Documentation
+
 - Store installation manuals, specifications, and compliance documents
 - Associate documents with specific projects and customers
 - Version control for updated documentation
 
 ### 2. Quote Management
+
 - Attach technical specifications to quotes
 - Include installation guides and product manuals
 - Share approved documents with customers
 
 ### 3. Customer Portal
+
 - Provide customers with approved project documents
 - Share installation guides and maintenance manuals
 - Download invoices and compliance certificates
 
 ### 4. Training Materials
+
 - Store training videos for electricians
 - Organize by equipment type or installation procedure
 - Version control for updated training content
 
 ### 5. Compliance Tracking
+
 - Store compliance certificates and inspection reports
 - Track approval status and expiration dates
 - Organize by regulatory requirement

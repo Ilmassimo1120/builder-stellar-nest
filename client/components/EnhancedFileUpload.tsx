@@ -1,33 +1,42 @@
-import React, { useState, useCallback } from 'react';
-import { useDropzone } from 'react-dropzone';
-import { 
-  Upload, X, File, AlertCircle, CheckCircle, Tag, 
-  FolderOpen, Eye, Users, Lock, Globe 
-} from 'lucide-react';
-import { Button } from './ui/button';
-import { Input } from './ui/input';
-import { Label } from './ui/label';
-import { Textarea } from './ui/textarea';
-import { Progress } from './ui/progress';
-import { Alert, AlertDescription } from './ui/alert';
-import { Badge } from './ui/badge';
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
-import { 
-  Select, 
-  SelectContent, 
-  SelectItem, 
-  SelectTrigger, 
-  SelectValue 
-} from './ui/select';
-import { cn } from '@/lib/utils';
-import { 
-  enhancedFileStorageService, 
-  BucketName, 
-  FileAsset, 
+import React, { useState, useCallback } from "react";
+import { useDropzone } from "react-dropzone";
+import {
+  Upload,
+  X,
+  File,
+  AlertCircle,
+  CheckCircle,
+  Tag,
+  FolderOpen,
+  Eye,
+  Users,
+  Lock,
+  Globe,
+} from "lucide-react";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import { Label } from "./ui/label";
+import { Textarea } from "./ui/textarea";
+import { Progress } from "./ui/progress";
+import { Alert, AlertDescription } from "./ui/alert";
+import { Badge } from "./ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
+import { cn } from "@/lib/utils";
+import {
+  enhancedFileStorageService,
+  BucketName,
+  FileAsset,
   FileUploadRequest,
-  AssetVisibility
-} from '@/lib/services/enhancedFileStorageService';
+  AssetVisibility,
+} from "@/lib/services/enhancedFileStorageService";
 
 interface EnhancedFileUploadProps {
   defaultBucket?: BucketName;
@@ -49,158 +58,192 @@ interface UploadState {
     visibility: AssetVisibility;
   };
   progress: number;
-  status: 'pending' | 'uploading' | 'success' | 'error';
+  status: "pending" | "uploading" | "success" | "error";
   error?: string;
   result?: FileAsset;
 }
 
-const bucketInfo: Record<BucketName, { label: string; description: string; icon: string; maxSize: string }> = {
-  'charge-source-user-files': {
-    label: 'User Files',
-    description: 'Personal files and general documents',
-    icon: '👤',
-    maxSize: '50MB'
+const bucketInfo: Record<
+  BucketName,
+  { label: string; description: string; icon: string; maxSize: string }
+> = {
+  "charge-source-user-files": {
+    label: "User Files",
+    description: "Personal files and general documents",
+    icon: "👤",
+    maxSize: "50MB",
   },
-  'charge-source-documents': {
-    label: 'Documents',
-    description: 'Official documents, manuals, and reports',
-    icon: '📄',
-    maxSize: '100MB'
+  "charge-source-documents": {
+    label: "Documents",
+    description: "Official documents, manuals, and reports",
+    icon: "📄",
+    maxSize: "100MB",
   },
-  'charge-source-videos': {
-    label: 'Videos',
-    description: 'Training videos and media content',
-    icon: '🎥',
-    maxSize: '500MB'
-  }
+  "charge-source-videos": {
+    label: "Videos",
+    description: "Training videos and media content",
+    icon: "🎥",
+    maxSize: "500MB",
+  },
 };
 
 const categories = [
-  'Manual', 'Training', 'Specification', 'Report', 'Installation Guide',
-  'Maintenance', 'Safety', 'Compliance', 'Product Info', 'Case Study'
+  "Manual",
+  "Training",
+  "Specification",
+  "Report",
+  "Installation Guide",
+  "Maintenance",
+  "Safety",
+  "Compliance",
+  "Product Info",
+  "Case Study",
 ];
 
 const visibilityOptions = [
-  { value: 'private' as AssetVisibility, label: 'Private', icon: Lock, description: 'Only you can access' },
-  { value: 'team' as AssetVisibility, label: 'Team', icon: Users, description: 'Team members can access' },
-  { value: 'public' as AssetVisibility, label: 'Public', icon: Globe, description: 'Everyone can access' }
+  {
+    value: "private" as AssetVisibility,
+    label: "Private",
+    icon: Lock,
+    description: "Only you can access",
+  },
+  {
+    value: "team" as AssetVisibility,
+    label: "Team",
+    icon: Users,
+    description: "Team members can access",
+  },
+  {
+    value: "public" as AssetVisibility,
+    label: "Public",
+    icon: Globe,
+    description: "Everyone can access",
+  },
 ];
 
 export default function EnhancedFileUpload({
-  defaultBucket = 'charge-source-user-files',
+  defaultBucket = "charge-source-user-files",
   parentVersionId,
   onUploadComplete,
   onUploadError,
-  className
+  className,
 }: EnhancedFileUploadProps) {
   const [uploadStates, setUploadStates] = useState<UploadState[]>([]);
   const [isUploading, setIsUploading] = useState(false);
-  const [currentTab, setCurrentTab] = useState<string>('upload');
+  const [currentTab, setCurrentTab] = useState<string>("upload");
 
   const [globalSettings, setGlobalSettings] = useState({
     bucket: defaultBucket,
-    category: '',
-    visibility: 'private' as AssetVisibility
+    category: "",
+    visibility: "private" as AssetVisibility,
   });
 
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
       // Initialize upload states for dropped files
-      const initialStates: UploadState[] = acceptedFiles.map(file => ({
+      const initialStates: UploadState[] = acceptedFiles.map((file) => ({
         file,
         bucket: globalSettings.bucket,
         metadata: {
-          title: file.name.replace(/\.[^/.]+$/, ''), // Remove extension
-          description: '',
+          title: file.name.replace(/\.[^/.]+$/, ""), // Remove extension
+          description: "",
           tags: [],
           category: globalSettings.category,
-          subcategory: '',
-          visibility: globalSettings.visibility
+          subcategory: "",
+          visibility: globalSettings.visibility,
         },
         progress: 0,
-        status: 'pending' as const
+        status: "pending" as const,
       }));
 
       setUploadStates(initialStates);
-      setCurrentTab('metadata');
+      setCurrentTab("metadata");
     },
-    [globalSettings]
+    [globalSettings],
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     multiple: true,
-    disabled: isUploading
+    disabled: isUploading,
   });
 
   const updateFileMetadata = (index: number, field: string, value: any) => {
-    setUploadStates(prev => prev.map((state, i) => {
-      if (i === index) {
-        return {
-          ...state,
-          metadata: {
-            ...state.metadata,
-            [field]: value
-          }
-        };
-      }
-      return state;
-    }));
+    setUploadStates((prev) =>
+      prev.map((state, i) => {
+        if (i === index) {
+          return {
+            ...state,
+            metadata: {
+              ...state.metadata,
+              [field]: value,
+            },
+          };
+        }
+        return state;
+      }),
+    );
   };
 
   const updateGlobalSetting = (field: string, value: any) => {
-    setGlobalSettings(prev => ({ ...prev, [field]: value }));
-    
+    setGlobalSettings((prev) => ({ ...prev, [field]: value }));
+
     // Apply to all pending files
-    setUploadStates(prev => prev.map(state => {
-      if (state.status === 'pending') {
-        return {
-          ...state,
-          bucket: field === 'bucket' ? value : state.bucket,
-          metadata: {
-            ...state.metadata,
-            [field]: field !== 'bucket' ? value : state.metadata[field]
-          }
-        };
-      }
-      return state;
-    }));
+    setUploadStates((prev) =>
+      prev.map((state) => {
+        if (state.status === "pending") {
+          return {
+            ...state,
+            bucket: field === "bucket" ? value : state.bucket,
+            metadata: {
+              ...state.metadata,
+              [field]: field !== "bucket" ? value : state.metadata[field],
+            },
+          };
+        }
+        return state;
+      }),
+    );
   };
 
   const addTag = (index: number, tag: string) => {
     if (!tag.trim()) return;
-    
-    setUploadStates(prev => prev.map((state, i) => {
-      if (i === index && !state.metadata.tags.includes(tag.trim())) {
-        return {
-          ...state,
-          metadata: {
-            ...state.metadata,
-            tags: [...state.metadata.tags, tag.trim()]
-          }
-        };
-      }
-      return state;
-    }));
+
+    setUploadStates((prev) =>
+      prev.map((state, i) => {
+        if (i === index && !state.metadata.tags.includes(tag.trim())) {
+          return {
+            ...state,
+            metadata: {
+              ...state.metadata,
+              tags: [...state.metadata.tags, tag.trim()],
+            },
+          };
+        }
+        return state;
+      }),
+    );
   };
 
   const removeTag = (index: number, tagToRemove: string) => {
-    setUploadStates(prev => prev.map((state, i) => {
-      if (i === index) {
-        return {
-          ...state,
-          metadata: {
-            ...state.metadata,
-            tags: state.metadata.tags.filter(tag => tag !== tagToRemove)
-          }
-        };
-      }
-      return state;
-    }));
+    setUploadStates((prev) =>
+      prev.map((state, i) => {
+        if (i === index) {
+          return {
+            ...state,
+            metadata: {
+              ...state.metadata,
+              tags: state.metadata.tags.filter((tag) => tag !== tagToRemove),
+            },
+          };
+        }
+        return state;
+      }),
+    );
   };
 
   const removeFile = (index: number) => {
-    setUploadStates(prev => prev.filter((_, i) => i !== index));
+    setUploadStates((prev) => prev.filter((_, i) => i !== index));
   };
 
   const uploadFiles = async () => {
@@ -210,11 +253,13 @@ export default function EnhancedFileUpload({
     try {
       for (let i = 0; i < uploadStates.length; i++) {
         const state = uploadStates[i];
-        
+
         // Update status to uploading
-        setUploadStates(prev => prev.map((s, index) => 
-          index === i ? { ...s, status: 'uploading' as const } : s
-        ));
+        setUploadStates((prev) =>
+          prev.map((s, index) =>
+            index === i ? { ...s, status: "uploading" as const } : s,
+          ),
+        );
 
         try {
           const uploadRequest: FileUploadRequest = {
@@ -226,49 +271,76 @@ export default function EnhancedFileUpload({
               tags: state.metadata.tags,
               category: state.metadata.category,
               subcategory: state.metadata.subcategory,
-              visibility: state.metadata.visibility
+              visibility: state.metadata.visibility,
             },
-            parentVersionId
+            parentVersionId,
           };
 
-          const result = await enhancedFileStorageService.uploadFile(uploadRequest);
+          const result =
+            await enhancedFileStorageService.uploadFile(uploadRequest);
 
           // Update status to success
-          setUploadStates(prev => prev.map((s, index) => 
-            index === i ? { 
-              ...s, 
-              status: 'success' as const, 
-              progress: 100,
-              result 
-            } : s
-          ));
+          setUploadStates((prev) =>
+            prev.map((s, index) =>
+              index === i
+                ? {
+                    ...s,
+                    status: "success" as const,
+                    progress: 100,
+                    result,
+                  }
+                : s,
+            ),
+          );
 
           uploadedAssets.push(result);
-
         } catch (error) {
-          let errorMessage = error instanceof Error ? error.message : 'Upload failed';
+          let errorMessage =
+            error instanceof Error ? error.message : "Upload failed";
 
           // Provide more helpful error messages for common issues
-          if (errorMessage.includes('authenticated') || errorMessage.includes('log in')) {
-            errorMessage = '🔐 Please log in to upload files. You may need to refresh the page after logging in.';
-          } else if (errorMessage.includes('bucket') && errorMessage.includes('not found')) {
-            errorMessage = '📂 Storage bucket not found. Please contact support to set up file storage.';
-          } else if (errorMessage.includes('permission')) {
-            errorMessage = '🚫 Permission denied. Please check your account permissions.';
-          } else if (errorMessage.includes('CORS') || errorMessage.includes('network issues') || errorMessage.includes('Failed to fetch')) {
-            errorMessage = '🌐 Network issue detected. Using local storage as fallback. Your file has been saved locally and will sync when the connection is restored.';
-          } else if (errorMessage.includes('locally as fallback') || errorMessage.includes('stored locally')) {
-            errorMessage = '💾 File saved locally! Cloud storage is temporarily unavailable, but your file is safely stored and will sync later.';
+          if (
+            errorMessage.includes("authenticated") ||
+            errorMessage.includes("log in")
+          ) {
+            errorMessage =
+              "🔐 Please log in to upload files. You may need to refresh the page after logging in.";
+          } else if (
+            errorMessage.includes("bucket") &&
+            errorMessage.includes("not found")
+          ) {
+            errorMessage =
+              "📂 Storage bucket not found. Please contact support to set up file storage.";
+          } else if (errorMessage.includes("permission")) {
+            errorMessage =
+              "🚫 Permission denied. Please check your account permissions.";
+          } else if (
+            errorMessage.includes("CORS") ||
+            errorMessage.includes("network issues") ||
+            errorMessage.includes("Failed to fetch")
+          ) {
+            errorMessage =
+              "🌐 Network issue detected. Using local storage as fallback. Your file has been saved locally and will sync when the connection is restored.";
+          } else if (
+            errorMessage.includes("locally as fallback") ||
+            errorMessage.includes("stored locally")
+          ) {
+            errorMessage =
+              "💾 File saved locally! Cloud storage is temporarily unavailable, but your file is safely stored and will sync later.";
           }
 
           // Update status to error
-          setUploadStates(prev => prev.map((s, index) =>
-            index === i ? {
-              ...s,
-              status: 'error' as const,
-              error: errorMessage
-            } : s
-          ));
+          setUploadStates((prev) =>
+            prev.map((s, index) =>
+              index === i
+                ? {
+                    ...s,
+                    status: "error" as const,
+                    error: errorMessage,
+                  }
+                : s,
+            ),
+          );
 
           onUploadError?.(errorMessage);
         }
@@ -277,35 +349,37 @@ export default function EnhancedFileUpload({
       if (uploadedAssets.length > 0) {
         onUploadComplete?.(uploadedAssets);
       }
-
     } finally {
       setIsUploading(false);
     }
   };
 
   const getFileIcon = (file: File) => {
-    if (file.type.startsWith('image/')) return '🖼️';
-    if (file.type.startsWith('video/')) return '🎥';
-    if (file.type.includes('pdf')) return '📄';
-    if (file.type.includes('document') || file.type.includes('word')) return '📝';
-    if (file.type.includes('spreadsheet') || file.type.includes('excel')) return '📊';
-    return '📁';
+    if (file.type.startsWith("image/")) return "🖼️";
+    if (file.type.startsWith("video/")) return "🎥";
+    if (file.type.includes("pdf")) return "📄";
+    if (file.type.includes("document") || file.type.includes("word"))
+      return "📝";
+    if (file.type.includes("spreadsheet") || file.type.includes("excel"))
+      return "📊";
+    return "📁";
   };
 
   const formatFileSize = (bytes: number) => {
-    if (bytes === 0) return '0 Bytes';
+    if (bytes === 0) return "0 Bytes";
     const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const sizes = ["Bytes", "KB", "MB", "GB"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
   };
 
-  const canUpload = uploadStates.length > 0 && 
-    uploadStates.every(state => state.metadata.title.trim() !== '') &&
+  const canUpload =
+    uploadStates.length > 0 &&
+    uploadStates.every((state) => state.metadata.title.trim() !== "") &&
     !isUploading;
 
   return (
-    <div className={cn('w-full space-y-6', className)}>
+    <div className={cn("w-full space-y-6", className)}>
       <Tabs value={currentTab} onValueChange={setCurrentTab} className="w-full">
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="upload">Upload Files</TabsTrigger>
@@ -327,9 +401,11 @@ export default function EnhancedFileUpload({
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="space-y-2">
                   <Label>Storage Bucket</Label>
-                  <Select 
-                    value={globalSettings.bucket} 
-                    onValueChange={(value: BucketName) => updateGlobalSetting('bucket', value)}
+                  <Select
+                    value={globalSettings.bucket}
+                    onValueChange={(value: BucketName) =>
+                      updateGlobalSetting("bucket", value)
+                    }
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -354,15 +430,17 @@ export default function EnhancedFileUpload({
 
                 <div className="space-y-2">
                   <Label>Default Category</Label>
-                  <Select 
-                    value={globalSettings.category} 
-                    onValueChange={(value) => updateGlobalSetting('category', value)}
+                  <Select
+                    value={globalSettings.category}
+                    onValueChange={(value) =>
+                      updateGlobalSetting("category", value)
+                    }
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="Select category" />
                     </SelectTrigger>
                     <SelectContent>
-                      {categories.map(category => (
+                      {categories.map((category) => (
                         <SelectItem key={category} value={category}>
                           {category}
                         </SelectItem>
@@ -373,15 +451,17 @@ export default function EnhancedFileUpload({
 
                 <div className="space-y-2">
                   <Label>Default Visibility</Label>
-                  <Select 
-                    value={globalSettings.visibility} 
-                    onValueChange={(value: AssetVisibility) => updateGlobalSetting('visibility', value)}
+                  <Select
+                    value={globalSettings.visibility}
+                    onValueChange={(value: AssetVisibility) =>
+                      updateGlobalSetting("visibility", value)
+                    }
                   >
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      {visibilityOptions.map(option => (
+                      {visibilityOptions.map((option) => (
                         <SelectItem key={option.value} value={option.value}>
                           <div className="flex items-center space-x-2">
                             <option.icon className="h-4 w-4" />
@@ -407,11 +487,11 @@ export default function EnhancedFileUpload({
               <div
                 {...getRootProps()}
                 className={cn(
-                  'border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors',
-                  isDragActive 
-                    ? 'border-primary bg-primary/5' 
-                    : 'border-muted-foreground/25 hover:border-primary/50',
-                  isUploading && 'cursor-not-allowed opacity-50'
+                  "border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors",
+                  isDragActive
+                    ? "border-primary bg-primary/5"
+                    : "border-muted-foreground/25 hover:border-primary/50",
+                  isUploading && "cursor-not-allowed opacity-50",
                 )}
               >
                 <input {...getInputProps()} />
@@ -424,7 +504,8 @@ export default function EnhancedFileUpload({
                       Drag & drop files here, or click to select
                     </p>
                     <p className="text-sm text-muted-foreground">
-                      Multiple files supported • {bucketInfo[globalSettings.bucket].maxSize} max per file
+                      Multiple files supported •{" "}
+                      {bucketInfo[globalSettings.bucket].maxSize} max per file
                     </p>
                     <p className="text-xs text-muted-foreground mt-1">
                       {bucketInfo[globalSettings.bucket].description}
@@ -444,9 +525,12 @@ export default function EnhancedFileUpload({
                   <div className="flex items-center space-x-3">
                     <span className="text-2xl">{getFileIcon(state.file)}</span>
                     <div>
-                      <CardTitle className="text-base">{state.file.name}</CardTitle>
+                      <CardTitle className="text-base">
+                        {state.file.name}
+                      </CardTitle>
                       <p className="text-sm text-muted-foreground">
-                        {formatFileSize(state.file.size)} • {bucketInfo[state.bucket].label}
+                        {formatFileSize(state.file.size)} •{" "}
+                        {bucketInfo[state.bucket].label}
                       </p>
                     </div>
                   </div>
@@ -465,22 +549,26 @@ export default function EnhancedFileUpload({
                     <Label>Title *</Label>
                     <Input
                       value={state.metadata.title}
-                      onChange={(e) => updateFileMetadata(index, 'title', e.target.value)}
+                      onChange={(e) =>
+                        updateFileMetadata(index, "title", e.target.value)
+                      }
                       placeholder="Enter file title"
                     />
                   </div>
 
                   <div className="space-y-2">
                     <Label>Category</Label>
-                    <Select 
-                      value={state.metadata.category} 
-                      onValueChange={(value) => updateFileMetadata(index, 'category', value)}
+                    <Select
+                      value={state.metadata.category}
+                      onValueChange={(value) =>
+                        updateFileMetadata(index, "category", value)
+                      }
                     >
                       <SelectTrigger>
                         <SelectValue placeholder="Select category" />
                       </SelectTrigger>
                       <SelectContent>
-                        {categories.map(category => (
+                        {categories.map((category) => (
                           <SelectItem key={category} value={category}>
                             {category}
                           </SelectItem>
@@ -494,7 +582,9 @@ export default function EnhancedFileUpload({
                   <Label>Description</Label>
                   <Textarea
                     value={state.metadata.description}
-                    onChange={(e) => updateFileMetadata(index, 'description', e.target.value)}
+                    onChange={(e) =>
+                      updateFileMetadata(index, "description", e.target.value)
+                    }
                     placeholder="Enter file description"
                     rows={2}
                   />
@@ -503,9 +593,9 @@ export default function EnhancedFileUpload({
                 <div className="space-y-2">
                   <Label>Tags</Label>
                   <div className="flex flex-wrap gap-2 mb-2">
-                    {state.metadata.tags.map(tag => (
-                      <Badge 
-                        key={tag} 
+                    {state.metadata.tags.map((tag) => (
+                      <Badge
+                        key={tag}
                         variant="secondary"
                         className="cursor-pointer"
                         onClick={() => removeTag(index, tag)}
@@ -518,10 +608,10 @@ export default function EnhancedFileUpload({
                     <Input
                       placeholder="Add tag and press Enter"
                       onKeyPress={(e) => {
-                        if (e.key === 'Enter') {
+                        if (e.key === "Enter") {
                           const input = e.target as HTMLInputElement;
                           addTag(index, input.value);
-                          input.value = '';
+                          input.value = "";
                         }
                       }}
                     />
@@ -530,15 +620,17 @@ export default function EnhancedFileUpload({
 
                 <div className="space-y-2">
                   <Label>Visibility</Label>
-                  <Select 
-                    value={state.metadata.visibility} 
-                    onValueChange={(value: AssetVisibility) => updateFileMetadata(index, 'visibility', value)}
+                  <Select
+                    value={state.metadata.visibility}
+                    onValueChange={(value: AssetVisibility) =>
+                      updateFileMetadata(index, "visibility", value)
+                    }
                   >
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      {visibilityOptions.map(option => (
+                      {visibilityOptions.map((option) => (
                         <SelectItem key={option.value} value={option.value}>
                           <div className="flex items-center space-x-2">
                             <option.icon className="h-4 w-4" />
@@ -559,15 +651,13 @@ export default function EnhancedFileUpload({
             <CardHeader>
               <CardTitle>Review Files Before Upload</CardTitle>
               <p className="text-sm text-muted-foreground">
-                Review your files and metadata before uploading. All files will be saved as drafts requiring approval.
+                Review your files and metadata before uploading. All files will
+                be saved as drafts requiring approval.
               </p>
             </CardHeader>
             <CardContent className="space-y-4">
               {uploadStates.map((state, index) => (
-                <div
-                  key={index}
-                  className="border rounded-lg p-4 space-y-2"
-                >
+                <div key={index} className="border rounded-lg p-4 space-y-2">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-3">
                       <span className="text-xl">{getFileIcon(state.file)}</span>
@@ -581,17 +671,17 @@ export default function EnhancedFileUpload({
 
                     <Badge
                       variant={
-                        state.status === 'success'
-                          ? 'default'
-                          : state.status === 'error'
-                          ? 'destructive'
-                          : 'secondary'
+                        state.status === "success"
+                          ? "default"
+                          : state.status === "error"
+                            ? "destructive"
+                            : "secondary"
                       }
                     >
-                      {state.status === 'pending' && 'Ready'}
-                      {state.status === 'uploading' && 'Uploading'}
-                      {state.status === 'success' && 'Complete'}
-                      {state.status === 'error' && 'Failed'}
+                      {state.status === "pending" && "Ready"}
+                      {state.status === "uploading" && "Uploading"}
+                      {state.status === "success" && "Complete"}
+                      {state.status === "error" && "Failed"}
                     </Badge>
                   </div>
 
@@ -603,13 +693,15 @@ export default function EnhancedFileUpload({
 
                   <div className="flex items-center space-x-4 text-xs text-muted-foreground">
                     <span>📂 {bucketInfo[state.bucket].label}</span>
-                    {state.metadata.category && <span>🏷️ {state.metadata.category}</span>}
+                    {state.metadata.category && (
+                      <span>🏷️ {state.metadata.category}</span>
+                    )}
                     <span>👁️ {state.metadata.visibility}</span>
                   </div>
 
                   {state.metadata.tags.length > 0 && (
                     <div className="flex flex-wrap gap-1">
-                      {state.metadata.tags.map(tag => (
+                      {state.metadata.tags.map((tag) => (
                         <Badge key={tag} variant="outline" className="text-xs">
                           {tag}
                         </Badge>
@@ -617,11 +709,11 @@ export default function EnhancedFileUpload({
                     </div>
                   )}
 
-                  {state.status === 'uploading' && (
+                  {state.status === "uploading" && (
                     <Progress value={state.progress} className="w-full" />
                   )}
 
-                  {state.status === 'error' && state.error && (
+                  {state.status === "error" && state.error && (
                     <Alert variant="destructive">
                       <AlertCircle className="h-4 w-4" />
                       <AlertDescription>{state.error}</AlertDescription>
@@ -633,16 +725,15 @@ export default function EnhancedFileUpload({
               <div className="flex justify-between pt-4">
                 <Button
                   variant="outline"
-                  onClick={() => setCurrentTab('metadata')}
+                  onClick={() => setCurrentTab("metadata")}
                   disabled={isUploading}
                 >
                   Back to Metadata
                 </Button>
-                <Button
-                  onClick={uploadFiles}
-                  disabled={!canUpload}
-                >
-                  {isUploading ? 'Uploading...' : `Upload ${uploadStates.length} File${uploadStates.length !== 1 ? 's' : ''}`}
+                <Button onClick={uploadFiles} disabled={!canUpload}>
+                  {isUploading
+                    ? "Uploading..."
+                    : `Upload ${uploadStates.length} File${uploadStates.length !== 1 ? "s" : ""}`}
                 </Button>
               </div>
             </CardContent>

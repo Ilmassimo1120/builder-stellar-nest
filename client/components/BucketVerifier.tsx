@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Badge } from '@/components/ui/badge';
-import { CheckCircle, AlertTriangle, Loader2, Database } from 'lucide-react';
+import React, { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { CheckCircle, AlertTriangle, Loader2, Database } from "lucide-react";
 
 export default function BucketVerifier() {
   const [checking, setChecking] = useState(false);
@@ -17,49 +17,60 @@ export default function BucketVerifier() {
       // Use fetch directly to bypass any client-side restrictions
       const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
       const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-      
+
       if (!supabaseUrl || !supabaseKey) {
         setResult({
           success: false,
-          error: 'Missing Supabase configuration'
+          error: "Missing Supabase configuration",
         });
         return;
       }
 
-      console.log('Testing direct API call to Supabase...');
-      
+      console.log("Testing direct API call to Supabase...");
+
       // Make direct API call to Supabase Storage API
       const response = await fetch(`${supabaseUrl}/storage/v1/bucket`, {
-        method: 'GET',
+        method: "GET",
         headers: {
-          'Authorization': `Bearer ${supabaseKey}`,
-          'apikey': supabaseKey,
-          'Content-Type': 'application/json'
-        }
+          Authorization: `Bearer ${supabaseKey}`,
+          apikey: supabaseKey,
+          "Content-Type": "application/json",
+        },
       });
 
-      console.log('Response status:', response.status);
-      console.log('Response headers:', Object.fromEntries(response.headers.entries()));
+      console.log("Response status:", response.status);
+      console.log(
+        "Response headers:",
+        Object.fromEntries(response.headers.entries()),
+      );
 
       if (!response.ok) {
         const errorText = await response.text();
-        console.log('Error response:', errorText);
-        
+        console.log("Error response:", errorText);
+
         setResult({
           success: false,
           error: `HTTP ${response.status}: ${errorText}`,
-          status: response.status
+          status: response.status,
         });
         return;
       }
 
       const buckets = await response.json();
-      console.log('Buckets found:', buckets);
+      console.log("Buckets found:", buckets);
 
       const bucketNames = buckets.map((b: any) => b.name);
-      const requiredBuckets = ['charge-source-user-files', 'charge-source-documents', 'charge-source-videos'];
-      const foundRequired = requiredBuckets.filter(name => bucketNames.includes(name));
-      const missingRequired = requiredBuckets.filter(name => !bucketNames.includes(name));
+      const requiredBuckets = [
+        "charge-source-user-files",
+        "charge-source-documents",
+        "charge-source-videos",
+      ];
+      const foundRequired = requiredBuckets.filter((name) =>
+        bucketNames.includes(name),
+      );
+      const missingRequired = requiredBuckets.filter(
+        (name) => !bucketNames.includes(name),
+      );
 
       setResult({
         success: true,
@@ -67,14 +78,13 @@ export default function BucketVerifier() {
         allBuckets: bucketNames,
         foundRequired,
         missingRequired,
-        data: buckets
+        data: buckets,
       });
-
     } catch (err) {
-      console.error('Verification error:', err);
+      console.error("Verification error:", err);
       setResult({
         success: false,
-        error: err instanceof Error ? err.message : 'Unknown error'
+        error: err instanceof Error ? err.message : "Unknown error",
       });
     } finally {
       setChecking(false);
@@ -112,7 +122,8 @@ export default function BucketVerifier() {
           <Alert>
             <Database className="h-4 w-4" />
             <AlertDescription>
-              Click "Verify Buckets" to make a direct API call to Supabase and see the real bucket status.
+              Click "Verify Buckets" to make a direct API call to Supabase and
+              see the real bucket status.
             </AlertDescription>
           </Alert>
         ) : result.success ? (
@@ -130,14 +141,14 @@ export default function BucketVerifier() {
                 <Badge variant="default">
                   Total Buckets Found: {result.totalBuckets}
                 </Badge>
-                
+
                 {result.foundRequired.length > 0 && (
                   <div>
                     <Badge variant="default" className="mr-2">
                       ✅ Found Required: {result.foundRequired.length}/3
                     </Badge>
                     <div className="text-sm text-green-600 mt-1">
-                      {result.foundRequired.join(', ')}
+                      {result.foundRequired.join(", ")}
                     </div>
                   </div>
                 )}
@@ -148,7 +159,7 @@ export default function BucketVerifier() {
                       ❌ Missing Required: {result.missingRequired.length}/3
                     </Badge>
                     <div className="text-sm text-red-600 mt-1">
-                      {result.missingRequired.join(', ')}
+                      {result.missingRequired.join(", ")}
                     </div>
                   </div>
                 )}
@@ -157,7 +168,7 @@ export default function BucketVerifier() {
                   <div className="mt-3">
                     <h5 className="text-sm font-medium">All Buckets Found:</h5>
                     <div className="text-sm text-muted-foreground">
-                      {result.allBuckets.join(', ')}
+                      {result.allBuckets.join(", ")}
                     </div>
                   </div>
                 )}
@@ -168,16 +179,19 @@ export default function BucketVerifier() {
               <Alert>
                 <CheckCircle className="h-4 w-4" />
                 <AlertDescription>
-                  🎉 All required buckets exist! The issue is likely RLS policies blocking access.
+                  🎉 All required buckets exist! The issue is likely RLS
+                  policies blocking access.
                   <br />
-                  <strong>Next step:</strong> Run the RLS fix script in your Supabase SQL Editor.
+                  <strong>Next step:</strong> Run the RLS fix script in your
+                  Supabase SQL Editor.
                 </AlertDescription>
               </Alert>
             ) : (
               <Alert variant="destructive">
                 <AlertTriangle className="h-4 w-4" />
                 <AlertDescription>
-                  Some buckets are missing. Create them manually in your Supabase Dashboard → Storage.
+                  Some buckets are missing. Create them manually in your
+                  Supabase Dashboard → Storage.
                 </AlertDescription>
               </Alert>
             )}
@@ -188,9 +202,7 @@ export default function BucketVerifier() {
             <AlertDescription>
               <strong>Verification Failed:</strong> {result.error}
               {result.status && (
-                <div className="mt-2 text-sm">
-                  HTTP Status: {result.status}
-                </div>
+                <div className="mt-2 text-sm">HTTP Status: {result.status}</div>
               )}
             </AlertDescription>
           </Alert>

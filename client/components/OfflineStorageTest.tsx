@@ -1,19 +1,19 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Badge } from '@/components/ui/badge';
-import { 
-  Upload, 
-  FileText, 
-  CheckCircle, 
-  AlertTriangle, 
+import React, { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import {
+  Upload,
+  FileText,
+  CheckCircle,
+  AlertTriangle,
   Info,
   Download,
-  HardDrive
-} from 'lucide-react';
+  HardDrive,
+} from "lucide-react";
 
 export default function OfflineStorageTest() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -22,7 +22,7 @@ export default function OfflineStorageTest() {
 
   // Get stored files from localStorage
   React.useEffect(() => {
-    const stored = localStorage.getItem('chargeSourceTestFiles');
+    const stored = localStorage.getItem("chargeSourceTestFiles");
     if (stored) {
       try {
         setLocalFiles(JSON.parse(stored));
@@ -46,29 +46,29 @@ export default function OfflineStorageTest() {
           type: selectedFile.type,
           data: e.target?.result, // base64 data
           uploadedAt: new Date().toISOString(),
-          bucket: 'charge-source-documents'
+          bucket: "charge-source-documents",
         };
 
         // Store in localStorage
-        const existing = localStorage.getItem('chargeSourceTestFiles');
+        const existing = localStorage.getItem("chargeSourceTestFiles");
         const files = existing ? JSON.parse(existing) : [];
         files.push(fileData);
-        localStorage.setItem('chargeSourceTestFiles', JSON.stringify(files));
-        
+        localStorage.setItem("chargeSourceTestFiles", JSON.stringify(files));
+
         setLocalFiles(files);
         setUploadResult({
           success: true,
-          message: 'File stored locally (FullStory is blocking network calls)',
-          file: fileData
+          message: "File stored locally (FullStory is blocking network calls)",
+          file: fileData,
         });
         setSelectedFile(null);
       };
-      
+
       reader.readAsDataURL(selectedFile);
     } catch (err) {
       setUploadResult({
         success: false,
-        message: err instanceof Error ? err.message : 'Upload failed'
+        message: err instanceof Error ? err.message : "Upload failed",
       });
     }
   };
@@ -76,29 +76,29 @@ export default function OfflineStorageTest() {
   const downloadFile = (file: any) => {
     try {
       // Create download link from stored data
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.href = file.data;
       link.download = file.name;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
     } catch (err) {
-      console.error('Download failed:', err);
+      console.error("Download failed:", err);
     }
   };
 
   const clearAllFiles = () => {
-    localStorage.removeItem('chargeSourceTestFiles');
+    localStorage.removeItem("chargeSourceTestFiles");
     setLocalFiles([]);
     setUploadResult(null);
   };
 
   const formatFileSize = (bytes: number) => {
-    if (bytes === 0) return '0 Bytes';
+    if (bytes === 0) return "0 Bytes";
     const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const sizes = ["Bytes", "KB", "MB", "GB"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
   };
 
   return (
@@ -117,8 +117,9 @@ export default function OfflineStorageTest() {
         <Alert variant="destructive">
           <AlertTriangle className="h-4 w-4" />
           <AlertDescription>
-            <strong>FullStory Detected:</strong> FullStory is intercepting fetch calls and breaking Supabase connections. 
-            This is a known issue with monitoring tools. Testing with local storage instead.
+            <strong>FullStory Detected:</strong> FullStory is intercepting fetch
+            calls and breaking Supabase connections. This is a known issue with
+            monitoring tools. Testing with local storage instead.
           </AlertDescription>
         </Alert>
 
@@ -136,13 +137,14 @@ export default function OfflineStorageTest() {
               />
               {selectedFile && (
                 <div className="text-sm text-muted-foreground mt-1">
-                  Selected: {selectedFile.name} ({formatFileSize(selectedFile.size)})
+                  Selected: {selectedFile.name} (
+                  {formatFileSize(selectedFile.size)})
                 </div>
               )}
             </div>
-            
-            <Button 
-              onClick={handleFileUpload} 
+
+            <Button
+              onClick={handleFileUpload}
               disabled={!selectedFile}
               className="w-full"
             >
@@ -174,24 +176,34 @@ export default function OfflineStorageTest() {
         {localFiles.length > 0 && (
           <div>
             <div className="flex items-center justify-between mb-3">
-              <h4 className="font-medium">Stored Files ({localFiles.length})</h4>
+              <h4 className="font-medium">
+                Stored Files ({localFiles.length})
+              </h4>
               <Button variant="outline" size="sm" onClick={clearAllFiles}>
                 Clear All
               </Button>
             </div>
             <div className="space-y-2">
               {localFiles.map((file) => (
-                <div key={file.id} className="flex items-center justify-between p-3 border rounded">
+                <div
+                  key={file.id}
+                  className="flex items-center justify-between p-3 border rounded"
+                >
                   <div className="flex-1">
                     <div className="font-medium text-sm">{file.name}</div>
                     <div className="text-xs text-muted-foreground">
-                      {formatFileSize(file.size)} • {file.type} • {new Date(file.uploadedAt).toLocaleString()}
+                      {formatFileSize(file.size)} • {file.type} •{" "}
+                      {new Date(file.uploadedAt).toLocaleString()}
                     </div>
                     <Badge variant="outline" className="mt-1">
                       {file.bucket}
                     </Badge>
                   </div>
-                  <Button variant="outline" size="sm" onClick={() => downloadFile(file)}>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => downloadFile(file)}
+                  >
                     <Download className="h-3 w-3 mr-1" />
                     Download
                   </Button>
@@ -204,17 +216,31 @@ export default function OfflineStorageTest() {
         {/* Solution Information */}
         <div className="space-y-3">
           <h4 className="font-medium">FullStory Issue & Solutions</h4>
-          
+
           <Alert>
             <Info className="h-4 w-4" />
             <AlertDescription>
               <div className="space-y-2">
-                <p><strong>Problem:</strong> FullStory intercepts all fetch() calls, breaking Supabase API connections.</p>
-                <p><strong>Quick Solutions:</strong></p>
+                <p>
+                  <strong>Problem:</strong> FullStory intercepts all fetch()
+                  calls, breaking Supabase API connections.
+                </p>
+                <p>
+                  <strong>Quick Solutions:</strong>
+                </p>
                 <ul className="list-disc list-inside text-sm space-y-1">
-                  <li><strong>Option 1:</strong> Test in incognito mode (FullStory disabled)</li>
-                  <li><strong>Option 2:</strong> Disable FullStory temporarily in your project</li>
-                  <li><strong>Option 3:</strong> Use this local storage test to verify file handling logic</li>
+                  <li>
+                    <strong>Option 1:</strong> Test in incognito mode (FullStory
+                    disabled)
+                  </li>
+                  <li>
+                    <strong>Option 2:</strong> Disable FullStory temporarily in
+                    your project
+                  </li>
+                  <li>
+                    <strong>Option 3:</strong> Use this local storage test to
+                    verify file handling logic
+                  </li>
                 </ul>
               </div>
             </AlertDescription>
@@ -223,20 +249,27 @@ export default function OfflineStorageTest() {
           <Alert>
             <CheckCircle className="h-4 w-4" />
             <AlertDescription>
-              <strong>Good News:</strong> The storage architecture and file handling logic are working perfectly! 
-              The issue is just FullStory interfering with network calls, not your Supabase setup.
+              <strong>Good News:</strong> The storage architecture and file
+              handling logic are working perfectly! The issue is just FullStory
+              interfering with network calls, not your Supabase setup.
             </AlertDescription>
           </Alert>
         </div>
 
         {/* Technical Details */}
         <details className="text-sm">
-          <summary className="cursor-pointer font-medium">Technical Details</summary>
+          <summary className="cursor-pointer font-medium">
+            Technical Details
+          </summary>
           <div className="mt-2 p-3 bg-gray-50 rounded text-xs font-mono">
             <div>FullStory Script: edge.fullstory.com/s/fs.js</div>
             <div>Error: TypeError: Failed to fetch</div>
-            <div>Cause: FullStory wraps window.fetch and blocks Supabase calls</div>
-            <div>Solution: Test without FullStory or use alternative implementation</div>
+            <div>
+              Cause: FullStory wraps window.fetch and blocks Supabase calls
+            </div>
+            <div>
+              Solution: Test without FullStory or use alternative implementation
+            </div>
           </div>
         </details>
       </CardContent>

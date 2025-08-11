@@ -17,7 +17,7 @@ export default function BucketInitializer() {
 
   const addLog = (message: string) => {
     const timestamp = new Date().toLocaleTimeString();
-    setLogs(prev => [...prev, `${timestamp}: ${message}`]);
+    setLogs((prev) => [...prev, `${timestamp}: ${message}`]);
   };
 
   const initializeBuckets = async () => {
@@ -28,27 +28,30 @@ export default function BucketInitializer() {
     try {
       addLog("🚀 Starting bucket initialization...");
       addLog("🔑 Using service role authentication...");
-      
+
       const bucketService = new BucketInitService();
       const initResult = await bucketService.initializeBuckets();
-      
+
       setResult(initResult);
-      
+
       if (initResult.success) {
         addLog(`✅ Initialization completed successfully`);
-        addLog(`📊 Created: ${initResult.created.length}, Existing: ${initResult.existing.length}`);
+        addLog(
+          `📊 Created: ${initResult.created.length}, Existing: ${initResult.existing.length}`,
+        );
       } else {
         addLog(`❌ Initialization completed with errors`);
-        initResult.errors.forEach(error => addLog(`❌ Error: ${error}`));
+        initResult.errors.forEach((error) => addLog(`❌ Error: ${error}`));
       }
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      const errorMessage =
+        error instanceof Error ? error.message : "Unknown error";
       addLog(`💥 Failed to initialize buckets: ${errorMessage}`);
       setResult({
         success: false,
         created: [],
         existing: [],
-        errors: [errorMessage]
+        errors: [errorMessage],
       });
     } finally {
       setIsInitializing(false);
@@ -57,8 +60,12 @@ export default function BucketInitializer() {
 
   const requiredBuckets = [
     { name: "product-images", public: true, purpose: "Product catalog images" },
-    { name: "documents", public: false, purpose: "Project documents and files" },
-    { name: "quote-attachments", public: false, purpose: "Quote attachments" }
+    {
+      name: "documents",
+      public: false,
+      purpose: "Project documents and files",
+    },
+    { name: "quote-attachments", public: false, purpose: "Quote attachments" },
   ];
 
   return (
@@ -78,22 +85,27 @@ export default function BucketInitializer() {
           <div>
             <h4 className="font-medium mb-2">Required Buckets:</h4>
             <div className="space-y-2">
-              {requiredBuckets.map(bucket => (
-                <div key={bucket.name} className="flex items-center justify-between p-2 border rounded">
+              {requiredBuckets.map((bucket) => (
+                <div
+                  key={bucket.name}
+                  className="flex items-center justify-between p-2 border rounded"
+                >
                   <div>
                     <span className="font-mono text-sm">{bucket.name}</span>
                     <span className="ml-2 text-xs text-muted-foreground">
                       ({bucket.public ? "Public" : "Private"})
                     </span>
                   </div>
-                  <span className="text-xs text-muted-foreground">{bucket.purpose}</span>
+                  <span className="text-xs text-muted-foreground">
+                    {bucket.purpose}
+                  </span>
                 </div>
               ))}
             </div>
           </div>
 
-          <Button 
-            onClick={initializeBuckets} 
+          <Button
+            onClick={initializeBuckets}
             disabled={isInitializing}
             className="w-full"
           >
@@ -116,7 +128,9 @@ export default function BucketInitializer() {
                   <AlertCircle className="w-5 h-5 text-red-500" />
                 )}
                 <span className="font-medium">
-                  {result.success ? "Initialization Successful" : "Initialization Failed"}
+                  {result.success
+                    ? "Initialization Successful"
+                    : "Initialization Failed"}
                 </span>
               </div>
 

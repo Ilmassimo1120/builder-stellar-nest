@@ -1,158 +1,200 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
-  CheckCircle, 
-  AlertTriangle, 
-  Database, 
-  HardDrive, 
-  Copy, 
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  CheckCircle,
+  AlertTriangle,
+  Database,
+  HardDrive,
+  Copy,
   ExternalLink,
   RefreshCw,
-  Loader2
-} from 'lucide-react';
-import { supabase } from '@/lib/supabase';
+  Loader2,
+} from "lucide-react";
+import { supabase } from "@/lib/supabase";
 
 interface SetupStep {
   id: string;
   title: string;
   description: string;
-  status: 'pending' | 'checking' | 'completed' | 'failed';
+  status: "pending" | "checking" | "completed" | "failed";
   error?: string;
 }
 
 export default function StorageSetupWizard() {
   const [steps, setSteps] = useState<SetupStep[]>([
     {
-      id: 'buckets',
-      title: 'Storage Buckets',
-      description: 'Create charge-source-user-files, charge-source-documents, charge-source-videos',
-      status: 'pending'
+      id: "buckets",
+      title: "Storage Buckets",
+      description:
+        "Create charge-source-user-files, charge-source-documents, charge-source-videos",
+      status: "pending",
     },
     {
-      id: 'tables',
-      title: 'Database Tables',
-      description: 'Create document_metadata and document_versions tables',
-      status: 'pending'
+      id: "tables",
+      title: "Database Tables",
+      description: "Create document_metadata and document_versions tables",
+      status: "pending",
     },
     {
-      id: 'policies',
-      title: 'Security Policies',
-      description: 'Set up Row Level Security policies for data protection',
-      status: 'pending'
-    }
+      id: "policies",
+      title: "Security Policies",
+      description: "Set up Row Level Security policies for data protection",
+      status: "pending",
+    },
   ]);
 
   const [checking, setChecking] = useState(false);
 
-  const updateStepStatus = (stepId: string, status: SetupStep['status'], error?: string) => {
-    setSteps(prev => prev.map(step => 
-      step.id === stepId ? { ...step, status, error } : step
-    ));
+  const updateStepStatus = (
+    stepId: string,
+    status: SetupStep["status"],
+    error?: string,
+  ) => {
+    setSteps((prev) =>
+      prev.map((step) =>
+        step.id === stepId ? { ...step, status, error } : step,
+      ),
+    );
   };
 
   const checkStorageBuckets = async () => {
-    updateStepStatus('buckets', 'checking');
+    updateStepStatus("buckets", "checking");
     try {
       // First check if we have basic Supabase connection
-      console.log('Checking Supabase connection...');
+      console.log("Checking Supabase connection...");
 
       const { data, error } = await supabase.storage.listBuckets();
 
-      console.log('Storage listBuckets result:', { data, error });
+      console.log("Storage listBuckets result:", { data, error });
 
       if (error) {
         // Check for common authentication issues
-        if (error.message.includes('JWT') || error.message.includes('unauthorized') || error.message.includes('authentication') || error.message.includes('session missing')) {
-          updateStepStatus('buckets', 'completed', 'Authentication required to verify buckets, but connection is working');
+        if (
+          error.message.includes("JWT") ||
+          error.message.includes("unauthorized") ||
+          error.message.includes("authentication") ||
+          error.message.includes("session missing")
+        ) {
+          updateStepStatus(
+            "buckets",
+            "completed",
+            "Authentication required to verify buckets, but connection is working",
+          );
           return true; // Consider this a success since buckets are likely there
         } else {
-          updateStepStatus('buckets', 'failed', `Supabase error: ${error.message}`);
+          updateStepStatus(
+            "buckets",
+            "failed",
+            `Supabase error: ${error.message}`,
+          );
         }
         return false;
       }
 
-      const requiredBuckets = ['charge-source-user-files', 'charge-source-documents', 'charge-source-videos'];
-      const existingBuckets = data?.map(b => b.name) || [];
+      const requiredBuckets = [
+        "charge-source-user-files",
+        "charge-source-documents",
+        "charge-source-videos",
+      ];
+      const existingBuckets = data?.map((b) => b.name) || [];
 
-      console.log('Required buckets:', requiredBuckets);
-      console.log('Existing buckets:', existingBuckets);
+      console.log("Required buckets:", requiredBuckets);
+      console.log("Existing buckets:", existingBuckets);
 
-      const missingBuckets = requiredBuckets.filter(name => !existingBuckets.includes(name));
+      const missingBuckets = requiredBuckets.filter(
+        (name) => !existingBuckets.includes(name),
+      );
 
       if (missingBuckets.length === 0) {
-        updateStepStatus('buckets', 'completed');
+        updateStepStatus("buckets", "completed");
         return true;
       } else {
         // Show more detailed info about what was found
-        updateStepStatus('buckets', 'failed',
-          `Missing ${missingBuckets.length} buckets: ${missingBuckets.join(', ')}. ` +
-          `Found ${existingBuckets.length} buckets: ${existingBuckets.join(', ') || 'none'}`
+        updateStepStatus(
+          "buckets",
+          "failed",
+          `Missing ${missingBuckets.length} buckets: ${missingBuckets.join(", ")}. ` +
+            `Found ${existingBuckets.length} buckets: ${existingBuckets.join(", ") || "none"}`,
         );
         return false;
       }
     } catch (err) {
-      console.error('Storage check error:', err);
-      updateStepStatus('buckets', 'failed',
-        `Connection error: ${err instanceof Error ? err.message : 'Unknown error'}. Check browser console for details.`
+      console.error("Storage check error:", err);
+      updateStepStatus(
+        "buckets",
+        "failed",
+        `Connection error: ${err instanceof Error ? err.message : "Unknown error"}. Check browser console for details.`,
       );
       return false;
     }
   };
 
   const checkDatabaseTables = async () => {
-    updateStepStatus('tables', 'checking');
+    updateStepStatus("tables", "checking");
     try {
       // Try to query the document_metadata table
       const { error } = await supabase
-        .from('document_metadata')
-        .select('id')
+        .from("document_metadata")
+        .select("id")
         .limit(1);
 
       if (error) {
-        if (error.message.includes('relation') || error.message.includes('does not exist')) {
-          updateStepStatus('tables', 'failed', 'Tables do not exist');
+        if (
+          error.message.includes("relation") ||
+          error.message.includes("does not exist")
+        ) {
+          updateStepStatus("tables", "failed", "Tables do not exist");
           return false;
         } else {
-          updateStepStatus('tables', 'failed', error.message);
+          updateStepStatus("tables", "failed", error.message);
           return false;
         }
       }
 
-      updateStepStatus('tables', 'completed');
+      updateStepStatus("tables", "completed");
       return true;
     } catch (err) {
-      updateStepStatus('tables', 'failed', err instanceof Error ? err.message : 'Unknown error');
+      updateStepStatus(
+        "tables",
+        "failed",
+        err instanceof Error ? err.message : "Unknown error",
+      );
       return false;
     }
   };
 
   const checkSecurityPolicies = async () => {
-    updateStepStatus('policies', 'checking');
-    
+    updateStepStatus("policies", "checking");
+
     // For now, we'll assume policies are set up if tables exist
     // In a real implementation, you might query pg_policies or test access
-    const tablesExist = steps.find(s => s.id === 'tables')?.status === 'completed';
-    
+    const tablesExist =
+      steps.find((s) => s.id === "tables")?.status === "completed";
+
     if (tablesExist) {
-      updateStepStatus('policies', 'completed');
+      updateStepStatus("policies", "completed");
       return true;
     } else {
-      updateStepStatus('policies', 'failed', 'Cannot verify policies without database tables');
+      updateStepStatus(
+        "policies",
+        "failed",
+        "Cannot verify policies without database tables",
+      );
       return false;
     }
   };
 
   const runFullCheck = async () => {
     setChecking(true);
-    
+
     await checkStorageBuckets();
     await checkDatabaseTables();
     await checkSecurityPolicies();
-    
+
     setChecking(false);
   };
 
@@ -160,8 +202,8 @@ export default function StorageSetupWizard() {
     runFullCheck();
   }, []);
 
-  const allCompleted = steps.every(step => step.status === 'completed');
-  const hasFailures = steps.some(step => step.status === 'failed');
+  const allCompleted = steps.every((step) => step.status === "completed");
+  const hasFailures = steps.some((step) => step.status === "failed");
 
   const databaseSetupSQL = `-- ChargeSource Storage Setup
 -- Run this complete script in your Supabase SQL Editor
@@ -299,7 +341,8 @@ FOR INSERT WITH CHECK (bucket_id = 'charge-source-videos' AND auth.uid()::text =
           <Alert variant="destructive">
             <AlertTriangle className="h-4 w-4" />
             <AlertDescription>
-              Setup incomplete. Please follow the instructions below to complete the configuration.
+              Setup incomplete. Please follow the instructions below to complete
+              the configuration.
             </AlertDescription>
           </Alert>
         ) : (
@@ -315,28 +358,51 @@ FOR INSERT WITH CHECK (bucket_id = 'charge-source-videos' AND auth.uid()::text =
         <div className="space-y-3">
           <h4 className="font-medium">Setup Progress:</h4>
           {steps.map((step) => (
-            <div key={step.id} className="flex items-center justify-between p-3 border rounded-lg">
+            <div
+              key={step.id}
+              className="flex items-center justify-between p-3 border rounded-lg"
+            >
               <div className="flex items-center space-x-3">
-                {step.status === 'checking' && <Loader2 className="h-4 w-4 animate-spin text-blue-500" />}
-                {step.status === 'completed' && <CheckCircle className="h-4 w-4 text-green-500" />}
-                {step.status === 'failed' && <AlertTriangle className="h-4 w-4 text-red-500" />}
-                {step.status === 'pending' && <div className="h-4 w-4 rounded-full bg-gray-300" />}
-                
+                {step.status === "checking" && (
+                  <Loader2 className="h-4 w-4 animate-spin text-blue-500" />
+                )}
+                {step.status === "completed" && (
+                  <CheckCircle className="h-4 w-4 text-green-500" />
+                )}
+                {step.status === "failed" && (
+                  <AlertTriangle className="h-4 w-4 text-red-500" />
+                )}
+                {step.status === "pending" && (
+                  <div className="h-4 w-4 rounded-full bg-gray-300" />
+                )}
+
                 <div>
                   <div className="font-medium">{step.title}</div>
-                  <div className="text-sm text-muted-foreground">{step.description}</div>
+                  <div className="text-sm text-muted-foreground">
+                    {step.description}
+                  </div>
                   {step.error && (
-                    <div className="text-sm text-red-600 mt-1">Error: {step.error}</div>
+                    <div className="text-sm text-red-600 mt-1">
+                      Error: {step.error}
+                    </div>
                   )}
                 </div>
               </div>
-              
-              <Badge variant={
-                step.status === 'completed' ? 'default' : 
-                step.status === 'failed' ? 'destructive' : 
-                step.status === 'checking' ? 'secondary' : 'outline'
-              }>
-                {step.status === 'checking' ? 'Checking...' : step.status.replace('_', ' ')}
+
+              <Badge
+                variant={
+                  step.status === "completed"
+                    ? "default"
+                    : step.status === "failed"
+                      ? "destructive"
+                      : step.status === "checking"
+                        ? "secondary"
+                        : "outline"
+                }
+              >
+                {step.status === "checking"
+                  ? "Checking..."
+                  : step.status.replace("_", " ")}
               </Badge>
             </div>
           ))}
@@ -348,28 +414,37 @@ FOR INSERT WITH CHECK (bucket_id = 'charge-source-videos' AND auth.uid()::text =
               <TabsTrigger value="instructions">Setup Instructions</TabsTrigger>
               <TabsTrigger value="sql">SQL Script</TabsTrigger>
             </TabsList>
-            
+
             <TabsContent value="instructions" className="space-y-4">
               <div className="space-y-3">
                 <h4 className="font-medium">Quick Setup Steps:</h4>
                 <ol className="list-decimal list-inside space-y-2 text-sm">
                   <li>
-                    Open your{' '}
+                    Open your{" "}
                     <Button variant="link" className="p-0 h-auto" asChild>
-                      <a href="https://supabase.com/dashboard" target="_blank" rel="noopener noreferrer">
+                      <a
+                        href="https://supabase.com/dashboard"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
                         <ExternalLink className="h-3 w-3 mr-1" />
                         Supabase Dashboard
                       </a>
                     </Button>
                   </li>
-                  <li>Navigate to your project and go to <strong>SQL Editor</strong></li>
+                  <li>
+                    Navigate to your project and go to{" "}
+                    <strong>SQL Editor</strong>
+                  </li>
                   <li>Copy the SQL script from the "SQL Script" tab</li>
-                  <li>Paste it into the SQL Editor and click <strong>Run</strong></li>
+                  <li>
+                    Paste it into the SQL Editor and click <strong>Run</strong>
+                  </li>
                   <li>Click the "Check Status" button above to verify setup</li>
                 </ol>
               </div>
             </TabsContent>
-            
+
             <TabsContent value="sql" className="space-y-4">
               <div className="flex items-center justify-between">
                 <h4 className="font-medium">Complete Setup SQL:</h4>
@@ -393,7 +468,9 @@ FOR INSERT WITH CHECK (bucket_id = 'charge-source-videos' AND auth.uid()::text =
 
         {allCompleted && (
           <div className="p-4 bg-green-50 rounded-lg">
-            <h4 className="font-medium text-green-800 mb-2">✅ Ready to Use!</h4>
+            <h4 className="font-medium text-green-800 mb-2">
+              ✅ Ready to Use!
+            </h4>
             <p className="text-sm text-green-700 mb-3">
               Your ChargeSource storage system is now fully configured. You can:
             </p>

@@ -1,23 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  HardDrive, 
-  Upload, 
-  FolderOpen, 
-  Settings, 
+import React, { useState, useEffect } from "react";
+import {
+  HardDrive,
+  Upload,
+  FolderOpen,
+  Settings,
   BarChart3,
   Shield,
   Database,
-  Users
-} from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
-import FileManager from '@/components/FileManager';
-import { fileStorageService } from '@/lib/services/fileStorageService';
-import { useAuth } from '@/hooks/useAuth';
+  Users,
+} from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import FileManager from "@/components/FileManager";
+import { fileStorageService } from "@/lib/services/fileStorageService";
+import { useAuth } from "@/hooks/useAuth";
 
 interface StorageStats {
   totalFiles: number;
@@ -41,35 +41,52 @@ export default function FileStorage() {
     try {
       setLoading(true);
       const usage = await fileStorageService.getStorageUsage();
-      
+
       // For now, set basic stats. In a real implementation, you'd fetch
       // more detailed breakdown from your backend
       setStorageStats({
         totalFiles: usage.totalFiles,
         totalSize: usage.totalSize,
         categoryBreakdown: {
-          general: { files: Math.floor(usage.totalFiles * 0.4), size: Math.floor(usage.totalSize * 0.3) },
-          project: { files: Math.floor(usage.totalFiles * 0.3), size: Math.floor(usage.totalSize * 0.4) },
-          quote: { files: Math.floor(usage.totalFiles * 0.2), size: Math.floor(usage.totalSize * 0.2) },
-          product: { files: Math.floor(usage.totalFiles * 0.1), size: Math.floor(usage.totalSize * 0.1) }
-        }
+          general: {
+            files: Math.floor(usage.totalFiles * 0.4),
+            size: Math.floor(usage.totalSize * 0.3),
+          },
+          project: {
+            files: Math.floor(usage.totalFiles * 0.3),
+            size: Math.floor(usage.totalSize * 0.4),
+          },
+          quote: {
+            files: Math.floor(usage.totalFiles * 0.2),
+            size: Math.floor(usage.totalSize * 0.2),
+          },
+          product: {
+            files: Math.floor(usage.totalFiles * 0.1),
+            size: Math.floor(usage.totalSize * 0.1),
+          },
+        },
       });
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load storage stats');
+      setError(
+        err instanceof Error ? err.message : "Failed to load storage stats",
+      );
     } finally {
       setLoading(false);
     }
   };
 
   const formatFileSize = (bytes: number) => {
-    if (bytes === 0) return '0 Bytes';
+    if (bytes === 0) return "0 Bytes";
     const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const sizes = ["Bytes", "KB", "MB", "GB"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
   };
 
-  const getStorageUsagePercentage = (used: number, total: number = 1024 * 1024 * 1024) => {
+  const getStorageUsagePercentage = (
+    used: number,
+    total: number = 1024 * 1024 * 1024,
+  ) => {
     return Math.min((used / total) * 100, 100);
   };
 
@@ -77,7 +94,9 @@ export default function FileStorage() {
     return (
       <div className="container mx-auto py-8">
         <Alert>
-          <AlertDescription>Please log in to access file storage.</AlertDescription>
+          <AlertDescription>
+            Please log in to access file storage.
+          </AlertDescription>
         </Alert>
       </div>
     );
@@ -93,7 +112,7 @@ export default function FileStorage() {
             Manage your files and documents in the ChargeSource platform
           </p>
         </div>
-        
+
         <div className="flex items-center space-x-2">
           <Badge variant="outline">
             <HardDrive className="h-4 w-4 mr-2" />
@@ -123,7 +142,9 @@ export default function FileStorage() {
               <FolderOpen className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{storageStats.totalFiles}</div>
+              <div className="text-2xl font-bold">
+                {storageStats.totalFiles}
+              </div>
               <p className="text-xs text-muted-foreground">
                 Across all categories
               </p>
@@ -132,33 +153,38 @@ export default function FileStorage() {
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Storage Used</CardTitle>
+              <CardTitle className="text-sm font-medium">
+                Storage Used
+              </CardTitle>
               <Database className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{formatFileSize(storageStats.totalSize)}</div>
-              <Progress 
-                value={getStorageUsagePercentage(storageStats.totalSize)} 
+              <div className="text-2xl font-bold">
+                {formatFileSize(storageStats.totalSize)}
+              </div>
+              <Progress
+                value={getStorageUsagePercentage(storageStats.totalSize)}
                 className="mt-2"
               />
               <p className="text-xs text-muted-foreground mt-1">
-                {getStorageUsagePercentage(storageStats.totalSize).toFixed(1)}% of 1GB used
+                {getStorageUsagePercentage(storageStats.totalSize).toFixed(1)}%
+                of 1GB used
               </p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Recent Uploads</CardTitle>
+              <CardTitle className="text-sm font-medium">
+                Recent Uploads
+              </CardTitle>
               <Upload className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
                 {Math.floor(storageStats.totalFiles * 0.2)}
               </div>
-              <p className="text-xs text-muted-foreground">
-                This week
-              </p>
+              <p className="text-xs text-muted-foreground">This week</p>
             </CardContent>
           </Card>
 
@@ -171,9 +197,7 @@ export default function FileStorage() {
               <div className="text-2xl font-bold">
                 {Object.keys(storageStats.categoryBreakdown).length}
               </div>
-              <p className="text-xs text-muted-foreground">
-                Active categories
-              </p>
+              <p className="text-xs text-muted-foreground">Active categories</p>
             </CardContent>
           </Card>
         </div>
@@ -199,10 +223,7 @@ export default function FileStorage() {
               </p>
             </CardHeader>
             <CardContent>
-              <FileManager 
-                allowUpload={true}
-                allowDelete={true}
-              />
+              <FileManager allowUpload={true} allowDelete={true} />
             </CardContent>
           </Card>
         </TabsContent>
@@ -216,7 +237,7 @@ export default function FileStorage() {
               </p>
             </CardHeader>
             <CardContent>
-              <FileManager 
+              <FileManager
                 category="general"
                 allowUpload={true}
                 allowDelete={true}
@@ -234,7 +255,7 @@ export default function FileStorage() {
               </p>
             </CardHeader>
             <CardContent>
-              <FileManager 
+              <FileManager
                 category="project"
                 allowUpload={true}
                 allowDelete={true}
@@ -252,7 +273,7 @@ export default function FileStorage() {
               </p>
             </CardHeader>
             <CardContent>
-              <FileManager 
+              <FileManager
                 category="quote"
                 allowUpload={true}
                 allowDelete={true}
@@ -270,7 +291,7 @@ export default function FileStorage() {
               </p>
             </CardHeader>
             <CardContent>
-              <FileManager 
+              <FileManager
                 category="product"
                 allowUpload={isAdmin}
                 allowDelete={isAdmin}
@@ -288,7 +309,7 @@ export default function FileStorage() {
               </p>
             </CardHeader>
             <CardContent>
-              <FileManager 
+              <FileManager
                 category="public"
                 allowUpload={isAdmin}
                 allowDelete={isAdmin}
@@ -306,25 +327,35 @@ export default function FileStorage() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {Object.entries(storageStats.categoryBreakdown).map(([category, stats]) => (
-                <div key={category} className="flex items-center justify-between p-4 border rounded-lg">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-3 h-3 rounded-full bg-primary"></div>
-                    <div>
-                      <p className="font-medium capitalize">{category}</p>
+              {Object.entries(storageStats.categoryBreakdown).map(
+                ([category, stats]) => (
+                  <div
+                    key={category}
+                    className="flex items-center justify-between p-4 border rounded-lg"
+                  >
+                    <div className="flex items-center space-x-3">
+                      <div className="w-3 h-3 rounded-full bg-primary"></div>
+                      <div>
+                        <p className="font-medium capitalize">{category}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {stats.files} files
+                        </p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-medium">
+                        {formatFileSize(stats.size)}
+                      </p>
                       <p className="text-sm text-muted-foreground">
-                        {stats.files} files
+                        {((stats.size / storageStats.totalSize) * 100).toFixed(
+                          1,
+                        )}
+                        %
                       </p>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <p className="font-medium">{formatFileSize(stats.size)}</p>
-                    <p className="text-sm text-muted-foreground">
-                      {((stats.size / storageStats.totalSize) * 100).toFixed(1)}%
-                    </p>
-                  </div>
-                </div>
-              ))}
+                ),
+              )}
             </div>
           </CardContent>
         </Card>

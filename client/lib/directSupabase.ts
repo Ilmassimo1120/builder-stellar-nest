@@ -25,8 +25,8 @@ export const testLogin = async (email: string) => {
   const testUser = {
     id: crypto.randomUUID(),
     email: email,
-    aud: 'authenticated',
-    role: 'authenticated',
+    aud: "authenticated",
+    role: "authenticated",
     user_metadata: {},
     app_metadata: {},
     created_at: new Date().toISOString(),
@@ -34,69 +34,82 @@ export const testLogin = async (email: string) => {
   };
 
   // Store user in localStorage for persistence
-  localStorage.setItem('directSupabaseUser', JSON.stringify(testUser));
-  
+  localStorage.setItem("directSupabaseUser", JSON.stringify(testUser));
+
   return testUser;
 };
 
 export const testLogout = () => {
-  localStorage.removeItem('directSupabaseUser');
+  localStorage.removeItem("directSupabaseUser");
 };
 
 export const getTestUser = () => {
-  const stored = localStorage.getItem('directSupabaseUser');
+  const stored = localStorage.getItem("directSupabaseUser");
   return stored ? JSON.parse(stored) : null;
 };
 
 // Test if buckets are accessible
 export const testBucketAccess = async () => {
   try {
-    console.log('Testing bucket access with direct client...');
+    console.log("Testing bucket access with direct client...");
     const { data, error } = await directSupabase.storage.listBuckets();
-    
-    console.log('Direct bucket test result:', { data, error });
-    
+
+    console.log("Direct bucket test result:", { data, error });
+
     if (error) {
       return { success: false, error: error.message, buckets: [] };
     }
-    
-    const bucketNames = data?.map(b => b.name) || [];
-    const requiredBuckets = ['charge-source-user-files', 'charge-source-documents', 'charge-source-videos'];
-    const foundBuckets = requiredBuckets.filter(name => bucketNames.includes(name));
-    
+
+    const bucketNames = data?.map((b) => b.name) || [];
+    const requiredBuckets = [
+      "charge-source-user-files",
+      "charge-source-documents",
+      "charge-source-videos",
+    ];
+    const foundBuckets = requiredBuckets.filter((name) =>
+      bucketNames.includes(name),
+    );
+
     return {
       success: true,
       buckets: bucketNames,
       foundRequired: foundBuckets,
-      missingRequired: requiredBuckets.filter(name => !bucketNames.includes(name))
+      missingRequired: requiredBuckets.filter(
+        (name) => !bucketNames.includes(name),
+      ),
     };
   } catch (err) {
-    console.error('Direct bucket test error:', err);
-    return { 
-      success: false, 
-      error: err instanceof Error ? err.message : 'Unknown error',
-      buckets: []
+    console.error("Direct bucket test error:", err);
+    return {
+      success: false,
+      error: err instanceof Error ? err.message : "Unknown error",
+      buckets: [],
     };
   }
 };
 
 // Test file upload
-export const testFileUpload = async (file: File, bucket: string = 'charge-source-documents') => {
+export const testFileUpload = async (
+  file: File,
+  bucket: string = "charge-source-documents",
+) => {
   try {
     const user = getTestUser();
     if (!user) {
-      return { success: false, error: 'No test user logged in' };
+      return { success: false, error: "No test user logged in" };
     }
 
     const filename = `${Date.now()}-${file.name}`;
     const uploadPath = `${user.id}/${filename}`;
 
-    console.log(`Testing file upload to bucket: ${bucket}, path: ${uploadPath}`);
+    console.log(
+      `Testing file upload to bucket: ${bucket}, path: ${uploadPath}`,
+    );
 
     const { data, error } = await directSupabase.storage
       .from(bucket)
       .upload(uploadPath, file, {
-        upsert: true
+        upsert: true,
       });
 
     if (error) {
@@ -108,23 +121,25 @@ export const testFileUpload = async (file: File, bucket: string = 'charge-source
       data: {
         path: data.path,
         fullPath: data.fullPath || uploadPath,
-        bucket: bucket
-      }
+        bucket: bucket,
+      },
     };
   } catch (err) {
     return {
       success: false,
-      error: err instanceof Error ? err.message : 'Unknown error'
+      error: err instanceof Error ? err.message : "Unknown error",
     };
   }
 };
 
 // Test file listing
-export const testFileList = async (bucket: string = 'charge-source-documents') => {
+export const testFileList = async (
+  bucket: string = "charge-source-documents",
+) => {
   try {
     const user = getTestUser();
     if (!user) {
-      return { success: false, error: 'No test user logged in', files: [] };
+      return { success: false, error: "No test user logged in", files: [] };
     }
 
     console.log(`Testing file list for bucket: ${bucket}, user: ${user.id}`);
@@ -133,7 +148,7 @@ export const testFileList = async (bucket: string = 'charge-source-documents') =
       .from(bucket)
       .list(user.id, {
         limit: 100,
-        sortBy: { column: 'created_at', order: 'desc' }
+        sortBy: { column: "created_at", order: "desc" },
       });
 
     if (error) {
@@ -152,20 +167,20 @@ export const testFileList = async (bucket: string = 'charge-source-documents') =
           ...file,
           signedUrl: urlData?.signedUrl,
           fullPath: filePath,
-          bucket: bucket
+          bucket: bucket,
         };
-      })
+      }),
     );
 
     return {
       success: true,
-      files: filesWithUrls
+      files: filesWithUrls,
     };
   } catch (err) {
     return {
       success: false,
-      error: err instanceof Error ? err.message : 'Unknown error',
-      files: []
+      error: err instanceof Error ? err.message : "Unknown error",
+      files: [],
     };
   }
 };

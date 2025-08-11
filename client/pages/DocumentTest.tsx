@@ -1,46 +1,58 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
-  Upload, 
-  FileText, 
-  Download, 
-  Trash2, 
-  CheckCircle, 
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Upload,
+  FileText,
+  Download,
+  Trash2,
+  CheckCircle,
   AlertTriangle,
   Users,
   Building2,
   Clock,
   ArrowLeft,
   Database,
-  Copy
-} from 'lucide-react';
-import { Link } from 'react-router-dom';
-import { useAuth } from '@/hooks/useAuth';
-import { documentMetadataService, DocumentMetadata } from '@/lib/services/documentMetadataService';
-import { simpleDocumentService, FileInfo } from '@/lib/services/simpleDocumentService';
-import BucketSetupGuide from '@/components/BucketSetupGuide';
-import StorageSetupWizard from '@/components/StorageSetupWizard';
-import ClearStorageButton from '@/components/ClearStorageButton';
-import SupabaseDebugger from '@/components/SupabaseDebugger';
-import DirectStorageTest from '@/components/DirectStorageTest';
-import BucketVerifier from '@/components/BucketVerifier';
-import OfflineStorageTest from '@/components/OfflineStorageTest';
+  Copy,
+} from "lucide-react";
+import { Link } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
+import {
+  documentMetadataService,
+  DocumentMetadata,
+} from "@/lib/services/documentMetadataService";
+import {
+  simpleDocumentService,
+  FileInfo,
+} from "@/lib/services/simpleDocumentService";
+import BucketSetupGuide from "@/components/BucketSetupGuide";
+import StorageSetupWizard from "@/components/StorageSetupWizard";
+import ClearStorageButton from "@/components/ClearStorageButton";
+import SupabaseDebugger from "@/components/SupabaseDebugger";
+import DirectStorageTest from "@/components/DirectStorageTest";
+import BucketVerifier from "@/components/BucketVerifier";
+import OfflineStorageTest from "@/components/OfflineStorageTest";
 
 export default function DocumentTest() {
   const { user } = useAuth();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [bucket, setBucket] = useState<string>('charge-source-documents');
-  const [organizationId, setOrganizationId] = useState<string>('');
-  const [description, setDescription] = useState<string>('');
-  const [category, setCategory] = useState<string>('uncategorized');
+  const [bucket, setBucket] = useState<string>("charge-source-documents");
+  const [organizationId, setOrganizationId] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
+  const [category, setCategory] = useState<string>("uncategorized");
   const [uploading, setUploading] = useState(false);
   const [documents, setDocuments] = useState<DocumentMetadata[]>([]);
   const [simpleFiles, setSimpleFiles] = useState<FileInfo[]>([]);
@@ -49,19 +61,31 @@ export default function DocumentTest() {
   const [success, setSuccess] = useState<string | null>(null);
 
   const bucketOptions = [
-    { value: 'charge-source-user-files', label: '��� User Files', description: 'Personal files (50MB max)' },
-    { value: 'charge-source-documents', label: '📄 Documents', description: 'Official documents (100MB max)' },
-    { value: 'charge-source-videos', label: '🎥 Videos', description: 'Training videos (500MB max)' }
+    {
+      value: "charge-source-user-files",
+      label: "��� User Files",
+      description: "Personal files (50MB max)",
+    },
+    {
+      value: "charge-source-documents",
+      label: "📄 Documents",
+      description: "Official documents (100MB max)",
+    },
+    {
+      value: "charge-source-videos",
+      label: "🎥 Videos",
+      description: "Training videos (500MB max)",
+    },
   ];
 
   const categoryOptions = [
-    { value: 'uncategorized', label: 'Uncategorized' },
-    { value: 'manual', label: 'Manual' },
-    { value: 'report', label: 'Report' },
-    { value: 'specification', label: 'Specification' },
-    { value: 'training', label: 'Training Material' },
-    { value: 'contract', label: 'Contract' },
-    { value: 'invoice', label: 'Invoice' }
+    { value: "uncategorized", label: "Uncategorized" },
+    { value: "manual", label: "Manual" },
+    { value: "report", label: "Report" },
+    { value: "specification", label: "Specification" },
+    { value: "training", label: "Training Material" },
+    { value: "contract", label: "Contract" },
+    { value: "invoice", label: "Invoice" },
   ];
 
   useEffect(() => {
@@ -78,7 +102,7 @@ export default function DocumentTest() {
     try {
       const { files, error } = await simpleDocumentService.listDocuments({
         bucket: bucket,
-        organizationId: organizationId || undefined
+        organizationId: organizationId || undefined,
       });
 
       if (error) {
@@ -87,7 +111,7 @@ export default function DocumentTest() {
         setSimpleFiles(files);
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load files');
+      setError(err instanceof Error ? err.message : "Failed to load files");
     } finally {
       setLoading(false);
     }
@@ -95,13 +119,16 @@ export default function DocumentTest() {
 
   const loadDocuments = async () => {
     if (!user) return;
-    
+
     setLoading(true);
     try {
-      const { data, error } = await documentMetadataService.getDocumentsByUser(user.id, {
-        bucket: bucket,
-        organizationId: organizationId || undefined
-      });
+      const { data, error } = await documentMetadataService.getDocumentsByUser(
+        user.id,
+        {
+          bucket: bucket,
+          organizationId: organizationId || undefined,
+        },
+      );
 
       if (error) {
         setError(`Failed to load documents: ${error.message}`);
@@ -109,7 +136,7 @@ export default function DocumentTest() {
         setDocuments(data || []);
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load documents');
+      setError(err instanceof Error ? err.message : "Failed to load documents");
     } finally {
       setLoading(false);
     }
@@ -124,19 +151,25 @@ export default function DocumentTest() {
 
     try {
       // Use the simple document service (based on user's sample code)
-      const uploadResult = await simpleDocumentService.uploadDocument(selectedFile, {
-        bucket: bucket as any,
-        organizationId: organizationId || undefined,
-        upsert: true
-      });
+      const uploadResult = await simpleDocumentService.uploadDocument(
+        selectedFile,
+        {
+          bucket: bucket as any,
+          organizationId: organizationId || undefined,
+          upsert: true,
+        },
+      );
 
       if (!uploadResult.success) {
-        throw new Error(uploadResult.error || 'Upload failed');
+        throw new Error(uploadResult.error || "Upload failed");
       }
 
       // Try to create document metadata (optional - won't block upload)
       try {
-        const metadata: Omit<DocumentMetadata, 'id' | 'created_at' | 'updated_at'> = {
+        const metadata: Omit<
+          DocumentMetadata,
+          "id" | "created_at" | "updated_at"
+        > = {
           user_id: user.id,
           organization_id: organizationId || null,
           bucket_name: bucket,
@@ -146,26 +179,30 @@ export default function DocumentTest() {
           mime_type: selectedFile.type,
           category: category,
           description: description || undefined,
-          status: 'draft'
+          status: "draft",
         };
 
         await documentMetadataService.createDocumentMetadata(metadata);
       } catch (metadataError) {
-        console.warn('File uploaded but metadata creation failed:', metadataError);
+        console.warn(
+          "File uploaded but metadata creation failed:",
+          metadataError,
+        );
       }
 
-      setSuccess(`Document uploaded successfully! File: ${selectedFile.name} to ${uploadResult.data!.path}`);
+      setSuccess(
+        `Document uploaded successfully! File: ${selectedFile.name} to ${uploadResult.data!.path}`,
+      );
 
       // Reset form
       setSelectedFile(null);
-      setDescription('');
-      setCategory('uncategorized');
+      setDescription("");
+      setCategory("uncategorized");
 
       // Reload documents
       await loadSimpleDocuments();
-
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Upload failed');
+      setError(err instanceof Error ? err.message : "Upload failed");
     } finally {
       setUploading(false);
     }
@@ -173,34 +210,37 @@ export default function DocumentTest() {
 
   const handleDeleteDocument = async (documentId: string) => {
     try {
-      const { error } = await documentMetadataService.deleteDocumentMetadata(documentId);
-      
+      const { error } =
+        await documentMetadataService.deleteDocumentMetadata(documentId);
+
       if (error) {
         setError(`Failed to delete document: ${error.message}`);
       } else {
-        setSuccess('Document deleted successfully');
+        setSuccess("Document deleted successfully");
         await loadDocuments();
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to delete document');
+      setError(
+        err instanceof Error ? err.message : "Failed to delete document",
+      );
     }
   };
 
   const formatFileSize = (bytes: number) => {
-    if (bytes === 0) return '0 Bytes';
+    if (bytes === 0) return "0 Bytes";
     const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const sizes = ["Bytes", "KB", "MB", "GB"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     });
   };
 
@@ -234,13 +274,15 @@ export default function DocumentTest() {
             <Alert>
               <AlertTriangle className="h-4 w-4" />
               <AlertDescription>
-                You need to be logged in to test the document storage functionality.
+                You need to be logged in to test the document storage
+                functionality.
               </AlertDescription>
             </Alert>
 
             <div className="space-y-3">
               <p className="text-sm text-muted-foreground">
-                To test document upload and management features, please sign in with your ChargeSource account.
+                To test document upload and management features, please sign in
+                with your ChargeSource account.
               </p>
 
               <div className="flex space-x-2">
@@ -251,15 +293,15 @@ export default function DocumentTest() {
                   </Link>
                 </Button>
                 <Button variant="outline" asChild>
-                  <Link to="/register">
-                    Create Account
-                  </Link>
+                  <Link to="/register">Create Account</Link>
                 </Button>
               </div>
             </div>
 
             <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-              <h4 className="font-medium text-blue-800 mb-2">What you can test after logging in:</h4>
+              <h4 className="font-medium text-blue-800 mb-2">
+                What you can test after logging in:
+              </h4>
               <ul className="text-sm text-blue-700 space-y-1">
                 <li>• Upload documents to different storage buckets</li>
                 <li>• Test user vs organization file separation</li>
@@ -279,7 +321,10 @@ export default function DocumentTest() {
       {/* Header */}
       <div className="flex items-center space-x-4">
         <Button variant="outline" size="sm" asChild>
-          <Link to="/enhanced-file-storage" className="flex items-center space-x-2">
+          <Link
+            to="/enhanced-file-storage"
+            className="flex items-center space-x-2"
+          >
             <ArrowLeft className="h-4 w-4" />
             <span>Back to File Storage</span>
           </Link>
@@ -320,14 +365,16 @@ export default function DocumentTest() {
             <Alert>
               <Users className="h-4 w-4" />
               <AlertDescription>
-                <strong>Good news:</strong> The Supabase connection is working and all storage buckets are accessible!
-                You just need to log in to test the document upload functionality.
+                <strong>Good news:</strong> The Supabase connection is working
+                and all storage buckets are accessible! You just need to log in
+                to test the document upload functionality.
               </AlertDescription>
             </Alert>
 
             <div className="space-y-3">
               <p className="text-sm">
-                The debugger shows your storage setup is complete. Just sign in with any email to start testing:
+                The debugger shows your storage setup is complete. Just sign in
+                with any email to start testing:
               </p>
 
               <div className="flex space-x-2">
@@ -338,14 +385,14 @@ export default function DocumentTest() {
                   </Link>
                 </Button>
                 <Button variant="outline" asChild className="flex-1">
-                  <Link to="/register">
-                    Create Test Account
-                  </Link>
+                  <Link to="/register">Create Test Account</Link>
                 </Button>
               </div>
 
               <div className="text-xs text-muted-foreground">
-                💡 <strong>Quick test:</strong> Use any email like <code>test@example.com</code> with any password for instant access
+                💡 <strong>Quick test:</strong> Use any email like{" "}
+                <code>test@example.com</code> with any password for instant
+                access
               </div>
             </div>
           </CardContent>
@@ -354,7 +401,8 @@ export default function DocumentTest() {
 
       {error && user && (
         <>
-          {error.includes('invalid input syntax for type uuid') || error.includes('user-') ? (
+          {error.includes("invalid input syntax for type uuid") ||
+          error.includes("user-") ? (
             <ClearStorageButton />
           ) : (
             <Alert variant="destructive">
@@ -388,7 +436,8 @@ export default function DocumentTest() {
                 <span>Upload Document</span>
               </CardTitle>
               <p className="text-sm text-muted-foreground">
-                Test uploading documents to different buckets with metadata tracking
+                Test uploading documents to different buckets with metadata
+                tracking
               </p>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -398,12 +447,15 @@ export default function DocumentTest() {
                   <Input
                     id="file"
                     type="file"
-                    onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
+                    onChange={(e) =>
+                      setSelectedFile(e.target.files?.[0] || null)
+                    }
                     accept=".pdf,.doc,.docx,.xls,.xlsx,.txt,.csv,.zip,.mp4,.mov,.avi"
                   />
                   {selectedFile && (
                     <p className="text-sm text-muted-foreground">
-                      Selected: {selectedFile.name} ({formatFileSize(selectedFile.size)})
+                      Selected: {selectedFile.name} (
+                      {formatFileSize(selectedFile.size)})
                     </p>
                   )}
                 </div>
@@ -419,7 +471,9 @@ export default function DocumentTest() {
                         <SelectItem key={option.value} value={option.value}>
                           <div>
                             <div>{option.label}</div>
-                            <div className="text-xs text-muted-foreground">{option.description}</div>
+                            <div className="text-xs text-muted-foreground">
+                              {option.description}
+                            </div>
                           </div>
                         </SelectItem>
                       ))}
@@ -428,7 +482,9 @@ export default function DocumentTest() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="organization">Organization ID (Optional)</Label>
+                  <Label htmlFor="organization">
+                    Organization ID (Optional)
+                  </Label>
                   <Input
                     id="organization"
                     placeholder="Leave empty for user files"
@@ -468,8 +524,8 @@ export default function DocumentTest() {
                 />
               </div>
 
-              <Button 
-                onClick={handleFileUpload} 
+              <Button
+                onClick={handleFileUpload}
                 disabled={!selectedFile || uploading}
                 className="w-full"
               >
@@ -498,15 +554,26 @@ export default function DocumentTest() {
                   <span>My Documents</span>
                   <Badge variant="outline">{simpleFiles.length} files</Badge>
                   {documents.length > 0 && (
-                    <Badge variant="secondary">{documents.length} with metadata</Badge>
+                    <Badge variant="secondary">
+                      {documents.length} with metadata
+                    </Badge>
                   )}
                 </div>
-                <Button onClick={() => { loadDocuments(); loadSimpleDocuments(); }} variant="outline" size="sm" disabled={loading}>
-                  {loading ? 'Loading...' : 'Refresh'}
+                <Button
+                  onClick={() => {
+                    loadDocuments();
+                    loadSimpleDocuments();
+                  }}
+                  variant="outline"
+                  size="sm"
+                  disabled={loading}
+                >
+                  {loading ? "Loading..." : "Refresh"}
                 </Button>
               </CardTitle>
               <p className="text-sm text-muted-foreground">
-                Documents uploaded to the current bucket: {bucketOptions.find(b => b.value === bucket)?.label}
+                Documents uploaded to the current bucket:{" "}
+                {bucketOptions.find((b) => b.value === bucket)?.label}
               </p>
             </CardHeader>
             <CardContent>
@@ -519,13 +586,17 @@ export default function DocumentTest() {
               ) : (
                 <div className="space-y-3">
                   <p className="text-sm text-muted-foreground mb-4">
-                    Showing files from {bucketOptions.find(b => b.value === bucket)?.label} bucket
+                    Showing files from{" "}
+                    {bucketOptions.find((b) => b.value === bucket)?.label}{" "}
+                    bucket
                   </p>
 
                   {simpleFiles.map((file) => {
                     // Try to find corresponding metadata
-                    const metadata = documents.find(doc =>
-                      doc.original_filename === file.name || doc.file_path.endsWith(file.name)
+                    const metadata = documents.find(
+                      (doc) =>
+                        doc.original_filename === file.name ||
+                        doc.file_path.endsWith(file.name),
                     );
 
                     return (
@@ -538,8 +609,16 @@ export default function DocumentTest() {
 
                               {metadata ? (
                                 <>
-                                  <Badge variant="outline">{metadata.category}</Badge>
-                                  <Badge variant={metadata.status === 'approved' ? 'default' : 'secondary'}>
+                                  <Badge variant="outline">
+                                    {metadata.category}
+                                  </Badge>
+                                  <Badge
+                                    variant={
+                                      metadata.status === "approved"
+                                        ? "default"
+                                        : "secondary"
+                                    }
+                                  >
                                     {metadata.status}
                                   </Badge>
                                   <Badge variant="default">
@@ -565,11 +644,15 @@ export default function DocumentTest() {
                             </div>
 
                             {metadata?.description && (
-                              <p className="text-sm text-muted-foreground mb-2">{metadata.description}</p>
+                              <p className="text-sm text-muted-foreground mb-2">
+                                {metadata.description}
+                              </p>
                             )}
 
                             <div className="flex items-center space-x-4 text-xs text-muted-foreground">
-                              <span>Updated: {formatDate(file.updated_at)}</span>
+                              <span>
+                                Updated: {formatDate(file.updated_at)}
+                              </span>
                               <span>Bucket: {file.bucket}</span>
                               <span>Path: {file.fullPath}</span>
                               {file.signedUrl && (
@@ -590,15 +673,22 @@ export default function DocumentTest() {
                               variant="ghost"
                               size="sm"
                               onClick={async () => {
-                                const result = await simpleDocumentService.deleteDocument(file.name, {
-                                  bucket: bucket,
-                                  organizationId: organizationId || undefined
-                                });
+                                const result =
+                                  await simpleDocumentService.deleteDocument(
+                                    file.name,
+                                    {
+                                      bucket: bucket,
+                                      organizationId:
+                                        organizationId || undefined,
+                                    },
+                                  );
                                 if (result.success) {
-                                  setSuccess('File deleted successfully');
+                                  setSuccess("File deleted successfully");
                                   await loadSimpleDocuments();
                                 } else {
-                                  setError(result.error || 'Failed to delete file');
+                                  setError(
+                                    result.error || "Failed to delete file",
+                                  );
                                 }
                               }}
                             >

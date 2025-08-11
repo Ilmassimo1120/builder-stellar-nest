@@ -1,177 +1,200 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
+  <head>
     <title>File Upload Authentication Test</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        .status { margin: 10px 0; padding: 10px; border-radius: 4px; }
-        .success { background-color: #d4edda; color: #155724; }
-        .error { background-color: #f8d7da; color: #721c24; }
-        .info { background-color: #d1ecf1; color: #0c5460; }
-        button { padding: 10px 20px; margin: 5px; }
-        #fileInput { margin: 10px 0; }
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+      .status {
+        margin: 10px 0;
+        padding: 10px;
+        border-radius: 4px;
+      }
+      .success {
+        background-color: #d4edda;
+        color: #155724;
+      }
+      .error {
+        background-color: #f8d7da;
+        color: #721c24;
+      }
+      .info {
+        background-color: #d1ecf1;
+        color: #0c5460;
+      }
+      button {
+        padding: 10px 20px;
+        margin: 5px;
+      }
+      #fileInput {
+        margin: 10px 0;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <h1>File Upload Authentication Test</h1>
-    
+
     <div class="status info">
-        This test page verifies that file upload works with local authentication.
+      This test page verifies that file upload works with local authentication.
     </div>
 
     <h2>Authentication Status</h2>
     <div id="authStatus" class="status">Checking authentication...</div>
-    
+
     <h2>Local Auth Test</h2>
     <button onclick="testLocalAuth()">Login with Local Auth</button>
     <button onclick="clearAuth()">Logout</button>
-    
+
     <h2>File Upload Test</h2>
     <input type="file" id="fileInput" multiple />
     <button onclick="testFileUpload()">Test Upload</button>
-    
+
     <div id="uploadStatus"></div>
-    
+
     <h2>Storage Status</h2>
     <div id="storageStatus" class="status">...</div>
 
     <script>
-        function checkAuth() {
-            const storedUser = localStorage.getItem("chargeSourceUser");
-            const authDiv = document.getElementById("authStatus");
-            
-            if (storedUser) {
-                try {
-                    const userData = JSON.parse(storedUser);
-                    authDiv.className = "status success";
-                    authDiv.innerHTML = `✅ Authenticated as: ${userData.email} (${userData.role})`;
-                } catch (e) {
-                    authDiv.className = "status error";
-                    authDiv.innerHTML = "❌ Invalid auth data in localStorage";
-                }
-            } else {
-                authDiv.className = "status error";
-                authDiv.innerHTML = "❌ Not authenticated";
-            }
+      function checkAuth() {
+        const storedUser = localStorage.getItem("chargeSourceUser");
+        const authDiv = document.getElementById("authStatus");
+
+        if (storedUser) {
+          try {
+            const userData = JSON.parse(storedUser);
+            authDiv.className = "status success";
+            authDiv.innerHTML = `✅ Authenticated as: ${userData.email} (${userData.role})`;
+          } catch (e) {
+            authDiv.className = "status error";
+            authDiv.innerHTML = "❌ Invalid auth data in localStorage";
+          }
+        } else {
+          authDiv.className = "status error";
+          authDiv.innerHTML = "❌ Not authenticated";
         }
-        
-        function testLocalAuth() {
-            // Simulate login with test user
-            const testUser = {
-                id: `test-user-${Date.now()}`,
-                email: "test@chargesource.com.au",
-                name: "Test User", 
-                company: "Test Company",
-                role: "user",
-                loginTime: new Date().toISOString(),
-                verified: true
-            };
-            
-            localStorage.setItem("chargeSourceUser", JSON.stringify(testUser));
-            checkAuth();
-            
-            document.getElementById("uploadStatus").innerHTML = 
-                '<div class="status success">✅ Test user logged in successfully</div>';
+      }
+
+      function testLocalAuth() {
+        // Simulate login with test user
+        const testUser = {
+          id: `test-user-${Date.now()}`,
+          email: "test@chargesource.com.au",
+          name: "Test User",
+          company: "Test Company",
+          role: "user",
+          loginTime: new Date().toISOString(),
+          verified: true,
+        };
+
+        localStorage.setItem("chargeSourceUser", JSON.stringify(testUser));
+        checkAuth();
+
+        document.getElementById("uploadStatus").innerHTML =
+          '<div class="status success">✅ Test user logged in successfully</div>';
+      }
+
+      function clearAuth() {
+        localStorage.removeItem("chargeSourceUser");
+        checkAuth();
+        document.getElementById("uploadStatus").innerHTML =
+          '<div class="status info">🔄 User logged out</div>';
+      }
+
+      async function testFileUpload() {
+        const fileInput = document.getElementById("fileInput");
+        const statusDiv = document.getElementById("uploadStatus");
+
+        if (!fileInput.files.length) {
+          statusDiv.innerHTML =
+            '<div class="status error">❌ Please select a file first</div>';
+          return;
         }
-        
-        function clearAuth() {
-            localStorage.removeItem("chargeSourceUser");
-            checkAuth();
-            document.getElementById("uploadStatus").innerHTML = 
-                '<div class="status info">🔄 User logged out</div>';
+
+        // Check auth first
+        const storedUser = localStorage.getItem("chargeSourceUser");
+        if (!storedUser) {
+          statusDiv.innerHTML =
+            '<div class="status error">❌ Please login first</div>';
+          return;
         }
-        
-        async function testFileUpload() {
-            const fileInput = document.getElementById("fileInput");
-            const statusDiv = document.getElementById("uploadStatus");
-            
-            if (!fileInput.files.length) {
-                statusDiv.innerHTML = '<div class="status error">❌ Please select a file first</div>';
-                return;
-            }
-            
-            // Check auth first
-            const storedUser = localStorage.getItem("chargeSourceUser");
-            if (!storedUser) {
-                statusDiv.innerHTML = '<div class="status error">❌ Please login first</div>';
-                return;
-            }
-            
-            statusDiv.innerHTML = '<div class="status info">🔄 Testing file upload...</div>';
-            
-            try {
-                // Create a mock file upload request
-                const file = fileInput.files[0];
-                const userData = JSON.parse(storedUser);
-                
-                // Simulate the authentication check that happens in the service
-                const uploadRequest = {
-                    file: file,
-                    bucket: "charge-source-user-files",
-                    metadata: {
-                        title: file.name.replace(/\.[^/.]+$/, ''),
-                        description: "Test upload from verification page",
-                        tags: ["test"],
-                        category: "testing",
-                        visibility: "private"
-                    }
-                };
-                
-                // This would normally call the file storage service
-                // For this test, we just verify auth and show success
-                statusDiv.innerHTML = `
+
+        statusDiv.innerHTML =
+          '<div class="status info">🔄 Testing file upload...</div>';
+
+        try {
+          // Create a mock file upload request
+          const file = fileInput.files[0];
+          const userData = JSON.parse(storedUser);
+
+          // Simulate the authentication check that happens in the service
+          const uploadRequest = {
+            file: file,
+            bucket: "charge-source-user-files",
+            metadata: {
+              title: file.name.replace(/\.[^/.]+$/, ""),
+              description: "Test upload from verification page",
+              tags: ["test"],
+              category: "testing",
+              visibility: "private",
+            },
+          };
+
+          // This would normally call the file storage service
+          // For this test, we just verify auth and show success
+          statusDiv.innerHTML = `
                     <div class="status success">
                         ✅ Authentication verified for file upload<br>
-                        📁 File: ${file.name} (${(file.size/1024).toFixed(1)} KB)<br>
+                        📁 File: ${file.name} (${(file.size / 1024).toFixed(1)} KB)<br>
                         👤 User: ${userData.email}<br>
                         🪣 Bucket: ${uploadRequest.bucket}<br>
                         📝 Title: ${uploadRequest.metadata.title}<br>
                         🏷️ Category: ${uploadRequest.metadata.category}
                     </div>
                 `;
-                
-                // Update storage status
-                updateStorageStatus();
-                
-            } catch (error) {
-                statusDiv.innerHTML = `<div class="status error">❌ Upload test failed: ${error.message}</div>`;
-            }
+
+          // Update storage status
+          updateStorageStatus();
+        } catch (error) {
+          statusDiv.innerHTML = `<div class="status error">❌ Upload test failed: ${error.message}</div>`;
         }
-        
-        function updateStorageStatus() {
-            const storageDiv = document.getElementById("storageStatus");
-            const localFiles = localStorage.getItem("chargeSource_localFiles");
-            
-            if (localFiles) {
-                try {
-                    const files = JSON.parse(localFiles);
-                    const userFiles = files.filter(f => {
-                        const storedUser = localStorage.getItem("chargeSourceUser");
-                        if (storedUser) {
-                            const userData = JSON.parse(storedUser);
-                            return f.authorId === userData.id;
-                        }
-                        return false;
-                    });
-                    
-                    storageDiv.className = "status info";
-                    storageDiv.innerHTML = `📁 Local Storage: ${userFiles.length} files stored locally`;
-                } catch (e) {
-                    storageDiv.className = "status error";
-                    storageDiv.innerHTML = "❌ Error reading local storage";
-                }
-            } else {
-                storageDiv.className = "status info";
-                storageDiv.innerHTML = "📁 Local Storage: No files stored yet";
-            }
+      }
+
+      function updateStorageStatus() {
+        const storageDiv = document.getElementById("storageStatus");
+        const localFiles = localStorage.getItem("chargeSource_localFiles");
+
+        if (localFiles) {
+          try {
+            const files = JSON.parse(localFiles);
+            const userFiles = files.filter((f) => {
+              const storedUser = localStorage.getItem("chargeSourceUser");
+              if (storedUser) {
+                const userData = JSON.parse(storedUser);
+                return f.authorId === userData.id;
+              }
+              return false;
+            });
+
+            storageDiv.className = "status info";
+            storageDiv.innerHTML = `📁 Local Storage: ${userFiles.length} files stored locally`;
+          } catch (e) {
+            storageDiv.className = "status error";
+            storageDiv.innerHTML = "❌ Error reading local storage";
+          }
+        } else {
+          storageDiv.className = "status info";
+          storageDiv.innerHTML = "📁 Local Storage: No files stored yet";
         }
-        
-        // Initialize page
-        checkAuth();
-        updateStorageStatus();
-        
-        // Update storage status every 2 seconds
-        setInterval(updateStorageStatus, 2000);
+      }
+
+      // Initialize page
+      checkAuth();
+      updateStorageStatus();
+
+      // Update storage status every 2 seconds
+      setInterval(updateStorageStatus, 2000);
     </script>
-</body>
+  </body>
 </html>

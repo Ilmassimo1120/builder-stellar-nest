@@ -1,8 +1,11 @@
-import { supabase } from '@/lib/supabase';
+import { supabase } from "@/lib/supabase";
 
 export interface UploadOptions {
   organizationId?: string;
-  bucket?: 'charge-source-user-files' | 'charge-source-documents' | 'charge-source-videos';
+  bucket?:
+    | "charge-source-user-files"
+    | "charge-source-documents"
+    | "charge-source-videos";
   upsert?: boolean;
 }
 
@@ -41,43 +44,52 @@ class SimpleDocumentService {
    * Upload a document using the direct Supabase client approach
    * Based on the sample code provided by the user
    */
-  async uploadDocument(file: File, options: UploadOptions = {}): Promise<UploadResult> {
+  async uploadDocument(
+    file: File,
+    options: UploadOptions = {},
+  ): Promise<UploadResult> {
     try {
       // Get the current user
-      const { data: { user }, error: authError } = await supabase.auth.getUser();
-      
+      const {
+        data: { user },
+        error: authError,
+      } = await supabase.auth.getUser();
+
       if (authError || !user) {
         return {
           success: false,
-          error: 'User must be authenticated'
+          error: "User must be authenticated",
         };
       }
 
       // Determine bucket and path
-      const bucket = options.bucket || 'charge-source-documents';
-      const uploadPath = options.organizationId 
-        ? `${options.organizationId}/${file.name}` 
+      const bucket = options.bucket || "charge-source-documents";
+      const uploadPath = options.organizationId
+        ? `${options.organizationId}/${file.name}`
         : `${user.id}/${file.name}`;
 
       // Upload the file directly to Supabase storage
       const { data, error } = await supabase.storage
         .from(bucket)
         .upload(uploadPath, file, {
-          upsert: options.upsert !== false // Default to true
+          upsert: options.upsert !== false, // Default to true
         });
 
       if (error) {
         // Provide helpful error message for missing buckets
-        if (error.message.includes('not found') || error.message.includes('does not exist')) {
+        if (
+          error.message.includes("not found") ||
+          error.message.includes("does not exist")
+        ) {
           return {
             success: false,
-            error: `Storage bucket '${bucket}' not found. Please create the storage buckets in your Supabase dashboard:\n\n• charge-source-user-files\n• charge-source-documents\n• charge-source-videos\n\nUntil then, files cannot be uploaded to cloud storage.`
+            error: `Storage bucket '${bucket}' not found. Please create the storage buckets in your Supabase dashboard:\n\n• charge-source-user-files\n• charge-source-documents\n• charge-source-videos\n\nUntil then, files cannot be uploaded to cloud storage.`,
           };
         }
 
         return {
           success: false,
-          error: `Upload failed: ${error.message}`
+          error: `Upload failed: ${error.message}`,
         };
       }
 
@@ -86,14 +98,13 @@ class SimpleDocumentService {
         data: {
           path: data.path,
           fullPath: data.fullPath,
-          bucket: bucket
-        }
+          bucket: bucket,
+        },
       };
-
     } catch (err) {
       return {
         success: false,
-        error: err instanceof Error ? err.message : 'Upload failed'
+        error: err instanceof Error ? err.message : "Upload failed",
       };
     }
   }
@@ -101,18 +112,23 @@ class SimpleDocumentService {
   /**
    * List documents for a user or organization
    */
-  async listDocuments(options: ListOptions = {}): Promise<{ files: FileInfo[]; error?: string }> {
+  async listDocuments(
+    options: ListOptions = {},
+  ): Promise<{ files: FileInfo[]; error?: string }> {
     try {
-      const { data: { user }, error: authError } = await supabase.auth.getUser();
-      
+      const {
+        data: { user },
+        error: authError,
+      } = await supabase.auth.getUser();
+
       if (authError || !user) {
         return {
           files: [],
-          error: 'User must be authenticated'
+          error: "User must be authenticated",
         };
       }
 
-      const bucket = options.bucket || 'charge-source-documents';
+      const bucket = options.bucket || "charge-source-documents";
       const folderPath = options.organizationId || user.id;
 
       // List files in the user's or organization's folder
@@ -121,13 +137,13 @@ class SimpleDocumentService {
         .list(folderPath, {
           limit: options.limit || 100,
           offset: options.offset || 0,
-          sortBy: { column: 'created_at', order: 'desc' }
+          sortBy: { column: "created_at", order: "desc" },
         });
 
       if (error) {
         return {
           files: [],
-          error: `Failed to list files: ${error.message}`
+          error: `Failed to list files: ${error.message}`,
         };
       }
 
@@ -143,19 +159,18 @@ class SimpleDocumentService {
             ...file,
             signedUrl: urlData?.signedUrl,
             bucket: bucket,
-            fullPath: filePath
+            fullPath: filePath,
           } as FileInfo;
-        })
+        }),
       );
 
       return {
-        files: filesWithUrls
+        files: filesWithUrls,
       };
-
     } catch (err) {
       return {
         files: [],
-        error: err instanceof Error ? err.message : 'Failed to list documents'
+        error: err instanceof Error ? err.message : "Failed to list documents",
       };
     }
   }
@@ -163,40 +178,43 @@ class SimpleDocumentService {
   /**
    * Delete a document
    */
-  async deleteDocument(fileName: string, options: { bucket?: string; organizationId?: string } = {}): Promise<{ success: boolean; error?: string }> {
+  async deleteDocument(
+    fileName: string,
+    options: { bucket?: string; organizationId?: string } = {},
+  ): Promise<{ success: boolean; error?: string }> {
     try {
-      const { data: { user }, error: authError } = await supabase.auth.getUser();
-      
+      const {
+        data: { user },
+        error: authError,
+      } = await supabase.auth.getUser();
+
       if (authError || !user) {
         return {
           success: false,
-          error: 'User must be authenticated'
+          error: "User must be authenticated",
         };
       }
 
-      const bucket = options.bucket || 'charge-source-documents';
+      const bucket = options.bucket || "charge-source-documents";
       const folderPath = options.organizationId || user.id;
       const filePath = `${folderPath}/${fileName}`;
 
-      const { error } = await supabase.storage
-        .from(bucket)
-        .remove([filePath]);
+      const { error } = await supabase.storage.from(bucket).remove([filePath]);
 
       if (error) {
         return {
           success: false,
-          error: `Failed to delete file: ${error.message}`
+          error: `Failed to delete file: ${error.message}`,
         };
       }
 
       return {
-        success: true
+        success: true,
       };
-
     } catch (err) {
       return {
         success: false,
-        error: err instanceof Error ? err.message : 'Failed to delete document'
+        error: err instanceof Error ? err.message : "Failed to delete document",
       };
     }
   }
@@ -204,17 +222,27 @@ class SimpleDocumentService {
   /**
    * Get a signed URL for a document
    */
-  async getDocumentUrl(fileName: string, options: { bucket?: string; organizationId?: string; expiresIn?: number } = {}): Promise<{ url?: string; error?: string }> {
+  async getDocumentUrl(
+    fileName: string,
+    options: {
+      bucket?: string;
+      organizationId?: string;
+      expiresIn?: number;
+    } = {},
+  ): Promise<{ url?: string; error?: string }> {
     try {
-      const { data: { user }, error: authError } = await supabase.auth.getUser();
-      
+      const {
+        data: { user },
+        error: authError,
+      } = await supabase.auth.getUser();
+
       if (authError || !user) {
         return {
-          error: 'User must be authenticated'
+          error: "User must be authenticated",
         };
       }
 
-      const bucket = options.bucket || 'charge-source-documents';
+      const bucket = options.bucket || "charge-source-documents";
       const folderPath = options.organizationId || user.id;
       const filePath = `${folderPath}/${fileName}`;
 
@@ -224,17 +252,17 @@ class SimpleDocumentService {
 
       if (error) {
         return {
-          error: `Failed to get URL: ${error.message}`
+          error: `Failed to get URL: ${error.message}`,
         };
       }
 
       return {
-        url: data.signedUrl
+        url: data.signedUrl,
       };
-
     } catch (err) {
       return {
-        error: err instanceof Error ? err.message : 'Failed to get document URL'
+        error:
+          err instanceof Error ? err.message : "Failed to get document URL",
       };
     }
   }

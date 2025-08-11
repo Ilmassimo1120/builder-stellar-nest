@@ -3,6 +3,7 @@
 ## 🔍 Current Status Overview
 
 ### ✅ **What's Working:**
+
 - ✅ Storage bucket configuration (3 buckets defined)
 - ✅ Simple document upload service with direct Supabase client
 - ✅ File path structure: `${user.id}/${filename}` or `${organizationId}/${filename}`
@@ -19,17 +20,19 @@
 ## 📋 Storage Bucket Configuration
 
 ### **charge-source-user-files**
+
 - **Purpose**: Personal files and general documents
 - **Max File Size**: 50MB per file
 - **Max Total Storage**: 5GB per bucket
-- **Allowed File Types**: 
+- **Allowed File Types**:
   - Documents: PDF, DOC, DOCX, XLS, XLSX, TXT, CSV
   - Images: JPEG, PNG, WebP
 - **Security**: User-only access (user.id folder structure)
 
 ### **charge-source-documents**
+
 - **Purpose**: Official documents, manuals, reports, specifications
-- **Max File Size**: 100MB per file  
+- **Max File Size**: 100MB per file
 - **Max Total Storage**: 10GB per bucket
 - **Allowed File Types**:
   - Documents: PDF, DOC, DOCX, XLS, XLSX, TXT, CSV
@@ -37,9 +40,10 @@
 - **Security**: User or organization access
 
 ### **charge-source-videos**
+
 - **Purpose**: Training videos and media content
 - **Max File Size**: 500MB per file
-- **Max Total Storage**: 50GB per bucket  
+- **Max Total Storage**: 50GB per bucket
 - **Allowed File Types**:
   - Videos: MP4, MPEG, QuickTime, AVI, WebM
 - **Security**: User or organization access
@@ -55,7 +59,7 @@ graph TD
     E --> F[Upload to Supabase Storage]
     F --> G[Create metadata record]
     G --> H[Update UI with success]
-    
+
     D --> I[Auth Error: Show login prompt]
     F --> J[Storage Error: Show bucket setup guide]
     G --> K[Metadata Error: Log warning, continue]
@@ -64,6 +68,7 @@ graph TD
 ## 🗃️ Database Schema
 
 ### **document_metadata** table
+
 ```sql
 CREATE TABLE document_metadata (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -89,6 +94,7 @@ CREATE TABLE document_metadata (
 ```
 
 ### **document_versions** table
+
 ```sql
 CREATE TABLE document_versions (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -106,6 +112,7 @@ CREATE TABLE document_versions (
 ## 🔐 Security Model
 
 ### **Row Level Security (RLS) Policies**
+
 ```sql
 -- Users can only access their own documents
 CREATE POLICY "Users can view their own documents" ON document_metadata
@@ -114,38 +121,41 @@ CREATE POLICY "Users can view their own documents" ON document_metadata
 -- Users can only access files in their folders
 CREATE POLICY "Users can view their own documents storage" ON storage.objects
   FOR SELECT USING (
-    bucket_id = 'charge-source-documents' AND 
+    bucket_id = 'charge-source-documents' AND
     auth.uid()::text = (storage.foldername(name))[1]
   );
 ```
 
 ### **Access Control Matrix**
 
-| Resource | User Files | Documents | Videos | Metadata |
-|----------|------------|-----------|---------|----------|
-| **Own Files** | ✅ Full Access | ✅ Full Access | ✅ Full Access | ✅ Full Access |
-| **Org Files** | ❌ No Access | ✅ Read/Write | ✅ Read/Write | ✅ Read/Write |
-| **Other Users** | ❌ No Access | ❌ No Access | ❌ No Access | ❌ No Access |
+| Resource        | User Files     | Documents      | Videos         | Metadata       |
+| --------------- | -------------- | -------------- | -------------- | -------------- |
+| **Own Files**   | ✅ Full Access | ✅ Full Access | ✅ Full Access | ✅ Full Access |
+| **Org Files**   | ❌ No Access   | ✅ Read/Write  | ✅ Read/Write  | ✅ Read/Write  |
+| **Other Users** | ❌ No Access   | ❌ No Access   | ❌ No Access   | ❌ No Access   |
 
 ## 🚨 Issues & Solutions
 
 ### **Issue 1: UUID Format Mismatch**
+
 ```typescript
 // ❌ Current: Mock auth generates
-id: `user-${Date.now()}` // "user-1754807921952"
+id: `user-${Date.now()}`; // "user-1754807921952"
 
 // ✅ Required: Valid UUID format
-id: "550e8400-e29b-41d4-a716-446655440000"
+id: "550e8400-e29b-41d4-a716-446655440000";
 ```
 
 **Solution**: Update mock auth to generate proper UUIDs
 
 ### **Issue 2: Missing Storage Buckets**
+
 **Error**: `Storage bucket 'charge-source-documents' not found`
 
 **Solution**: Run SQL script to create buckets:
+
 ```sql
-INSERT INTO storage.buckets (id, name, public) VALUES 
+INSERT INTO storage.buckets (id, name, public) VALUES
   ('charge-source-user-files', 'charge-source-user-files', false),
   ('charge-source-documents', 'charge-source-documents', false),
   ('charge-source-videos', 'charge-source-videos', false)
@@ -153,6 +163,7 @@ ON CONFLICT (id) DO NOTHING;
 ```
 
 ### **Issue 3: Missing Database Tables**
+
 **Error**: `Could not find the table 'public.document_metadata'`
 
 **Solution**: Run complete database setup SQL script
@@ -160,6 +171,7 @@ ON CONFLICT (id) DO NOTHING;
 ## 🧪 Testing Process
 
 ### **Current Test Flow**
+
 1. Visit `/DocumentTest` or `/document-test`
 2. Login with any email (mock auth)
 3. Select file and bucket
@@ -168,22 +180,24 @@ ON CONFLICT (id) DO NOTHING;
 
 ### **Test Cases to Verify**
 
-| Test Case | User Files | Documents | Videos | Expected Result |
-|-----------|------------|-----------|---------|-----------------|
-| **Small PDF** | ✅ Should work | ✅ Should work | ❌ Wrong type | Success/Error |
-| **Large Video** | ❌ Size limit | ❌ Size limit | ✅ Should work | Success/Error |
-| **Organization File** | N/A | ✅ Should work | ✅ Should work | Correct path |
-| **Metadata Creation** | ✅ Optional | ✅ Required | ✅ Optional | DB record |
+| Test Case             | User Files     | Documents      | Videos         | Expected Result |
+| --------------------- | -------------- | -------------- | -------------- | --------------- |
+| **Small PDF**         | ✅ Should work | ✅ Should work | ❌ Wrong type  | Success/Error   |
+| **Large Video**       | ❌ Size limit  | ❌ Size limit  | ✅ Should work | Success/Error   |
+| **Organization File** | N/A            | ✅ Should work | ✅ Should work | Correct path    |
+| **Metadata Creation** | ✅ Optional    | ✅ Required    | ✅ Optional    | DB record       |
 
 ## 🔄 Complete Integration Steps
 
 ### **Phase 1: Fix Core Issues**
+
 1. ✅ Fix UUID generation in mock auth
 2. ✅ Create storage buckets in Supabase
 3. ✅ Create database tables and policies
 4. ✅ Test basic upload/list functionality
 
 ### **Phase 2: Enhanced Features**
+
 1. File version management
 2. Approval workflows
 3. Advanced search and filtering
@@ -191,6 +205,7 @@ ON CONFLICT (id) DO NOTHING;
 5. File preview capabilities
 
 ### **Phase 3: ChargeSource Integration**
+
 1. Connect to project management
 2. Quote attachment system
 3. Customer portal access
@@ -199,12 +214,14 @@ ON CONFLICT (id) DO NOTHING;
 ## 📊 Usage Recommendations
 
 ### **charge-source-user-files**
+
 - Personal contractor certificates
 - Individual project photos
 - Personal documentation
 - Training completion certificates
 
 ### **charge-source-documents**
+
 - Project specifications
 - Installation manuals
 - Compliance certificates
@@ -213,6 +230,7 @@ ON CONFLICT (id) DO NOTHING;
 - Inspection reports
 
 ### **charge-source-videos**
+
 - Installation training videos
 - Safety procedure videos
 - Equipment demonstration videos
@@ -221,6 +239,7 @@ ON CONFLICT (id) DO NOTHING;
 ## 🔍 Monitoring & Analytics
 
 ### **Key Metrics to Track**
+
 - Upload success/failure rates by bucket
 - Storage usage per bucket
 - Most uploaded file types
@@ -228,6 +247,7 @@ ON CONFLICT (id) DO NOTHING;
 - Document approval turnaround times
 
 ### **Error Monitoring**
+
 - Authentication failures
 - Storage quota exceeded
 - Invalid file type uploads

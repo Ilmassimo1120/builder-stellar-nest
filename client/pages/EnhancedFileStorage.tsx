@@ -252,7 +252,8 @@ export default function EnhancedFileStorage() {
 
         {error && (
           <>
-            {error.includes('not found') || error.includes('create the storage buckets') ? (
+            {error.includes("not found") ||
+            error.includes("create the storage buckets") ? (
               <BucketSetupGuide />
             ) : (
               <Alert variant="destructive">

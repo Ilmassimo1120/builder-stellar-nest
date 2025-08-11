@@ -1,37 +1,40 @@
-import { createClient } from 'npm:@supabase/supabase-js';
+import { createClient } from "npm:@supabase/supabase-js";
 
 Deno.serve(async (req: Request) => {
   // Validate request method
-  if (req.method !== 'GET') {
-    return new Response('Method Not Allowed', { status: 405 });
+  if (req.method !== "GET") {
+    return new Response("Method Not Allowed", { status: 405 });
   }
 
   // Initialize Supabase client
   const supabase = createClient(
-    Deno.env.get('SUPABASE_URL') ?? '',
-    Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+    Deno.env.get("SUPABASE_URL") ?? "",
+    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
   );
 
   try {
     // Extract authorization header
-    const authHeader = req.headers.get('Authorization');
+    const authHeader = req.headers.get("Authorization");
     if (!authHeader) {
-      return new Response('Unauthorized', { status: 401 });
+      return new Response("Unauthorized", { status: 401 });
     }
 
     // Validate user
-    const { data: { user }, error: authError } = await supabase.auth.getUser(authHeader.replace('Bearer ', ''));
-    
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser(authHeader.replace("Bearer ", ""));
+
     if (authError || !user) {
-      return new Response('Authentication failed', { status: 403 });
+      return new Response("Authentication failed", { status: 403 });
     }
 
     // Get query parameters
     const url = new URL(req.url);
-    const limit = parseInt(url.searchParams.get('limit') || '50');
-    const offset = parseInt(url.searchParams.get('offset') || '0');
-    const bucket = url.searchParams.get('bucket') || 'charge-source-documents';
-    const organizationId = url.searchParams.get('organizationId');
+    const limit = parseInt(url.searchParams.get("limit") || "50");
+    const offset = parseInt(url.searchParams.get("offset") || "0");
+    const bucket = url.searchParams.get("bucket") || "charge-source-documents";
+    const organizationId = url.searchParams.get("organizationId");
 
     // Determine folder to list: organization files vs user files
     const folderPath = organizationId || user.id;
@@ -42,14 +45,14 @@ Deno.serve(async (req: Request) => {
       .list(folderPath, {
         limit,
         offset,
-        sortBy: { column: 'created_at', order: 'desc' }
+        sortBy: { column: "created_at", order: "desc" },
       });
 
     if (error) {
-      console.error('List error:', error);
-      return new Response(JSON.stringify({ error: error.message }), { 
+      console.error("List error:", error);
+      return new Response(JSON.stringify({ error: error.message }), {
         status: 500,
-        headers: { 'Content-Type': 'application/json' }
+        headers: { "Content-Type": "application/json" },
       });
     }
 
@@ -67,21 +70,23 @@ Deno.serve(async (req: Request) => {
           fullPath: filePath,
           bucket: bucket,
           organizationId: organizationId || null,
-          userId: user.id
+          userId: user.id,
         };
-      })
+      }),
     );
 
-    return new Response(JSON.stringify({ 
-      files: filesWithUrls,
-      total: data?.length || 0
-    }), { 
-      status: 200,
-      headers: { 'Content-Type': 'application/json' }
-    });
-
+    return new Response(
+      JSON.stringify({
+        files: filesWithUrls,
+        total: data?.length || 0,
+      }),
+      {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      },
+    );
   } catch (err) {
-    console.error('Unexpected error:', err);
-    return new Response('Internal Server Error', { status: 500 });
+    console.error("Unexpected error:", err);
+    return new Response("Internal Server Error", { status: 500 });
   }
 });

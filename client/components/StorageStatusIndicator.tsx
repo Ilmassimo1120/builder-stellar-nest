@@ -1,30 +1,34 @@
-import React, { useState, useEffect } from 'react';
-import { Badge } from '@/components/ui/badge';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Button } from '@/components/ui/button';
-import { 
-  Cloud, 
-  HardDrive, 
-  AlertTriangle, 
-  CheckCircle, 
-  Wifi, 
+import React, { useState, useEffect } from "react";
+import { Badge } from "@/components/ui/badge";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import {
+  Cloud,
+  HardDrive,
+  AlertTriangle,
+  CheckCircle,
+  Wifi,
   WifiOff,
   RefreshCw,
-  Info
-} from 'lucide-react';
-import { localFileStorageService } from '@/lib/services/localFileStorageService';
-import CORSFixGuide from './CORSFixGuide';
+  Info,
+} from "lucide-react";
+import { localFileStorageService } from "@/lib/services/localFileStorageService";
+import CORSFixGuide from "./CORSFixGuide";
 
 interface StorageStatusIndicatorProps {
   className?: string;
   showDetails?: boolean;
 }
 
-export default function StorageStatusIndicator({ 
-  className, 
-  showDetails = false 
+export default function StorageStatusIndicator({
+  className,
+  showDetails = false,
 }: StorageStatusIndicatorProps) {
-  const [localStats, setLocalStats] = useState({ totalFiles: 0, totalSize: 0, storageUsed: '0 B' });
+  const [localStats, setLocalStats] = useState({
+    totalFiles: 0,
+    totalSize: 0,
+    storageUsed: "0 B",
+  });
   const [showGuide, setShowGuide] = useState(false);
   const [isOnline, setIsOnline] = useState(navigator.onLine);
 
@@ -38,18 +42,18 @@ export default function StorageStatusIndicator({
     const handleOffline = () => setIsOnline(false);
 
     updateStats();
-    
+
     // Update stats every 5 seconds
     const interval = setInterval(updateStats, 5000);
-    
+
     // Listen for online/offline events
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
 
     return () => {
       clearInterval(interval);
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
     };
   }, []);
 
@@ -59,9 +63,16 @@ export default function StorageStatusIndicator({
     <div className={className}>
       <div className="flex items-center space-x-2">
         {/* Network Status */}
-        <Badge variant={isOnline ? "default" : "destructive"} className="flex items-center space-x-1">
-          {isOnline ? <Wifi className="h-3 w-3" /> : <WifiOff className="h-3 w-3" />}
-          <span>{isOnline ? 'Online' : 'Offline'}</span>
+        <Badge
+          variant={isOnline ? "default" : "destructive"}
+          className="flex items-center space-x-1"
+        >
+          {isOnline ? (
+            <Wifi className="h-3 w-3" />
+          ) : (
+            <WifiOff className="h-3 w-3" />
+          )}
+          <span>{isOnline ? "Online" : "Offline"}</span>
         </Badge>
 
         {/* Storage Status */}
@@ -95,8 +106,9 @@ export default function StorageStatusIndicator({
         <Alert className="mt-2">
           <HardDrive className="h-4 w-4" />
           <AlertDescription>
-            {localStats.totalFiles} files stored locally ({localStats.storageUsed} used). 
-            Files will sync to cloud storage when connection is restored.
+            {localStats.totalFiles} files stored locally (
+            {localStats.storageUsed} used). Files will sync to cloud storage
+            when connection is restored.
           </AlertDescription>
         </Alert>
       )}
@@ -106,7 +118,8 @@ export default function StorageStatusIndicator({
         <Alert variant="destructive" className="mt-2">
           <WifiOff className="h-4 w-4" />
           <AlertDescription>
-            You're currently offline. Files will be saved locally and synced when you're back online.
+            You're currently offline. Files will be saved locally and synced
+            when you're back online.
           </AlertDescription>
         </Alert>
       )}

@@ -14,13 +14,8 @@ export class BucketInitService {
       id: "product-images",
       name: "product-images",
       public: true,
-      allowedMimeTypes: [
-        "image/jpeg",
-        "image/png",
-        "image/gif",
-        "image/webp"
-      ],
-      fileSizeLimit: 10 * 1024 * 1024 // 10MB
+      allowedMimeTypes: ["image/jpeg", "image/png", "image/gif", "image/webp"],
+      fileSizeLimit: 10 * 1024 * 1024, // 10MB
     },
     {
       id: "documents",
@@ -38,21 +33,17 @@ export class BucketInitService {
         "application/vnd.ms-powerpoint",
         "application/zip",
         "image/jpeg",
-        "image/png"
+        "image/png",
       ],
-      fileSizeLimit: 50 * 1024 * 1024 // 50MB
+      fileSizeLimit: 50 * 1024 * 1024, // 50MB
     },
     {
       id: "quote-attachments",
       name: "quote-attachments",
       public: false,
-      allowedMimeTypes: [
-        "application/pdf",
-        "image/jpeg",
-        "image/png"
-      ],
-      fileSizeLimit: 20 * 1024 * 1024 // 20MB
-    }
+      allowedMimeTypes: ["application/pdf", "image/jpeg", "image/png"],
+      fileSizeLimit: 20 * 1024 * 1024, // 20MB
+    },
   ];
 
   /**
@@ -60,19 +51,22 @@ export class BucketInitService {
    */
   private getServiceRoleClient() {
     const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-    const serviceRoleKey = import.meta.env.SUPABASE_SERVICE_ROLE_KEY ||
-                          (import.meta as any).env?.SUPABASE_SERVICE_ROLE_KEY ||
-                          (window as any).SUPABASE_SERVICE_ROLE_KEY;
+    const serviceRoleKey =
+      import.meta.env.SUPABASE_SERVICE_ROLE_KEY ||
+      (import.meta as any).env?.SUPABASE_SERVICE_ROLE_KEY ||
+      (window as any).SUPABASE_SERVICE_ROLE_KEY;
 
     if (!serviceRoleKey) {
-      throw new Error("Service role key not found. Please set SUPABASE_SERVICE_ROLE_KEY environment variable.");
+      throw new Error(
+        "Service role key not found. Please set SUPABASE_SERVICE_ROLE_KEY environment variable.",
+      );
     }
 
     return createClient(supabaseUrl, serviceRoleKey, {
       auth: {
         autoRefreshToken: false,
-        persistSession: false
-      }
+        persistSession: false,
+      },
     });
   }
 
@@ -89,7 +83,7 @@ export class BucketInitService {
       success: true,
       created: [] as string[],
       existing: [] as string[],
-      errors: [] as string[]
+      errors: [] as string[],
     };
 
     console.log("🚀 Initializing storage buckets...");
@@ -99,14 +93,18 @@ export class BucketInitService {
       const serviceClient = this.getServiceRoleClient();
 
       // First, check which buckets already exist
-      const { data: existingBuckets, error: listError } = await serviceClient.storage.listBuckets();
-      
+      const { data: existingBuckets, error: listError } =
+        await serviceClient.storage.listBuckets();
+
       if (listError) {
-        console.warn("Warning: Could not list existing buckets:", listError.message);
+        console.warn(
+          "Warning: Could not list existing buckets:",
+          listError.message,
+        );
         // Continue anyway - we'll try to create and handle conflicts
       }
 
-      const existingBucketIds = existingBuckets?.map(b => b.id) || [];
+      const existingBucketIds = existingBuckets?.map((b) => b.id) || [];
       console.log("📋 Existing buckets:", existingBucketIds);
 
       // Create each bucket
@@ -119,22 +117,28 @@ export class BucketInitService {
           }
 
           console.log(`🆕 Creating bucket '${bucket.id}'...`);
-          const { data: createData, error: createError } = await serviceClient.storage.createBucket(
-            bucket.id,
-            {
+          const { data: createData, error: createError } =
+            await serviceClient.storage.createBucket(bucket.id, {
               public: bucket.public,
               allowedMimeTypes: bucket.allowedMimeTypes,
-              fileSizeLimit: bucket.fileSizeLimit
-            }
-          );
+              fileSizeLimit: bucket.fileSizeLimit,
+            });
 
           if (createError) {
             // Check if it's just a "bucket already exists" error
-            if (createError.message.includes('already exists') || createError.message.includes('duplicate')) {
-              console.log(`✅ Bucket '${bucket.id}' already exists (from error)`);
+            if (
+              createError.message.includes("already exists") ||
+              createError.message.includes("duplicate")
+            ) {
+              console.log(
+                `✅ Bucket '${bucket.id}' already exists (from error)`,
+              );
               result.existing.push(bucket.id);
             } else {
-              console.error(`❌ Failed to create bucket '${bucket.id}':`, createError.message);
+              console.error(
+                `❌ Failed to create bucket '${bucket.id}':`,
+                createError.message,
+              );
               result.errors.push(`${bucket.id}: ${createError.message}`);
               result.success = false;
             }
@@ -143,8 +147,12 @@ export class BucketInitService {
             result.created.push(bucket.id);
           }
         } catch (error) {
-          const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-          console.error(`❌ Exception creating bucket '${bucket.id}':`, errorMessage);
+          const errorMessage =
+            error instanceof Error ? error.message : "Unknown error";
+          console.error(
+            `❌ Exception creating bucket '${bucket.id}':`,
+            errorMessage,
+          );
           result.errors.push(`${bucket.id}: ${errorMessage}`);
           result.success = false;
         }
@@ -162,9 +170,12 @@ export class BucketInitService {
 
       return result;
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error during bucket initialization';
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "Unknown error during bucket initialization";
       console.error("❌ Bucket initialization failed:", errorMessage);
-      
+
       result.success = false;
       result.errors.push(errorMessage);
       return result;
@@ -180,32 +191,33 @@ export class BucketInitService {
     existing: string[];
   }> {
     try {
-      const { data: existingBuckets, error } = await supabase.storage.listBuckets();
-      
+      const { data: existingBuckets, error } =
+        await supabase.storage.listBuckets();
+
       if (error) {
         console.warn("Could not check buckets:", error.message);
         return {
           allExist: false,
-          missing: this.buckets.map(b => b.id),
-          existing: []
+          missing: this.buckets.map((b) => b.id),
+          existing: [],
         };
       }
 
-      const existingIds = existingBuckets?.map(b => b.id) || [];
-      const requiredIds = this.buckets.map(b => b.id);
-      const missing = requiredIds.filter(id => !existingIds.includes(id));
+      const existingIds = existingBuckets?.map((b) => b.id) || [];
+      const requiredIds = this.buckets.map((b) => b.id);
+      const missing = requiredIds.filter((id) => !existingIds.includes(id));
 
       return {
         allExist: missing.length === 0,
         missing,
-        existing: existingIds.filter(id => requiredIds.includes(id))
+        existing: existingIds.filter((id) => requiredIds.includes(id)),
       };
     } catch (error) {
       console.error("Error checking buckets:", error);
       return {
         allExist: false,
-        missing: this.buckets.map(b => b.id),
-        existing: []
+        missing: this.buckets.map((b) => b.id),
+        existing: [],
       };
     }
   }
@@ -215,16 +227,16 @@ export class BucketInitService {
    */
   async getBucketStatus() {
     const check = await this.checkBuckets();
-    
+
     return {
       ...check,
-      buckets: this.buckets.map(bucket => ({
+      buckets: this.buckets.map((bucket) => ({
         id: bucket.id,
         name: bucket.name,
         exists: check.existing.includes(bucket.id),
         maxSize: this.formatFileSize(bucket.fileSizeLimit || 0),
-        allowedTypes: bucket.allowedMimeTypes?.length || 0
-      }))
+        allowedTypes: bucket.allowedMimeTypes?.length || 0,
+      })),
     };
   }
 

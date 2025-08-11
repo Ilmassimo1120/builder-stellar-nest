@@ -110,7 +110,7 @@ class EnhancedFileStorageService {
 
   private readonly maxFileSizes: Record<BucketName, number> = {
     "product-images": 10 * 1024 * 1024, // 10MB
-    "documents": 50 * 1024 * 1024, // 50MB
+    documents: 50 * 1024 * 1024, // 50MB
     "quote-attachments": 20 * 1024 * 1024, // 20MB
     "charge-source-user-files": 50 * 1024 * 1024, // 50MB
     "charge-source-documents": 100 * 1024 * 1024, // 100MB
@@ -118,13 +118,8 @@ class EnhancedFileStorageService {
   };
 
   private readonly allowedMimeTypes: Record<BucketName, string[]> = {
-    "product-images": [
-      "image/jpeg",
-      "image/png",
-      "image/gif",
-      "image/webp",
-    ],
-    "documents": [
+    "product-images": ["image/jpeg", "image/png", "image/gif", "image/webp"],
+    documents: [
       "application/pdf",
       "text/plain",
       "text/csv",
@@ -319,8 +314,13 @@ class EnhancedFileStorageService {
         } catch (error) {
           const errorMessage = this.formatError(error, "Auth check failed");
           console.log("Network error during auth check:", errorMessage);
-          if (errorMessage.includes("Failed to fetch") || errorMessage.includes("CORS")) {
-            console.warn("⚠️ CORS or network connectivity issue detected during authentication");
+          if (
+            errorMessage.includes("Failed to fetch") ||
+            errorMessage.includes("CORS")
+          ) {
+            console.warn(
+              "⚠️ CORS or network connectivity issue detected during authentication",
+            );
           }
         }
       }
@@ -352,16 +352,18 @@ class EnhancedFileStorageService {
       try {
         console.log(`🔄 Attempting to upload file via Supabase storage`);
         console.log(`📁 File name: ${request.file.name}`);
-        console.log(`📦 File size: ${(request.file.size / 1024 / 1024).toFixed(2)} MB`);
+        console.log(
+          `📦 File size: ${(request.file.size / 1024 / 1024).toFixed(2)} MB`,
+        );
 
         // For local auth users, try direct storage upload instead of edge function
         if (isAuthenticated && user) {
           // Try direct Supabase storage upload first
           const { data, error: uploadError } = await supabase.storage
-            .from('documents')
+            .from("documents")
             .upload(filePath, request.file, {
               upsert: true,
-              contentType: request.file.type
+              contentType: request.file.type,
             });
 
           if (uploadError) {
@@ -395,29 +397,40 @@ class EnhancedFileStorageService {
             }
 
             // If direct storage fails, try edge function with mock session
-            console.log('Direct storage failed, trying edge function...', uploadError.message);
+            console.log(
+              "Direct storage failed, trying edge function...",
+              uploadError.message,
+            );
 
             // Get auth token for edge function (may not exist for local auth)
-            const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+            const {
+              data: { session },
+              error: sessionError,
+            } = await supabase.auth.getSession();
 
             if (sessionError || !session?.access_token) {
               // Create a simulated file upload for local auth users
-              console.log('No Supabase session available for local auth user, simulating upload...');
+              console.log(
+                "No Supabase session available for local auth user, simulating upload...",
+              );
               uploadData = { path: filePath };
               uploadSuccess = false; // Mark as simulated
             } else {
               // Create form data for edge function
               const formData = new FormData();
-              formData.append('file', request.file);
+              formData.append("file", request.file);
 
               // Call secure upload edge function
-              const response = await fetch(`${supabase.supabaseUrl}/functions/v1/secure-file-upload`, {
-                method: 'POST',
-                headers: {
-                  'Authorization': `Bearer ${session.access_token}`,
+              const response = await fetch(
+                `${supabase.supabaseUrl}/functions/v1/secure-file-upload`,
+                {
+                  method: "POST",
+                  headers: {
+                    Authorization: `Bearer ${session.access_token}`,
+                  },
+                  body: formData,
                 },
-                body: formData,
-              });
+              );
 
               if (!response.ok) {
                 const errorText = await response.text();
@@ -431,7 +444,10 @@ class EnhancedFileStorageService {
           } else {
             uploadData = data;
             uploadSuccess = true;
-            console.log("File uploaded successfully via direct storage:", filePath);
+            console.log(
+              "File uploaded successfully via direct storage:",
+              filePath,
+            );
           }
         }
       } catch (storageError) {
@@ -459,19 +475,29 @@ class EnhancedFileStorageService {
 
           try {
             // Use local storage fallback
-            const localResult = await localFileStorageService.simulateFileUpload(request);
-            console.log("✅ File stored locally as fallback:", localResult.fileName);
+            const localResult =
+              await localFileStorageService.simulateFileUpload(request);
+            console.log(
+              "✅ File stored locally as fallback:",
+              localResult.fileName,
+            );
 
             // Add metadata to indicate this is a local fallback
-            localResult.tags = [...(localResult.tags || []), 'local-fallback', 'pending-sync'];
+            localResult.tags = [
+              ...(localResult.tags || []),
+              "local-fallback",
+              "pending-sync",
+            ];
             localResult.description = localResult.description
               ? `${localResult.description} (Stored locally - will sync when cloud storage is available)`
-              : 'Stored locally - will sync when cloud storage is available';
+              : "Stored locally - will sync when cloud storage is available";
 
             return localResult;
           } catch (localError) {
             console.error("Local storage fallback also failed:", localError);
-            throw new Error(`Both cloud and local storage failed: ${errorMessage}`);
+            throw new Error(
+              `Both cloud and local storage failed: ${errorMessage}`,
+            );
           }
         } else {
           throw storageError; // Re-throw for unexpected errors
@@ -589,8 +615,12 @@ class EnhancedFileStorageService {
 
         try {
           // Use local storage as complete fallback
-          const localResult = await localFileStorageService.simulateFileUpload(request);
-          console.log("✅ File stored locally as complete fallback:", localResult.fileName);
+          const localResult =
+            await localFileStorageService.simulateFileUpload(request);
+          console.log(
+            "✅ File stored locally as complete fallback:",
+            localResult.fileName,
+          );
           return localResult;
         } catch (localError) {
           throw new Error(

@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/supabase';
+import { supabase } from "@/lib/supabase";
 
 export interface DocumentMetadata {
   id?: string;
@@ -12,7 +12,7 @@ export interface DocumentMetadata {
   category?: string;
   tags?: string[];
   description?: string;
-  status?: 'draft' | 'pending_approval' | 'approved' | 'rejected' | 'archived';
+  status?: "draft" | "pending_approval" | "approved" | "rejected" | "archived";
   version?: number;
   metadata?: Record<string, any>;
   created_at?: string;
@@ -33,48 +33,53 @@ export interface DocumentVersion {
 }
 
 class DocumentMetadataService {
-  async createDocumentMetadata(metadata: Omit<DocumentMetadata, 'id' | 'created_at' | 'updated_at'>): Promise<{ data: DocumentMetadata | null; error: any }> {
+  async createDocumentMetadata(
+    metadata: Omit<DocumentMetadata, "id" | "created_at" | "updated_at">,
+  ): Promise<{ data: DocumentMetadata | null; error: any }> {
     try {
       // First, ensure the tables exist
       await this.ensureTablesExist();
-      
+
       const { data, error } = await supabase
-        .from('document_metadata')
+        .from("document_metadata")
         .insert([metadata])
         .select()
         .single();
 
       return { data, error };
     } catch (error) {
-      console.error('Error creating document metadata:', error);
+      console.error("Error creating document metadata:", error);
       return { data: null, error };
     }
   }
 
-  async getDocumentsByUser(userId: string, options?: {
-    bucket?: string;
-    organizationId?: string;
-    status?: string;
-    limit?: number;
-    offset?: number;
-  }): Promise<{ data: DocumentMetadata[] | null; error: any }> {
+  async getDocumentsByUser(
+    userId: string,
+    options?: {
+      bucket?: string;
+      organizationId?: string;
+      status?: string;
+      limit?: number;
+      offset?: number;
+    },
+  ): Promise<{ data: DocumentMetadata[] | null; error: any }> {
     try {
       let query = supabase
-        .from('document_metadata')
-        .select('*')
-        .eq('user_id', userId)
-        .order('created_at', { ascending: false });
+        .from("document_metadata")
+        .select("*")
+        .eq("user_id", userId)
+        .order("created_at", { ascending: false });
 
       if (options?.bucket) {
-        query = query.eq('bucket_name', options.bucket);
+        query = query.eq("bucket_name", options.bucket);
       }
 
       if (options?.organizationId) {
-        query = query.eq('organization_id', options.organizationId);
+        query = query.eq("organization_id", options.organizationId);
       }
 
       if (options?.status) {
-        query = query.eq('status', options.status);
+        query = query.eq("status", options.status);
       }
 
       if (options?.limit) {
@@ -82,36 +87,43 @@ class DocumentMetadataService {
       }
 
       if (options?.offset) {
-        query = query.range(options.offset, (options.offset + (options.limit || 50)) - 1);
+        query = query.range(
+          options.offset,
+          options.offset + (options.limit || 50) - 1,
+        );
       }
 
       const { data, error } = await query;
       return { data, error };
     } catch (error) {
-      console.error('Error fetching documents:', error);
+      console.error("Error fetching documents:", error);
       return { data: null, error };
     }
   }
 
-  async updateDocumentStatus(documentId: string, status: DocumentMetadata['status'], approvedBy?: string): Promise<{ data: DocumentMetadata | null; error: any }> {
+  async updateDocumentStatus(
+    documentId: string,
+    status: DocumentMetadata["status"],
+    approvedBy?: string,
+  ): Promise<{ data: DocumentMetadata | null; error: any }> {
     try {
       const updateData: Partial<DocumentMetadata> = { status };
-      
-      if (status === 'approved' && approvedBy) {
+
+      if (status === "approved" && approvedBy) {
         updateData.approved_by = approvedBy;
         updateData.approved_at = new Date().toISOString();
       }
 
       const { data, error } = await supabase
-        .from('document_metadata')
+        .from("document_metadata")
         .update(updateData)
-        .eq('id', documentId)
+        .eq("id", documentId)
         .select()
         .single();
 
       return { data, error };
     } catch (error) {
-      console.error('Error updating document status:', error);
+      console.error("Error updating document status:", error);
       return { data: null, error };
     }
   }
@@ -119,71 +131,81 @@ class DocumentMetadataService {
   async deleteDocumentMetadata(documentId: string): Promise<{ error: any }> {
     try {
       const { error } = await supabase
-        .from('document_metadata')
+        .from("document_metadata")
         .delete()
-        .eq('id', documentId);
+        .eq("id", documentId);
 
       return { error };
     } catch (error) {
-      console.error('Error deleting document metadata:', error);
+      console.error("Error deleting document metadata:", error);
       return { error };
     }
   }
 
-  async createDocumentVersion(version: Omit<DocumentVersion, 'id' | 'created_at'>): Promise<{ data: DocumentVersion | null; error: any }> {
+  async createDocumentVersion(
+    version: Omit<DocumentVersion, "id" | "created_at">,
+  ): Promise<{ data: DocumentVersion | null; error: any }> {
     try {
       const { data, error } = await supabase
-        .from('document_versions')
+        .from("document_versions")
         .insert([version])
         .select()
         .single();
 
       return { data, error };
     } catch (error) {
-      console.error('Error creating document version:', error);
+      console.error("Error creating document version:", error);
       return { data: null, error };
     }
   }
 
-  async getDocumentVersions(documentId: string): Promise<{ data: DocumentVersion[] | null; error: any }> {
+  async getDocumentVersions(
+    documentId: string,
+  ): Promise<{ data: DocumentVersion[] | null; error: any }> {
     try {
       const { data, error } = await supabase
-        .from('document_versions')
-        .select('*')
-        .eq('document_id', documentId)
-        .order('version_number', { ascending: false });
+        .from("document_versions")
+        .select("*")
+        .eq("document_id", documentId)
+        .order("version_number", { ascending: false });
 
       return { data, error };
     } catch (error) {
-      console.error('Error fetching document versions:', error);
+      console.error("Error fetching document versions:", error);
       return { data: null, error };
     }
   }
 
-  async searchDocuments(query: string, userId: string, options?: {
-    bucket?: string;
-    organizationId?: string;
-  }): Promise<{ data: DocumentMetadata[] | null; error: any }> {
+  async searchDocuments(
+    query: string,
+    userId: string,
+    options?: {
+      bucket?: string;
+      organizationId?: string;
+    },
+  ): Promise<{ data: DocumentMetadata[] | null; error: any }> {
     try {
       let searchQuery = supabase
-        .from('document_metadata')
-        .select('*')
-        .eq('user_id', userId)
-        .or(`original_filename.ilike.%${query}%,description.ilike.%${query}%,tags.cs.{${query}}`)
-        .order('created_at', { ascending: false });
+        .from("document_metadata")
+        .select("*")
+        .eq("user_id", userId)
+        .or(
+          `original_filename.ilike.%${query}%,description.ilike.%${query}%,tags.cs.{${query}}`,
+        )
+        .order("created_at", { ascending: false });
 
       if (options?.bucket) {
-        searchQuery = searchQuery.eq('bucket_name', options.bucket);
+        searchQuery = searchQuery.eq("bucket_name", options.bucket);
       }
 
       if (options?.organizationId) {
-        searchQuery = searchQuery.eq('organization_id', options.organizationId);
+        searchQuery = searchQuery.eq("organization_id", options.organizationId);
       }
 
       const { data, error } = await searchQuery;
       return { data, error };
     } catch (error) {
-      console.error('Error searching documents:', error);
+      console.error("Error searching documents:", error);
       return { data: null, error };
     }
   }
@@ -192,13 +214,13 @@ class DocumentMetadataService {
     try {
       // Check if tables exist by trying to select from them
       const { error: metadataError } = await supabase
-        .from('document_metadata')
-        .select('id')
+        .from("document_metadata")
+        .select("id")
         .limit(1);
 
       const { error: versionsError } = await supabase
-        .from('document_versions')
-        .select('id')
+        .from("document_versions")
+        .select("id")
         .limit(1);
 
       // If tables don't exist, create them using RPC
@@ -206,7 +228,7 @@ class DocumentMetadataService {
         await this.createTables();
       }
     } catch (error) {
-      console.error('Error checking tables:', error);
+      console.error("Error checking tables:", error);
       // Try to create tables anyway
       await this.createTables();
     }
@@ -318,14 +340,15 @@ class DocumentMetadataService {
       `;
 
       // Use a simpler approach - create an RPC function to execute the SQL
-      console.log('Creating document metadata tables...');
-      
+      console.log("Creating document metadata tables...");
+
       // For now, we'll just log that tables need to be created
       // In production, you'd want to run this via a migration or manual SQL execution
-      console.warn('Document metadata tables need to be created. Please run the SQL manually in your Supabase SQL editor.');
-      
+      console.warn(
+        "Document metadata tables need to be created. Please run the SQL manually in your Supabase SQL editor.",
+      );
     } catch (error) {
-      console.error('Error creating tables:', error);
+      console.error("Error creating tables:", error);
     }
   }
 }

@@ -22,7 +22,9 @@ async function setupChargeSourceStorage() {
     console.error("❌ Missing required environment variables:");
     console.error("   - VITE_SUPABASE_URL");
     console.error("   - SUPABASE_SERVICE_ROLE_KEY");
-    console.log("\n📝 Add these to your .env file or use DevServerControl to set them.");
+    console.log(
+      "\n📝 Add these to your .env file or use DevServerControl to set them.",
+    );
     process.exit(1);
   }
 
@@ -51,13 +53,13 @@ async function setupChargeSourceStorage() {
         "text/csv",
         "image/jpeg",
         "image/png",
-        "image/webp"
+        "image/webp",
       ],
       fileSizeLimit: 50 * 1024 * 1024, // 50MB
-      description: "Personal files and general documents for users"
+      description: "Personal files and general documents for users",
     },
     {
-      name: "charge-source-documents", 
+      name: "charge-source-documents",
       public: false,
       allowedMimeTypes: [
         "application/pdf",
@@ -68,10 +70,10 @@ async function setupChargeSourceStorage() {
         "text/plain",
         "text/csv",
         "application/zip",
-        "application/x-zip-compressed"
+        "application/x-zip-compressed",
       ],
       fileSizeLimit: 100 * 1024 * 1024, // 100MB
-      description: "Official documents, manuals, and reports"
+      description: "Official documents, manuals, and reports",
     },
     {
       name: "charge-source-videos",
@@ -81,36 +83,41 @@ async function setupChargeSourceStorage() {
         "video/mpeg",
         "video/quicktime",
         "video/x-msvideo",
-        "video/webm"
+        "video/webm",
       ],
       fileSizeLimit: 500 * 1024 * 1024, // 500MB
-      description: "Training videos and media content"
-    }
+      description: "Training videos and media content",
+    },
   ];
 
   console.log("\n📋 Required Buckets:");
-  buckets.forEach(bucket => {
-    console.log(`   • ${bucket.name} (Private) - ${Math.round(bucket.fileSizeLimit / 1024 / 1024)}MB max`);
+  buckets.forEach((bucket) => {
+    console.log(
+      `   • ${bucket.name} (Private) - ${Math.round(bucket.fileSizeLimit / 1024 / 1024)}MB max`,
+    );
   });
 
   try {
     // Step 1: Create Storage Buckets
     console.log("\n🔍 Checking existing buckets...");
-    const { data: existingBuckets, error: listError } = await supabase.storage.listBuckets();
-    
+    const { data: existingBuckets, error: listError } =
+      await supabase.storage.listBuckets();
+
     if (listError) {
       throw new Error(`Failed to list buckets: ${listError.message}`);
     }
 
-    const existingNames = existingBuckets?.map(b => b.name) || [];
-    console.log(`   Found ${existingBuckets?.length || 0} existing buckets: ${existingNames.join(', ') || 'none'}`);
+    const existingNames = existingBuckets?.map((b) => b.name) || [];
+    console.log(
+      `   Found ${existingBuckets?.length || 0} existing buckets: ${existingNames.join(", ") || "none"}`,
+    );
 
     let created = 0;
     let existing = 0;
     let errors = 0;
 
     console.log("\n🚀 Creating storage buckets...");
-    
+
     for (const bucket of buckets) {
       if (existingNames.includes(bucket.name)) {
         console.log(`   ✅ ${bucket.name} - Already exists`);
@@ -119,15 +126,18 @@ async function setupChargeSourceStorage() {
       }
 
       console.log(`   🆕 Creating ${bucket.name}...`);
-      
+
       const { data, error } = await supabase.storage.createBucket(bucket.name, {
         public: bucket.public,
         allowedMimeTypes: bucket.allowedMimeTypes,
-        fileSizeLimit: bucket.fileSizeLimit
+        fileSizeLimit: bucket.fileSizeLimit,
       });
 
       if (error) {
-        if (error.message.includes('already exists') || error.message.includes('duplicate')) {
+        if (
+          error.message.includes("already exists") ||
+          error.message.includes("duplicate")
+        ) {
           console.log(`   ✅ ${bucket.name} - Already exists (from error)`);
           existing++;
         } else {
@@ -142,7 +152,7 @@ async function setupChargeSourceStorage() {
 
     // Step 2: Create Database Tables for Document Metadata
     console.log("\n🗃️ Creating database tables...");
-    
+
     const createDocumentMetadataTable = `
       CREATE TABLE IF NOT EXISTS document_metadata (
         id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -254,13 +264,13 @@ async function setupChargeSourceStorage() {
       { name: "Document versions table", query: createDocumentVersionsTable },
       { name: "RLS policies", query: createRLSPolicies },
       { name: "Database indexes", query: createIndexes },
-      { name: "Update trigger", query: createUpdateTrigger }
+      { name: "Update trigger", query: createUpdateTrigger },
     ];
 
     for (const { name, query } of dbQueries) {
       console.log(`   🏗️ Creating ${name}...`);
-      const { error: dbError } = await supabase.rpc('exec_sql', { sql: query });
-      
+      const { error: dbError } = await supabase.rpc("exec_sql", { sql: query });
+
       if (dbError) {
         console.log(`   ⚠️ ${name} - ${dbError.message}`);
       } else {
@@ -283,22 +293,23 @@ async function setupChargeSourceStorage() {
       console.log("   3. Try uploading documents to different buckets");
       console.log("   4. Check the Documents tab for uploaded files");
     } else {
-      console.log("\n⚠️  Some buckets could not be created. Check the errors above.");
+      console.log(
+        "\n⚠️  Some buckets could not be created. Check the errors above.",
+      );
     }
 
     // Verify final state
     console.log("\n🔍 Final verification...");
     const { data: finalBuckets } = await supabase.storage.listBuckets();
-    const finalNames = finalBuckets?.map(b => b.name) || [];
-    const requiredNames = buckets.map(b => b.name);
-    const missing = requiredNames.filter(name => !finalNames.includes(name));
-    
+    const finalNames = finalBuckets?.map((b) => b.name) || [];
+    const requiredNames = buckets.map((b) => b.name);
+    const missing = requiredNames.filter((name) => !finalNames.includes(name));
+
     if (missing.length === 0) {
       console.log("   ✅ All required buckets verified!");
     } else {
-      console.log(`   ⚠️  Still missing: ${missing.join(', ')}`);
+      console.log(`   ⚠️  Still missing: ${missing.join(", ")}`);
     }
-
   } catch (error) {
     console.error("\n❌ Setup failed:");
     console.error(`   ${error.message}`);

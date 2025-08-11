@@ -23,7 +23,9 @@ if (supabaseUrl.includes("your-project") || supabaseUrl.includes("localhost")) {
 }
 if (supabaseAnonKey.includes("your-anon-key") || supabaseAnonKey.length < 100) {
   console.error("❌ Invalid Supabase API key configuration");
-  throw new Error("Invalid Supabase anon key - please use your actual anon key");
+  throw new Error(
+    "Invalid Supabase anon key - please use your actual anon key",
+  );
 }
 
 // Create Supabase client
@@ -418,7 +420,10 @@ const isProblematicEnvironment = (): boolean => {
   if (typeof window === "undefined") return false;
 
   // Check for FullStory specifically
-  if ((window as any).FS || document.querySelector('script[src*="fullstory"]')) {
+  if (
+    (window as any).FS ||
+    document.querySelector('script[src*="fullstory"]')
+  ) {
     return true;
   }
 
@@ -433,7 +438,11 @@ const isProblematicEnvironment = (): boolean => {
   }
 
   // Check for other monitoring tools
-  if ((window as any).dataLayer || (window as any).gtag || (window as any).analytics) {
+  if (
+    (window as any).dataLayer ||
+    (window as any).gtag ||
+    (window as any).analytics
+  ) {
     return true;
   }
 
@@ -447,7 +456,8 @@ export const initializeSupabase = async (): Promise<boolean> => {
 
     // Make service role key available for bucket operations (development only)
     if (typeof window !== "undefined" && import.meta.env.DEV) {
-      (window as any).SUPABASE_SERVICE_ROLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlcG1rbGpvZHNpZmFleG1yaW5sIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NDYwNDAyNSwiZXhwIjoyMDcwMTgwMDI1fQ.4jnYA3rg3IKPyQT5e_Dng9oKr7eF1p8QI4s88K4n5XY";
+      (window as any).SUPABASE_SERVICE_ROLE_KEY =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlcG1rbGpvZHNpZmFleG1yaW5sIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NDYwNDAyNSwiZXhwIjoyMDcwMTgwMDI1fQ.4jnYA3rg3IKPyQT5e_Dng9oKr7eF1p8QI4s88K4n5XY";
     }
 
     // Check for problematic environments first - this is critical
