@@ -27,6 +27,7 @@ const NotFound = lazy(() => import("../pages/NotFound"));
 const Placeholder = lazy(() => import("../pages/Placeholder"));
 const AuthTest = lazy(() => import("../pages/AuthTest"));
 const DocumentTest = lazy(() => import("../pages/DocumentTest"));
+const SimpleTest = lazy(() => import("../pages/SimpleTest"));
 
 // Loading component for Suspense fallback
 const PageLoading = () => (
@@ -311,6 +312,14 @@ const AppRoutes = () => (
       element={
         <PublicLazyRoute>
           <AuthTest />
+        </PublicLazyRoute>
+      }
+    />
+    <Route
+      path="/test"
+      element={
+        <PublicLazyRoute>
+          <SimpleTest />
         </PublicLazyRoute>
       }
     />
