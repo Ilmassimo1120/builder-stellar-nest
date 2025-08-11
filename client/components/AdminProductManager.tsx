@@ -335,11 +335,12 @@ export default function AdminProductManager({
         }
       );
 
-      if (uploadResult.success && uploadResult.data) {
+      if (uploadResult) {
         // Add the uploaded image URL to the form data
+        const imageUrl = (uploadResult as any).publicUrl || (uploadResult as any).filePath || '/placeholder.svg';
         setFormData(prev => ({
           ...prev,
-          images: [...prev.images, uploadResult.data.publicUrl || uploadResult.data.filePath]
+          images: [...prev.images, imageUrl]
         }));
 
         toast({
@@ -347,7 +348,7 @@ export default function AdminProductManager({
           description: "Product image has been uploaded successfully.",
         });
       } else {
-        throw new Error(uploadResult.error || "Upload failed");
+        throw new Error("Upload failed");
       }
     } catch (error) {
       console.error("Image upload error:", error);
