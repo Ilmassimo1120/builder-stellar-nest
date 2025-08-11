@@ -102,8 +102,7 @@ export default function EnhancedFileManager({
   const [versionHistory, setVersionHistory] = useState<FileAsset[]>([]);
   const [changelog, setChangelog] = useState<ChangelogEntry[]>([]);
 
-  const isAdmin = userProfile?.role === 'admin' || userProfile?.role === 'global_admin';
-  const canApprove = isAdmin || userProfile?.role === 'sales';
+  const canApprove = isAdmin || isGlobalAdmin || isSales;
 
   useEffect(() => {
     loadAssets();
