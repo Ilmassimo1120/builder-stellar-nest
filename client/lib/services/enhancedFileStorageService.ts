@@ -365,6 +365,35 @@ class EnhancedFileStorageService {
             });
 
           if (uploadError) {
+            // Handle specific storage errors
+            if (
+              uploadError.message.includes("not found") ||
+              uploadError.message.includes("bucket")
+            ) {
+              throw new Error(
+                `Storage bucket '${request.bucket}' not found. Please create the storage buckets in your Supabase dashboard:\n\n• charge-source-user-files\n• charge-source-documents\n• charge-source-videos\n\nUntil then, files cannot be uploaded to cloud storage.`,
+              );
+            }
+            if (
+              uploadError.message.includes("permission") ||
+              uploadError.message.includes("unauthorized") ||
+              uploadError.message.includes("JWT") ||
+              uploadError.message.includes("token")
+            ) {
+              throw new Error(
+                `Permission denied for storage bucket '${request.bucket}'. Please check your Supabase storage bucket permissions and authentication.`,
+              );
+            }
+            if (
+              uploadError.message.includes("Failed to fetch") ||
+              uploadError.message.includes("CORS") ||
+              uploadError.message.includes("network")
+            ) {
+              throw new Error(
+                `Network connection failed. This might be a CORS issue or network connectivity problem. Please check:\n\n• Your internet connection\n• CORS settings in Supabase dashboard\n• Firewall/proxy settings\n\nError: ${uploadError.message}`,
+              );
+            }
+
             // If direct storage fails, try edge function with mock session
             console.log('Direct storage failed, trying edge function...', uploadError.message);
 
@@ -405,44 +434,6 @@ class EnhancedFileStorageService {
             console.log("File uploaded successfully via direct storage:", filePath);
           }
         }
-
-        if (uploadError) {
-          console.error("Supabase storage upload error:", uploadError);
-
-          // Handle specific storage errors
-          if (
-            uploadError.message.includes("not found") ||
-            uploadError.message.includes("bucket")
-          ) {
-            throw new Error(
-              `Storage bucket '${request.bucket}' not found. Please create the storage buckets in your Supabase dashboard:\n\n• charge-source-user-files\n• charge-source-documents\n• charge-source-videos\n\nUntil then, files cannot be uploaded to cloud storage.`,
-            );
-          }
-          if (
-            uploadError.message.includes("permission") ||
-            uploadError.message.includes("unauthorized") ||
-            uploadError.message.includes("JWT") ||
-            uploadError.message.includes("token")
-          ) {
-            throw new Error(
-              `Permission denied for storage bucket '${request.bucket}'. Please check your Supabase storage bucket permissions and authentication.`,
-            );
-          }
-          if (
-            uploadError.message.includes("Failed to fetch") ||
-            uploadError.message.includes("CORS") ||
-            uploadError.message.includes("network")
-          ) {
-            throw new Error(
-              `Network connection failed. This might be a CORS issue or network connectivity problem. Please check:\n\n• Your internet connection\n• CORS settings in Supabase dashboard\n• Firewall/proxy settings\n\nError: ${uploadError.message}`,
-            );
-          }
-          throw new Error(`Storage upload failed: ${uploadError.message}`);
-        }
-
-        uploadData = data;
-        uploadSuccess = true;
-        console.log("File uploaded successfully to storage:", filePath);
       } catch (storageError) {
         const errorMessage = this.formatError(
           storageError,
