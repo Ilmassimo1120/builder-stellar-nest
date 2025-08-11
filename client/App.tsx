@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/sonner";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import AppRoutes from "@/routes/AppRoutes";
+import { AuthProvider } from "@/hooks/useAuth";
 import { appConfig } from "@/lib/config";
 import { preloadCriticalResources } from "@/lib/bundleOptimization";
 import "@/global.css";
@@ -48,34 +49,36 @@ function App() {
   return (
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
-          <Suspense fallback={<GlobalLoadingFallback />}>
-            <div className="min-h-screen bg-background">
-              <ErrorBoundary
-                fallback={
-                  <div className="p-4 text-center">
-                    <h2 className="text-lg font-semibold mb-2">
-                      Navigation Error
-                    </h2>
-                    <p className="text-muted-foreground">
-                      There was an error loading the navigation. Please refresh
-                      the page.
-                    </p>
-                  </div>
-                }
-              >
-                <AppRoutes />
-              </ErrorBoundary>
+        <AuthProvider>
+          <BrowserRouter>
+            <Suspense fallback={<GlobalLoadingFallback />}>
+              <div className="min-h-screen bg-background">
+                <ErrorBoundary
+                  fallback={
+                    <div className="p-4 text-center">
+                      <h2 className="text-lg font-semibold mb-2">
+                        Navigation Error
+                      </h2>
+                      <p className="text-muted-foreground">
+                        There was an error loading the navigation. Please refresh
+                        the page.
+                      </p>
+                    </div>
+                  }
+                >
+                  <AppRoutes />
+                </ErrorBoundary>
 
-              <Toaster
-                position="bottom-right"
-                toastOptions={{
-                  duration: 4000,
-                }}
-              />
-            </div>
-          </Suspense>
-        </BrowserRouter>
+                <Toaster
+                  position="bottom-right"
+                  toastOptions={{
+                    duration: 4000,
+                  }}
+                />
+              </div>
+            </Suspense>
+          </BrowserRouter>
+        </AuthProvider>
       </QueryClientProvider>
     </ErrorBoundary>
   );
