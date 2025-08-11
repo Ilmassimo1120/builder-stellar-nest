@@ -30,11 +30,16 @@ Deno.serve(async (req: Request) => {
     const url = new URL(req.url);
     const limit = parseInt(url.searchParams.get('limit') || '50');
     const offset = parseInt(url.searchParams.get('offset') || '0');
+    const bucket = url.searchParams.get('bucket') || 'charge-source-documents';
+    const organizationId = url.searchParams.get('organizationId');
 
-    // List files in user's folder
+    // Determine folder to list: organization files vs user files
+    const folderPath = organizationId || user.id;
+
+    // List files in specified folder and bucket
     const { data, error } = await supabase.storage
-      .from('chargesource')
-      .list(user.id, {
+      .from(bucket)
+      .list(folderPath, {
         limit,
         offset,
         sortBy: { column: 'created_at', order: 'desc' }
@@ -51,14 +56,18 @@ Deno.serve(async (req: Request) => {
     // Get signed URLs for each file
     const filesWithUrls = await Promise.all(
       (data || []).map(async (file) => {
+        const filePath = `${folderPath}/${file.name}`;
         const { data: urlData } = await supabase.storage
-          .from('chargesource')
-          .createSignedUrl(`${user.id}/${file.name}`, 3600); // 1 hour expiry
+          .from(bucket)
+          .createSignedUrl(filePath, 3600); // 1 hour expiry
 
         return {
           ...file,
           signedUrl: urlData?.signedUrl,
-          fullPath: `${user.id}/${file.name}`
+          fullPath: filePath,
+          bucket: bucket,
+          organizationId: organizationId || null,
+          userId: user.id
         };
       })
     );
