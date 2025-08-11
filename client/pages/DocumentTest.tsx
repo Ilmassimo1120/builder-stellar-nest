@@ -295,7 +295,52 @@ export default function DocumentTest() {
       {/* Supabase Connection Debugger */}
       <SupabaseDebugger />
 
-      {error && (
+      {/* Authentication Required Notice */}
+      {!user && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center space-x-2 text-blue-600">
+              <Users className="h-5 w-5" />
+              <span>Login Required for Testing</span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <Alert>
+              <Users className="h-4 w-4" />
+              <AlertDescription>
+                <strong>Good news:</strong> The Supabase connection is working and all storage buckets are accessible!
+                You just need to log in to test the document upload functionality.
+              </AlertDescription>
+            </Alert>
+
+            <div className="space-y-3">
+              <p className="text-sm">
+                The debugger shows your storage setup is complete. Just sign in with any email to start testing:
+              </p>
+
+              <div className="flex space-x-2">
+                <Button asChild className="flex-1">
+                  <Link to="/login">
+                    <Users className="h-4 w-4 mr-2" />
+                    Sign In to Test
+                  </Link>
+                </Button>
+                <Button variant="outline" asChild className="flex-1">
+                  <Link to="/register">
+                    Create Test Account
+                  </Link>
+                </Button>
+              </div>
+
+              <div className="text-xs text-muted-foreground">
+                💡 <strong>Quick test:</strong> Use any email like <code>test@example.com</code> with any password for instant access
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {error && user && (
         <>
           {error.includes('invalid input syntax for type uuid') || error.includes('user-') ? (
             <ClearStorageButton />
