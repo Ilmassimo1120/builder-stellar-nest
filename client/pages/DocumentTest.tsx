@@ -18,7 +18,8 @@ import {
   Users,
   Building2,
   Clock,
-  ArrowLeft
+  ArrowLeft,
+  Database
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
