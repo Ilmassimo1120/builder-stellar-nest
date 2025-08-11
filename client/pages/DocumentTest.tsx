@@ -28,6 +28,7 @@ import { documentMetadataService, DocumentMetadata } from '@/lib/services/docume
 import { simpleDocumentService, FileInfo } from '@/lib/services/simpleDocumentService';
 import BucketSetupGuide from '@/components/BucketSetupGuide';
 import StorageSetupWizard from '@/components/StorageSetupWizard';
+import ClearStorageButton from '@/components/ClearStorageButton';
 
 export default function DocumentTest() {
   const { user } = useAuth();
@@ -44,7 +45,7 @@ export default function DocumentTest() {
   const [success, setSuccess] = useState<string | null>(null);
 
   const bucketOptions = [
-    { value: 'charge-source-user-files', label: '👤 User Files', description: 'Personal files (50MB max)' },
+    { value: 'charge-source-user-files', label: '��� User Files', description: 'Personal files (50MB max)' },
     { value: 'charge-source-documents', label: '📄 Documents', description: 'Official documents (100MB max)' },
     { value: 'charge-source-videos', label: '🎥 Videos', description: 'Training videos (500MB max)' }
   ];
@@ -291,12 +292,18 @@ export default function DocumentTest() {
       <StorageSetupWizard />
 
       {error && (
-        <Alert variant="destructive">
-          <AlertTriangle className="h-4 w-4" />
-          <AlertDescription>
-            <strong>Error:</strong> {error}
-          </AlertDescription>
-        </Alert>
+        <>
+          {error.includes('invalid input syntax for type uuid') || error.includes('user-') ? (
+            <ClearStorageButton />
+          ) : (
+            <Alert variant="destructive">
+              <AlertTriangle className="h-4 w-4" />
+              <AlertDescription>
+                <strong>Error:</strong> {error}
+              </AlertDescription>
+            </Alert>
+          )}
+        </>
       )}
 
       {success && (
