@@ -60,8 +60,8 @@ function App() {
                         Navigation Error
                       </h2>
                       <p className="text-muted-foreground">
-                        There was an error loading the navigation. Please refresh
-                        the page.
+                        There was an error loading the navigation. Please
+                        refresh the page.
                       </p>
                     </div>
                   }
