@@ -31,6 +31,7 @@ import StorageSetupWizard from '@/components/StorageSetupWizard';
 import ClearStorageButton from '@/components/ClearStorageButton';
 import SupabaseDebugger from '@/components/SupabaseDebugger';
 import DirectStorageTest from '@/components/DirectStorageTest';
+import BucketVerifier from '@/components/BucketVerifier';
 
 export default function DocumentTest() {
   const { user } = useAuth();
@@ -289,6 +290,9 @@ export default function DocumentTest() {
           </p>
         </div>
       </div>
+
+      {/* Raw Bucket Verification - Check if buckets actually exist */}
+      <BucketVerifier />
 
       {/* Storage Setup Wizard - Always show for setup assistance */}
       <StorageSetupWizard />
