@@ -109,6 +109,9 @@ class EnhancedFileStorageService {
   ];
 
   private readonly maxFileSizes: Record<BucketName, number> = {
+    "product-images": 10 * 1024 * 1024, // 10MB
+    "documents": 50 * 1024 * 1024, // 50MB
+    "quote-attachments": 20 * 1024 * 1024, // 20MB
     "charge-source-user-files": 50 * 1024 * 1024, // 50MB
     "charge-source-documents": 100 * 1024 * 1024, // 100MB
     "charge-source-videos": 500 * 1024 * 1024, // 500MB
