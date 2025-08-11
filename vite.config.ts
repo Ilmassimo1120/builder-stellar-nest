@@ -55,6 +55,8 @@ export default defineConfig(({ mode }) => ({
   esbuild: {
     // Remove console statements in production
     drop: mode === "production" ? ["console", "debugger"] : [],
+    // Ignore TypeScript errors in development
+    logOverride: { 'this-is-undefined-in-esm': 'silent' }
   },
 }));
 
