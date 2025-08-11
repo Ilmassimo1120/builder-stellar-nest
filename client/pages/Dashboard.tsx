@@ -87,7 +87,7 @@ export default function Dashboard() {
         // Reload projects if connection is successful
         await loadProjects();
       } else {
-        console.log("📱 Connection not available, using local mode");
+        console.log("���� Connection not available, using local mode");
       }
     } catch (error) {
       console.log("⚠️ Error retrying Supabase connection, using local mode");
@@ -1044,6 +1044,7 @@ export default function Dashboard() {
           <TabsContent value="database" className="space-y-6">
             <NetworkTest />
             <SupabaseConnectionTest />
+            <BucketInitializer />
             <SupabaseTest />
           </TabsContent>
         </Tabs>
