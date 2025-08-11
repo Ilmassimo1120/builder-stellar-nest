@@ -171,6 +171,13 @@ export default function ChargeSourceStorageSetup() {
         </p>
       </CardHeader>
       <CardContent className="space-y-4">
+        <Alert>
+          <Info className="h-4 w-4" />
+          <AlertDescription>
+            <strong>How it works:</strong> Storage buckets are created server-side with service role privileges.
+            Click "Create Missing Buckets" to automatically set up the required storage containers for your ChargeSource documents.
+          </AlertDescription>
+        </Alert>
         {error && (
           <Alert variant="destructive">
             <AlertTriangle className="h-4 w-4" />
