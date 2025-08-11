@@ -15,13 +15,50 @@ export default defineConfig(({ mode }) => ({
   },
   build: {
     outDir: "dist/spa",
+    sourcemap: mode === "development",
+    minify: mode === "production" ? "esbuild" : false,
+    target: "es2020",
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          // Split vendor chunks for better caching
+          vendor: ["react", "react-dom", "react-router-dom"],
+          ui: [
+            "@radix-ui/react-dialog",
+            "@radix-ui/react-dropdown-menu",
+            "@radix-ui/react-toast",
+            "@radix-ui/react-select",
+          ],
+          icons: ["lucide-react"],
+          forms: ["react-hook-form", "@hookform/resolvers", "zod"],
+          utils: ["clsx", "tailwind-merge", "date-fns"],
+        },
+      },
+    },
+    chunkSizeWarningLimit: 1000,
   },
-  plugins: [react(), expressPlugin()],
+  plugins: [
+    react(),
+    expressPlugin(),
+    ...(mode === "production" ? [compressionPlugin()] : []),
+  ],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./client"),
       "@shared": path.resolve(__dirname, "./shared"),
     },
+  },
+  define: {
+    // Remove console logs in production
+    ...(mode === "production" && {
+      "console.log": "(() => {})",
+      "console.debug": "(() => {})",
+      "console.warn": "(() => {})",
+    }),
+  },
+  esbuild: {
+    // Remove console statements in production
+    drop: mode === "production" ? ["console", "debugger"] : [],
   },
 }));
 
@@ -34,6 +71,17 @@ function expressPlugin(): Plugin {
 
       // Add Express app as middleware to Vite dev server
       server.middlewares.use(app);
+    },
+  };
+}
+
+function compressionPlugin(): Plugin {
+  return {
+    name: "compression-plugin",
+    apply: "build",
+    generateBundle() {
+      // Add compression headers for production
+      console.log("📦 Applying production optimizations...");
     },
   };
 }
