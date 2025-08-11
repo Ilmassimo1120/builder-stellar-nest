@@ -57,26 +57,47 @@ export default function StorageSetupWizard() {
   const checkStorageBuckets = async () => {
     updateStepStatus('buckets', 'checking');
     try {
+      // First check if we have basic Supabase connection
+      console.log('Checking Supabase connection...');
+
       const { data, error } = await supabase.storage.listBuckets();
-      
+
+      console.log('Storage listBuckets result:', { data, error });
+
       if (error) {
-        updateStepStatus('buckets', 'failed', error.message);
+        // Check for common authentication issues
+        if (error.message.includes('JWT') || error.message.includes('unauthorized') || error.message.includes('authentication')) {
+          updateStepStatus('buckets', 'failed', `Authentication issue: ${error.message}. Make sure your Supabase URL and anon key are correct.`);
+        } else {
+          updateStepStatus('buckets', 'failed', `Supabase error: ${error.message}`);
+        }
         return false;
       }
 
       const requiredBuckets = ['charge-source-user-files', 'charge-source-documents', 'charge-source-videos'];
       const existingBuckets = data?.map(b => b.name) || [];
+
+      console.log('Required buckets:', requiredBuckets);
+      console.log('Existing buckets:', existingBuckets);
+
       const missingBuckets = requiredBuckets.filter(name => !existingBuckets.includes(name));
 
       if (missingBuckets.length === 0) {
         updateStepStatus('buckets', 'completed');
         return true;
       } else {
-        updateStepStatus('buckets', 'failed', `Missing buckets: ${missingBuckets.join(', ')}`);
+        // Show more detailed info about what was found
+        updateStepStatus('buckets', 'failed',
+          `Missing ${missingBuckets.length} buckets: ${missingBuckets.join(', ')}. ` +
+          `Found ${existingBuckets.length} buckets: ${existingBuckets.join(', ') || 'none'}`
+        );
         return false;
       }
     } catch (err) {
-      updateStepStatus('buckets', 'failed', err instanceof Error ? err.message : 'Unknown error');
+      console.error('Storage check error:', err);
+      updateStepStatus('buckets', 'failed',
+        `Connection error: ${err instanceof Error ? err.message : 'Unknown error'}. Check browser console for details.`
+      );
       return false;
     }
   };
