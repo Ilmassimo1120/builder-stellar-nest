@@ -255,6 +255,10 @@ export default function EnhancedFileUpload({
             errorMessage = '📂 Storage bucket not found. Please contact support to set up file storage.';
           } else if (errorMessage.includes('permission')) {
             errorMessage = '🚫 Permission denied. Please check your account permissions.';
+          } else if (errorMessage.includes('CORS') || errorMessage.includes('network issues') || errorMessage.includes('Failed to fetch')) {
+            errorMessage = '🌐 Network issue detected. Using local storage as fallback. Your file has been saved locally and will sync when the connection is restored.';
+          } else if (errorMessage.includes('locally as fallback') || errorMessage.includes('stored locally')) {
+            errorMessage = '💾 File saved locally! Cloud storage is temporarily unavailable, but your file is safely stored and will sync later.';
           }
 
           // Update status to error
