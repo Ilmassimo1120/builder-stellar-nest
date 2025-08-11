@@ -171,6 +171,14 @@ const AppRoutes = () => (
       }
     />
     <Route
+      path="/EnhancedFileStorage"
+      element={
+        <ProtectedLazyRoute>
+          <EnhancedFileStorage />
+        </ProtectedLazyRoute>
+      }
+    />
+    <Route
       path="/document-test"
       element={
         <PublicLazyRoute>
