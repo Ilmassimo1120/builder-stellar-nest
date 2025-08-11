@@ -142,6 +142,8 @@ export default function AdminProductManager({
   const [searchTerm, setSearchTerm] = useState("");
   const [specKey, setSpecKey] = useState("");
   const [specValue, setSpecValue] = useState("");
+  const [imageUploading, setImageUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const categories = productCatalog.getCategories();
   const subcategories = productCatalog.getSubcategories(formData.category);
