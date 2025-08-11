@@ -32,6 +32,7 @@ import ClearStorageButton from '@/components/ClearStorageButton';
 import SupabaseDebugger from '@/components/SupabaseDebugger';
 import DirectStorageTest from '@/components/DirectStorageTest';
 import BucketVerifier from '@/components/BucketVerifier';
+import OfflineStorageTest from '@/components/OfflineStorageTest';
 
 export default function DocumentTest() {
   const { user } = useAuth();
@@ -290,6 +291,9 @@ export default function DocumentTest() {
           </p>
         </div>
       </div>
+
+      {/* FullStory-Safe Storage Test - Primary testing method */}
+      <OfflineStorageTest />
 
       {/* Raw Bucket Verification - Check if buckets actually exist */}
       <BucketVerifier />
