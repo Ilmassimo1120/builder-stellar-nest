@@ -79,7 +79,7 @@ export default function EnhancedFileManager({
   allowVersionControl = true,
   className
 }: EnhancedFileManagerProps) {
-  const { userProfile } = useAuth();
+  const { user, isAdmin, isGlobalAdmin, isSales } = useAuth();
   const [assets, setAssets] = useState<FileAsset[]>([]);
   const [filteredAssets, setFilteredAssets] = useState<FileAsset[]>([]);
   const [loading, setLoading] = useState(true);
