@@ -78,12 +78,20 @@ export default function ChargeSourceStorageSetup() {
         },
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to create buckets');
+      let result;
+      let errorMessage = 'Failed to create buckets';
+
+      try {
+        result = await response.json();
+      } catch (parseError) {
+        // If JSON parsing fails, try to get text
+        const text = await response.text();
+        throw new Error(`Server response error: ${response.status} - ${text || response.statusText}`);
       }
 
-      const result = await response.json();
+      if (!response.ok) {
+        throw new Error(result?.error || result?.details || errorMessage);
+      }
 
       if (!result.success) {
         throw new Error(result.message || 'Failed to create some buckets');
