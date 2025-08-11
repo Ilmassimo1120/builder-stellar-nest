@@ -67,6 +67,14 @@ class SimpleDocumentService {
         });
 
       if (error) {
+        // Provide helpful error message for missing buckets
+        if (error.message.includes('not found') || error.message.includes('does not exist')) {
+          return {
+            success: false,
+            error: `Storage bucket '${bucket}' not found. Please create the storage buckets in your Supabase dashboard:\n\n• charge-source-user-files\n• charge-source-documents\n• charge-source-videos\n\nUntil then, files cannot be uploaded to cloud storage.`
+          };
+        }
+
         return {
           success: false,
           error: `Upload failed: ${error.message}`
