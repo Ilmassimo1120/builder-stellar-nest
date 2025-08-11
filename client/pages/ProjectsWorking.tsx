@@ -1,20 +1,26 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
-import { 
-  Plus, 
-  Search, 
-  Filter, 
-  Calendar, 
-  MapPin, 
-  User, 
+import {
+  Plus,
+  Search,
+  Filter,
+  Calendar,
+  MapPin,
+  User,
   DollarSign,
   Clock,
   CheckCircle,
-  AlertCircle
+  AlertCircle,
 } from "lucide-react";
 
 export default function ProjectsWorking() {
@@ -31,19 +37,19 @@ export default function ProjectsWorking() {
       expectedCompletion: "2024-03-20",
       value: "$125,000",
       location: "Sydney, NSW",
-      priority: "High"
+      priority: "High",
     },
     {
       id: 2,
       name: "Office Building EV Hub - Corporate Center",
-      client: "ABC Property Group", 
+      client: "ABC Property Group",
       status: "Planning",
       progress: 25,
       startDate: "2024-02-01",
       expectedCompletion: "2024-04-15",
       value: "$89,500",
       location: "Melbourne, VIC",
-      priority: "Medium"
+      priority: "Medium",
     },
     {
       id: 3,
@@ -55,7 +61,7 @@ export default function ProjectsWorking() {
       expectedCompletion: "2024-01-10",
       value: "$67,800",
       location: "Brisbane, QLD",
-      priority: "Low"
+      priority: "Low",
     },
     {
       id: 4,
@@ -67,26 +73,35 @@ export default function ProjectsWorking() {
       expectedCompletion: "TBD",
       value: "$156,000",
       location: "Perth, WA",
-      priority: "High"
-    }
+      priority: "High",
+    },
   ];
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "Completed": return "default";
-      case "In Progress": return "secondary";
-      case "Planning": return "outline";
-      case "Quote Pending": return "destructive";
-      default: return "outline";
+      case "Completed":
+        return "default";
+      case "In Progress":
+        return "secondary";
+      case "Planning":
+        return "outline";
+      case "Quote Pending":
+        return "destructive";
+      default:
+        return "outline";
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case "High": return "text-red-600";
-      case "Medium": return "text-yellow-600";
-      case "Low": return "text-green-600";
-      default: return "text-gray-600";
+      case "High":
+        return "text-red-600";
+      case "Medium":
+        return "text-yellow-600";
+      case "Low":
+        return "text-green-600";
+      default:
+        return "text-gray-600";
     }
   };
 
@@ -97,7 +112,9 @@ export default function ProjectsWorking() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold">Projects</h1>
-            <p className="text-muted-foreground">Manage your EV charging infrastructure projects</p>
+            <p className="text-muted-foreground">
+              Manage your EV charging infrastructure projects
+            </p>
           </div>
           <Link to="/projects/new">
             <Button className="flex items-center gap-2">
@@ -129,11 +146,16 @@ export default function ProjectsWorking() {
         {/* Projects Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
           {projects.map((project) => (
-            <Card key={project.id} className="hover:shadow-lg transition-shadow">
+            <Card
+              key={project.id}
+              className="hover:shadow-lg transition-shadow"
+            >
               <CardHeader>
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
-                    <CardTitle className="text-lg mb-1">{project.name}</CardTitle>
+                    <CardTitle className="text-lg mb-1">
+                      {project.name}
+                    </CardTitle>
                     <CardDescription className="flex items-center gap-1">
                       <User className="h-3 w-3" />
                       {project.client}
@@ -143,7 +165,9 @@ export default function ProjectsWorking() {
                     <Badge variant={getStatusColor(project.status)}>
                       {project.status}
                     </Badge>
-                    <span className={`text-xs font-medium ${getPriorityColor(project.priority)}`}>
+                    <span
+                      className={`text-xs font-medium ${getPriorityColor(project.priority)}`}
+                    >
                       {project.priority} Priority
                     </span>
                   </div>
@@ -158,8 +182,8 @@ export default function ProjectsWorking() {
                       <span>{project.progress}%</span>
                     </div>
                     <div className="w-full bg-muted rounded-full h-2">
-                      <div 
-                        className="bg-primary h-2 rounded-full transition-all duration-300" 
+                      <div
+                        className="bg-primary h-2 rounded-full transition-all duration-300"
                         style={{ width: `${project.progress}%` }}
                       />
                     </div>
@@ -178,7 +202,9 @@ export default function ProjectsWorking() {
                     <div className="flex items-center gap-2">
                       <Calendar className="h-3 w-3 text-muted-foreground" />
                       <span>
-                        {project.startDate !== "TBD" ? `Due: ${project.expectedCompletion}` : "Timeline TBD"}
+                        {project.startDate !== "TBD"
+                          ? `Due: ${project.expectedCompletion}`
+                          : "Timeline TBD"}
                       </span>
                     </div>
                   </div>
@@ -190,7 +216,10 @@ export default function ProjectsWorking() {
                         View Details
                       </Button>
                     </Link>
-                    <Link to={`/projects/${project.id}/edit`} className="flex-1">
+                    <Link
+                      to={`/projects/${project.id}/edit`}
+                      className="flex-1"
+                    >
                       <Button size="sm" className="w-full">
                         Edit
                       </Button>
@@ -217,7 +246,7 @@ export default function ProjectsWorking() {
               </div>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
@@ -231,7 +260,7 @@ export default function ProjectsWorking() {
               </div>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
@@ -245,7 +274,7 @@ export default function ProjectsWorking() {
               </div>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center gap-3">

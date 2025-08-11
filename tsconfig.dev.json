@@ -10,12 +10,6 @@
     "noImplicitReturns": false,
     "noImplicitThis": false
   },
-  "include": [
-    "client/**/*",
-    "shared/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist"
-  ]
+  "include": ["client/**/*", "shared/**/*"],
+  "exclude": ["node_modules", "dist"]
 }

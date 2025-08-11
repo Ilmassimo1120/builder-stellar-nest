@@ -293,12 +293,14 @@ export default function AdminProductManager({
     fileInputRef.current?.click();
   };
 
-  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
     // Validate file type
-    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+    const allowedTypes = ["image/jpeg", "image/png", "image/gif", "image/webp"];
     if (!allowedTypes.includes(file.type)) {
       toast({
         title: "Invalid File Type",
@@ -323,14 +325,20 @@ export default function AdminProductManager({
       setImageUploading(true);
 
       // Temporarily use a simple upload approach
-      const uploadResult = await enhancedFileStorageService.uploadFile(file, "product-images" as any);
+      const uploadResult = await enhancedFileStorageService.uploadFile(
+        file,
+        "product-images" as any,
+      );
 
       if (uploadResult) {
         // Add the uploaded image URL to the form data
-        const imageUrl = (uploadResult as any).publicUrl || (uploadResult as any).filePath || '/placeholder.svg';
-        setFormData(prev => ({
+        const imageUrl =
+          (uploadResult as any).publicUrl ||
+          (uploadResult as any).filePath ||
+          "/placeholder.svg";
+        setFormData((prev) => ({
           ...prev,
-          images: [...prev.images, imageUrl]
+          images: [...prev.images, imageUrl],
         }));
 
         toast({
@@ -344,22 +352,25 @@ export default function AdminProductManager({
       console.error("Image upload error:", error);
       toast({
         title: "Upload Failed",
-        description: error instanceof Error ? error.message : "Failed to upload image. Please try again.",
+        description:
+          error instanceof Error
+            ? error.message
+            : "Failed to upload image. Please try again.",
         variant: "destructive",
       });
     } finally {
       setImageUploading(false);
       // Clear the file input
       if (fileInputRef.current) {
-        fileInputRef.current.value = '';
+        fileInputRef.current.value = "";
       }
     }
   };
 
   const removeImage = (imageIndex: number) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      images: prev.images.filter((_, index) => index !== imageIndex)
+      images: prev.images.filter((_, index) => index !== imageIndex),
     }));
   };
 
@@ -648,12 +659,13 @@ export default function AdminProductManager({
                         ref={fileInputRef}
                         onChange={handleFileChange}
                         accept="image/jpeg,image/png,image/gif,image/webp"
-                        style={{ display: 'none' }}
+                        style={{ display: "none" }}
                       />
                       <div className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-6 text-center">
                         <ImageIcon className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
                         <p className="text-sm text-muted-foreground mb-2">
-                          Upload product images (JPEG, PNG, GIF, WebP - Max 10MB)
+                          Upload product images (JPEG, PNG, GIF, WebP - Max
+                          10MB)
                         </p>
                         <Button
                           variant="outline"
@@ -666,7 +678,7 @@ export default function AdminProductManager({
                           ) : (
                             <Upload className="w-4 h-4 mr-2" />
                           )}
-                          {imageUploading ? 'Uploading...' : 'Upload Images'}
+                          {imageUploading ? "Uploading..." : "Upload Images"}
                         </Button>
                       </div>
 
@@ -684,7 +696,7 @@ export default function AdminProductManager({
                                   alt={`Product image ${index + 1}`}
                                   className="w-full h-20 object-cover rounded border"
                                   onError={(e) => {
-                                    e.currentTarget.src = '/placeholder.svg';
+                                    e.currentTarget.src = "/placeholder.svg";
                                   }}
                                 />
                                 <Button

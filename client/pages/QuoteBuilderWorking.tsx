@@ -1,20 +1,26 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { 
-  Calculator, 
-  Plus, 
-  Trash2, 
-  Download, 
-  Send, 
+import {
+  Calculator,
+  Plus,
+  Trash2,
+  Download,
+  Send,
   FileText,
   DollarSign,
-  Package
+  Package,
 } from "lucide-react";
 
 export default function QuoteBuilderWorking() {
@@ -26,13 +32,34 @@ export default function QuoteBuilderWorking() {
     description: "",
     validUntil: "",
     lineItems: [
-      { id: 1, description: "Tesla Wall Connector", quantity: 4, unitPrice: 750, total: 3000 },
-      { id: 2, description: "Installation & Wiring", quantity: 1, unitPrice: 2500, total: 2500 },
-      { id: 3, description: "Electrical Panel Upgrade", quantity: 1, unitPrice: 1800, total: 1800 }
-    ]
+      {
+        id: 1,
+        description: "Tesla Wall Connector",
+        quantity: 4,
+        unitPrice: 750,
+        total: 3000,
+      },
+      {
+        id: 2,
+        description: "Installation & Wiring",
+        quantity: 1,
+        unitPrice: 2500,
+        total: 2500,
+      },
+      {
+        id: 3,
+        description: "Electrical Panel Upgrade",
+        quantity: 1,
+        unitPrice: 1800,
+        total: 1800,
+      },
+    ],
   });
 
-  const subtotal = quoteData.lineItems.reduce((sum, item) => sum + item.total, 0);
+  const subtotal = quoteData.lineItems.reduce(
+    (sum, item) => sum + item.total,
+    0,
+  );
   const tax = subtotal * 0.1; // 10% GST
   const total = subtotal + tax;
 
@@ -42,34 +69,34 @@ export default function QuoteBuilderWorking() {
       description: "",
       quantity: 1,
       unitPrice: 0,
-      total: 0
+      total: 0,
     };
-    setQuoteData(prev => ({
+    setQuoteData((prev) => ({
       ...prev,
-      lineItems: [...prev.lineItems, newItem]
+      lineItems: [...prev.lineItems, newItem],
     }));
   };
 
   const removeLineItem = (id: number) => {
-    setQuoteData(prev => ({
+    setQuoteData((prev) => ({
       ...prev,
-      lineItems: prev.lineItems.filter(item => item.id !== id)
+      lineItems: prev.lineItems.filter((item) => item.id !== id),
     }));
   };
 
   const updateLineItem = (id: number, field: string, value: any) => {
-    setQuoteData(prev => ({
+    setQuoteData((prev) => ({
       ...prev,
-      lineItems: prev.lineItems.map(item => {
+      lineItems: prev.lineItems.map((item) => {
         if (item.id === id) {
           const updated = { ...item, [field]: value };
-          if (field === 'quantity' || field === 'unitPrice') {
+          if (field === "quantity" || field === "unitPrice") {
             updated.total = updated.quantity * updated.unitPrice;
           }
           return updated;
         }
         return item;
-      })
+      }),
     }));
   };
 
@@ -80,7 +107,9 @@ export default function QuoteBuilderWorking() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold">Quote Builder</h1>
-            <p className="text-muted-foreground">Create professional quotes for EV charging projects</p>
+            <p className="text-muted-foreground">
+              Create professional quotes for EV charging projects
+            </p>
           </div>
           <div className="flex items-center gap-3">
             <Badge variant="outline">{quoteData.quoteNumber}</Badge>
@@ -120,7 +149,12 @@ export default function QuoteBuilderWorking() {
                     <Input
                       id="clientName"
                       value={quoteData.clientName}
-                      onChange={(e) => setQuoteData(prev => ({ ...prev, clientName: e.target.value }))}
+                      onChange={(e) =>
+                        setQuoteData((prev) => ({
+                          ...prev,
+                          clientName: e.target.value,
+                        }))
+                      }
                       placeholder="Enter client name"
                     />
                   </div>
@@ -130,7 +164,12 @@ export default function QuoteBuilderWorking() {
                       id="clientEmail"
                       type="email"
                       value={quoteData.clientEmail}
-                      onChange={(e) => setQuoteData(prev => ({ ...prev, clientEmail: e.target.value }))}
+                      onChange={(e) =>
+                        setQuoteData((prev) => ({
+                          ...prev,
+                          clientEmail: e.target.value,
+                        }))
+                      }
                       placeholder="Enter client email"
                     />
                   </div>
@@ -140,7 +179,12 @@ export default function QuoteBuilderWorking() {
                       id="validUntil"
                       type="date"
                       value={quoteData.validUntil}
-                      onChange={(e) => setQuoteData(prev => ({ ...prev, validUntil: e.target.value }))}
+                      onChange={(e) =>
+                        setQuoteData((prev) => ({
+                          ...prev,
+                          validUntil: e.target.value,
+                        }))
+                      }
                     />
                   </div>
                 </CardContent>
@@ -159,7 +203,12 @@ export default function QuoteBuilderWorking() {
                     <Input
                       id="projectName"
                       value={quoteData.projectName}
-                      onChange={(e) => setQuoteData(prev => ({ ...prev, projectName: e.target.value }))}
+                      onChange={(e) =>
+                        setQuoteData((prev) => ({
+                          ...prev,
+                          projectName: e.target.value,
+                        }))
+                      }
                       placeholder="Enter project name"
                     />
                   </div>
@@ -168,7 +217,12 @@ export default function QuoteBuilderWorking() {
                     <Textarea
                       id="description"
                       value={quoteData.description}
-                      onChange={(e) => setQuoteData(prev => ({ ...prev, description: e.target.value }))}
+                      onChange={(e) =>
+                        setQuoteData((prev) => ({
+                          ...prev,
+                          description: e.target.value,
+                        }))
+                      }
                       placeholder="Describe the project scope and requirements"
                       rows={4}
                     />
@@ -187,7 +241,10 @@ export default function QuoteBuilderWorking() {
                     <Calculator className="h-5 w-5" />
                     Line Items
                   </CardTitle>
-                  <Button onClick={addLineItem} className="flex items-center gap-2">
+                  <Button
+                    onClick={addLineItem}
+                    className="flex items-center gap-2"
+                  >
                     <Plus className="h-4 w-4" />
                     Add Item
                   </Button>
@@ -197,13 +254,22 @@ export default function QuoteBuilderWorking() {
                 <div className="space-y-4">
                   {/* Line Items */}
                   {quoteData.lineItems.map((item) => (
-                    <div key={item.id} className="grid grid-cols-12 gap-4 items-end p-4 border rounded-lg">
+                    <div
+                      key={item.id}
+                      className="grid grid-cols-12 gap-4 items-end p-4 border rounded-lg"
+                    >
                       <div className="col-span-5">
                         <Label htmlFor={`desc-${item.id}`}>Description</Label>
                         <Input
                           id={`desc-${item.id}`}
                           value={item.description}
-                          onChange={(e) => updateLineItem(item.id, 'description', e.target.value)}
+                          onChange={(e) =>
+                            updateLineItem(
+                              item.id,
+                              "description",
+                              e.target.value,
+                            )
+                          }
                           placeholder="Item description"
                         />
                       </div>
@@ -213,7 +279,13 @@ export default function QuoteBuilderWorking() {
                           id={`qty-${item.id}`}
                           type="number"
                           value={item.quantity}
-                          onChange={(e) => updateLineItem(item.id, 'quantity', parseInt(e.target.value) || 0)}
+                          onChange={(e) =>
+                            updateLineItem(
+                              item.id,
+                              "quantity",
+                              parseInt(e.target.value) || 0,
+                            )
+                          }
                           min="1"
                         />
                       </div>
@@ -223,7 +295,13 @@ export default function QuoteBuilderWorking() {
                           id={`price-${item.id}`}
                           type="number"
                           value={item.unitPrice}
-                          onChange={(e) => updateLineItem(item.id, 'unitPrice', parseFloat(e.target.value) || 0)}
+                          onChange={(e) =>
+                            updateLineItem(
+                              item.id,
+                              "unitPrice",
+                              parseFloat(e.target.value) || 0,
+                            )
+                          }
                           min="0"
                           step="0.01"
                         />
@@ -276,14 +354,20 @@ export default function QuoteBuilderWorking() {
             <Card>
               <CardHeader>
                 <CardTitle>Quote Preview</CardTitle>
-                <CardDescription>This is how your quote will appear to the client</CardDescription>
+                <CardDescription>
+                  This is how your quote will appear to the client
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-6 max-w-4xl">
                   {/* Quote Header */}
                   <div className="text-center border-b pb-6">
-                    <h1 className="text-3xl font-bold text-primary">ChargeSource</h1>
-                    <p className="text-muted-foreground">EV Charging Infrastructure Solutions</p>
+                    <h1 className="text-3xl font-bold text-primary">
+                      ChargeSource
+                    </h1>
+                    <p className="text-muted-foreground">
+                      EV Charging Infrastructure Solutions
+                    </p>
                   </div>
 
                   {/* Quote Details */}
@@ -297,14 +381,24 @@ export default function QuoteBuilderWorking() {
                       <h3 className="font-semibold mb-2">Quote Details:</h3>
                       <p>Quote #: {quoteData.quoteNumber}</p>
                       <p>Date: {new Date().toLocaleDateString()}</p>
-                      {quoteData.validUntil && <p>Valid Until: {new Date(quoteData.validUntil).toLocaleDateString()}</p>}
+                      {quoteData.validUntil && (
+                        <p>
+                          Valid Until:{" "}
+                          {new Date(quoteData.validUntil).toLocaleDateString()}
+                        </p>
+                      )}
                     </div>
                   </div>
 
                   {/* Project Info */}
                   <div>
-                    <h3 className="font-semibold mb-2">Project: {quoteData.projectName || "Project Name"}</h3>
-                    <p className="text-muted-foreground">{quoteData.description || "Project description will appear here"}</p>
+                    <h3 className="font-semibold mb-2">
+                      Project: {quoteData.projectName || "Project Name"}
+                    </h3>
+                    <p className="text-muted-foreground">
+                      {quoteData.description ||
+                        "Project description will appear here"}
+                    </p>
                   </div>
 
                   {/* Line Items Table */}
@@ -312,34 +406,71 @@ export default function QuoteBuilderWorking() {
                     <table className="w-full border-collapse border border-gray-300">
                       <thead>
                         <tr className="bg-muted">
-                          <th className="border border-gray-300 p-3 text-left">Description</th>
-                          <th className="border border-gray-300 p-3 text-center">Qty</th>
-                          <th className="border border-gray-300 p-3 text-right">Unit Price</th>
-                          <th className="border border-gray-300 p-3 text-right">Total</th>
+                          <th className="border border-gray-300 p-3 text-left">
+                            Description
+                          </th>
+                          <th className="border border-gray-300 p-3 text-center">
+                            Qty
+                          </th>
+                          <th className="border border-gray-300 p-3 text-right">
+                            Unit Price
+                          </th>
+                          <th className="border border-gray-300 p-3 text-right">
+                            Total
+                          </th>
                         </tr>
                       </thead>
                       <tbody>
                         {quoteData.lineItems.map((item) => (
                           <tr key={item.id}>
-                            <td className="border border-gray-300 p-3">{item.description}</td>
-                            <td className="border border-gray-300 p-3 text-center">{item.quantity}</td>
-                            <td className="border border-gray-300 p-3 text-right">${item.unitPrice.toLocaleString()}</td>
-                            <td className="border border-gray-300 p-3 text-right">${item.total.toLocaleString()}</td>
+                            <td className="border border-gray-300 p-3">
+                              {item.description}
+                            </td>
+                            <td className="border border-gray-300 p-3 text-center">
+                              {item.quantity}
+                            </td>
+                            <td className="border border-gray-300 p-3 text-right">
+                              ${item.unitPrice.toLocaleString()}
+                            </td>
+                            <td className="border border-gray-300 p-3 text-right">
+                              ${item.total.toLocaleString()}
+                            </td>
                           </tr>
                         ))}
                       </tbody>
                       <tfoot>
                         <tr>
-                          <td colSpan={3} className="border border-gray-300 p-3 text-right font-semibold">Subtotal:</td>
-                          <td className="border border-gray-300 p-3 text-right">${subtotal.toLocaleString()}</td>
+                          <td
+                            colSpan={3}
+                            className="border border-gray-300 p-3 text-right font-semibold"
+                          >
+                            Subtotal:
+                          </td>
+                          <td className="border border-gray-300 p-3 text-right">
+                            ${subtotal.toLocaleString()}
+                          </td>
                         </tr>
                         <tr>
-                          <td colSpan={3} className="border border-gray-300 p-3 text-right font-semibold">GST (10%):</td>
-                          <td className="border border-gray-300 p-3 text-right">${tax.toLocaleString()}</td>
+                          <td
+                            colSpan={3}
+                            className="border border-gray-300 p-3 text-right font-semibold"
+                          >
+                            GST (10%):
+                          </td>
+                          <td className="border border-gray-300 p-3 text-right">
+                            ${tax.toLocaleString()}
+                          </td>
                         </tr>
                         <tr className="bg-muted">
-                          <td colSpan={3} className="border border-gray-300 p-3 text-right font-bold text-lg">Total:</td>
-                          <td className="border border-gray-300 p-3 text-right font-bold text-lg">${total.toLocaleString()}</td>
+                          <td
+                            colSpan={3}
+                            className="border border-gray-300 p-3 text-right font-bold text-lg"
+                          >
+                            Total:
+                          </td>
+                          <td className="border border-gray-300 p-3 text-right font-bold text-lg">
+                            ${total.toLocaleString()}
+                          </td>
                         </tr>
                       </tfoot>
                     </table>
