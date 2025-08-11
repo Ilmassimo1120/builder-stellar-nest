@@ -30,6 +30,7 @@ import BucketSetupGuide from '@/components/BucketSetupGuide';
 import StorageSetupWizard from '@/components/StorageSetupWizard';
 import ClearStorageButton from '@/components/ClearStorageButton';
 import SupabaseDebugger from '@/components/SupabaseDebugger';
+import DirectStorageTest from '@/components/DirectStorageTest';
 
 export default function DocumentTest() {
   const { user } = useAuth();
@@ -291,6 +292,9 @@ export default function DocumentTest() {
 
       {/* Storage Setup Wizard - Always show for setup assistance */}
       <StorageSetupWizard />
+
+      {/* Direct Storage Test - Bypasses authentication issues */}
+      <DirectStorageTest />
 
       {/* Supabase Connection Debugger */}
       <SupabaseDebugger />
