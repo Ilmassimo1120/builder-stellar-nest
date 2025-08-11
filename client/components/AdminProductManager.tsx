@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -50,10 +50,12 @@ import {
   Image as ImageIcon,
   Shield,
   AlertTriangle,
+  Loader2,
 } from "lucide-react";
 import { productCatalog } from "@/lib/productCatalog";
 import { ProductCatalogueItem } from "@/lib/quoteTypes";
 import { useToast } from "@/hooks/use-toast";
+import { enhancedFileStorageService } from "@/lib/services/enhancedFileStorageService";
 
 interface AdminProductManagerProps {
   isOpen: boolean;
