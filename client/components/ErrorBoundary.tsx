@@ -27,7 +27,7 @@ export class ErrorBoundary extends Component<Props, State> {
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     this.setState({ errorInfo });
-    
+
     // Log error in development
     if (appConfig.isDevelopment) {
       console.error("Error caught by boundary:", error, errorInfo);
@@ -94,9 +94,10 @@ export class ErrorBoundary extends Component<Props, State> {
             </CardHeader>
             <CardContent className="space-y-4">
               <p className="text-sm text-muted-foreground text-center">
-                We're sorry, but something unexpected happened. Please try again.
+                We're sorry, but something unexpected happened. Please try
+                again.
               </p>
-              
+
               {appConfig.isDevelopment && this.state.error && (
                 <details className="mt-4">
                   <summary className="cursor-pointer text-sm font-medium">
@@ -111,7 +112,7 @@ export class ErrorBoundary extends Component<Props, State> {
               )}
 
               <div className="flex gap-2">
-                <Button 
+                <Button
                   onClick={this.handleRetry}
                   variant="outline"
                   size="sm"
@@ -120,7 +121,7 @@ export class ErrorBoundary extends Component<Props, State> {
                   <RefreshCw className="h-4 w-4 mr-2" />
                   Try Again
                 </Button>
-                <Button 
+                <Button
                   onClick={this.handleReload}
                   size="sm"
                   className="flex-1"
@@ -141,14 +142,14 @@ export class ErrorBoundary extends Component<Props, State> {
 // Higher-order component for easier usage
 export const withErrorBoundary = <P extends object>(
   Component: React.ComponentType<P>,
-  errorHandler?: (error: Error, errorInfo: ErrorInfo) => void
+  errorHandler?: (error: Error, errorInfo: ErrorInfo) => void,
 ) => {
   const WrappedComponent = (props: P) => (
     <ErrorBoundary onError={errorHandler}>
       <Component {...props} />
     </ErrorBoundary>
   );
-  
+
   WrappedComponent.displayName = `withErrorBoundary(${Component.displayName || Component.name})`;
   return WrappedComponent;
 };

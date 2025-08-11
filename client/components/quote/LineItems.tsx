@@ -13,7 +13,9 @@ export default function LineItems({ data, onUpdate }: LineItemsProps) {
         <CardTitle>Line Items</CardTitle>
       </CardHeader>
       <CardContent>
-        <p className="text-sm text-muted-foreground">Line items management will be implemented here.</p>
+        <p className="text-sm text-muted-foreground">
+          Line items management will be implemented here.
+        </p>
       </CardContent>
     </Card>
   );

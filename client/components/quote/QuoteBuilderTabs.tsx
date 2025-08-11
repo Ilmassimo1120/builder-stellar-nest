@@ -23,7 +23,10 @@ const LoadingSpinner = () => (
   </Card>
 );
 
-export function QuoteBuilderTabs({ quoteData, onQuoteUpdate }: QuoteBuilderTabsProps) {
+export function QuoteBuilderTabs({
+  quoteData,
+  onQuoteUpdate,
+}: QuoteBuilderTabsProps) {
   return (
     <Tabs defaultValue="details" className="w-full">
       <TabsList className="grid w-full grid-cols-4">

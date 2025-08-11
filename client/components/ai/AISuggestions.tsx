@@ -17,7 +17,9 @@ export default function AISuggestions({ onClose }: AISuggestionsProps) {
         </Button>
       </CardHeader>
       <CardContent>
-        <p className="text-sm text-muted-foreground">AI Suggestions component will be implemented here.</p>
+        <p className="text-sm text-muted-foreground">
+          AI Suggestions component will be implemented here.
+        </p>
       </CardContent>
     </Card>
   );

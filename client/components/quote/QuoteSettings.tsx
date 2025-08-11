@@ -13,7 +13,9 @@ export default function QuoteSettings({ data, onUpdate }: QuoteSettingsProps) {
         <CardTitle>Quote Settings</CardTitle>
       </CardHeader>
       <CardContent>
-        <p className="text-sm text-muted-foreground">Quote settings will be implemented here.</p>
+        <p className="text-sm text-muted-foreground">
+          Quote settings will be implemented here.
+        </p>
       </CardContent>
     </Card>
   );

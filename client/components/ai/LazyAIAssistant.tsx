@@ -25,10 +25,10 @@ const AILoadingFallback = () => (
   </Card>
 );
 
-export function LazyAIAssistant({ 
-  isOpen, 
-  onClose, 
-  initialMode = "chat" 
+export function LazyAIAssistant({
+  isOpen,
+  onClose,
+  initialMode = "chat",
 }: LazyAIAssistantProps) {
   if (!isOpen) return null;
 

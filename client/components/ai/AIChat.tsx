@@ -17,7 +17,9 @@ export default function AIChat({ onClose }: AIChatProps) {
         </Button>
       </CardHeader>
       <CardContent>
-        <p className="text-sm text-muted-foreground">AI Chat component will be implemented here.</p>
+        <p className="text-sm text-muted-foreground">
+          AI Chat component will be implemented here.
+        </p>
       </CardContent>
     </Card>
   );

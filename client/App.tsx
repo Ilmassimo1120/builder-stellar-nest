@@ -54,16 +54,19 @@ function App() {
               <ErrorBoundary
                 fallback={
                   <div className="p-4 text-center">
-                    <h2 className="text-lg font-semibold mb-2">Navigation Error</h2>
+                    <h2 className="text-lg font-semibold mb-2">
+                      Navigation Error
+                    </h2>
                     <p className="text-muted-foreground">
-                      There was an error loading the navigation. Please refresh the page.
+                      There was an error loading the navigation. Please refresh
+                      the page.
                     </p>
                   </div>
                 }
               >
                 <AppRoutes />
               </ErrorBoundary>
-              
+
               <Toaster
                 position="bottom-right"
                 toastOptions={{

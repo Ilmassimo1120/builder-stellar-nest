@@ -38,7 +38,7 @@ export class OptimizedPDFGenerator {
           loadJsPDF(),
           loadHtml2Canvas(),
         ]);
-        
+
         this.pdfLib = jsPDF.default;
         this.canvasLib = html2canvas.default;
       } catch (error) {
@@ -49,7 +49,7 @@ export class OptimizedPDFGenerator {
 
   async generateFromElement(
     element: HTMLElement,
-    options: PDFGenerationOptions = {}
+    options: PDFGenerationOptions = {},
   ): Promise<PDFGenerationResult> {
     try {
       await this.loadDependencies();
@@ -78,7 +78,7 @@ export class OptimizedPDFGenerator {
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
       pdf.addImage(imgData, "JPEG", 0, 0, imgWidth, imgHeight);
-      
+
       // Generate blob for better memory management
       const blob = pdf.output("blob");
       const downloadUrl = URL.createObjectURL(blob);
@@ -99,7 +99,7 @@ export class OptimizedPDFGenerator {
 
   async generateFromHTML(
     html: string,
-    options: PDFGenerationOptions = {}
+    options: PDFGenerationOptions = {},
   ): Promise<PDFGenerationResult> {
     try {
       // Create temporary element
@@ -108,7 +108,7 @@ export class OptimizedPDFGenerator {
       tempDiv.style.position = "absolute";
       tempDiv.style.left = "-9999px";
       tempDiv.style.width = "800px";
-      
+
       document.body.appendChild(tempDiv);
 
       try {
@@ -140,21 +140,21 @@ export const pdfGenerator = OptimizedPDFGenerator.getInstance();
 export const usePDFGenerator = () => {
   const generatePDF = async (
     element: HTMLElement,
-    options?: PDFGenerationOptions
+    options?: PDFGenerationOptions,
   ) => {
     const result = await pdfGenerator.generateFromElement(element, options);
-    
+
     if (result.success && result.downloadUrl) {
       // Auto-download
       const link = document.createElement("a");
       link.href = result.downloadUrl;
       link.download = options?.filename || "document.pdf";
       link.click();
-      
+
       // Clean up URL
       setTimeout(() => URL.revokeObjectURL(result.downloadUrl!), 100);
     }
-    
+
     return result;
   };
 

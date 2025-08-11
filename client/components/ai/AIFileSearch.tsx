@@ -17,7 +17,9 @@ export default function AIFileSearch({ onClose }: AIFileSearchProps) {
         </Button>
       </CardHeader>
       <CardContent>
-        <p className="text-sm text-muted-foreground">AI File Search component will be implemented here.</p>
+        <p className="text-sm text-muted-foreground">
+          AI File Search component will be implemented here.
+        </p>
       </CardContent>
     </Card>
   );

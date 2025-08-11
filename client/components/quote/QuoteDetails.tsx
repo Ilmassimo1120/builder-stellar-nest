@@ -13,7 +13,9 @@ export default function QuoteDetails({ data, onUpdate }: QuoteDetailsProps) {
         <CardTitle>Quote Details</CardTitle>
       </CardHeader>
       <CardContent>
-        <p className="text-sm text-muted-foreground">Quote details form will be implemented here.</p>
+        <p className="text-sm text-muted-foreground">
+          Quote details form will be implemented here.
+        </p>
       </CardContent>
     </Card>
   );

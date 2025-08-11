@@ -12,7 +12,9 @@ export default function QuotePreview({ data }: QuotePreviewProps) {
         <CardTitle>Quote Preview</CardTitle>
       </CardHeader>
       <CardContent>
-        <p className="text-sm text-muted-foreground">Quote preview will be implemented here.</p>
+        <p className="text-sm text-muted-foreground">
+          Quote preview will be implemented here.
+        </p>
       </CardContent>
     </Card>
   );
