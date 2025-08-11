@@ -649,26 +649,64 @@ export default function AdminProductManager({
                       </div>
                     </div>
 
-                    {/* Image Upload Placeholder */}
+                    {/* Image Upload */}
                     <div className="space-y-2">
                       <Label>Product Images</Label>
+                      <input
+                        type="file"
+                        ref={fileInputRef}
+                        onChange={handleFileChange}
+                        accept="image/jpeg,image/png,image/gif,image/webp"
+                        style={{ display: 'none' }}
+                      />
                       <div className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-6 text-center">
                         <ImageIcon className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
                         <p className="text-sm text-muted-foreground mb-2">
-                          Upload product images
+                          Upload product images (JPEG, PNG, GIF, WebP - Max 10MB)
                         </p>
                         <Button
                           variant="outline"
                           size="sm"
                           onClick={handleImageUpload}
+                          disabled={imageUploading}
                         >
-                          <Upload className="w-4 h-4 mr-2" />
-                          Upload Images
+                          {imageUploading ? (
+                            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                          ) : (
+                            <Upload className="w-4 h-4 mr-2" />
+                          )}
+                          {imageUploading ? 'Uploading...' : 'Upload Images'}
                         </Button>
                       </div>
+
+                      {/* Display uploaded images */}
                       {formData.images.length > 0 && (
-                        <div className="text-sm text-muted-foreground">
-                          {formData.images.length} image(s) selected
+                        <div className="space-y-2">
+                          <p className="text-sm font-medium">
+                            Uploaded Images ({formData.images.length})
+                          </p>
+                          <div className="grid grid-cols-2 gap-2">
+                            {formData.images.map((imageUrl, index) => (
+                              <div key={index} className="relative">
+                                <img
+                                  src={imageUrl}
+                                  alt={`Product image ${index + 1}`}
+                                  className="w-full h-20 object-cover rounded border"
+                                  onError={(e) => {
+                                    e.currentTarget.src = '/placeholder.svg';
+                                  }}
+                                />
+                                <Button
+                                  variant="destructive"
+                                  size="sm"
+                                  className="absolute top-1 right-1 h-6 w-6 p-0"
+                                  onClick={() => removeImage(index)}
+                                >
+                                  <X className="w-3 h-3" />
+                                </Button>
+                              </div>
+                            ))}
+                          </div>
                         </div>
                       )}
                     </div>
