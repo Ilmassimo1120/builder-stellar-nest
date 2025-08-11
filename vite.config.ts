@@ -49,12 +49,8 @@ export default defineConfig(({ mode }) => ({
     },
   },
   define: {
-    // Remove console logs in production
-    ...(mode === "production" && {
-      "console.log": "(() => {})",
-      "console.debug": "(() => {})",
-      "console.warn": "(() => {})",
-    }),
+    // Define environment for better tree shaking
+    __DEV__: mode === "development",
   },
   esbuild: {
     // Remove console statements in production
