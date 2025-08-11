@@ -445,7 +445,13 @@ class EnhancedFileStorageService {
         if (
           errorMessage.includes("Network connection failed") ||
           errorMessage.includes("not found") ||
-          errorMessage.includes("Authentication required")
+          errorMessage.includes("Authentication required") ||
+          errorMessage.includes("CORS") ||
+          errorMessage.includes("Failed to fetch") ||
+          errorMessage.includes("cors") ||
+          errorMessage.includes("network issues") ||
+          errorMessage.includes("cross-origin") ||
+          storageError.name === "TypeError"
         ) {
           console.warn(
             `⚠️ Cloud storage unavailable, using local fallback for: ${request.file.name}`,
