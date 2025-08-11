@@ -66,7 +66,7 @@ function App() {
                     </div>
                   }
                 >
-                  <AppRoutesMinimal />
+                  <AppRoutes />
                 </ErrorBoundary>
 
                 <Toaster
