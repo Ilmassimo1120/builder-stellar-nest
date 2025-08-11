@@ -86,15 +86,13 @@ const bucketInfo: Record<
 };
 
 export default function EnhancedFileStorage() {
-  const { user, userProfile } = useAuth();
+  const { user, isAdmin, isGlobalAdmin, isSales } = useAuth();
   const [storageStats, setStorageStats] = useState<StorageStats | null>(null);
   const [statusStats, setStatusStats] = useState<StatusStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const isAdmin =
-    userProfile?.role === "admin" || userProfile?.role === "global_admin";
-  const canApprove = isAdmin || userProfile?.role === "sales";
+  const canApprove = isAdmin || isGlobalAdmin || isSales;
 
   useEffect(() => {
     loadDashboardData();
