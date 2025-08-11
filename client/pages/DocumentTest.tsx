@@ -200,12 +200,70 @@ export default function DocumentTest() {
 
   if (!user) {
     return (
-      <div className="container mx-auto py-8">
-        <Alert>
-          <AlertDescription>
-            Please log in to test document storage functionality.
-          </AlertDescription>
-        </Alert>
+      <div className="container mx-auto py-8 space-y-6">
+        {/* Header */}
+        <div className="flex items-center space-x-4">
+          <Button variant="outline" size="sm" asChild>
+            <Link to="/" className="flex items-center space-x-2">
+              <ArrowLeft className="h-4 w-4" />
+              <span>Back to Home</span>
+            </Link>
+          </Button>
+          <div>
+            <h1 className="text-3xl font-bold">ChargeSource Document Test</h1>
+            <p className="text-muted-foreground">
+              Test document upload and retrieval functionality
+            </p>
+          </div>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center space-x-2">
+              <Users className="h-5 w-5" />
+              <span>Authentication Required</span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <Alert>
+              <AlertTriangle className="h-4 w-4" />
+              <AlertDescription>
+                You need to be logged in to test the document storage functionality.
+              </AlertDescription>
+            </Alert>
+
+            <div className="space-y-3">
+              <p className="text-sm text-muted-foreground">
+                To test document upload and management features, please sign in with your ChargeSource account.
+              </p>
+
+              <div className="flex space-x-2">
+                <Button asChild>
+                  <Link to="/login">
+                    <Users className="h-4 w-4 mr-2" />
+                    Sign In
+                  </Link>
+                </Button>
+                <Button variant="outline" asChild>
+                  <Link to="/register">
+                    Create Account
+                  </Link>
+                </Button>
+              </div>
+            </div>
+
+            <div className="mt-6 p-4 bg-blue-50 rounded-lg">
+              <h4 className="font-medium text-blue-800 mb-2">What you can test after logging in:</h4>
+              <ul className="text-sm text-blue-700 space-y-1">
+                <li>• Upload documents to different storage buckets</li>
+                <li>• Test user vs organization file separation</li>
+                <li>• Add metadata (categories, descriptions, tags)</li>
+                <li>• View and download uploaded files</li>
+                <li>• Delete documents from storage</li>
+              </ul>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     );
   }
