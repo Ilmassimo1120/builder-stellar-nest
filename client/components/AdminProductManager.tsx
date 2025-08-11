@@ -324,15 +324,7 @@ export default function AdminProductManager({
 
       const uploadResult = await enhancedFileStorageService.uploadFile(
         file,
-        "product-images",
-        {
-          title: `Product image for ${formData.name || 'new product'}`,
-          description: `Product catalog image`,
-          tags: ["product", "catalog", formData.category].filter(Boolean),
-          category: "product-image",
-          subcategory: formData.category,
-          visibility: "public",
-        }
+        "product-images"
       );
 
       if (uploadResult) {

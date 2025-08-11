@@ -140,7 +140,7 @@ export function CRMSettings() {
       });
 
       if (success) {
-        setConfig(data);
+        setConfig({ provider: data.provider || 'native', ...data } as any);
         setSuccess("Configuration saved successfully!");
 
         // Update connection status
