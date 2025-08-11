@@ -174,7 +174,17 @@ export default function ChargeSourceStorageSetup() {
         {error && (
           <Alert variant="destructive">
             <AlertTriangle className="h-4 w-4" />
-            <AlertDescription>{error}</AlertDescription>
+            <AlertDescription>
+              <div className="space-y-2">
+                <p><strong>Error:</strong> {error}</p>
+                {error.includes('row-level security') && (
+                  <p className="text-sm">
+                    <strong>Note:</strong> Storage bucket creation requires service role privileges.
+                    This is normal - the server will handle bucket creation with the proper permissions.
+                  </p>
+                )}
+              </div>
+            </AlertDescription>
           </Alert>
         )}
 
