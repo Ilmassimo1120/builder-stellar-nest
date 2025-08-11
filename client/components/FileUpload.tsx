@@ -6,7 +6,7 @@ import { Progress } from './ui/progress';
 import { Alert, AlertDescription } from './ui/alert';
 import { Badge } from './ui/badge';
 import { cn } from '@/lib/utils';
-import { fileStorageService, FileUpload, StoredFile, UploadProgress } from '@/lib/services/fileStorageService';
+import { fileStorageService, type FileUpload as FileUploadType, StoredFile, UploadProgress } from '@/lib/services/fileStorageService';
 
 interface FileUploadProps {
   category?: 'general' | 'project' | 'quote' | 'product' | 'user' | 'public';
