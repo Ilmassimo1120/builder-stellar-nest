@@ -19,7 +19,8 @@ import {
   Building2,
   Clock,
   ArrowLeft,
-  Database
+  Database,
+  Copy
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
@@ -44,7 +45,7 @@ export default function DocumentTest() {
   const bucketOptions = [
     { value: 'charge-source-user-files', label: '👤 User Files', description: 'Personal files (50MB max)' },
     { value: 'charge-source-documents', label: '📄 Documents', description: 'Official documents (100MB max)' },
-    { value: 'charge-source-videos', label: '�� Videos', description: 'Training videos (500MB max)' }
+    { value: 'charge-source-videos', label: '🎥 Videos', description: 'Training videos (500MB max)' }
   ];
 
   const categoryOptions = [
