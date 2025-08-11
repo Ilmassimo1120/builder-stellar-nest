@@ -224,6 +224,12 @@ export default function EnhancedFileStorage() {
           </div>
 
           <div className="flex items-center space-x-2">
+            <Button variant="outline" size="sm" asChild>
+              <Link to="/document-test" className="flex items-center space-x-2">
+                <FileText className="h-4 w-4" />
+                <span>Test Documents</span>
+              </Link>
+            </Button>
             <Badge variant="outline">
               <HardDrive className="h-4 w-4 mr-2" />
               Supabase Storage
