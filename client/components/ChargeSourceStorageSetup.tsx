@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
-import { CheckCircle, AlertTriangle, Loader2, Database, HardDrive } from 'lucide-react';
+import { CheckCircle, AlertTriangle, Loader2, Database, HardDrive, Info } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 
 interface BucketStatus {
