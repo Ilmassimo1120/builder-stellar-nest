@@ -95,8 +95,11 @@ export class BucketInitService {
     console.log("🚀 Initializing storage buckets...");
 
     try {
+      // Use service role client for admin operations
+      const serviceClient = this.getServiceRoleClient();
+
       // First, check which buckets already exist
-      const { data: existingBuckets, error: listError } = await supabase.storage.listBuckets();
+      const { data: existingBuckets, error: listError } = await serviceClient.storage.listBuckets();
       
       if (listError) {
         console.warn("Warning: Could not list existing buckets:", listError.message);
