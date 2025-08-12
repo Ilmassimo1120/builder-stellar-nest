@@ -243,15 +243,18 @@ export function SupportAIAssistant() {
     setMessages(prev => [...prev, detailsMessage]);
   };
 
-  const handleDetailsSubmit = (description: string) => {
+  const handleDetailsSubmit = async (description: string) => {
     setSupportRequest(prev => ({ ...prev, description }));
     setCurrentStep("complete");
+
+    // Try to push contact to CRM
+    await pushContactToCRM(description);
 
     const category = supportCategories.find(c => c.id === supportRequest.category);
     const completeMessage: ChatMessage = {
       id: `complete-${Date.now()}`,
       type: "assistant",
-      content: `✅ **Support Request Submitted Successfully!**\n\n**Request Summary:**\n• **Name:** ${supportRequest.name}\n• **Email:** ${supportRequest.email}\n• **Phone:** ${supportRequest.phone}\n• **Category:** ${category?.label}\n• **Priority:** ${supportRequest.priority?.toUpperCase()}\n• **Expected Response:** ${category?.responseTime}\n\n**Reference ID:** #CS${Date.now().toString().slice(-6)}\n\n📧 You'll receive a confirmation email shortly with your support ticket details. Our ${category?.label.toLowerCase()} team will contact you within the expected timeframe.\n\nIs there anything else I can help you with today?`,
+      content: `✅ **Support Request Submitted Successfully!**\n\n**Request Summary:**\n• **Name:** ${supportRequest.name}\n• **Email:** ${supportRequest.email}\n• **Phone:** ${supportRequest.phone}\n• **Category:** ${category?.label}\n• **Priority:** ${supportRequest.priority?.toUpperCase()}\n• **Expected Response:** ${category?.responseTime}\n\n**Reference ID:** #CS${Date.now().toString().slice(-6)}\n\n📧 You'll receive a confirmation email shortly with your support ticket details. Our ${category?.label.toLowerCase()} team will contact you within the expected timeframe.\n\n💡 **CRM Integration:** Your contact information has been automatically added to our customer relationship management system for better support tracking.\n\nIs there anything else I can help you with today?`,
       timestamp: new Date(),
       suggestions: [
         "Submit another request",
@@ -275,6 +278,85 @@ export function SupportAIAssistant() {
       ]
     };
     setMessages(prev => [...prev, completeMessage]);
+  };
+
+  const pushContactToCRM = async (description: string) => {
+    try {
+      if (!supportRequest.name || !supportRequest.email || !supportRequest.phone) {
+        console.warn("Missing required contact information for CRM push");
+        return;
+      }
+
+      // Check if customer already exists
+      const existingCustomers = await customerService.searchCustomers(supportRequest.email!);
+
+      let customer;
+
+      if (existingCustomers.length > 0) {
+        // Update existing customer
+        customer = existingCustomers[0];
+        console.log("Found existing customer in CRM:", customer.id);
+
+        // Update customer with latest information
+        await customerService.updateCustomer(customer.id, {
+          name: supportRequest.name!,
+          phone: supportRequest.phone!,
+          tags: [...(customer.tags || []), "support-contact", `support-${supportRequest.category}`],
+        });
+      } else {
+        // Create new customer
+        const category = supportCategories.find(c => c.id === supportRequest.category);
+
+        customer = await customerService.createCustomer({
+          name: supportRequest.name!,
+          email: supportRequest.email!,
+          phone: supportRequest.phone!,
+          company: "", // Could be extracted from email domain or left empty
+          tags: ["support-contact", `support-${supportRequest.category}`, "lead"],
+          notes: `Initial contact via Support AI Assistant - ${category?.label}`,
+          customFields: {
+            supportCategory: category?.label || "General",
+            supportPriority: supportRequest.priority || "medium",
+            contactSource: "Support AI Assistant",
+            firstContactDate: new Date().toISOString(),
+          },
+        });
+
+        console.log("Created new customer in CRM:", customer.id);
+      }
+
+      // Add contact/interaction record
+      await customerService.addContact({
+        customerId: customer.id,
+        type: "note",
+        subject: `Support Request: ${supportCategories.find(c => c.id === supportRequest.category)?.label}`,
+        content: `Support request submitted via AI Assistant:\n\nCategory: ${supportCategories.find(c => c.id === supportRequest.category)?.label}\nPriority: ${supportRequest.priority}\nDescription: ${description}\n\nContact: ${supportRequest.name} (${supportRequest.email}, ${supportRequest.phone})`,
+        date: new Date().toISOString(),
+        direction: "inbound",
+      });
+
+      // If it's a sales inquiry, create a deal
+      if (supportRequest.category === "sales") {
+        await customerService.createDeal({
+          customerId: customer.id,
+          title: `Sales Inquiry - ${supportRequest.name}`,
+          value: 0, // Will be updated later
+          stage: "prospect",
+          probability: 20, // Initial probability for cold lead
+          source: "Support AI Assistant",
+          description: `Sales inquiry submitted via Support AI Assistant:\n\n${description}`,
+          expectedCloseDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(), // 30 days from now
+        });
+
+        console.log("Created sales deal for customer:", customer.id);
+      }
+
+      console.log("Successfully pushed support contact to CRM");
+    } catch (error) {
+      console.error("Failed to push contact to CRM:", error);
+      // Don't throw error as this shouldn't break the support flow
+      // Log for monitoring/alerting in production
+    }
   };
 
   const handleSendMessage = async () => {
