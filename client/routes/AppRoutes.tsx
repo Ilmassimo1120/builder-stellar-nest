@@ -381,19 +381,19 @@ const AppRoutes = () => (
     />
 
     <Route
-      path="/help-centre"
+      path="/help-centre-public"
       element={
         <PublicLazyRoute>
-          <HelpCentre />
+          <HelpCentrePublic />
         </PublicLazyRoute>
       }
     />
 
     <Route
-      path="/training"
+      path="/training-public"
       element={
         <PublicLazyRoute>
-          <Training />
+          <TrainingPublic />
         </PublicLazyRoute>
       }
     />
