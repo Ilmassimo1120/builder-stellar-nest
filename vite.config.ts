@@ -20,7 +20,7 @@ export default defineConfig(({ mode }) => ({
     rollupOptions: {
       external: (id) => {
         // Externalize date-fns if it's being imported in a way that causes issues
-        if (id === 'date-fns' && process.env.NODE_ENV === 'production') {
+        if (id === "date-fns" && process.env.NODE_ENV === "production") {
           return false; // Don't externalize in client build, bundle it
         }
         return false;
