@@ -74,6 +74,7 @@ export function SupportAIAssistant() {
   const [isTyping, setIsTyping] = useState(false);
   const [currentStep, setCurrentStep] = useState<"greeting" | "info" | "category" | "details" | "complete">("greeting");
   const [supportRequest, setSupportRequest] = useState<Partial<SupportRequest>>({});
+  const [crmStatus, setCrmStatus] = useState<{ provider: string; enabled: boolean } | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const supportCategories = [
