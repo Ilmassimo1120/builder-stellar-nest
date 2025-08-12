@@ -18,10 +18,12 @@ export default defineConfig(({ mode }) => ({
     minify: mode === "production" ? "esbuild" : false,
     target: "es2020",
     rollupOptions: {
+      // Treat react-router-dom as an external dependency (avoids resolution issues on Netlify)
+      external: ['react-router-dom'],
       output: {
         manualChunks: {
           // Split vendor chunks for better caching
-          vendor: ["react", "react-dom", "react-router-dom"],
+          vendor: ["react", "react-dom"],
           ui: [
             "@radix-ui/react-dialog",
             "@radix-ui/react-dropdown-menu",

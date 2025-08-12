@@ -5,7 +5,9 @@
 
 [build.environment]
   NODE_VERSION = "20"
-  NPM_VERSION = "10"
+
+[[plugins]]
+  package = "@netlify/plugin-lighthouse"
 
 [functions]
   external_node_modules = ["express"]
