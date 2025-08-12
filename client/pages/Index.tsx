@@ -159,10 +159,10 @@ export default function Index() {
               Pricing
             </Link>
             <Link
-              to="/support"
+              to="/contact"
               className="text-sm font-medium hover:text-primary transition-colors"
             >
-              Support
+              Contact
             </Link>
           </nav>
           <div className="flex items-center space-x-3">
