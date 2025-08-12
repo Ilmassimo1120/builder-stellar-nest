@@ -1,4 +1,5 @@
 import { useState } from "react";
+import DemoRequestForm from "@/components/DemoRequestForm";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -35,6 +36,7 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState("");
+  const [showDemoForm, setShowDemoForm] = useState(false);
 
   const [formData, setFormData] = useState({
     email: "",
@@ -239,7 +241,7 @@ export default function Login() {
                   variant="outline"
                   size="sm"
                   className="flex-1 text-xs"
-                  onClick={() => window.open('mailto:demo@chargesource.com.au?subject=Demo Request&body=Hi, I would like to schedule a demo of ChargeSource for my electrical contracting business.', '_blank')}
+                  onClick={() => setShowDemoForm(true)}
                 >
                   <Mail className="w-3 h-3 mr-1" />
                   Email Demo Request
@@ -305,6 +307,12 @@ export default function Login() {
             </Link>
           </p>
         </div>
+
+        {/* Demo Request Form */}
+        <DemoRequestForm
+          isOpen={showDemoForm}
+          onClose={() => setShowDemoForm(false)}
+        />
       </div>
     </div>
   );
