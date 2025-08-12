@@ -204,7 +204,8 @@ const Contact = () => {
           </CardHeader>
           <CardContent className="space-y-4">
             <p className="text-sm text-muted-foreground">
-              Reference: #{Math.random().toString(36).substring(7).toUpperCase()}
+              Reference: #
+              {Math.random().toString(36).substring(7).toUpperCase()}
             </p>
             <div className="flex gap-3">
               <Button className="flex-1" asChild>
