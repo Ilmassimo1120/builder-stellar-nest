@@ -279,10 +279,14 @@ export function SupportAIAssistant() {
     await pushContactToCRM(description);
 
     const category = supportCategories.find(c => c.id === supportRequest.category);
+    const crmIntegrationInfo = crmStatus?.enabled
+      ? `\n\n💡 **CRM Integration:** Your contact information has been automatically added to our ${crmStatus.provider} for better support tracking and follow-up.${supportRequest.category === "sales" ? " A sales opportunity has also been created for your inquiry." : ""}`
+      : `\n\n📝 **Support Tracking:** Your request has been logged in our support system.`;
+
     const completeMessage: ChatMessage = {
       id: `complete-${Date.now()}`,
       type: "assistant",
-      content: `✅ **Support Request Submitted Successfully!**\n\n**Request Summary:**\n• **Name:** ${supportRequest.name}\n• **Email:** ${supportRequest.email}\n• **Phone:** ${supportRequest.phone}\n• **Category:** ${category?.label}\n• **Priority:** ${supportRequest.priority?.toUpperCase()}\n• **Expected Response:** ${category?.responseTime}\n\n**Reference ID:** #CS${Date.now().toString().slice(-6)}\n\n📧 You'll receive a confirmation email shortly with your support ticket details. Our ${category?.label.toLowerCase()} team will contact you within the expected timeframe.\n\n💡 **CRM Integration:** Your contact information has been automatically added to our customer relationship management system for better support tracking.\n\nIs there anything else I can help you with today?`,
+      content: `✅ **Support Request Submitted Successfully!**\n\n**Request Summary:**\n• **Name:** ${supportRequest.name}\n• **Email:** ${supportRequest.email}\n• **Phone:** ${supportRequest.phone}\n• **Category:** ${category?.label}\n• **Priority:** ${supportRequest.priority?.toUpperCase()}\n• **Expected Response:** ${category?.responseTime}\n\n**Reference ID:** #CS${Date.now().toString().slice(-6)}\n\n📧 You'll receive a confirmation email shortly with your support ticket details. Our ${category?.label.toLowerCase()} team will contact you within the expected timeframe.${crmIntegrationInfo}\n\nIs there anything else I can help you with today?`,
       timestamp: new Date(),
       suggestions: [
         "Submit another request",
