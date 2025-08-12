@@ -48,7 +48,8 @@ const Features = () => {
     {
       icon: Building,
       title: "Project Management",
-      description: "Complete project lifecycle management from planning to completion",
+      description:
+        "Complete project lifecycle management from planning to completion",
       features: [
         "Custom project templates",
         "Progress tracking & milestones",
@@ -142,13 +143,21 @@ const Features = () => {
       icon: Factory,
       title: "Industrial",
       description: "Large-scale charging networks",
-      features: ["Manufacturing facilities", "Warehouses", "Distribution centers"],
+      features: [
+        "Manufacturing facilities",
+        "Warehouses",
+        "Distribution centers",
+      ],
     },
     {
       icon: Car,
       title: "Fleet",
       description: "Commercial fleet charging",
-      features: ["Delivery companies", "Transport services", "Government fleets"],
+      features: [
+        "Delivery companies",
+        "Transport services",
+        "Government fleets",
+      ],
     },
   ];
 
@@ -230,8 +239,9 @@ const Features = () => {
             EV Infrastructure Projects
           </h1>
           <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
-            Everything you need to plan, quote, manage, and deliver successful EV charging infrastructure projects. 
-            Built specifically for electrical contractors and project managers.
+            Everything you need to plan, quote, manage, and deliver successful
+            EV charging infrastructure projects. Built specifically for
+            electrical contractors and project managers.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" asChild>
@@ -251,13 +261,17 @@ const Features = () => {
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">Core Features</h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Comprehensive tools designed to streamline every aspect of your EV infrastructure business
+              Comprehensive tools designed to streamline every aspect of your EV
+              infrastructure business
             </p>
           </div>
 
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             {coreFeatures.map((feature, index) => (
-              <Card key={index} className="relative overflow-hidden group hover:shadow-lg transition-shadow">
+              <Card
+                key={index}
+                className="relative overflow-hidden group hover:shadow-lg transition-shadow"
+              >
                 <CardHeader>
                   <div className="flex items-center space-x-3">
                     <div className="p-2 bg-primary/10 rounded-lg">
@@ -271,7 +285,10 @@ const Features = () => {
                 <CardContent>
                   <ul className="space-y-2">
                     {feature.features.map((item, idx) => (
-                      <li key={idx} className="flex items-center space-x-2 text-sm">
+                      <li
+                        key={idx}
+                        className="flex items-center space-x-2 text-sm"
+                      >
                         <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
                         <span>{item}</span>
                       </li>
@@ -294,7 +311,10 @@ const Features = () => {
 
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
             {industries.map((industry, index) => (
-              <Card key={index} className="text-center group hover:shadow-lg transition-shadow">
+              <Card
+                key={index}
+                className="text-center group hover:shadow-lg transition-shadow"
+              >
                 <CardHeader>
                   <div className="mx-auto p-3 bg-primary/10 rounded-full w-16 h-16 flex items-center justify-center mb-4">
                     <industry.icon className="w-8 h-8 text-primary" />
@@ -319,7 +339,8 @@ const Features = () => {
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">Proven Results</h2>
             <p className="text-lg text-muted-foreground">
-              See the measurable impact ChargeSource has on electrical contracting businesses
+              See the measurable impact ChargeSource has on electrical
+              contracting businesses
             </p>
           </div>
 
@@ -442,14 +463,19 @@ const Features = () => {
 
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {integrations.map((integration, index) => (
-              <Card key={index} className="p-6 hover:shadow-md transition-shadow">
+              <Card
+                key={index}
+                className="p-6 hover:shadow-md transition-shadow"
+              >
                 <div className="flex items-center space-x-3">
                   <div className="p-2 bg-primary/10 rounded-lg">
                     <Settings className="w-5 h-5 text-primary" />
                   </div>
                   <div>
                     <h3 className="font-semibold">{integration.name}</h3>
-                    <p className="text-sm text-muted-foreground">{integration.description}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {integration.description}
+                    </p>
                   </div>
                 </div>
               </Card>
@@ -459,9 +485,12 @@ const Features = () => {
 
         {/* CTA Section */}
         <section className="text-center py-16 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-2xl">
-          <h2 className="text-3xl font-bold mb-4">Ready to Transform Your Business?</h2>
+          <h2 className="text-3xl font-bold mb-4">
+            Ready to Transform Your Business?
+          </h2>
           <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Join hundreds of electrical contractors who have streamlined their EV infrastructure projects with ChargeSource.
+            Join hundreds of electrical contractors who have streamlined their
+            EV infrastructure projects with ChargeSource.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" asChild>
@@ -483,13 +512,22 @@ const Features = () => {
           <div className="flex flex-col md:flex-row justify-between items-center">
             <Logo size="md" />
             <div className="flex items-center space-x-6 mt-4 md:mt-0">
-              <Link to="/support" className="text-sm text-muted-foreground hover:text-foreground">
+              <Link
+                to="/support"
+                className="text-sm text-muted-foreground hover:text-foreground"
+              >
                 Support
               </Link>
-              <Link to="/pricing" className="text-sm text-muted-foreground hover:text-foreground">
+              <Link
+                to="/pricing"
+                className="text-sm text-muted-foreground hover:text-foreground"
+              >
                 Pricing
               </Link>
-              <Link to="/login" className="text-sm text-muted-foreground hover:text-foreground">
+              <Link
+                to="/login"
+                className="text-sm text-muted-foreground hover:text-foreground"
+              >
                 Login
               </Link>
             </div>

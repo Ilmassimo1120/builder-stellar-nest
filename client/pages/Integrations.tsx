@@ -67,12 +67,18 @@ const Integrations = () => {
       id: "quickbooks",
       name: "QuickBooks",
       category: "accounting",
-      description: "Sync your financial data automatically with QuickBooks Online and Desktop",
+      description:
+        "Sync your financial data automatically with QuickBooks Online and Desktop",
       logo: "https://logo.clearbit.com/quickbooks.intuit.com",
       isPopular: true,
       rating: 4.8,
       reviews: 2450,
-      features: ["Two-way sync", "Real-time updates", "Invoice automation", "Tax reporting"],
+      features: [
+        "Two-way sync",
+        "Real-time updates",
+        "Invoice automation",
+        "Tax reporting",
+      ],
       setupTime: "5 minutes",
       tier: "free",
     },
@@ -80,12 +86,18 @@ const Integrations = () => {
       id: "hubspot",
       name: "HubSpot CRM",
       category: "crm",
-      description: "Manage leads and customers seamlessly with HubSpot integration",
+      description:
+        "Manage leads and customers seamlessly with HubSpot integration",
       logo: "https://logo.clearbit.com/hubspot.com",
       isPopular: true,
       rating: 4.7,
       reviews: 1850,
-      features: ["Lead sync", "Contact management", "Deal tracking", "Email automation"],
+      features: [
+        "Lead sync",
+        "Contact management",
+        "Deal tracking",
+        "Email automation",
+      ],
       setupTime: "10 minutes",
       tier: "pro",
     },
@@ -98,7 +110,12 @@ const Integrations = () => {
       isPopular: true,
       rating: 4.5,
       reviews: 1680,
-      features: ["Bank reconciliation", "Invoice tracking", "Financial reporting", "GST compliance"],
+      features: [
+        "Bank reconciliation",
+        "Invoice tracking",
+        "Financial reporting",
+        "GST compliance",
+      ],
       setupTime: "8 minutes",
       tier: "free",
     },
@@ -111,7 +128,12 @@ const Integrations = () => {
       isPopular: true,
       rating: 4.5,
       reviews: 1340,
-      features: ["Visual sales pipeline", "Activity reminders", "Email integration", "Lead scoring"],
+      features: [
+        "Visual sales pipeline",
+        "Activity reminders",
+        "Email integration",
+        "Lead scoring",
+      ],
       setupTime: "7 minutes",
       tier: "free",
     },
@@ -127,7 +149,11 @@ const Integrations = () => {
       logo: "https://logo.clearbit.com/xero.com",
       rating: 4.5,
       tier: "free",
-      features: ["Bank reconciliation", "Invoice tracking", "Financial reporting"],
+      features: [
+        "Bank reconciliation",
+        "Invoice tracking",
+        "Financial reporting",
+      ],
     },
     {
       id: "myob",
@@ -137,7 +163,11 @@ const Integrations = () => {
       logo: "https://logo.clearbit.com/myob.com",
       rating: 4.3,
       tier: "pro",
-      features: ["Payroll management", "GST compliance", "Australian tax reporting"],
+      features: [
+        "Payroll management",
+        "GST compliance",
+        "Australian tax reporting",
+      ],
     },
     {
       id: "freshbooks",
@@ -157,9 +187,13 @@ const Integrations = () => {
       logo: "https://logo.clearbit.com/sage.com",
       rating: 4.2,
       tier: "enterprise",
-      features: ["Advanced reporting", "Multi-currency", "Inventory management"],
+      features: [
+        "Advanced reporting",
+        "Multi-currency",
+        "Inventory management",
+      ],
     },
-    
+
     // CRM
     {
       id: "salesforce",
@@ -179,7 +213,11 @@ const Integrations = () => {
       logo: "https://logo.clearbit.com/pipedrive.com",
       rating: 4.5,
       tier: "free",
-      features: ["Visual sales pipeline", "Activity reminders", "Email integration"],
+      features: [
+        "Visual sales pipeline",
+        "Activity reminders",
+        "Email integration",
+      ],
     },
     {
       id: "monday",
@@ -191,7 +229,7 @@ const Integrations = () => {
       tier: "pro",
       features: ["Custom workflows", "Team collaboration", "Visual dashboards"],
     },
-    
+
     // Project Management
     {
       id: "asana",
@@ -223,7 +261,7 @@ const Integrations = () => {
       tier: "pro",
       features: ["Issue tracking", "Agile boards", "Custom workflows"],
     },
-    
+
     // Communication
     {
       id: "teams",
@@ -255,7 +293,7 @@ const Integrations = () => {
       tier: "free",
       features: ["HD video", "Screen sharing", "Recording"],
     },
-    
+
     // Payments
     {
       id: "paypal",
@@ -277,7 +315,7 @@ const Integrations = () => {
       tier: "free",
       features: ["Card processing", "POS system", "Inventory management"],
     },
-    
+
     // Cloud Storage
     {
       id: "googledrive",
@@ -311,10 +349,12 @@ const Integrations = () => {
     },
   ];
 
-  const filteredIntegrations = allIntegrations.filter(integration => {
-    const matchesSearch = integration.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         integration.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory === "all" || integration.category === selectedCategory;
+  const filteredIntegrations = allIntegrations.filter((integration) => {
+    const matchesSearch =
+      integration.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      integration.description.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory =
+      selectedCategory === "all" || integration.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
@@ -322,11 +362,16 @@ const Integrations = () => {
     const tierColors = {
       free: "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300",
       pro: "bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300",
-      enterprise: "bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-300",
+      enterprise:
+        "bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-300",
     };
-    
+
     return (
-      <Badge className={tierColors[tier as keyof typeof tierColors] || tierColors.free}>
+      <Badge
+        className={
+          tierColors[tier as keyof typeof tierColors] || tierColors.free
+        }
+      >
         {tier.charAt(0).toUpperCase() + tier.slice(1)}
       </Badge>
     );
@@ -413,8 +458,9 @@ const Integrations = () => {
             Your Favorite Tools
           </h1>
           <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
-            Seamlessly integrate ChargeSource with the tools you already use. 
-            From accounting software to project management platforms, we've got you covered.
+            Seamlessly integrate ChargeSource with the tools you already use.
+            From accounting software to project management platforms, we've got
+            you covered.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
             <Button size="lg" asChild>
@@ -441,7 +487,10 @@ const Integrations = () => {
 
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
             {featuredIntegrations.map((integration) => (
-              <Card key={integration.id} className="relative overflow-hidden group hover:shadow-lg transition-all duration-300">
+              <Card
+                key={integration.id}
+                className="relative overflow-hidden group hover:shadow-lg transition-all duration-300"
+              >
                 {integration.isPopular && (
                   <div className="absolute top-4 right-4">
                     <Badge className="bg-orange-100 text-orange-800 dark:bg-orange-900/20 dark:text-orange-300">
@@ -452,13 +501,21 @@ const Integrations = () => {
                 )}
                 <CardHeader className="pb-3">
                   <div className="flex items-center space-x-3 mb-3">
-                    <img src={integration.logo} alt={integration.name} className="w-12 h-12 rounded-lg" />
+                    <img
+                      src={integration.logo}
+                      alt={integration.name}
+                      className="w-12 h-12 rounded-lg"
+                    />
                     <div>
-                      <CardTitle className="text-lg">{integration.name}</CardTitle>
+                      <CardTitle className="text-lg">
+                        {integration.name}
+                      </CardTitle>
                       <div className="flex items-center space-x-2">
                         <div className="flex items-center space-x-1">
                           <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                          <span className="text-sm font-medium">{integration.rating}</span>
+                          <span className="text-sm font-medium">
+                            {integration.rating}
+                          </span>
                         </div>
                         <span className="text-sm text-muted-foreground">
                           ({integration.reviews.toLocaleString()})
@@ -471,13 +528,20 @@ const Integrations = () => {
                 <CardContent>
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-muted-foreground">Setup time:</span>
-                      <span className="text-sm font-medium">{integration.setupTime}</span>
+                      <span className="text-sm text-muted-foreground">
+                        Setup time:
+                      </span>
+                      <span className="text-sm font-medium">
+                        {integration.setupTime}
+                      </span>
                     </div>
                     {getTierBadge(integration.tier)}
                     <ul className="space-y-1">
                       {integration.features.slice(0, 3).map((feature, idx) => (
-                        <li key={idx} className="flex items-center space-x-2 text-sm">
+                        <li
+                          key={idx}
+                          className="flex items-center space-x-2 text-sm"
+                        >
                           <CheckCircle className="w-3 h-3 text-green-500 flex-shrink-0" />
                           <span>{feature}</span>
                         </li>
@@ -514,7 +578,9 @@ const Integrations = () => {
                     className="mb-4"
                   />
                   <div className="space-y-2">
-                    <h4 className="font-medium text-sm text-muted-foreground">Categories</h4>
+                    <h4 className="font-medium text-sm text-muted-foreground">
+                      Categories
+                    </h4>
                     {categories.map((category) => (
                       <button
                         key={category.id}
@@ -544,11 +610,18 @@ const Integrations = () => {
                 </CardHeader>
                 <CardContent className="space-y-3">
                   {developerResources.map((resource, idx) => (
-                    <div key={idx} className="flex items-center space-x-3 p-2 rounded-lg hover:bg-muted transition-colors cursor-pointer">
+                    <div
+                      key={idx}
+                      className="flex items-center space-x-3 p-2 rounded-lg hover:bg-muted transition-colors cursor-pointer"
+                    >
                       <resource.icon className="w-5 h-5 text-primary" />
                       <div>
-                        <h4 className="font-medium text-sm">{resource.title}</h4>
-                        <p className="text-xs text-muted-foreground">{resource.description}</p>
+                        <h4 className="font-medium text-sm">
+                          {resource.title}
+                        </h4>
+                        <p className="text-xs text-muted-foreground">
+                          {resource.description}
+                        </p>
                       </div>
                     </div>
                   ))}
@@ -579,25 +652,41 @@ const Integrations = () => {
 
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                 {filteredIntegrations.map((integration) => (
-                  <Card key={integration.id} className="hover:shadow-md transition-shadow group">
+                  <Card
+                    key={integration.id}
+                    className="hover:shadow-md transition-shadow group"
+                  >
                     <CardHeader className="pb-3">
                       <div className="flex items-center space-x-3 mb-2">
-                        <img src={integration.logo} alt={integration.name} className="w-10 h-10 rounded-lg" />
+                        <img
+                          src={integration.logo}
+                          alt={integration.name}
+                          className="w-10 h-10 rounded-lg"
+                        />
                         <div className="flex-1">
-                          <CardTitle className="text-base">{integration.name}</CardTitle>
+                          <CardTitle className="text-base">
+                            {integration.name}
+                          </CardTitle>
                           <div className="flex items-center space-x-1">
                             <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
-                            <span className="text-sm">{integration.rating}</span>
+                            <span className="text-sm">
+                              {integration.rating}
+                            </span>
                           </div>
                         </div>
                         {getTierBadge(integration.tier)}
                       </div>
-                      <CardDescription className="text-sm">{integration.description}</CardDescription>
+                      <CardDescription className="text-sm">
+                        {integration.description}
+                      </CardDescription>
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-2 mb-3">
                         {integration.features.map((feature, idx) => (
-                          <div key={idx} className="flex items-center space-x-2 text-xs">
+                          <div
+                            key={idx}
+                            className="flex items-center space-x-2 text-xs"
+                          >
                             <CheckCircle className="w-3 h-3 text-green-500 flex-shrink-0" />
                             <span>{feature}</span>
                           </div>
@@ -614,7 +703,9 @@ const Integrations = () => {
               {filteredIntegrations.length === 0 && (
                 <div className="text-center py-12">
                   <Search className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                  <h3 className="text-lg font-medium mb-2">No integrations found</h3>
+                  <h3 className="text-lg font-medium mb-2">
+                    No integrations found
+                  </h3>
                   <p className="text-muted-foreground">
                     Try adjusting your search terms or category filters
                   </p>
@@ -626,9 +717,11 @@ const Integrations = () => {
 
         {/* Custom Integration CTA */}
         <section className="text-center py-16 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-2xl">
-          <h2 className="text-3xl font-bold mb-4">Need a Custom Integration?</h2>
+          <h2 className="text-3xl font-bold mb-4">
+            Need a Custom Integration?
+          </h2>
           <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Don't see the tool you need? Our team can build custom integrations 
+            Don't see the tool you need? Our team can build custom integrations
             to connect ChargeSource with any software your business uses.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -650,16 +743,28 @@ const Integrations = () => {
           <div className="flex flex-col md:flex-row justify-between items-center">
             <Logo size="md" />
             <div className="flex items-center space-x-6 mt-4 md:mt-0">
-              <Link to="/support" className="text-sm text-muted-foreground hover:text-foreground">
+              <Link
+                to="/support"
+                className="text-sm text-muted-foreground hover:text-foreground"
+              >
                 Support
               </Link>
-              <Link to="/features" className="text-sm text-muted-foreground hover:text-foreground">
+              <Link
+                to="/features"
+                className="text-sm text-muted-foreground hover:text-foreground"
+              >
                 Features
               </Link>
-              <Link to="/pricing" className="text-sm text-muted-foreground hover:text-foreground">
+              <Link
+                to="/pricing"
+                className="text-sm text-muted-foreground hover:text-foreground"
+              >
                 Pricing
               </Link>
-              <Link to="/login" className="text-sm text-muted-foreground hover:text-foreground">
+              <Link
+                to="/login"
+                className="text-sm text-muted-foreground hover:text-foreground"
+              >
                 Login
               </Link>
             </div>
