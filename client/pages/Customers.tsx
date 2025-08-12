@@ -1,3 +1,4 @@
+import React from "react";
 import { CustomerList } from "@/components/CustomerList";
 
 export default function Customers() {
