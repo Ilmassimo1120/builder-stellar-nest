@@ -217,9 +217,6 @@ export default function HelpCentre() {
               >
                 Training
               </Link>
-              <Link to="/help-centre" className="text-foreground font-medium">
-                Help Centre
-              </Link>
             </nav>
             <div className="flex items-center space-x-4">
               <Link to="/login">
