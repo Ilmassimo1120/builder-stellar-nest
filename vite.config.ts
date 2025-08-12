@@ -38,7 +38,7 @@ export default defineConfig(({ mode }) => ({
   },
   plugins: [
     react({
-      jsxRuntime: "automatic",
+      jsxRuntime: "classic",
     }),
     expressPlugin(),
     ...(mode === "production" ? [compressionPlugin()] : []),
