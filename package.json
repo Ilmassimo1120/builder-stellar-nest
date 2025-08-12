@@ -24,7 +24,8 @@
     "analyze": "npm run build && npx vite-bundle-analyzer dist/spa",
     "preview": "npm run build && npm start",
     "supabase:setup": "node scripts/setup-supabase.js",
-    "supabase:types": "supabase gen types typescript --local > client/lib/database.types.ts"
+    "supabase:types": "supabase gen types typescript --local > client/lib/database.types.ts",
+    "audit-deps": "node dependency-audit.js"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.45.4",
@@ -43,7 +44,8 @@
     "typescript": "^5.5.3",
     "vite": "^6.2.2",
     "zod": "^3.23.8",
-    "@tanstack/react-query": "^5.56.2"
+    "@tanstack/react-query": "^5.56.2",
+    "glob": "^10.3.10"
   },
   "devDependencies": {
     "@hookform/resolvers": "^3.9.0",
