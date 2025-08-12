@@ -495,7 +495,7 @@ export default function Pricing() {
                 asChild
               >
                 <Link to="/register">
-                  🚀 Start Free Trial
+                  Start Free Trial
                   <ArrowRight className="ml-2 w-5 h-5" />
                 </Link>
               </Button>
@@ -506,7 +506,7 @@ export default function Pricing() {
                 asChild
               >
                 <Link to="/contact">
-                  📅 Schedule Demo
+                  Schedule Demo
                 </Link>
               </Button>
             </div>
