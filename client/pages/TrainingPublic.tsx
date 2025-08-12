@@ -218,15 +218,24 @@ export default function TrainingPublic() {
               Professional training designed specifically for electrical contractors.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" asChild>
+              <Button
+                size="lg"
+                className="bg-primary hover:bg-primary/90 text-white font-semibold px-8 py-4 text-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
+                asChild
+              >
                 <Link to="/register">
-                  Start Learning Today
+                  🚀 Start Free Trial
                   <ArrowRight className="ml-2 w-5 h-5" />
                 </Link>
               </Button>
-              <Button variant="outline" size="lg" asChild>
+              <Button
+                variant="secondary"
+                size="lg"
+                className="bg-secondary hover:bg-secondary/90 text-white font-semibold px-8 py-4 text-lg shadow-md hover:shadow-lg transition-all duration-200"
+                asChild
+              >
                 <Link to="/contact">
-                  Contact Training Team
+                  📅 Schedule Demo
                 </Link>
               </Button>
             </div>
