@@ -24,6 +24,8 @@ import {
   Users,
   CheckCircle2,
   ArrowLeft,
+  Calendar,
+  Phone,
 } from "lucide-react";
 
 export default function Login() {
@@ -223,17 +225,34 @@ export default function Login() {
               </Button>
             </form>
 
-            {/* Demo Credentials */}
-            <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-              <h4 className="text-sm font-medium text-blue-900 mb-2">
-                Demo Access
+            {/* Demo Request */}
+            <div className="mt-6 p-4 bg-primary/5 border border-primary/20 rounded-lg">
+              <h4 className="text-sm font-medium text-primary mb-2 flex items-center gap-2">
+                <Calendar className="w-4 h-4" />
+                Request a Demo
               </h4>
-              <p className="text-xs text-blue-700 mb-2">
-                Use any email and password to access the demo
+              <p className="text-xs text-muted-foreground mb-3">
+                See ChargeSource in action with a personalized demonstration tailored to your electrical contracting business
               </p>
-              <div className="text-xs text-blue-600 space-y-1">
-                <div>📧 Email: demo@contractor.com.au</div>
-                <div>🔑 Password: demo123</div>
+              <div className="flex flex-col sm:flex-row gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="flex-1 text-xs"
+                  onClick={() => window.open('mailto:demo@chargesource.com.au?subject=Demo Request&body=Hi, I would like to schedule a demo of ChargeSource for my electrical contracting business.', '_blank')}
+                >
+                  <Mail className="w-3 h-3 mr-1" />
+                  Email Demo Request
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="flex-1 text-xs"
+                  onClick={() => window.open('tel:+61-1800-CHARGE', '_blank')}
+                >
+                  <Phone className="w-3 h-3 mr-1" />
+                  Call for Demo
+                </Button>
               </div>
             </div>
 
