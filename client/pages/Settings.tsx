@@ -17,6 +17,7 @@ import {
   Smartphone,
   Truck,
   DollarSign,
+  TestTube,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -40,6 +41,7 @@ import GlobalSettings from "@/components/GlobalSettings";
 import PartnerSettings from "@/components/PartnerSettings";
 import UserAccountSettings from "@/components/UserAccountSettings";
 import { CRMSettings } from "@/components/CRMSettings";
+import DevelopmentSettings from "@/components/DevelopmentSettings";
 
 interface SettingsSection {
   id: string;
@@ -83,6 +85,14 @@ const settingsSections: SettingsSection[] = [
     permission: "settings.edit",
     roles: [UserRole.GLOBAL_ADMIN],
     component: GlobalSettings,
+  },
+  {
+    id: "development",
+    title: "Development & Testing",
+    description: "Development tools and testing utilities for system diagnostics",
+    icon: <TestTube className="w-5 h-5" />,
+    roles: [UserRole.ADMIN, UserRole.GLOBAL_ADMIN],
+    component: DevelopmentSettings,
   },
 ];
 
