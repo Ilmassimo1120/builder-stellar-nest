@@ -413,8 +413,7 @@ export default function HelpCentrePublic() {
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <Button
                     size="lg"
-                    variant="secondary"
-                    className="text-primary font-semibold px-8 py-4 text-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
+                    className="bg-primary hover:bg-primary/90 text-white font-semibold px-8 py-4 text-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
                     asChild
                   >
                     <Link to="/register">
@@ -424,11 +423,13 @@ export default function HelpCentrePublic() {
                   </Button>
                   <Button
                     size="lg"
-                    variant="outline"
-                    className="border-2 border-white text-white hover:bg-white hover:text-primary font-semibold px-8 py-4 text-lg shadow-md hover:shadow-lg transition-all duration-200"
+                    className="bg-secondary hover:bg-secondary/90 text-white font-semibold px-8 py-4 text-lg shadow-md hover:shadow-lg transition-all duration-200"
                     asChild
                   >
-                    <Link to="/contact">Schedule Demo</Link>
+                    <Link to="/contact">
+                      Schedule Demo
+                      <Calendar className="ml-2 w-5 h-5" />
+                    </Link>
                   </Button>
                 </div>
               </CardContent>
