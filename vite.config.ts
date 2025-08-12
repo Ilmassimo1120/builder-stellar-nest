@@ -18,9 +18,17 @@ export default defineConfig(({ mode }) => ({
     minify: mode === "production" ? "esbuild" : false,
     target: "es2020",
     rollupOptions: {
+      external: (id) => {
+        // Externalize date-fns if it's being imported in a way that causes issues
+        if (id === 'date-fns' && process.env.NODE_ENV === 'production') {
+          return false; // Don't externalize in client build, bundle it
+        }
+        return false;
+      },
       output: {
         manualChunks: {
           vendor: ["react", "react-dom", "sonner"],
+          "date-utils": ["date-fns"],
         },
       },
     },
