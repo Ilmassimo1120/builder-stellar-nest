@@ -136,13 +136,40 @@ export function SupportAIAssistant() {
     scrollToBottom();
   }, [messages]);
 
+  // Initialize CRM status
+  useEffect(() => {
+    const initializeCrmStatus = async () => {
+      try {
+        const config = customerService.getConfig();
+        const activeProvider = customerService.getActiveProvider();
+
+        setCrmStatus({
+          provider: config.provider === "native" ? "Local Database" :
+                   config.provider === "hubspot" ? "HubSpot CRM" :
+                   config.provider === "pipedrive" ? "Pipedrive CRM" :
+                   config.provider,
+          enabled: config.provider !== "native" && activeProvider.isAuthenticated?.() !== false
+        });
+      } catch (error) {
+        console.warn("Could not initialize CRM status:", error);
+        setCrmStatus({ provider: "Local Database", enabled: true });
+      }
+    };
+
+    initializeCrmStatus();
+  }, []);
+
   // Initialize with welcome message
   useEffect(() => {
-    if (messages.length === 0) {
+    if (messages.length === 0 && crmStatus) {
+      const crmInfo = crmStatus.enabled
+        ? `\n\n🔗 **CRM Integration Active:** Your contact information will be automatically added to our ${crmStatus.provider} for better support tracking and follow-up.`
+        : `\n\n📝 **Local Support:** Your request will be tracked in our support system.`;
+
       const welcomeMessage: ChatMessage = {
         id: "welcome",
         type: "assistant",
-        content: `👋 Hello! I'm your ChargeSource Support Assistant. I'm here to help you get the support you need quickly and efficiently.\n\nI can help connect you with the right support team based on your specific needs. To get started, I'll need to collect some basic information to ensure you receive the best possible assistance.\n\nAre you ready to begin?`,
+        content: `👋 Hello! I'm your ChargeSource Support Assistant. I'm here to help you get the support you need quickly and efficiently.\n\nI can help connect you with the right support team based on your specific needs. To get started, I'll need to collect some basic information to ensure you receive the best possible assistance.${crmInfo}\n\nAre you ready to begin?`,
         timestamp: new Date(),
         suggestions: ["Yes, I need support", "What types of support are available?"],
         actions: [
@@ -156,7 +183,7 @@ export function SupportAIAssistant() {
       };
       setMessages([welcomeMessage]);
     }
-  }, [messages.length]);
+  }, [messages.length, crmStatus]);
 
   const handleStartSupport = () => {
     setCurrentStep("info");
