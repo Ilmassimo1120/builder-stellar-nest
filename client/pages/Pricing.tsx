@@ -544,13 +544,18 @@ export default function Pricing() {
               <h4 className="font-semibold mb-4">Support</h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li>
-                  <Link to="/contact" className="hover:text-foreground">
-                    Contact
+                  <Link to="/help-centre-public" className="hover:text-foreground">
+                    Help Centre
                   </Link>
                 </li>
                 <li>
-                  <Link to="/support" className="hover:text-foreground">
-                    Help Center
+                  <Link to="/training-public" className="hover:text-foreground">
+                    Training
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/contact" className="hover:text-foreground">
+                    Contact
                   </Link>
                 </li>
               </ul>
