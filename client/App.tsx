@@ -76,6 +76,9 @@ function App() {
                     duration: 4000,
                   }}
                 />
+
+                {/* Global Support AI Assistant */}
+                <SupportAIAssistant />
               </div>
             </Suspense>
           </BrowserRouter>
