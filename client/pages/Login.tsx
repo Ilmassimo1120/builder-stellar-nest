@@ -234,7 +234,8 @@ export default function Login() {
                 Request a Demo
               </h4>
               <p className="text-xs text-muted-foreground mb-3">
-                See ChargeSource in action with a personalized demonstration tailored to your electrical contracting business
+                See ChargeSource in action with a personalized demonstration
+                tailored to your electrical contracting business
               </p>
               <div className="flex flex-col sm:flex-row gap-2">
                 <Button
@@ -250,7 +251,7 @@ export default function Login() {
                   variant="outline"
                   size="sm"
                   className="flex-1 text-xs"
-                  onClick={() => window.open('tel:+61-1800-CHARGE', '_blank')}
+                  onClick={() => window.open("tel:+61-1800-CHARGE", "_blank")}
                 >
                   <Phone className="w-3 h-3 mr-1" />
                   Call for Demo

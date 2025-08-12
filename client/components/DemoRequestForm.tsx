@@ -58,7 +58,10 @@ const businessSizeOptions = [
   { value: "100+", label: "100+ employees (Corporate)" },
 ];
 
-export default function DemoRequestForm({ isOpen, onClose }: DemoRequestFormProps) {
+export default function DemoRequestForm({
+  isOpen,
+  onClose,
+}: DemoRequestFormProps) {
   const [formData, setFormData] = useState<FormData>({
     firstName: "",
     lastName: "",
@@ -76,8 +79,11 @@ export default function DemoRequestForm({ isOpen, onClose }: DemoRequestFormProp
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState("");
 
-  const handleInputChange = (field: keyof FormData, value: string | boolean) => {
-    setFormData(prev => ({
+  const handleInputChange = (
+    field: keyof FormData,
+    value: string | boolean,
+  ) => {
+    setFormData((prev) => ({
       ...prev,
       [field]: value,
     }));
@@ -120,26 +126,26 @@ export default function DemoRequestForm({ isOpen, onClose }: DemoRequestFormProp
     // This would integrate with your CRM system
     // For now, we'll simulate the API call
     try {
-      const response = await fetch('/api/crm/leads', {
-        method: 'POST',
+      const response = await fetch("/api/crm/leads", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           ...data,
-          source: 'demo_request',
-          leadType: 'demo',
+          source: "demo_request",
+          leadType: "demo",
           timestamp: new Date().toISOString(),
         }),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to submit to CRM');
+        throw new Error("Failed to submit to CRM");
       }
 
       return await response.json();
     } catch (error) {
-      console.error('CRM submission error:', error);
+      console.error("CRM submission error:", error);
       throw error;
     }
   };
@@ -147,10 +153,10 @@ export default function DemoRequestForm({ isOpen, onClose }: DemoRequestFormProp
   const sendConfirmationEmail = async (data: FormData) => {
     // This would send a confirmation email to the user
     try {
-      const response = await fetch('/api/email/demo-confirmation', {
-        method: 'POST',
+      const response = await fetch("/api/email/demo-confirmation", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           to: data.email,
@@ -160,19 +166,19 @@ export default function DemoRequestForm({ isOpen, onClose }: DemoRequestFormProp
       });
 
       if (!response.ok) {
-        throw new Error('Failed to send confirmation email');
+        throw new Error("Failed to send confirmation email");
       }
 
       return await response.json();
     } catch (error) {
-      console.error('Email sending error:', error);
+      console.error("Email sending error:", error);
       throw error;
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
@@ -183,12 +189,12 @@ export default function DemoRequestForm({ isOpen, onClose }: DemoRequestFormProp
     try {
       // Submit to CRM
       await submitToCRM(formData);
-      
+
       // Send confirmation email
       await sendConfirmationEmail(formData);
-      
+
       setIsSuccess(true);
-      
+
       // Auto-close after 3 seconds
       setTimeout(() => {
         onClose();
@@ -206,9 +212,10 @@ export default function DemoRequestForm({ isOpen, onClose }: DemoRequestFormProp
           subscribeNewsletter: true,
         });
       }, 3000);
-      
     } catch (error) {
-      setError("Something went wrong. Please try again or contact us directly.");
+      setError(
+        "Something went wrong. Please try again or contact us directly.",
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -223,13 +230,17 @@ export default function DemoRequestForm({ isOpen, onClose }: DemoRequestFormProp
               <CheckCircle2 className="w-8 h-8 text-green-600" />
             </div>
             <div className="space-y-2">
-              <h3 className="text-xl font-semibold text-green-900">Demo Request Submitted!</h3>
+              <h3 className="text-xl font-semibold text-green-900">
+                Demo Request Submitted!
+              </h3>
               <p className="text-sm text-green-700">
-                Thank you {formData.firstName}! We've received your demo request for {formData.businessName}.
+                Thank you {formData.firstName}! We've received your demo request
+                for {formData.businessName}.
               </p>
               <p className="text-xs text-muted-foreground">
-                Our team will contact you within 24 hours to schedule your personalized demonstration.
-                A confirmation email has been sent to {formData.email}.
+                Our team will contact you within 24 hours to schedule your
+                personalized demonstration. A confirmation email has been sent
+                to {formData.email}.
               </p>
             </div>
           </div>
@@ -247,7 +258,8 @@ export default function DemoRequestForm({ isOpen, onClose }: DemoRequestFormProp
             Request a Demo
           </DialogTitle>
           <DialogDescription>
-            Tell us about your business and we'll schedule a personalized demonstration of ChargeSource
+            Tell us about your business and we'll schedule a personalized
+            demonstration of ChargeSource
           </DialogDescription>
         </DialogHeader>
 
@@ -265,14 +277,16 @@ export default function DemoRequestForm({ isOpen, onClose }: DemoRequestFormProp
               <User className="w-4 h-4 text-primary" />
               <h4 className="font-medium">Personal Information</h4>
             </div>
-            
+
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1">
                 <Label htmlFor="firstName">First Name *</Label>
                 <Input
                   id="firstName"
                   value={formData.firstName}
-                  onChange={(e) => handleInputChange("firstName", e.target.value)}
+                  onChange={(e) =>
+                    handleInputChange("firstName", e.target.value)
+                  }
                   placeholder="John"
                   required
                 />
@@ -282,7 +296,9 @@ export default function DemoRequestForm({ isOpen, onClose }: DemoRequestFormProp
                 <Input
                   id="lastName"
                   value={formData.lastName}
-                  onChange={(e) => handleInputChange("lastName", e.target.value)}
+                  onChange={(e) =>
+                    handleInputChange("lastName", e.target.value)
+                  }
                   placeholder="Smith"
                   required
                 />
@@ -344,7 +360,9 @@ export default function DemoRequestForm({ isOpen, onClose }: DemoRequestFormProp
               <Input
                 id="businessName"
                 value={formData.businessName}
-                onChange={(e) => handleInputChange("businessName", e.target.value)}
+                onChange={(e) =>
+                  handleInputChange("businessName", e.target.value)
+                }
                 placeholder="ABC Electrical Services Pty Ltd"
                 required
               />
@@ -354,7 +372,9 @@ export default function DemoRequestForm({ isOpen, onClose }: DemoRequestFormProp
               <Label htmlFor="businessSize">Business Size *</Label>
               <Select
                 value={formData.businessSize}
-                onValueChange={(value) => handleInputChange("businessSize", value)}
+                onValueChange={(value) =>
+                  handleInputChange("businessSize", value)
+                }
               >
                 <SelectTrigger>
                   <div className="flex items-center gap-2">
@@ -391,12 +411,21 @@ export default function DemoRequestForm({ isOpen, onClose }: DemoRequestFormProp
               <Checkbox
                 id="agreeToTerms"
                 checked={formData.agreeToTerms}
-                onCheckedChange={(checked) => handleInputChange("agreeToTerms", checked as boolean)}
+                onCheckedChange={(checked) =>
+                  handleInputChange("agreeToTerms", checked as boolean)
+                }
                 required
               />
               <Label htmlFor="agreeToTerms" className="text-xs leading-relaxed">
-                I agree to the <a href="/terms" className="text-primary hover:underline">Terms of Service</a> and{" "}
-                <a href="/privacy" className="text-primary hover:underline">Privacy Policy</a>, and consent to being contacted about this demo request.
+                I agree to the{" "}
+                <a href="/terms" className="text-primary hover:underline">
+                  Terms of Service
+                </a>{" "}
+                and{" "}
+                <a href="/privacy" className="text-primary hover:underline">
+                  Privacy Policy
+                </a>
+                , and consent to being contacted about this demo request.
               </Label>
             </div>
 
@@ -404,10 +433,13 @@ export default function DemoRequestForm({ isOpen, onClose }: DemoRequestFormProp
               <Checkbox
                 id="subscribeNewsletter"
                 checked={formData.subscribeNewsletter}
-                onCheckedChange={(checked) => handleInputChange("subscribeNewsletter", checked as boolean)}
+                onCheckedChange={(checked) =>
+                  handleInputChange("subscribeNewsletter", checked as boolean)
+                }
               />
               <Label htmlFor="subscribeNewsletter" className="text-xs">
-                Subscribe to our newsletter for industry insights and product updates
+                Subscribe to our newsletter for industry insights and product
+                updates
               </Label>
             </div>
           </div>

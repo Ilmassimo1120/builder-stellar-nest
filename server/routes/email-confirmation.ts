@@ -7,7 +7,10 @@ interface EmailData {
 }
 
 // Email template for demo confirmation
-const createDemoConfirmationEmail = (firstName: string, businessName: string) => {
+const createDemoConfirmationEmail = (
+  firstName: string,
+  businessName: string,
+) => {
   return {
     subject: "Demo Request Confirmed - ChargeSource EV Infrastructure Platform",
     html: `
@@ -121,13 +124,18 @@ Email: demo@chargesource.com.au
 Phone: 1800-CHARGE
 Website: www.chargesource.com.au
 🇦🇺 Made in Australia | AS/NZS 3000 Compliant
-    `
+    `,
   };
 };
 
 // This would integrate with your email service provider
 // Examples: SendGrid, AWS SES, Mailgun, etc.
-const sendEmail = async (to: string, subject: string, html: string, text: string) => {
+const sendEmail = async (
+  to: string,
+  subject: string,
+  html: string,
+  text: string,
+) => {
   try {
     // Example using SendGrid or similar service
     // const response = await fetch('https://api.sendgrid.com/v3/mail/send', {
@@ -150,16 +158,15 @@ const sendEmail = async (to: string, subject: string, html: string, text: string
     // For demo purposes, we'll log the email and simulate success
     console.log(`Demo confirmation email would be sent to: ${to}`);
     console.log(`Subject: ${subject}`);
-    
+
     return {
       success: true,
       messageId: `demo_email_${Date.now()}`,
-      message: "Email sent successfully"
+      message: "Email sent successfully",
     };
-
   } catch (error) {
-    console.error('Email sending error:', error);
-    throw new Error('Failed to send confirmation email');
+    console.error("Email sending error:", error);
+    throw new Error("Failed to send confirmation email");
   }
 };
 
@@ -171,7 +178,7 @@ export const handleDemoConfirmationEmail: RequestHandler = async (req, res) => {
     if (!to || !firstName || !businessName) {
       return res.status(400).json({
         success: false,
-        error: 'Missing required fields: to, firstName, businessName'
+        error: "Missing required fields: to, firstName, businessName",
       });
     }
 
@@ -180,7 +187,7 @@ export const handleDemoConfirmationEmail: RequestHandler = async (req, res) => {
     if (!emailRegex.test(to)) {
       return res.status(400).json({
         success: false,
-        error: 'Invalid email format'
+        error: "Invalid email format",
       });
     }
 
@@ -192,7 +199,7 @@ export const handleDemoConfirmationEmail: RequestHandler = async (req, res) => {
       to,
       emailContent.subject,
       emailContent.html,
-      emailContent.text
+      emailContent.text,
     );
 
     // Log for analytics
@@ -200,18 +207,17 @@ export const handleDemoConfirmationEmail: RequestHandler = async (req, res) => {
 
     res.json({
       success: true,
-      message: 'Confirmation email sent successfully',
+      message: "Confirmation email sent successfully",
       data: {
         messageId: emailResult.messageId,
-        timestamp: new Date().toISOString()
-      }
+        timestamp: new Date().toISOString(),
+      },
     });
-
   } catch (error) {
-    console.error('Email confirmation error:', error);
+    console.error("Email confirmation error:", error);
     res.status(500).json({
       success: false,
-      error: 'Internal server error'
+      error: "Internal server error",
     });
   }
 };

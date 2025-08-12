@@ -36,7 +36,7 @@ const submitToCRM = async (leadData: DemoRequestData) => {
         business_size: leadData.businessSize,
         additional_notes: leadData.message || "",
         newsletter_subscription: leadData.subscribeNewsletter.toString(),
-      }
+      },
     };
 
     // In a real implementation, you would use the HubSpot API
@@ -50,17 +50,16 @@ const submitToCRM = async (leadData: DemoRequestData) => {
     // });
 
     // For demo purposes, we'll simulate a successful response
-    console.log('Demo lead submitted to CRM:', hubspotData);
-    
+    console.log("Demo lead submitted to CRM:", hubspotData);
+
     return {
       success: true,
       contactId: `demo_${Date.now()}`,
-      message: "Lead successfully created in CRM"
+      message: "Lead successfully created in CRM",
     };
-
   } catch (error) {
-    console.error('CRM integration error:', error);
-    throw new Error('Failed to submit lead to CRM');
+    console.error("CRM integration error:", error);
+    throw new Error("Failed to submit lead to CRM");
   }
 };
 
@@ -69,13 +68,20 @@ export const handleCRMLeadSubmission: RequestHandler = async (req, res) => {
     const leadData: DemoRequestData = req.body;
 
     // Validate required fields
-    const requiredFields = ['firstName', 'lastName', 'email', 'phone', 'businessName', 'businessSize'];
-    const missingFields = requiredFields.filter(field => !leadData[field]);
-    
+    const requiredFields = [
+      "firstName",
+      "lastName",
+      "email",
+      "phone",
+      "businessName",
+      "businessSize",
+    ];
+    const missingFields = requiredFields.filter((field) => !leadData[field]);
+
     if (missingFields.length > 0) {
       return res.status(400).json({
         success: false,
-        error: `Missing required fields: ${missingFields.join(', ')}`
+        error: `Missing required fields: ${missingFields.join(", ")}`,
       });
     }
 
@@ -84,7 +90,7 @@ export const handleCRMLeadSubmission: RequestHandler = async (req, res) => {
     if (!emailRegex.test(leadData.email)) {
       return res.status(400).json({
         success: false,
-        error: 'Invalid email format'
+        error: "Invalid email format",
       });
     }
 
@@ -92,22 +98,23 @@ export const handleCRMLeadSubmission: RequestHandler = async (req, res) => {
     const crmResult = await submitToCRM(leadData);
 
     // Log for analytics
-    console.log(`Demo request received from ${leadData.firstName} ${leadData.lastName} at ${leadData.businessName}`);
+    console.log(
+      `Demo request received from ${leadData.firstName} ${leadData.lastName} at ${leadData.businessName}`,
+    );
 
     res.json({
       success: true,
-      message: 'Demo request submitted successfully',
+      message: "Demo request submitted successfully",
       data: {
         contactId: crmResult.contactId,
-        timestamp: new Date().toISOString()
-      }
+        timestamp: new Date().toISOString(),
+      },
     });
-
   } catch (error) {
-    console.error('Demo request submission error:', error);
+    console.error("Demo request submission error:", error);
     res.status(500).json({
       success: false,
-      error: 'Internal server error'
+      error: "Internal server error",
     });
   }
 };
