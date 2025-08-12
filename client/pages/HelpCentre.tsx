@@ -39,7 +39,8 @@ export default function HelpCentre() {
     {
       id: "getting-started",
       title: "Getting Started",
-      description: "Everything you need to know to begin your EV infrastructure journey",
+      description:
+        "Everything you need to know to begin your EV infrastructure journey",
       icon: <Zap className="w-8 h-8 text-primary" />,
       articles: 12,
       color: "primary",
@@ -47,7 +48,8 @@ export default function HelpCentre() {
     {
       id: "project-planning",
       title: "Project Planning",
-      description: "Site assessment, compliance checks, and project setup guidance",
+      description:
+        "Site assessment, compliance checks, and project setup guidance",
       icon: <Calculator className="w-8 h-8 text-secondary" />,
       articles: 18,
       color: "secondary",
@@ -63,7 +65,8 @@ export default function HelpCentre() {
     {
       id: "procurement",
       title: "Procurement & Orders",
-      description: "Supplier integration, inventory management, and order processing",
+      description:
+        "Supplier integration, inventory management, and order processing",
       icon: <Package className="w-8 h-8 text-primary" />,
       articles: 10,
       color: "primary",
@@ -197,13 +200,22 @@ export default function HelpCentre() {
               <span className="font-bold text-xl">ChargeSource</span>
             </Link>
             <nav className="hidden md:flex space-x-8">
-              <Link to="/features" className="text-muted-foreground hover:text-foreground">
+              <Link
+                to="/features"
+                className="text-muted-foreground hover:text-foreground"
+              >
                 Features
               </Link>
-              <Link to="/pricing" className="text-muted-foreground hover:text-foreground">
+              <Link
+                to="/pricing"
+                className="text-muted-foreground hover:text-foreground"
+              >
                 Pricing
               </Link>
-              <Link to="/training" className="text-muted-foreground hover:text-foreground">
+              <Link
+                to="/training"
+                className="text-muted-foreground hover:text-foreground"
+              >
                 Training
               </Link>
               <Link to="/help-centre" className="text-foreground font-medium">
@@ -226,13 +238,12 @@ export default function HelpCentre() {
         {/* Hero Section */}
         <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-primary/10 to-secondary/10">
           <div className="container mx-auto text-center max-w-4xl">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              Help Centre
-            </h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-6">Help Centre</h1>
             <p className="text-xl text-muted-foreground mb-8">
-              Find answers, get support, and learn how to maximize your EV infrastructure projects with ChargeSource.
+              Find answers, get support, and learn how to maximize your EV
+              infrastructure projects with ChargeSource.
             </p>
-            
+
             {/* Search Bar */}
             <div className="relative max-w-2xl mx-auto mb-8">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
@@ -249,19 +260,27 @@ export default function HelpCentre() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-12">
               <div className="text-center">
                 <div className="text-2xl font-bold text-primary">150+</div>
-                <div className="text-sm text-muted-foreground">Help Articles</div>
+                <div className="text-sm text-muted-foreground">
+                  Help Articles
+                </div>
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-secondary">45+</div>
-                <div className="text-sm text-muted-foreground">Video Tutorials</div>
+                <div className="text-sm text-muted-foreground">
+                  Video Tutorials
+                </div>
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-accent">24/7</div>
-                <div className="text-sm text-muted-foreground">Support Access</div>
+                <div className="text-sm text-muted-foreground">
+                  Support Access
+                </div>
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-primary">500+</div>
-                <div className="text-sm text-muted-foreground">Community Members</div>
+                <div className="text-sm text-muted-foreground">
+                  Community Members
+                </div>
               </div>
             </div>
           </div>
@@ -276,15 +295,20 @@ export default function HelpCentre() {
                 Find the information you need, organized by topic
               </p>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {categories.map((category) => (
-                <Card key={category.id} className="hover:shadow-lg transition-shadow cursor-pointer">
+                <Card
+                  key={category.id}
+                  className="hover:shadow-lg transition-shadow cursor-pointer"
+                >
                   <CardHeader>
                     <div className="flex items-center gap-3 mb-2">
                       {category.icon}
                       <div className="flex-1">
-                        <CardTitle className="text-xl">{category.title}</CardTitle>
+                        <CardTitle className="text-xl">
+                          {category.title}
+                        </CardTitle>
                         <Badge variant="secondary" className="mt-1">
                           {category.articles} articles
                         </Badge>
@@ -308,7 +332,10 @@ export default function HelpCentre() {
                 <h2 className="text-2xl font-bold mb-6">Popular Articles</h2>
                 <div className="space-y-4">
                   {popularArticles.map((article, index) => (
-                    <Card key={index} className="hover:shadow-md transition-shadow cursor-pointer">
+                    <Card
+                      key={index}
+                      className="hover:shadow-md transition-shadow cursor-pointer"
+                    >
                       <CardContent className="p-6">
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
@@ -316,7 +343,9 @@ export default function HelpCentre() {
                               {article.title}
                             </h3>
                             <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                              <Badge variant="outline">{article.category}</Badge>
+                              <Badge variant="outline">
+                                {article.category}
+                              </Badge>
                               <div className="flex items-center gap-1">
                                 <Clock className="w-4 h-4" />
                                 {article.readTime}
@@ -340,7 +369,10 @@ export default function HelpCentre() {
                     <ul className="space-y-3">
                       {quickLinks.map((link, index) => (
                         <li key={index}>
-                          <a href={link.link} className="flex items-center justify-between text-sm hover:text-primary">
+                          <a
+                            href={link.link}
+                            className="flex items-center justify-between text-sm hover:text-primary"
+                          >
                             {link.title}
                             <ChevronRight className="w-4 h-4" />
                           </a>
@@ -356,7 +388,8 @@ export default function HelpCentre() {
                   </CardHeader>
                   <CardContent>
                     <p className="text-sm text-muted-foreground mb-4">
-                      Can't find what you're looking for? Our support team is here to help.
+                      Can't find what you're looking for? Our support team is
+                      here to help.
                     </p>
                     <Button className="w-full" asChild>
                       <Link to="/contact">Contact Support</Link>
@@ -377,7 +410,7 @@ export default function HelpCentre() {
                 Choose the support option that works best for you
               </p>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {supportOptions.map((option, index) => (
                 <Card key={index} className="text-center">
@@ -411,7 +444,7 @@ export default function HelpCentre() {
                 Explore more ways to learn and get the most out of ChargeSource
               </p>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {resources.map((resource, index) => (
                 <Card key={index} className="hover:shadow-lg transition-shadow">
@@ -451,8 +484,9 @@ export default function HelpCentre() {
                   Download Our Complete Guide
                 </h3>
                 <p className="text-xl mb-8 text-primary-foreground/90 max-w-2xl mx-auto">
-                  Get the comprehensive "EV Infrastructure Planning Guide for Australian Contractors" - 
-                  a 50-page resource covering everything from site assessment to project completion.
+                  Get the comprehensive "EV Infrastructure Planning Guide for
+                  Australian Contractors" - a 50-page resource covering
+                  everything from site assessment to project completion.
                 </p>
                 <Button size="lg" variant="secondary" className="text-primary">
                   Download Free Guide
@@ -474,25 +508,58 @@ export default function HelpCentre() {
                 <span className="font-bold text-lg">ChargeSource</span>
               </div>
               <p className="text-sm text-muted-foreground">
-                The complete platform for electrical contractors in the EV infrastructure market.
+                The complete platform for electrical contractors in the EV
+                infrastructure market.
               </p>
             </div>
             <div>
               <h4 className="font-semibold mb-4">Support</h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><Link to="/help-centre" className="hover:text-foreground">Help Centre</Link></li>
-                <li><Link to="/training" className="hover:text-foreground">Training</Link></li>
-                <li><Link to="/compliance" className="hover:text-foreground">Compliance</Link></li>
-                <li><Link to="/contact" className="hover:text-foreground">Contact</Link></li>
+                <li>
+                  <Link to="/help-centre" className="hover:text-foreground">
+                    Help Centre
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/training" className="hover:text-foreground">
+                    Training
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/compliance" className="hover:text-foreground">
+                    Compliance
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/contact" className="hover:text-foreground">
+                    Contact
+                  </Link>
+                </li>
               </ul>
             </div>
             <div>
               <h4 className="font-semibold mb-4">Resources</h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><a href="#api" className="hover:text-foreground">API Documentation</a></li>
-                <li><a href="#downloads" className="hover:text-foreground">Downloads</a></li>
-                <li><a href="#forum" className="hover:text-foreground">Community Forum</a></li>
-                <li><a href="#status" className="hover:text-foreground">System Status</a></li>
+                <li>
+                  <a href="#api" className="hover:text-foreground">
+                    API Documentation
+                  </a>
+                </li>
+                <li>
+                  <a href="#downloads" className="hover:text-foreground">
+                    Downloads
+                  </a>
+                </li>
+                <li>
+                  <a href="#forum" className="hover:text-foreground">
+                    Community Forum
+                  </a>
+                </li>
+                <li>
+                  <a href="#status" className="hover:text-foreground">
+                    System Status
+                  </a>
+                </li>
               </ul>
             </div>
             <div>
