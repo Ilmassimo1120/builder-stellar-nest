@@ -193,9 +193,6 @@ export default function TrainingPublic() {
               <Link to="/training-public" className="text-foreground font-medium">
                 Training
               </Link>
-              <Link to="/help-centre-public" className="text-muted-foreground hover:text-foreground">
-                Help Centre
-              </Link>
             </nav>
             <div className="flex items-center space-x-4">
               <Link to="/login">
