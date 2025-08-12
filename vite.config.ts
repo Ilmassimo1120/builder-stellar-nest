@@ -19,7 +19,7 @@ export default defineConfig(({ mode }) => ({
     target: "es2020",
     rollupOptions: {
       // Treat react-router-dom as an external dependency (avoids resolution issues on Netlify)
-      external: ['react-router-dom'],
+      external: ["react-router-dom"],
       output: {
         manualChunks: {
           // Split vendor chunks for better caching
