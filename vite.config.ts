@@ -37,7 +37,9 @@ export default defineConfig(({ mode }) => ({
     chunkSizeWarningLimit: 1000,
   },
   plugins: [
-    react(),
+    react({
+      jsxRuntime: "automatic",
+    }),
     expressPlugin(),
     ...(mode === "production" ? [compressionPlugin()] : []),
   ],
