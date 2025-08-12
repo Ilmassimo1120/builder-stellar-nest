@@ -505,9 +505,7 @@ export default function Pricing() {
                 className="bg-secondary hover:bg-secondary/90 text-white font-semibold px-8 py-4 text-lg shadow-md hover:shadow-lg transition-all duration-200"
                 asChild
               >
-                <Link to="/contact">
-                  Schedule Demo
-                </Link>
+                <Link to="/contact">Schedule Demo</Link>
               </Button>
             </div>
           </div>
@@ -551,7 +549,10 @@ export default function Pricing() {
               <h4 className="font-semibold mb-4">Support</h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li>
-                  <Link to="/help-centre-public" className="hover:text-foreground">
+                  <Link
+                    to="/help-centre-public"
+                    className="hover:text-foreground"
+                  >
                     Help Centre
                   </Link>
                 </li>

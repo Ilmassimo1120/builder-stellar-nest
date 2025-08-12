@@ -39,14 +39,16 @@ export default function HelpCentrePublic() {
     {
       id: "getting-started",
       title: "Getting Started",
-      description: "Everything you need to know to begin your EV infrastructure journey",
+      description:
+        "Everything you need to know to begin your EV infrastructure journey",
       icon: <Zap className="w-8 h-8 text-primary" />,
       articles: 12,
     },
     {
       id: "project-planning",
       title: "Project Planning",
-      description: "Site assessment, compliance checks, and project setup guidance",
+      description:
+        "Site assessment, compliance checks, and project setup guidance",
       icon: <Calculator className="w-8 h-8 text-secondary" />,
       articles: 18,
     },
@@ -60,7 +62,8 @@ export default function HelpCentrePublic() {
     {
       id: "procurement",
       title: "Procurement & Orders",
-      description: "Supplier integration, inventory management, and order processing",
+      description:
+        "Supplier integration, inventory management, and order processing",
       icon: <Package className="w-8 h-8 text-primary" />,
       articles: 10,
     },
@@ -84,27 +87,32 @@ export default function HelpCentrePublic() {
     {
       title: "Setting up your first EV charging project",
       category: "Getting Started",
-      description: "Learn the basics of planning and implementing EV charging infrastructure projects."
+      description:
+        "Learn the basics of planning and implementing EV charging infrastructure projects.",
     },
     {
       title: "Understanding compliance requirements",
       category: "Compliance",
-      description: "Overview of Australian electrical standards and regulatory requirements."
+      description:
+        "Overview of Australian electrical standards and regulatory requirements.",
     },
     {
       title: "Supplier integration overview",
       category: "Integrations",
-      description: "How ChargeSource connects with major EV equipment suppliers."
+      description:
+        "How ChargeSource connects with major EV equipment suppliers.",
     },
     {
       title: "Cost estimation fundamentals",
       category: "Quoting & Pricing",
-      description: "Basic principles for creating accurate EV infrastructure cost estimates."
+      description:
+        "Basic principles for creating accurate EV infrastructure cost estimates.",
     },
     {
       title: "Commercial installation planning",
       category: "Project Planning",
-      description: "Key considerations for multi-charger commercial installations."
+      description:
+        "Key considerations for multi-charger commercial installations.",
     },
   ];
 
@@ -139,13 +147,22 @@ export default function HelpCentrePublic() {
               <Logo />
             </Link>
             <nav className="hidden md:flex space-x-8">
-              <Link to="/features" className="text-muted-foreground hover:text-foreground">
+              <Link
+                to="/features"
+                className="text-muted-foreground hover:text-foreground"
+              >
                 Features
               </Link>
-              <Link to="/pricing" className="text-muted-foreground hover:text-foreground">
+              <Link
+                to="/pricing"
+                className="text-muted-foreground hover:text-foreground"
+              >
                 Pricing
               </Link>
-              <Link to="/training-public" className="text-muted-foreground hover:text-foreground">
+              <Link
+                to="/training-public"
+                className="text-muted-foreground hover:text-foreground"
+              >
                 Training
               </Link>
             </nav>
@@ -165,13 +182,12 @@ export default function HelpCentrePublic() {
         {/* Hero Section */}
         <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-primary/10 to-secondary/10">
           <div className="container mx-auto text-center max-w-4xl">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              Help Centre
-            </h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-6">Help Centre</h1>
             <p className="text-xl text-muted-foreground mb-8">
-              Learn about ChargeSource and how our platform can help electrical contractors succeed in the EV infrastructure market.
+              Learn about ChargeSource and how our platform can help electrical
+              contractors succeed in the EV infrastructure market.
             </p>
-            
+
             {/* Search Bar */}
             <div className="relative max-w-2xl mx-auto mb-8">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
@@ -192,15 +208,21 @@ export default function HelpCentrePublic() {
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-secondary">45+</div>
-                <div className="text-sm text-muted-foreground">Video Tutorials</div>
+                <div className="text-sm text-muted-foreground">
+                  Video Tutorials
+                </div>
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-accent">24/7</div>
-                <div className="text-sm text-muted-foreground">Support Access</div>
+                <div className="text-sm text-muted-foreground">
+                  Support Access
+                </div>
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-primary">500+</div>
-                <div className="text-sm text-muted-foreground">Happy Customers</div>
+                <div className="text-sm text-muted-foreground">
+                  Happy Customers
+                </div>
               </div>
             </div>
           </div>
@@ -215,15 +237,20 @@ export default function HelpCentrePublic() {
                 Explore our platform features and capabilities
               </p>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {categories.map((category) => (
-                <Card key={category.id} className="hover:shadow-lg transition-shadow">
+                <Card
+                  key={category.id}
+                  className="hover:shadow-lg transition-shadow"
+                >
                   <CardHeader>
                     <div className="flex items-center gap-3 mb-2">
                       {category.icon}
                       <div className="flex-1">
-                        <CardTitle className="text-xl">{category.title}</CardTitle>
+                        <CardTitle className="text-xl">
+                          {category.title}
+                        </CardTitle>
                         <Badge variant="secondary" className="mt-1">
                           {category.articles} topics
                         </Badge>
@@ -254,7 +281,10 @@ export default function HelpCentrePublic() {
                 <h2 className="text-2xl font-bold mb-6">Popular Topics</h2>
                 <div className="space-y-4">
                   {popularTopics.map((topic, index) => (
-                    <Card key={index} className="hover:shadow-md transition-shadow">
+                    <Card
+                      key={index}
+                      className="hover:shadow-md transition-shadow"
+                    >
                       <CardContent className="p-6">
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
@@ -267,9 +297,7 @@ export default function HelpCentrePublic() {
                             <Badge variant="outline">{topic.category}</Badge>
                           </div>
                           <Button variant="outline" size="sm" asChild>
-                            <Link to="/register">
-                              View
-                            </Link>
+                            <Link to="/register">View</Link>
                           </Button>
                         </div>
                       </CardContent>
@@ -282,11 +310,14 @@ export default function HelpCentrePublic() {
               <div className="lg:w-1/3">
                 <Card>
                   <CardHeader>
-                    <CardTitle className="text-lg">Ready to Get Started?</CardTitle>
+                    <CardTitle className="text-lg">
+                      Ready to Get Started?
+                    </CardTitle>
                   </CardHeader>
                   <CardContent>
                     <p className="text-sm text-muted-foreground mb-4">
-                      Sign up for ChargeSource to access our full help center, training materials, and expert support.
+                      Sign up for ChargeSource to access our full help center,
+                      training materials, and expert support.
                     </p>
                     <div className="space-y-3">
                       <Button className="w-full" asChild>
@@ -301,7 +332,9 @@ export default function HelpCentrePublic() {
 
                 <Card className="mt-6">
                   <CardHeader>
-                    <CardTitle className="text-lg">Why Choose ChargeSource?</CardTitle>
+                    <CardTitle className="text-lg">
+                      Why Choose ChargeSource?
+                    </CardTitle>
                   </CardHeader>
                   <CardContent>
                     <ul className="space-y-3 text-sm">
@@ -338,7 +371,7 @@ export default function HelpCentrePublic() {
                 Multiple ways to get the help you need
               </p>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {supportOptions.map((option, index) => (
                 <Card key={index} className="text-center">
@@ -373,8 +406,9 @@ export default function HelpCentrePublic() {
                   Access the Complete Help Centre
                 </h3>
                 <p className="text-xl mb-8 text-primary-foreground/90 max-w-2xl mx-auto">
-                  Sign up for ChargeSource to access our comprehensive help center with detailed guides, 
-                  training materials, compliance tools, and expert support.
+                  Sign up for ChargeSource to access our comprehensive help
+                  center with detailed guides, training materials, compliance
+                  tools, and expert support.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <Button
@@ -394,9 +428,7 @@ export default function HelpCentrePublic() {
                     className="border-2 border-white text-white hover:bg-white hover:text-primary font-semibold px-8 py-4 text-lg shadow-md hover:shadow-lg transition-all duration-200"
                     asChild
                   >
-                    <Link to="/contact">
-                      Schedule Demo
-                    </Link>
+                    <Link to="/contact">Schedule Demo</Link>
                   </Button>
                 </div>
               </CardContent>
@@ -414,31 +446,71 @@ export default function HelpCentrePublic() {
                 <Logo />
               </div>
               <p className="text-sm text-muted-foreground">
-                The complete platform for electrical contractors in the EV infrastructure market.
+                The complete platform for electrical contractors in the EV
+                infrastructure market.
               </p>
             </div>
             <div>
               <h4 className="font-semibold mb-4">Product</h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><Link to="/features" className="hover:text-foreground">Features</Link></li>
-                <li><Link to="/pricing" className="hover:text-foreground">Pricing</Link></li>
-                <li><Link to="/integrations" className="hover:text-foreground">Integrations</Link></li>
+                <li>
+                  <Link to="/features" className="hover:text-foreground">
+                    Features
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/pricing" className="hover:text-foreground">
+                    Pricing
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/integrations" className="hover:text-foreground">
+                    Integrations
+                  </Link>
+                </li>
               </ul>
             </div>
             <div>
               <h4 className="font-semibold mb-4">Support</h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><Link to="/help-centre-public" className="hover:text-foreground">Help Centre</Link></li>
-                <li><Link to="/training-public" className="hover:text-foreground">Training</Link></li>
-                <li><Link to="/contact" className="hover:text-foreground">Contact</Link></li>
+                <li>
+                  <Link
+                    to="/help-centre-public"
+                    className="hover:text-foreground"
+                  >
+                    Help Centre
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/training-public" className="hover:text-foreground">
+                    Training
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/contact" className="hover:text-foreground">
+                    Contact
+                  </Link>
+                </li>
               </ul>
             </div>
             <div>
               <h4 className="font-semibold mb-4">Company</h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><Link to="/contact" className="hover:text-foreground">About</Link></li>
-                <li><Link to="/contact" className="hover:text-foreground">Privacy</Link></li>
-                <li><Link to="/contact" className="hover:text-foreground">Terms</Link></li>
+                <li>
+                  <Link to="/contact" className="hover:text-foreground">
+                    About
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/contact" className="hover:text-foreground">
+                    Privacy
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/contact" className="hover:text-foreground">
+                    Terms
+                  </Link>
+                </li>
               </ul>
             </div>
           </div>
