@@ -35,6 +35,8 @@ const Pricing = lazy(() => import("../pages/Pricing"));
 const HelpCentre = lazy(() => import("../pages/HelpCentre"));
 const Training = lazy(() => import("../pages/Training"));
 const Compliance = lazy(() => import("../pages/Compliance"));
+const HelpCentrePublic = lazy(() => import("../pages/HelpCentrePublic"));
+const TrainingPublic = lazy(() => import("../pages/TrainingPublic"));
 
 // Loading component for Suspense fallback
 const PageLoading = () => (
