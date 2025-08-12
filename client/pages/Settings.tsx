@@ -89,7 +89,8 @@ const settingsSections: SettingsSection[] = [
   {
     id: "development",
     title: "Development & Testing",
-    description: "Development tools and testing utilities for system diagnostics",
+    description:
+      "Development tools and testing utilities for system diagnostics",
     icon: <TestTube className="w-5 h-5" />,
     roles: [UserRole.ADMIN, UserRole.GLOBAL_ADMIN],
     component: DevelopmentSettings,

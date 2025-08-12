@@ -1,22 +1,28 @@
 import React from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Link } from "react-router-dom";
-import { 
-  TestTube, 
-  Database, 
-  Settings, 
-  HardDrive, 
-  Key, 
-  Users, 
-  Code, 
+import {
+  TestTube,
+  Database,
+  Settings,
+  HardDrive,
+  Key,
+  Users,
+  Code,
   ExternalLink,
   Info,
   AlertTriangle,
-  Shield
+  Shield,
 } from "lucide-react";
 
 export default function DevelopmentSettings() {
@@ -26,52 +32,52 @@ export default function DevelopmentSettings() {
       title: "Auth & Storage Test",
       description: "Test Supabase authentication and storage buckets",
       icon: <Database className="w-4 h-4" />,
-      status: "ready"
+      status: "ready",
     },
     {
-      path: "/dashboard", 
+      path: "/dashboard",
       title: "Dashboard",
       description: "Main application dashboard",
       icon: <Settings className="w-4 h-4" />,
-      status: "ready"
+      status: "ready",
     },
     {
       path: "/login",
       title: "Login Page",
       description: "User authentication login",
       icon: <Key className="w-4 h-4" />,
-      status: "ready"
+      status: "ready",
     },
     {
       path: "/register",
       title: "Registration",
       description: "New user registration",
       icon: <Users className="w-4 h-4" />,
-      status: "ready"
-    }
+      status: "ready",
+    },
   ];
 
   const testFiles = [
     {
       file: "test-supabase-connection.html",
       title: "Connection Test",
-      description: "Basic Supabase connectivity"
+      description: "Basic Supabase connectivity",
     },
     {
-      file: "test-storage-status.html", 
+      file: "test-storage-status.html",
       title: "Storage Status",
-      description: "Check storage bucket status"
+      description: "Check storage bucket status",
     },
     {
       file: "test-create-buckets.html",
       title: "Bucket Creator",
-      description: "Create missing storage buckets"
+      description: "Create missing storage buckets",
     },
     {
       file: "verify-buckets.html",
       title: "Quick Verification",
-      description: "Fast bucket existence check"
-    }
+      description: "Fast bucket existence check",
+    },
   ];
 
   return (
@@ -89,7 +95,8 @@ export default function DevelopmentSettings() {
                 <Badge variant="destructive">Admin Only</Badge>
               </CardTitle>
               <CardDescription>
-                Development navigation and testing utilities for system diagnostics
+                Development navigation and testing utilities for system
+                diagnostics
               </CardDescription>
             </div>
           </div>
@@ -100,8 +107,9 @@ export default function DevelopmentSettings() {
       <Alert variant="destructive">
         <AlertTriangle className="h-4 w-4" />
         <AlertDescription>
-          <strong>Administrative Access Required:</strong> These tools are intended for system administrators and developers only. 
-          Use with caution in production environments.
+          <strong>Administrative Access Required:</strong> These tools are
+          intended for system administrators and developers only. Use with
+          caution in production environments.
         </AlertDescription>
       </Alert>
 
@@ -131,8 +139,12 @@ export default function DevelopmentSettings() {
                     </div>
                     <div className="flex-1">
                       <div className="font-medium text-sm">{route.title}</div>
-                      <div className="text-xs text-muted-foreground mt-1">{route.description}</div>
-                      <div className="text-xs text-primary mt-2 font-mono">{route.path}</div>
+                      <div className="text-xs text-muted-foreground mt-1">
+                        {route.description}
+                      </div>
+                      <div className="text-xs text-primary mt-2 font-mono">
+                        {route.path}
+                      </div>
                     </div>
                   </div>
                   <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors" />
@@ -167,8 +179,12 @@ export default function DevelopmentSettings() {
                   </div>
                   <div className="flex-1">
                     <div className="font-medium text-sm">{file.title}</div>
-                    <div className="text-xs text-muted-foreground mt-1">{file.description}</div>
-                    <div className="text-xs text-secondary mt-2 font-mono">{file.file}</div>
+                    <div className="text-xs text-muted-foreground mt-1">
+                      {file.description}
+                    </div>
+                    <div className="text-xs text-secondary mt-2 font-mono">
+                      {file.file}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -189,8 +205,10 @@ export default function DevelopmentSettings() {
           <Alert>
             <Info className="h-4 w-4" />
             <AlertDescription>
-              <strong>Quick Setup:</strong> For bucket creation, use the Auth Test page → Storage tab → "Initialize Buckets" button.
-              Alternative routes: <code>/AuthTest</code>, <code>/authtest</code>, <code>/auth_test</code>
+              <strong>Quick Setup:</strong> For bucket creation, use the Auth
+              Test page → Storage tab → "Initialize Buckets" button. Alternative
+              routes: <code>/AuthTest</code>, <code>/authtest</code>,{" "}
+              <code>/auth_test</code>
             </AlertDescription>
           </Alert>
 
@@ -206,7 +224,7 @@ export default function DevelopmentSettings() {
             <Button asChild variant="outline" size="sm">
               <Link to="/dashboard">
                 <Settings className="w-4 h-4 mr-2" />
-                Go to Dashboard  
+                Go to Dashboard
               </Link>
             </Button>
           </div>

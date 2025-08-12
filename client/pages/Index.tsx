@@ -303,7 +303,6 @@ export default function Index() {
         </div>
       </section>
 
-
       {/* Footer */}
       <footer className="border-t bg-muted/30 py-12 px-4">
         <div className="container mx-auto">
