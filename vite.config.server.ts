@@ -32,6 +32,7 @@ export default defineConfig({
         // External dependencies that should not be bundled
         "express",
         "cors",
+        "date-fns",
       ],
       output: {
         format: "es",
