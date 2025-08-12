@@ -81,7 +81,7 @@ const Integrations = () => {
       name: "HubSpot CRM",
       category: "crm",
       description: "Manage leads and customers seamlessly with HubSpot integration",
-      logo: "https://via.placeholder.com/60x60/FF5722/FFFFFF?text=HS",
+      logo: "https://logo.clearbit.com/hubspot.com",
       isPopular: true,
       rating: 4.7,
       reviews: 1850,
