@@ -14,7 +14,7 @@ export default defineConfig(({ mode }) => ({
   },
   build: {
     outDir: "dist/spa",
-    sourcemap: mode === "development",
+    sourcemap: false,
     minify: mode === "production" ? "esbuild" : false,
     target: "es2020",
     rollupOptions: {
