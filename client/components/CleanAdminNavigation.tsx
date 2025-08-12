@@ -344,7 +344,7 @@ export function CleanQuickActions() {
         </Link>
       </Button>
 
-      <Button variant="outline" size="sm" asChild>
+      <Button variant="outline" size="sm" asChild className="bg-[#31a249] text-white border-[#31a249] hover:bg-[#2a8c3e]">
         <Link to="/quotes/new">
           <FileText className="w-4 h-4 mr-2" />
           New Quote
