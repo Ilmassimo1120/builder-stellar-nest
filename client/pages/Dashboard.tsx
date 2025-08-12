@@ -680,12 +680,6 @@ export default function Dashboard() {
               <Download className="w-4 h-4 mr-2" />
               Export Report
             </Button>
-            <Button size="sm" asChild>
-              <Link to="/projects/new">
-                <Plus className="w-4 h-4 mr-2" />
-                New Project
-              </Link>
-            </Button>
           </div>
         </div>
 
