@@ -284,6 +284,25 @@ const AppRoutes = () => (
         </ProtectedLazyRoute>
       }
     />
+
+    {/* Internal Help & Training Routes (Protected) */}
+    <Route
+      path="/help-centre"
+      element={
+        <ProtectedLazyRoute>
+          <HelpCentre />
+        </ProtectedLazyRoute>
+      }
+    />
+
+    <Route
+      path="/training"
+      element={
+        <ProtectedLazyRoute>
+          <Training />
+        </ProtectedLazyRoute>
+      }
+    />
     <Route
       path="/cloud-status"
       element={
