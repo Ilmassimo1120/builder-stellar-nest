@@ -280,7 +280,9 @@ export function SupportAIAssistant() {
 
     const category = supportCategories.find(c => c.id === supportRequest.category);
     const crmIntegrationInfo = crmStatus?.enabled
-      ? `\n\n💡 **CRM Integration:** Your contact information has been automatically added to our ${crmStatus.provider} for better support tracking and follow-up.${supportRequest.category === "sales" ? " A sales opportunity has also been created for your inquiry." : ""}`
+      ? crmResult.success
+        ? `\n\n💡 **CRM Integration:** Your contact information has been successfully added to our ${crmStatus.provider} for better support tracking and follow-up.${crmResult.dealId ? " A sales opportunity has been created for your inquiry." : supportRequest.category === "sales" ? " A sales opportunity will be created shortly." : ""}`
+        : `\n\n⚠️ **CRM Integration:** There was an issue syncing to our ${crmStatus.provider}, but your support request has been logged locally. Our team will still contact you as scheduled.`
       : `\n\n📝 **Support Tracking:** Your request has been logged in our support system.`;
 
     const completeMessage: ChatMessage = {
