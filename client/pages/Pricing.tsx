@@ -28,13 +28,16 @@ import { Logo } from "@/components/ui/logo";
 import { cn } from "@/lib/utils";
 
 export default function Pricing() {
-  const [billingCycle, setBillingCycle] = useState<"monthly" | "annual">("monthly");
+  const [billingCycle, setBillingCycle] = useState<"monthly" | "annual">(
+    "monthly",
+  );
 
   const plans = [
     {
       id: "starter",
       name: "Starter",
-      description: "Perfect for small electrical contractors getting started with EV infrastructure",
+      description:
+        "Perfect for small electrical contractors getting started with EV infrastructure",
       icon: <Zap className="w-8 h-8 text-primary" />,
       monthlyPrice: 49,
       annualPrice: 39,
@@ -60,7 +63,8 @@ export default function Pricing() {
     {
       id: "professional",
       name: "Professional",
-      description: "For growing electrical businesses ready to scale their EV projects",
+      description:
+        "For growing electrical businesses ready to scale their EV projects",
       icon: <Users className="w-8 h-8 text-secondary" />,
       monthlyPrice: 149,
       annualPrice: 119,
@@ -86,7 +90,8 @@ export default function Pricing() {
     {
       id: "enterprise",
       name: "Enterprise",
-      description: "For established contractors managing multiple teams and complex projects",
+      description:
+        "For established contractors managing multiple teams and complex projects",
       icon: <Building2 className="w-8 h-8 text-accent" />,
       monthlyPrice: 349,
       annualPrice: 279,
@@ -113,7 +118,8 @@ export default function Pricing() {
     {
       id: "custom",
       name: "Custom",
-      description: "Tailored solutions for large organizations with specific requirements",
+      description:
+        "Tailored solutions for large organizations with specific requirements",
       icon: <Crown className="w-8 h-8 text-primary" />,
       monthlyPrice: null,
       annualPrice: null,
@@ -164,28 +170,32 @@ export default function Pricing() {
   const faq = [
     {
       question: "Can I change plans at any time?",
-      answer: "Yes, you can upgrade or downgrade your plan at any time. Changes will be prorated and reflected on your next billing cycle.",
+      answer:
+        "Yes, you can upgrade or downgrade your plan at any time. Changes will be prorated and reflected on your next billing cycle.",
     },
     {
       question: "What's included in the free trial?",
-      answer: "All plans include a 14-day free trial with full access to all features. No credit card required to start.",
+      answer:
+        "All plans include a 14-day free trial with full access to all features. No credit card required to start.",
     },
     {
       question: "Do you offer refunds?",
-      answer: "We offer a 30-day money-back guarantee for all annual plans if you're not completely satisfied.",
+      answer:
+        "We offer a 30-day money-back guarantee for all annual plans if you're not completely satisfied.",
     },
     {
       question: "How does user management work?",
-      answer: "Each plan includes a specific number of user accounts. Additional users can be added for $15/month per user.",
+      answer:
+        "Each plan includes a specific number of user accounts. Additional users can be added for $15/month per user.",
     },
   ];
 
-  const getCurrentPrice = (plan: typeof plans[0]) => {
+  const getCurrentPrice = (plan: (typeof plans)[0]) => {
     if (!plan.monthlyPrice) return null;
     return billingCycle === "monthly" ? plan.monthlyPrice : plan.annualPrice;
   };
 
-  const getSavings = (plan: typeof plans[0]) => {
+  const getSavings = (plan: (typeof plans)[0]) => {
     if (!plan.monthlyPrice || !plan.annualPrice) return null;
     const monthlyCost = plan.monthlyPrice * 12;
     const annualCost = plan.annualPrice * 12;
@@ -205,16 +215,25 @@ export default function Pricing() {
               <span className="font-bold text-xl">ChargeSource</span>
             </Link>
             <nav className="hidden md:flex space-x-8">
-              <Link to="/features" className="text-muted-foreground hover:text-foreground">
+              <Link
+                to="/features"
+                className="text-muted-foreground hover:text-foreground"
+              >
                 Features
               </Link>
               <Link to="/pricing" className="text-foreground font-medium">
                 Pricing
               </Link>
-              <Link to="/integrations" className="text-muted-foreground hover:text-foreground">
+              <Link
+                to="/integrations"
+                className="text-muted-foreground hover:text-foreground"
+              >
                 Integrations
               </Link>
-              <Link to="/contact" className="text-muted-foreground hover:text-foreground">
+              <Link
+                to="/contact"
+                className="text-muted-foreground hover:text-foreground"
+              >
                 Contact
               </Link>
             </nav>
@@ -238,10 +257,10 @@ export default function Pricing() {
               Simple, Transparent Pricing
             </h1>
             <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
-              Choose the perfect plan for your electrical contracting business. 
+              Choose the perfect plan for your electrical contracting business.
               Start with our free trial and scale as you grow.
             </p>
-            
+
             {/* Billing Toggle */}
             <div className="flex items-center justify-center mb-12">
               <div className="flex items-center bg-muted rounded-lg p-1">
@@ -251,7 +270,7 @@ export default function Pricing() {
                     "px-4 py-2 rounded-md transition-colors",
                     billingCycle === "monthly"
                       ? "bg-background shadow-sm"
-                      : "text-muted-foreground hover:text-foreground"
+                      : "text-muted-foreground hover:text-foreground",
                   )}
                 >
                   Monthly
@@ -262,7 +281,7 @@ export default function Pricing() {
                     "px-4 py-2 rounded-md transition-colors relative",
                     billingCycle === "annual"
                       ? "bg-background shadow-sm"
-                      : "text-muted-foreground hover:text-foreground"
+                      : "text-muted-foreground hover:text-foreground",
                   )}
                 >
                   Annual
@@ -283,18 +302,18 @@ export default function Pricing() {
                 const currentPrice = getCurrentPrice(plan);
                 const savings = getSavings(plan);
                 const isPopular = plan.badge === "Most Popular";
-                
+
                 return (
                   <Card
                     key={plan.id}
                     className={cn(
                       "relative",
-                      isPopular && "border-primary shadow-lg scale-105"
+                      isPopular && "border-primary shadow-lg scale-105",
                     )}
                   >
                     {plan.badge && (
                       <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                        <Badge 
+                        <Badge
                           variant={isPopular ? "default" : "secondary"}
                           className="px-3 py-1"
                         >
@@ -302,7 +321,7 @@ export default function Pricing() {
                         </Badge>
                       </div>
                     )}
-                    
+
                     <CardHeader className="text-center">
                       <div className="flex justify-center mb-4">
                         {plan.icon}
@@ -311,7 +330,7 @@ export default function Pricing() {
                       <CardDescription className="text-sm">
                         {plan.description}
                       </CardDescription>
-                      
+
                       <div className="mt-4">
                         {currentPrice ? (
                           <>
@@ -323,7 +342,8 @@ export default function Pricing() {
                             </div>
                             {billingCycle === "annual" && savings && (
                               <p className="text-sm text-green-600 mt-1">
-                                Save ${savings.amount}/year ({savings.percentage}% off)
+                                Save ${savings.amount}/year (
+                                {savings.percentage}% off)
                               </p>
                             )}
                           </>
@@ -348,17 +368,20 @@ export default function Pricing() {
                             <ArrowRight className="ml-2 w-4 h-4" />
                           </Link>
                         ) : (
-                          <Link to="/register">
-                            {plan.cta}
-                          </Link>
+                          <Link to="/register">{plan.cta}</Link>
                         )}
                       </Button>
 
                       <div className="space-y-3">
-                        <h4 className="font-semibold text-sm">Everything included:</h4>
+                        <h4 className="font-semibold text-sm">
+                          Everything included:
+                        </h4>
                         <ul className="space-y-2">
                           {plan.features.map((feature, index) => (
-                            <li key={index} className="flex items-start text-sm">
+                            <li
+                              key={index}
+                              className="flex items-start text-sm"
+                            >
                               <Check className="w-4 h-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
                               {feature}
                             </li>
@@ -381,18 +404,19 @@ export default function Pricing() {
                 Powerful Features Across All Plans
               </h2>
               <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-                Every plan includes the core tools you need to succeed in the EV infrastructure market
+                Every plan includes the core tools you need to succeed in the EV
+                infrastructure market
               </p>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               {additionalFeatures.map((feature, index) => (
                 <div key={index} className="text-center">
-                  <div className="flex justify-center mb-4">
-                    {feature.icon}
-                  </div>
+                  <div className="flex justify-center mb-4">{feature.icon}</div>
                   <h3 className="font-semibold mb-2">{feature.title}</h3>
-                  <p className="text-sm text-muted-foreground">{feature.description}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {feature.description}
+                  </p>
                 </div>
               ))}
             </div>
@@ -410,7 +434,7 @@ export default function Pricing() {
                 Have a question? We're here to help.
               </p>
             </div>
-            
+
             <div className="space-y-6">
               {faq.map((item, index) => (
                 <Card key={index}>
@@ -462,8 +486,8 @@ export default function Pricing() {
               Ready to Transform Your EV Business?
             </h2>
             <p className="text-muted-foreground text-lg mb-8 max-w-2xl mx-auto">
-              Join hundreds of electrical contractors who are already using ChargeSource 
-              to streamline their EV infrastructure projects.
+              Join hundreds of electrical contractors who are already using
+              ChargeSource to streamline their EV infrastructure projects.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to="/register">
@@ -492,30 +516,63 @@ export default function Pricing() {
                 <span className="font-bold text-lg">ChargeSource</span>
               </div>
               <p className="text-sm text-muted-foreground">
-                The complete platform for electrical contractors in the EV infrastructure market.
+                The complete platform for electrical contractors in the EV
+                infrastructure market.
               </p>
             </div>
             <div>
               <h4 className="font-semibold mb-4">Product</h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><Link to="/features" className="hover:text-foreground">Features</Link></li>
-                <li><Link to="/pricing" className="hover:text-foreground">Pricing</Link></li>
-                <li><Link to="/integrations" className="hover:text-foreground">Integrations</Link></li>
+                <li>
+                  <Link to="/features" className="hover:text-foreground">
+                    Features
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/pricing" className="hover:text-foreground">
+                    Pricing
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/integrations" className="hover:text-foreground">
+                    Integrations
+                  </Link>
+                </li>
               </ul>
             </div>
             <div>
               <h4 className="font-semibold mb-4">Support</h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><Link to="/contact" className="hover:text-foreground">Contact</Link></li>
-                <li><Link to="/support" className="hover:text-foreground">Help Center</Link></li>
+                <li>
+                  <Link to="/contact" className="hover:text-foreground">
+                    Contact
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/support" className="hover:text-foreground">
+                    Help Center
+                  </Link>
+                </li>
               </ul>
             </div>
             <div>
               <h4 className="font-semibold mb-4">Company</h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><Link to="/contact" className="hover:text-foreground">About</Link></li>
-                <li><Link to="/contact" className="hover:text-foreground">Privacy</Link></li>
-                <li><Link to="/contact" className="hover:text-foreground">Terms</Link></li>
+                <li>
+                  <Link to="/contact" className="hover:text-foreground">
+                    About
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/contact" className="hover:text-foreground">
+                    Privacy
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/contact" className="hover:text-foreground">
+                    Terms
+                  </Link>
+                </li>
               </ul>
             </div>
           </div>
