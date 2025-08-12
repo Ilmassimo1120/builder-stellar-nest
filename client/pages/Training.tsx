@@ -743,7 +743,6 @@ export default function Training() {
             <div>
               <div className="flex items-center space-x-2 mb-4">
                 <Logo />
-                <span className="font-bold text-lg">ChargeSource</span>
               </div>
               <p className="text-sm text-muted-foreground">
                 The complete platform for electrical contractors in the EV
