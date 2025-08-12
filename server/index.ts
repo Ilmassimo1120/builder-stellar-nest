@@ -3,6 +3,8 @@ import express from "express";
 import cors from "cors";
 import { handleDemo } from "./routes/demo";
 import { createStorageBuckets } from "./routes/create-storage-buckets";
+import { handleCRMLeadSubmission } from "./routes/crm-leads";
+import { handleDemoConfirmationEmail } from "./routes/email-confirmation";
 
 export function createServer() {
   const app = express();
@@ -22,6 +24,10 @@ export function createServer() {
 
   // ChargeSource storage bucket creation
   app.post("/api/create-storage-buckets", createStorageBuckets);
+
+  // Demo request and lead capture
+  app.post("/api/crm/leads", handleCRMLeadSubmission);
+  app.post("/api/email/demo-confirmation", handleDemoConfirmationEmail);
 
   return app;
 }
