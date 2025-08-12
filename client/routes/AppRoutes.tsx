@@ -31,6 +31,7 @@ const SimpleTest = lazy(() => import("../pages/SimpleTest"));
 const Features = lazy(() => import("../pages/Features"));
 const Integrations = lazy(() => import("../pages/Integrations"));
 const Contact = lazy(() => import("../pages/Contact"));
+const Pricing = lazy(() => import("../pages/Pricing"));
 
 // Loading component for Suspense fallback
 const PageLoading = () => (
