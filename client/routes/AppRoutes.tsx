@@ -426,6 +426,16 @@ const AppRoutes = () => (
       }
     />
 
+    {/* Legacy route redirects */}
+    <Route
+      path="/help"
+      element={
+        <PublicLazyRoute>
+          <HelpCentrePublic />
+        </PublicLazyRoute>
+      }
+    />
+
     <Route
       path="/pricing"
       element={
