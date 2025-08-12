@@ -40,6 +40,7 @@ import {
   Maximize2,
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
+import { customerService } from "@/lib/services/customerService";
 
 interface ChatMessage {
   id: string;
