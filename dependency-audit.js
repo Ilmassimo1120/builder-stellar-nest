@@ -7,15 +7,16 @@ import readline from "readline";
 const packageJson = JSON.parse(fs.readFileSync("package.json", "utf8"));
 const declaredDeps = new Set([
   ...Object.keys(packageJson.dependencies || {}),
-  ...Object.keys(packageJson.devDependencies || {})
+  ...Object.keys(packageJson.devDependencies || {}),
 ]);
 
 // Regex for imports and requires
-const importRegex = /(?:import\s+.*?from\s+['"]([^'"]+)['"])|(?:require\(['"]([^'"]+)['"]\))/g;
+const importRegex =
+  /(?:import\s+.*?from\s+['"]([^'"]+)['"])|(?:require\(['"]([^'"]+)['"]\))/g;
 
 // Find all code files
 const files = glob.sync("**/*.{js,ts,jsx,tsx}", {
-  ignore: ["node_modules/**", "dist/**", "build/**"]
+  ignore: ["node_modules/**", "dist/**", "build/**"],
 });
 
 const usedDeps = new Set();
@@ -29,13 +30,13 @@ for (const file of files) {
       usedDeps.add(
         pkg.split("/")[0].startsWith("@")
           ? pkg.split("/").slice(0, 2).join("/")
-          : pkg.split("/")[0]
+          : pkg.split("/")[0],
       );
     }
   }
 }
 
-const missingDeps = [...usedDeps].filter(dep => !declaredDeps.has(dep));
+const missingDeps = [...usedDeps].filter((dep) => !declaredDeps.has(dep));
 
 if (missingDeps.length === 0) {
   console.log("✅ No missing dependencies found.");
@@ -43,15 +44,15 @@ if (missingDeps.length === 0) {
 }
 
 console.log("❌ Missing dependencies:");
-missingDeps.forEach(dep => console.log(`  - ${dep}`));
+missingDeps.forEach((dep) => console.log(`  - ${dep}`));
 
 // Ask to install
 const rl = readline.createInterface({
   input: process.stdin,
-  output: process.stdout
+  output: process.stdout,
 });
 
-rl.question(`\nInstall now? (y/N): `, answer => {
+rl.question(`\nInstall now? (y/N): `, (answer) => {
   if (answer.toLowerCase() === "y") {
     try {
       console.log(`\n📦 Installing: ${missingDeps.join(" ")}\n`);
