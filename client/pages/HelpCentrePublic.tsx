@@ -29,6 +29,7 @@ import {
   ChevronRight,
   ArrowRight,
   Info,
+  Calendar,
 } from "lucide-react";
 import { Logo } from "@/components/ui/logo";
 
