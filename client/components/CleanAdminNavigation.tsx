@@ -337,7 +337,7 @@ export function CleanQuickActions() {
 
   return (
     <div className="flex items-center gap-2">
-      <Button variant="outline" size="sm" asChild>
+      <Button variant="outline" size="sm" asChild className="bg-[#36a0d4] text-white border-[#36a0d4] hover:bg-[#2a8bb8]">
         <Link to="/projects/new">
           <Plus className="w-4 h-4 mr-2" />
           New Project
