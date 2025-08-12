@@ -489,17 +489,26 @@ export default function Pricing() {
               ChargeSource to streamline their EV infrastructure projects.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/register">
-                <Button size="lg" className="px-8">
-                  Start Free Trial
-                  <ArrowRight className="ml-2 w-4 h-4" />
-                </Button>
-              </Link>
-              <Link to="/contact">
-                <Button variant="outline" size="lg" className="px-8">
-                  Contact Sales
-                </Button>
-              </Link>
+              <Button
+                size="lg"
+                className="bg-primary hover:bg-primary/90 text-white font-semibold px-8 py-4 text-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
+                asChild
+              >
+                <Link to="/register">
+                  🚀 Start Free Trial
+                  <ArrowRight className="ml-2 w-5 h-5" />
+                </Link>
+              </Button>
+              <Button
+                variant="secondary"
+                size="lg"
+                className="bg-secondary hover:bg-secondary/90 text-white font-semibold px-8 py-4 text-lg shadow-md hover:shadow-lg transition-all duration-200"
+                asChild
+              >
+                <Link to="/contact">
+                  📅 Schedule Demo
+                </Link>
+              </Button>
             </div>
           </div>
         </section>
