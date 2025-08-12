@@ -817,6 +817,18 @@ export function SupportAIAssistant() {
                     <div className="text-xs text-muted-foreground">
                       ChargeSource Support • Response times: 30min - 8hrs
                     </div>
+                    {crmStatus && (
+                      <div className="flex items-center justify-center gap-4 mt-1 text-xs text-muted-foreground">
+                        <div className="flex items-center gap-1">
+                          <div className={`w-2 h-2 ${crmStatus.enabled ? 'bg-green-500' : 'bg-gray-400'} rounded-full`}></div>
+                          {crmStatus.provider}
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                          Auto-sync Contacts
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               </>
