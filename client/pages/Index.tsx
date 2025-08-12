@@ -283,8 +283,9 @@ export default function Index() {
               Why Electrical Contractors Choose ChargeSource
             </h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Discover the comprehensive advantages that make ChargeSource the preferred platform
-              for Australian electrical contractors in the EV infrastructure market.
+              Discover the comprehensive advantages that make ChargeSource the
+              preferred platform for Australian electrical contractors in the EV
+              infrastructure market.
             </p>
           </div>
 
@@ -303,23 +304,34 @@ export default function Index() {
                 <ul className="space-y-3">
                   <li className="flex items-start gap-3">
                     <CheckCircle2 className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
-                    <span className="text-sm">Increase project win rate by up to 40% with professional quotes</span>
+                    <span className="text-sm">
+                      Increase project win rate by up to 40% with professional
+                      quotes
+                    </span>
                   </li>
                   <li className="flex items-start gap-3">
                     <CheckCircle2 className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
-                    <span className="text-sm">Reduce quote preparation time from hours to minutes</span>
+                    <span className="text-sm">
+                      Reduce quote preparation time from hours to minutes
+                    </span>
                   </li>
                   <li className="flex items-start gap-3">
                     <CheckCircle2 className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
-                    <span className="text-sm">Access to exclusive EV infrastructure opportunities</span>
+                    <span className="text-sm">
+                      Access to exclusive EV infrastructure opportunities
+                    </span>
                   </li>
                   <li className="flex items-start gap-3">
                     <CheckCircle2 className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
-                    <span className="text-sm">Built-in referral system to grow your client base</span>
+                    <span className="text-sm">
+                      Built-in referral system to grow your client base
+                    </span>
                   </li>
                   <li className="flex items-start gap-3">
                     <CheckCircle2 className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
-                    <span className="text-sm">Professional branding and marketing support</span>
+                    <span className="text-sm">
+                      Professional branding and marketing support
+                    </span>
                   </li>
                 </ul>
               </CardContent>
@@ -332,30 +344,42 @@ export default function Index() {
                   <div className="p-3 rounded-lg bg-secondary/10">
                     <Settings className="w-6 h-6 text-secondary" />
                   </div>
-                  <CardTitle className="text-xl">Operational Efficiency</CardTitle>
+                  <CardTitle className="text-xl">
+                    Operational Efficiency
+                  </CardTitle>
                 </div>
               </CardHeader>
               <CardContent>
                 <ul className="space-y-3">
                   <li className="flex items-start gap-3">
                     <CheckCircle2 className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
-                    <span className="text-sm">Streamlined project management from quote to completion</span>
+                    <span className="text-sm">
+                      Streamlined project management from quote to completion
+                    </span>
                   </li>
                   <li className="flex items-start gap-3">
                     <CheckCircle2 className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
-                    <span className="text-sm">Automated compliance checking and documentation</span>
+                    <span className="text-sm">
+                      Automated compliance checking and documentation
+                    </span>
                   </li>
                   <li className="flex items-start gap-3">
                     <CheckCircle2 className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
-                    <span className="text-sm">Real-time inventory tracking and procurement</span>
+                    <span className="text-sm">
+                      Real-time inventory tracking and procurement
+                    </span>
                   </li>
                   <li className="flex items-start gap-3">
                     <CheckCircle2 className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
-                    <span className="text-sm">Integrated accounting and invoicing systems</span>
+                    <span className="text-sm">
+                      Integrated accounting and invoicing systems
+                    </span>
                   </li>
                   <li className="flex items-start gap-3">
                     <CheckCircle2 className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
-                    <span className="text-sm">Mobile-first design for on-site productivity</span>
+                    <span className="text-sm">
+                      Mobile-first design for on-site productivity
+                    </span>
                   </li>
                 </ul>
               </CardContent>
@@ -375,23 +399,33 @@ export default function Index() {
                 <ul className="space-y-3">
                   <li className="flex items-start gap-3">
                     <CheckCircle2 className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
-                    <span className="text-sm">Automatic AS/NZS 3000 compliance verification</span>
+                    <span className="text-sm">
+                      Automatic AS/NZS 3000 compliance verification
+                    </span>
                   </li>
                   <li className="flex items-start gap-3">
                     <CheckCircle2 className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
-                    <span className="text-sm">Built-in safety protocols and checklists</span>
+                    <span className="text-sm">
+                      Built-in safety protocols and checklists
+                    </span>
                   </li>
                   <li className="flex items-start gap-3">
                     <CheckCircle2 className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
-                    <span className="text-sm">Insurance-approved documentation and processes</span>
+                    <span className="text-sm">
+                      Insurance-approved documentation and processes
+                    </span>
                   </li>
                   <li className="flex items-start gap-3">
                     <CheckCircle2 className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
-                    <span className="text-sm">Regular updates for changing regulations</span>
+                    <span className="text-sm">
+                      Regular updates for changing regulations
+                    </span>
                   </li>
                   <li className="flex items-start gap-3">
                     <CheckCircle2 className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
-                    <span className="text-sm">Professional liability protection guidance</span>
+                    <span className="text-sm">
+                      Professional liability protection guidance
+                    </span>
                   </li>
                 </ul>
               </CardContent>
@@ -403,22 +437,34 @@ export default function Index() {
             <div className="text-center p-6 rounded-lg bg-white/50 border">
               <DollarSign className="w-8 h-8 text-primary mx-auto mb-4" />
               <h4 className="font-semibold mb-2">Cost Savings</h4>
-              <p className="text-sm text-muted-foreground">Save up to 30% on project costs through optimized procurement and efficient workflows</p>
+              <p className="text-sm text-muted-foreground">
+                Save up to 30% on project costs through optimized procurement
+                and efficient workflows
+              </p>
             </div>
             <div className="text-center p-6 rounded-lg bg-white/50 border">
               <Clock className="w-8 h-8 text-secondary mx-auto mb-4" />
               <h4 className="font-semibold mb-2">Time Efficiency</h4>
-              <p className="text-sm text-muted-foreground">Reduce project delivery time by 25% with streamlined processes and automation</p>
+              <p className="text-sm text-muted-foreground">
+                Reduce project delivery time by 25% with streamlined processes
+                and automation
+              </p>
             </div>
             <div className="text-center p-6 rounded-lg bg-white/50 border">
               <Star className="w-8 h-8 text-accent mx-auto mb-4" />
               <h4 className="font-semibold mb-2">Customer Satisfaction</h4>
-              <p className="text-sm text-muted-foreground">95% customer satisfaction rate with transparent communication and quality delivery</p>
+              <p className="text-sm text-muted-foreground">
+                95% customer satisfaction rate with transparent communication
+                and quality delivery
+              </p>
             </div>
             <div className="text-center p-6 rounded-lg bg-white/50 border">
               <Users className="w-8 h-8 text-primary mx-auto mb-4" />
               <h4 className="font-semibold mb-2">Expert Support</h4>
-              <p className="text-sm text-muted-foreground">24/7 technical support from EV infrastructure specialists and industry experts</p>
+              <p className="text-sm text-muted-foreground">
+                24/7 technical support from EV infrastructure specialists and
+                industry experts
+              </p>
             </div>
           </div>
 
@@ -437,23 +483,35 @@ export default function Index() {
                   <ul className="space-y-3">
                     <li className="flex items-start gap-3">
                       <ArrowRight className="w-4 h-4 text-primary mt-1 flex-shrink-0" />
-                      <span className="text-sm">First-to-market with comprehensive EV infrastructure platform in Australia</span>
+                      <span className="text-sm">
+                        First-to-market with comprehensive EV infrastructure
+                        platform in Australia
+                      </span>
                     </li>
                     <li className="flex items-start gap-3">
                       <ArrowRight className="w-4 h-4 text-primary mt-1 flex-shrink-0" />
-                      <span className="text-sm">Direct partnerships with leading EV equipment manufacturers</span>
+                      <span className="text-sm">
+                        Direct partnerships with leading EV equipment
+                        manufacturers
+                      </span>
                     </li>
                     <li className="flex items-start gap-3">
                       <ArrowRight className="w-4 h-4 text-primary mt-1 flex-shrink-0" />
-                      <span className="text-sm">Government rebate and incentive program integration</span>
+                      <span className="text-sm">
+                        Government rebate and incentive program integration
+                      </span>
                     </li>
                     <li className="flex items-start gap-3">
                       <ArrowRight className="w-4 h-4 text-primary mt-1 flex-shrink-0" />
-                      <span className="text-sm">Exclusive access to high-value commercial projects</span>
+                      <span className="text-sm">
+                        Exclusive access to high-value commercial projects
+                      </span>
                     </li>
                     <li className="flex items-start gap-3">
                       <ArrowRight className="w-4 h-4 text-primary mt-1 flex-shrink-0" />
-                      <span className="text-sm">Industry-leading profit margins on completed projects</span>
+                      <span className="text-sm">
+                        Industry-leading profit margins on completed projects
+                      </span>
                     </li>
                   </ul>
                 </div>
@@ -465,23 +523,36 @@ export default function Index() {
                   <ul className="space-y-3">
                     <li className="flex items-start gap-3">
                       <ArrowRight className="w-4 h-4 text-secondary mt-1 flex-shrink-0" />
-                      <span className="text-sm">All-in-one solution eliminating need for multiple software tools</span>
+                      <span className="text-sm">
+                        All-in-one solution eliminating need for multiple
+                        software tools
+                      </span>
                     </li>
                     <li className="flex items-start gap-3">
                       <ArrowRight className="w-4 h-4 text-secondary mt-1 flex-shrink-0" />
-                      <span className="text-sm">Cloud-based platform accessible anywhere, anytime</span>
+                      <span className="text-sm">
+                        Cloud-based platform accessible anywhere, anytime
+                      </span>
                     </li>
                     <li className="flex items-start gap-3">
                       <ArrowRight className="w-4 h-4 text-secondary mt-1 flex-shrink-0" />
-                      <span className="text-sm">Regular feature updates and platform improvements at no extra cost</span>
+                      <span className="text-sm">
+                        Regular feature updates and platform improvements at no
+                        extra cost
+                      </span>
                     </li>
                     <li className="flex items-start gap-3">
                       <ArrowRight className="w-4 h-4 text-secondary mt-1 flex-shrink-0" />
-                      <span className="text-sm">Seamless integration with existing business systems</span>
+                      <span className="text-sm">
+                        Seamless integration with existing business systems
+                      </span>
                     </li>
                     <li className="flex items-start gap-3">
                       <ArrowRight className="w-4 h-4 text-secondary mt-1 flex-shrink-0" />
-                      <span className="text-sm">Scalable from sole traders to large contracting companies</span>
+                      <span className="text-sm">
+                        Scalable from sole traders to large contracting
+                        companies
+                      </span>
                     </li>
                   </ul>
                 </div>
@@ -491,23 +562,35 @@ export default function Index() {
 
           {/* Success Metrics */}
           <div className="mt-16 text-center">
-            <h3 className="text-2xl font-bold mb-8">Proven Results for Our Partners</h3>
+            <h3 className="text-2xl font-bold mb-8">
+              Proven Results for Our Partners
+            </h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
               <div>
                 <div className="text-4xl font-bold text-primary mb-2">500+</div>
-                <div className="text-sm text-muted-foreground">Active Contractors</div>
+                <div className="text-sm text-muted-foreground">
+                  Active Contractors
+                </div>
               </div>
               <div>
-                <div className="text-4xl font-bold text-secondary mb-2">$50M+</div>
-                <div className="text-sm text-muted-foreground">Projects Completed</div>
+                <div className="text-4xl font-bold text-secondary mb-2">
+                  $50M+
+                </div>
+                <div className="text-sm text-muted-foreground">
+                  Projects Completed
+                </div>
               </div>
               <div>
                 <div className="text-4xl font-bold text-accent mb-2">98%</div>
-                <div className="text-sm text-muted-foreground">Customer Retention</div>
+                <div className="text-sm text-muted-foreground">
+                  Customer Retention
+                </div>
               </div>
               <div>
                 <div className="text-4xl font-bold text-primary mb-2">24/7</div>
-                <div className="text-sm text-muted-foreground">Expert Support</div>
+                <div className="text-sm text-muted-foreground">
+                  Expert Support
+                </div>
               </div>
             </div>
           </div>
