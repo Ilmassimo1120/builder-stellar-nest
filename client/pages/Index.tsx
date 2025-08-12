@@ -25,6 +25,7 @@ import {
   Settings,
   TrendingUp,
   Shield,
+  Clock,
 } from "lucide-react";
 import { Logo } from "@/components/ui/logo";
 
