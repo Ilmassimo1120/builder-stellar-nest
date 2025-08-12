@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/sonner";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import AppRoutes from "@/routes/AppRoutes";
 import { AuthProvider } from "@/hooks/useAuth";
+import { SupportAIAssistant } from "@/components/SupportAIAssistant";
 import { appConfig } from "@/lib/config";
 import { preloadCriticalResources } from "@/lib/bundleOptimization";
 import "@/global.css";
