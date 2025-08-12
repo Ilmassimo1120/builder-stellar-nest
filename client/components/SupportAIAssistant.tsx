@@ -312,38 +312,51 @@ export function SupportAIAssistant() {
     setMessages(prev => [...prev, completeMessage]);
   };
 
-  const pushContactToCRM = async (description: string) => {
+  const pushContactToCRM = async (description: string): Promise<{ success: boolean; customerId?: string; dealId?: string }> => {
+    // Skip CRM integration if not enabled
+    if (!crmStatus?.enabled) {
+      return { success: true }; // Consider local storage as successful
+    }
+
     try {
       if (!supportRequest.name || !supportRequest.email || !supportRequest.phone) {
         console.warn("Missing required contact information for CRM push");
-        return;
+        return { success: false };
       }
 
       // Check if customer already exists
       const existingCustomers = await customerService.searchCustomers(supportRequest.email!);
 
       let customer;
+      let isNewCustomer = false;
 
       if (existingCustomers.length > 0) {
         // Update existing customer
         customer = existingCustomers[0];
-        console.log("Found existing customer in CRM:", customer.id);
+        console.log(`Found existing customer in ${crmStatus.provider}:`, customer.id);
 
         // Update customer with latest information
         await customerService.updateCustomer(customer.id, {
           name: supportRequest.name!,
           phone: supportRequest.phone!,
-          tags: [...(customer.tags || []), "support-contact", `support-${supportRequest.category}`],
+          tags: [...(customer.tags || []), "support-contact", `support-${supportRequest.category}`].filter((tag, index, arr) => arr.indexOf(tag) === index), // Remove duplicates
         });
       } else {
         // Create new customer
+        isNewCustomer = true;
         const category = supportCategories.find(c => c.id === supportRequest.category);
+
+        // Extract company from email domain if available
+        const emailDomain = supportRequest.email!.split('@')[1];
+        const company = emailDomain && !['gmail.com', 'yahoo.com', 'hotmail.com', 'outlook.com'].includes(emailDomain.toLowerCase())
+          ? emailDomain.split('.')[0]
+          : "";
 
         customer = await customerService.createCustomer({
           name: supportRequest.name!,
           email: supportRequest.email!,
           phone: supportRequest.phone!,
-          company: "", // Could be extracted from email domain or left empty
+          company: company,
           tags: ["support-contact", `support-${supportRequest.category}`, "lead"],
           notes: `Initial contact via Support AI Assistant - ${category?.label}`,
           customFields: {
@@ -351,43 +364,72 @@ export function SupportAIAssistant() {
             supportPriority: supportRequest.priority || "medium",
             contactSource: "Support AI Assistant",
             firstContactDate: new Date().toISOString(),
+            isNewLead: "true",
           },
         });
 
-        console.log("Created new customer in CRM:", customer.id);
+        console.log(`Created new customer in ${crmStatus.provider}:`, customer.id);
       }
 
       // Add contact/interaction record
-      await customerService.addContact({
+      const contactRecord = await customerService.addContact({
         customerId: customer.id,
         type: "note",
         subject: `Support Request: ${supportCategories.find(c => c.id === supportRequest.category)?.label}`,
-        content: `Support request submitted via AI Assistant:\n\nCategory: ${supportCategories.find(c => c.id === supportRequest.category)?.label}\nPriority: ${supportRequest.priority}\nDescription: ${description}\n\nContact: ${supportRequest.name} (${supportRequest.email}, ${supportRequest.phone})`,
+        content: `Support request submitted via AI Assistant:\n\nCategory: ${supportCategories.find(c => c.id === supportRequest.category)?.label}\nPriority: ${supportRequest.priority}\nDescription: ${description}\n\nContact: ${supportRequest.name} (${supportRequest.email}, ${supportRequest.phone})\n\n${isNewCustomer ? "New customer created from support request." : "Existing customer updated."}`,
         date: new Date().toISOString(),
         direction: "inbound",
       });
 
+      let dealId: string | undefined;
+
       // If it's a sales inquiry, create a deal
       if (supportRequest.category === "sales") {
-        await customerService.createDeal({
-          customerId: customer.id,
-          title: `Sales Inquiry - ${supportRequest.name}`,
-          value: 0, // Will be updated later
-          stage: "prospect",
-          probability: 20, // Initial probability for cold lead
-          source: "Support AI Assistant",
-          description: `Sales inquiry submitted via Support AI Assistant:\n\n${description}`,
-          expectedCloseDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(), // 30 days from now
-        });
+        try {
+          const deal = await customerService.createDeal({
+            customerId: customer.id,
+            title: `Sales Inquiry - ${supportRequest.name}`,
+            value: 0, // Will be updated later when qualified
+            stage: "prospect",
+            probability: isNewCustomer ? 15 : 25, // Slightly higher probability for existing customers
+            source: "Support AI Assistant",
+            description: `Sales inquiry submitted via Support AI Assistant:\n\n${description}`,
+            expectedCloseDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(), // 30 days from now
+          });
 
-        console.log("Created sales deal for customer:", customer.id);
+          dealId = deal.id;
+          console.log(`Created sales deal in ${crmStatus.provider}:`, deal.id);
+        } catch (dealError) {
+          console.warn("Failed to create sales deal, but customer was created:", dealError);
+          // Don't fail the whole operation if deal creation fails
+        }
       }
 
-      console.log("Successfully pushed support contact to CRM");
+      console.log(`Successfully pushed support contact to ${crmStatus.provider}`);
+      return {
+        success: true,
+        customerId: customer.id,
+        dealId
+      };
     } catch (error) {
-      console.error("Failed to push contact to CRM:", error);
-      // Don't throw error as this shouldn't break the support flow
-      // Log for monitoring/alerting in production
+      console.error(`Failed to push contact to ${crmStatus?.provider || "CRM"}:`, error);
+
+      // Log detailed error for monitoring
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      console.error("CRM Integration Error Details:", {
+        provider: crmStatus?.provider,
+        error: errorMessage,
+        supportRequest: {
+          category: supportRequest.category,
+          priority: supportRequest.priority,
+          hasEmail: !!supportRequest.email,
+          hasPhone: !!supportRequest.phone,
+          hasName: !!supportRequest.name
+        },
+        timestamp: new Date().toISOString()
+      });
+
+      return { success: false };
     }
   };
 
