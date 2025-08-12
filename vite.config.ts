@@ -20,18 +20,7 @@ export default defineConfig(({ mode }) => ({
     rollupOptions: {
       output: {
         manualChunks: {
-          // Split vendor chunks for better caching
-          vendor: ["react", "react-dom"],
-          ui: [
-            "@radix-ui/react-dialog",
-            "@radix-ui/react-dropdown-menu",
-            "@radix-ui/react-toast",
-            "@radix-ui/react-select",
-            "sonner",
-          ],
-          icons: ["lucide-react"],
-          forms: ["react-hook-form", "@hookform/resolvers", "zod"],
-          utils: ["clsx", "tailwind-merge", "date-fns"],
+          vendor: ["react", "react-dom", "sonner"],
         },
       },
     },
