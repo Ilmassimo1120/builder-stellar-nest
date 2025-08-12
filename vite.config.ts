@@ -39,6 +39,7 @@ export default defineConfig(({ mode }) => ({
   plugins: [
     react({
       tsDecorators: true,
+      jsxRuntime: "automatic",
     }),
     expressPlugin(),
     ...(mode === "production" ? [compressionPlugin()] : []),
