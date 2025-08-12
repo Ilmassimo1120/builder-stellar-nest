@@ -72,9 +72,16 @@ export function SupportAIAssistant() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputMessage, setInputMessage] = useState("");
   const [isTyping, setIsTyping] = useState(false);
-  const [currentStep, setCurrentStep] = useState<"greeting" | "info" | "category" | "details" | "complete">("greeting");
-  const [supportRequest, setSupportRequest] = useState<Partial<SupportRequest>>({});
-  const [crmStatus, setCrmStatus] = useState<{ provider: string; enabled: boolean } | null>(null);
+  const [currentStep, setCurrentStep] = useState<
+    "greeting" | "info" | "category" | "details" | "complete"
+  >("greeting");
+  const [supportRequest, setSupportRequest] = useState<Partial<SupportRequest>>(
+    {},
+  );
+  const [crmStatus, setCrmStatus] = useState<{
+    provider: string;
+    enabled: boolean;
+  } | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const supportCategories = [
@@ -84,7 +91,7 @@ export function SupportAIAssistant() {
       description: "Pricing, products, business inquiries",
       icon: <HeadphonesIcon className="w-4 h-4" />,
       priority: "medium" as const,
-      responseTime: "2-4 hours"
+      responseTime: "2-4 hours",
     },
     {
       id: "account",
@@ -92,7 +99,7 @@ export function SupportAIAssistant() {
       description: "Login, access, profile problems",
       icon: <User className="w-4 h-4" />,
       priority: "high" as const,
-      responseTime: "1-2 hours"
+      responseTime: "1-2 hours",
     },
     {
       id: "billing",
@@ -100,7 +107,7 @@ export function SupportAIAssistant() {
       description: "Payments, invoices, subscription",
       icon: <CreditCard className="w-4 h-4" />,
       priority: "high" as const,
-      responseTime: "1-2 hours"
+      responseTime: "1-2 hours",
     },
     {
       id: "application",
@@ -108,7 +115,7 @@ export function SupportAIAssistant() {
       description: "Bugs, errors, feature problems",
       icon: <Bug className="w-4 h-4" />,
       priority: "medium" as const,
-      responseTime: "4-8 hours"
+      responseTime: "4-8 hours",
     },
     {
       id: "technical",
@@ -116,7 +123,7 @@ export function SupportAIAssistant() {
       description: "Installation, configuration help",
       icon: <Settings className="w-4 h-4" />,
       priority: "medium" as const,
-      responseTime: "2-4 hours"
+      responseTime: "2-4 hours",
     },
     {
       id: "urgent",
@@ -124,8 +131,8 @@ export function SupportAIAssistant() {
       description: "Critical problems affecting operations",
       icon: <AlertTriangle className="w-4 h-4" />,
       priority: "urgent" as const,
-      responseTime: "30 minutes"
-    }
+      responseTime: "30 minutes",
+    },
   ];
 
   const scrollToBottom = () => {
@@ -144,11 +151,17 @@ export function SupportAIAssistant() {
         const activeProvider = customerService.getActiveProvider();
 
         setCrmStatus({
-          provider: config.provider === "native" ? "Local Database" :
-                   config.provider === "hubspot" ? "HubSpot CRM" :
-                   config.provider === "pipedrive" ? "Pipedrive CRM" :
-                   config.provider,
-          enabled: config.provider !== "native" && activeProvider.isAuthenticated?.() !== false
+          provider:
+            config.provider === "native"
+              ? "Local Database"
+              : config.provider === "hubspot"
+                ? "HubSpot CRM"
+                : config.provider === "pipedrive"
+                  ? "Pipedrive CRM"
+                  : config.provider,
+          enabled:
+            config.provider !== "native" &&
+            activeProvider.isAuthenticated?.() !== false,
         });
       } catch (error) {
         console.warn("Could not initialize CRM status:", error);
@@ -171,15 +184,18 @@ export function SupportAIAssistant() {
         type: "assistant",
         content: `👋 Hello! I'm your ChargeSource Support Assistant. I'm here to help you get the support you need quickly and efficiently.\n\nI can help connect you with the right support team based on your specific needs. To get started, I'll need to collect some basic information to ensure you receive the best possible assistance.${crmInfo}\n\nAre you ready to begin?`,
         timestamp: new Date(),
-        suggestions: ["Yes, I need support", "What types of support are available?"],
+        suggestions: [
+          "Yes, I need support",
+          "What types of support are available?",
+        ],
         actions: [
           {
             label: "Start Support Request",
             action: "start-support",
             icon: <HelpCircle className="w-4 h-4" />,
-            variant: "default"
-          }
-        ]
+            variant: "default",
+          },
+        ],
       };
       setMessages([welcomeMessage]);
     }
@@ -197,21 +213,21 @@ export function SupportAIAssistant() {
           label: "Provide Contact Information",
           action: "collect-info",
           icon: <User className="w-4 h-4" />,
-          variant: "default"
-        }
-      ]
+          variant: "default",
+        },
+      ],
     };
-    setMessages(prev => [...prev, infoMessage]);
+    setMessages((prev) => [...prev, infoMessage]);
   };
 
   const handleCollectInfo = () => {
     // Pre-fill with user data if available
     if (user) {
-      setSupportRequest(prev => ({
+      setSupportRequest((prev) => ({
         ...prev,
         name: user.name || "",
         email: user.email || "",
-        phone: user.phone || ""
+        phone: user.phone || "",
       }));
     }
 
@@ -219,38 +235,45 @@ export function SupportAIAssistant() {
       id: `form-${Date.now()}`,
       type: "system",
       content: "CONTACT_FORM",
-      timestamp: new Date()
+      timestamp: new Date(),
     };
-    setMessages(prev => [...prev, formMessage]);
+    setMessages((prev) => [...prev, formMessage]);
   };
 
-  const handleInfoSubmit = (info: { name: string; email: string; phone: string }) => {
-    setSupportRequest(prev => ({ ...prev, ...info }));
+  const handleInfoSubmit = (info: {
+    name: string;
+    email: string;
+    phone: string;
+  }) => {
+    setSupportRequest((prev) => ({ ...prev, ...info }));
     setCurrentStep("category");
-    
+
     const categoryMessage: ChatMessage = {
       id: `category-${Date.now()}`,
       type: "assistant",
       content: `Thank you, ${info.name}! 📧 We have your contact information.\n\nNow, please select the type of support you need. This helps us route your request to the right specialist team:`,
       timestamp: new Date(),
-      actions: supportCategories.map(category => ({
+      actions: supportCategories.map((category) => ({
         label: category.label,
         action: `select-category-${category.id}`,
         icon: category.icon,
-        variant: category.priority === "urgent" ? "destructive" as const : "outline" as const
-      }))
+        variant:
+          category.priority === "urgent"
+            ? ("destructive" as const)
+            : ("outline" as const),
+      })),
     };
-    setMessages(prev => [...prev, categoryMessage]);
+    setMessages((prev) => [...prev, categoryMessage]);
   };
 
   const handleCategorySelect = (categoryId: string) => {
-    const category = supportCategories.find(c => c.id === categoryId);
+    const category = supportCategories.find((c) => c.id === categoryId);
     if (!category) return;
 
-    setSupportRequest(prev => ({ 
-      ...prev, 
+    setSupportRequest((prev) => ({
+      ...prev,
       category: categoryId,
-      priority: category.priority 
+      priority: category.priority,
     }));
     setCurrentStep("details");
 
@@ -264,21 +287,23 @@ export function SupportAIAssistant() {
           label: "Provide Details",
           action: "collect-details",
           icon: <MessageSquare className="w-4 h-4" />,
-          variant: "default"
-        }
-      ]
+          variant: "default",
+        },
+      ],
     };
-    setMessages(prev => [...prev, detailsMessage]);
+    setMessages((prev) => [...prev, detailsMessage]);
   };
 
   const handleDetailsSubmit = async (description: string) => {
-    setSupportRequest(prev => ({ ...prev, description }));
+    setSupportRequest((prev) => ({ ...prev, description }));
     setCurrentStep("complete");
 
     // Try to push contact to CRM
     const crmResult = await pushContactToCRM(description);
 
-    const category = supportCategories.find(c => c.id === supportRequest.category);
+    const category = supportCategories.find(
+      (c) => c.id === supportRequest.category,
+    );
     const crmIntegrationInfo = crmStatus?.enabled
       ? crmResult.success
         ? `\n\n💡 **CRM Integration:** Your contact information has been successfully added to our ${crmStatus.provider} for better support tracking and follow-up.${crmResult.dealId ? " A sales opportunity has been created for your inquiry." : supportRequest.category === "sales" ? " A sales opportunity will be created shortly." : ""}`
@@ -294,40 +319,48 @@ export function SupportAIAssistant() {
         "Submit another request",
         "Check support status",
         "Contact information",
-        "I'm all set, thank you"
+        "I'm all set, thank you",
       ],
       actions: [
         {
           label: "New Support Request",
           action: "new-request",
           icon: <HelpCircle className="w-4 h-4" />,
-          variant: "outline"
+          variant: "outline",
         },
         {
           label: "Close Chat",
           action: "close-chat",
           icon: <CheckCircle2 className="w-4 h-4" />,
-          variant: "default"
-        }
-      ]
+          variant: "default",
+        },
+      ],
     };
-    setMessages(prev => [...prev, completeMessage]);
+    setMessages((prev) => [...prev, completeMessage]);
   };
 
-  const pushContactToCRM = async (description: string): Promise<{ success: boolean; customerId?: string; dealId?: string }> => {
+  const pushContactToCRM = async (
+    description: string,
+  ): Promise<{ success: boolean; customerId?: string; dealId?: string }> => {
     // Skip CRM integration if not enabled
     if (!crmStatus?.enabled) {
       return { success: true }; // Consider local storage as successful
     }
 
     try {
-      if (!supportRequest.name || !supportRequest.email || !supportRequest.phone) {
+      if (
+        !supportRequest.name ||
+        !supportRequest.email ||
+        !supportRequest.phone
+      ) {
         console.warn("Missing required contact information for CRM push");
         return { success: false };
       }
 
       // Check if customer already exists
-      const existingCustomers = await customerService.searchCustomers(supportRequest.email!);
+      const existingCustomers = await customerService.searchCustomers(
+        supportRequest.email!,
+      );
 
       let customer;
       let isNewCustomer = false;
@@ -335,31 +368,48 @@ export function SupportAIAssistant() {
       if (existingCustomers.length > 0) {
         // Update existing customer
         customer = existingCustomers[0];
-        console.log(`Found existing customer in ${crmStatus.provider}:`, customer.id);
+        console.log(
+          `Found existing customer in ${crmStatus.provider}:`,
+          customer.id,
+        );
 
         // Update customer with latest information
         await customerService.updateCustomer(customer.id, {
           name: supportRequest.name!,
           phone: supportRequest.phone!,
-          tags: [...(customer.tags || []), "support-contact", `support-${supportRequest.category}`].filter((tag, index, arr) => arr.indexOf(tag) === index), // Remove duplicates
+          tags: [
+            ...(customer.tags || []),
+            "support-contact",
+            `support-${supportRequest.category}`,
+          ].filter((tag, index, arr) => arr.indexOf(tag) === index), // Remove duplicates
         });
       } else {
         // Create new customer
         isNewCustomer = true;
-        const category = supportCategories.find(c => c.id === supportRequest.category);
+        const category = supportCategories.find(
+          (c) => c.id === supportRequest.category,
+        );
 
         // Extract company from email domain if available
-        const emailDomain = supportRequest.email!.split('@')[1];
-        const company = emailDomain && !['gmail.com', 'yahoo.com', 'hotmail.com', 'outlook.com'].includes(emailDomain.toLowerCase())
-          ? emailDomain.split('.')[0]
-          : "";
+        const emailDomain = supportRequest.email!.split("@")[1];
+        const company =
+          emailDomain &&
+          !["gmail.com", "yahoo.com", "hotmail.com", "outlook.com"].includes(
+            emailDomain.toLowerCase(),
+          )
+            ? emailDomain.split(".")[0]
+            : "";
 
         customer = await customerService.createCustomer({
           name: supportRequest.name!,
           email: supportRequest.email!,
           phone: supportRequest.phone!,
           company: company,
-          tags: ["support-contact", `support-${supportRequest.category}`, "lead"],
+          tags: [
+            "support-contact",
+            `support-${supportRequest.category}`,
+            "lead",
+          ],
           notes: `Initial contact via Support AI Assistant - ${category?.label}`,
           customFields: {
             supportCategory: category?.label || "General",
@@ -370,15 +420,18 @@ export function SupportAIAssistant() {
           },
         });
 
-        console.log(`Created new customer in ${crmStatus.provider}:`, customer.id);
+        console.log(
+          `Created new customer in ${crmStatus.provider}:`,
+          customer.id,
+        );
       }
 
       // Add contact/interaction record
       const contactRecord = await customerService.addContact({
         customerId: customer.id,
         type: "note",
-        subject: `Support Request: ${supportCategories.find(c => c.id === supportRequest.category)?.label}`,
-        content: `Support request submitted via AI Assistant:\n\nCategory: ${supportCategories.find(c => c.id === supportRequest.category)?.label}\nPriority: ${supportRequest.priority}\nDescription: ${description}\n\nContact: ${supportRequest.name} (${supportRequest.email}, ${supportRequest.phone})\n\n${isNewCustomer ? "New customer created from support request." : "Existing customer updated."}`,
+        subject: `Support Request: ${supportCategories.find((c) => c.id === supportRequest.category)?.label}`,
+        content: `Support request submitted via AI Assistant:\n\nCategory: ${supportCategories.find((c) => c.id === supportRequest.category)?.label}\nPriority: ${supportRequest.priority}\nDescription: ${description}\n\nContact: ${supportRequest.name} (${supportRequest.email}, ${supportRequest.phone})\n\n${isNewCustomer ? "New customer created from support request." : "Existing customer updated."}`,
         date: new Date().toISOString(),
         direction: "inbound",
       });
@@ -396,28 +449,39 @@ export function SupportAIAssistant() {
             probability: isNewCustomer ? 15 : 25, // Slightly higher probability for existing customers
             source: "Support AI Assistant",
             description: `Sales inquiry submitted via Support AI Assistant:\n\n${description}`,
-            expectedCloseDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(), // 30 days from now
+            expectedCloseDate: new Date(
+              Date.now() + 30 * 24 * 60 * 60 * 1000,
+            ).toISOString(), // 30 days from now
           });
 
           dealId = deal.id;
           console.log(`Created sales deal in ${crmStatus.provider}:`, deal.id);
         } catch (dealError) {
-          console.warn("Failed to create sales deal, but customer was created:", dealError);
+          console.warn(
+            "Failed to create sales deal, but customer was created:",
+            dealError,
+          );
           // Don't fail the whole operation if deal creation fails
         }
       }
 
-      console.log(`Successfully pushed support contact to ${crmStatus.provider}`);
+      console.log(
+        `Successfully pushed support contact to ${crmStatus.provider}`,
+      );
       return {
         success: true,
         customerId: customer.id,
-        dealId
+        dealId,
       };
     } catch (error) {
-      console.error(`Failed to push contact to ${crmStatus?.provider || "CRM"}:`, error);
+      console.error(
+        `Failed to push contact to ${crmStatus?.provider || "CRM"}:`,
+        error,
+      );
 
       // Log detailed error for monitoring
-      const errorMessage = error instanceof Error ? error.message : String(error);
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
       console.error("CRM Integration Error Details:", {
         provider: crmStatus?.provider,
         error: errorMessage,
@@ -426,9 +490,9 @@ export function SupportAIAssistant() {
           priority: supportRequest.priority,
           hasEmail: !!supportRequest.email,
           hasPhone: !!supportRequest.phone,
-          hasName: !!supportRequest.name
+          hasName: !!supportRequest.name,
         },
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
 
       return { success: false };
@@ -457,34 +521,49 @@ export function SupportAIAssistant() {
       let actions: ChatMessage["actions"] = [];
 
       // Handle different types of user input
-      if (messageContent.includes("support") || messageContent.includes("help")) {
-        response = `I can see you're looking for support! 🎯\n\nLet me help you get connected with the right team. We offer several types of support:\n\n${supportCategories.map(cat => `• **${cat.label}**: ${cat.description}`).join('\n')}\n\nWould you like to start a support request?`;
-        suggestions = ["Yes, start support request", "Tell me about response times"];
+      if (
+        messageContent.includes("support") ||
+        messageContent.includes("help")
+      ) {
+        response = `I can see you're looking for support! 🎯\n\nLet me help you get connected with the right team. We offer several types of support:\n\n${supportCategories.map((cat) => `• **${cat.label}**: ${cat.description}`).join("\n")}\n\nWould you like to start a support request?`;
+        suggestions = [
+          "Yes, start support request",
+          "Tell me about response times",
+        ];
         actions = [
           {
             label: "Start Support Request",
             action: "start-support",
             icon: <HelpCircle className="w-4 h-4" />,
-            variant: "default"
-          }
+            variant: "default",
+          },
         ];
-      } else if (messageContent.includes("response time") || messageContent.includes("how long")) {
-        response = `⏱️ **Our Support Response Times:**\n\n${supportCategories.map(cat => `• **${cat.label}**: ${cat.responseTime}`).join('\n')}\n\n*Response times are during business hours (9 AM - 5 PM AEST, Monday-Friday). Urgent issues are monitored 24/7.*\n\nReady to submit a support request?`;
+      } else if (
+        messageContent.includes("response time") ||
+        messageContent.includes("how long")
+      ) {
+        response = `⏱️ **Our Support Response Times:**\n\n${supportCategories.map((cat) => `• **${cat.label}**: ${cat.responseTime}`).join("\n")}\n\n*Response times are during business hours (9 AM - 5 PM AEST, Monday-Friday). Urgent issues are monitored 24/7.*\n\nReady to submit a support request?`;
         suggestions = ["Submit support request", "What's considered urgent?"];
       } else if (messageContent.includes("urgent")) {
         response = `🚨 **Urgent Support Issues:**\n\nUrgent issues include:\n• System outages affecting operations\n• Critical security concerns\n• Payment processing failures\n• Data loss or corruption\n\n**Response Time:** 30 minutes during business hours, 2 hours outside business hours.\n\nIf you have an urgent issue, please select "Urgent Issue" when creating your support request.`;
-        suggestions = ["I have an urgent issue", "Create regular support request"];
+        suggestions = [
+          "I have an urgent issue",
+          "Create regular support request",
+        ];
       } else {
         // General response
         response = `I understand you need assistance! 😊\n\nI'm here to help you connect with our support teams. To provide you with the best possible service, I'll need to collect some basic information and understand what type of support you need.\n\nWould you like to start a support request now?`;
-        suggestions = ["Start support request", "Tell me about support options"];
+        suggestions = [
+          "Start support request",
+          "Tell me about support options",
+        ];
         actions = [
           {
             label: "Start Support Request",
             action: "start-support",
             icon: <HelpCircle className="w-4 h-4" />,
-            variant: "default"
-          }
+            variant: "default",
+          },
         ];
       }
 
@@ -519,9 +598,9 @@ export function SupportAIAssistant() {
           id: `details-form-${Date.now()}`,
           type: "system",
           content: "DETAILS_FORM",
-          timestamp: new Date()
+          timestamp: new Date(),
         };
-        setMessages(prev => [...prev, detailsFormMessage]);
+        setMessages((prev) => [...prev, detailsFormMessage]);
         break;
       case "new-request":
         // Reset the flow
@@ -552,7 +631,12 @@ export function SupportAIAssistant() {
                 id="support-name"
                 defaultValue={supportRequest.name || user?.name || ""}
                 placeholder="Enter your full name"
-                onBlur={(e) => setSupportRequest(prev => ({ ...prev, name: e.target.value }))}
+                onBlur={(e) =>
+                  setSupportRequest((prev) => ({
+                    ...prev,
+                    name: e.target.value,
+                  }))
+                }
               />
             </div>
             <div>
@@ -562,7 +646,12 @@ export function SupportAIAssistant() {
                 type="email"
                 defaultValue={supportRequest.email || user?.email || ""}
                 placeholder="Enter your email address"
-                onBlur={(e) => setSupportRequest(prev => ({ ...prev, email: e.target.value }))}
+                onBlur={(e) =>
+                  setSupportRequest((prev) => ({
+                    ...prev,
+                    email: e.target.value,
+                  }))
+                }
               />
             </div>
             <div>
@@ -572,16 +661,27 @@ export function SupportAIAssistant() {
                 type="tel"
                 defaultValue={supportRequest.phone || user?.phone || ""}
                 placeholder="Enter your phone number"
-                onBlur={(e) => setSupportRequest(prev => ({ ...prev, phone: e.target.value }))}
+                onBlur={(e) =>
+                  setSupportRequest((prev) => ({
+                    ...prev,
+                    phone: e.target.value,
+                  }))
+                }
               />
             </div>
-            <Button 
-              className="w-full" 
+            <Button
+              className="w-full"
               onClick={() => {
-                const name = (document.getElementById("support-name") as HTMLInputElement)?.value;
-                const email = (document.getElementById("support-email") as HTMLInputElement)?.value;
-                const phone = (document.getElementById("support-phone") as HTMLInputElement)?.value;
-                
+                const name = (
+                  document.getElementById("support-name") as HTMLInputElement
+                )?.value;
+                const email = (
+                  document.getElementById("support-email") as HTMLInputElement
+                )?.value;
+                const phone = (
+                  document.getElementById("support-phone") as HTMLInputElement
+                )?.value;
+
                 if (name && email && phone) {
                   handleInfoSubmit({ name, email, phone });
                 }
@@ -605,10 +705,14 @@ export function SupportAIAssistant() {
               rows={4}
               className="resize-none"
             />
-            <Button 
-              className="w-full" 
+            <Button
+              className="w-full"
               onClick={() => {
-                const details = (document.getElementById("support-details") as HTMLTextAreaElement)?.value;
+                const details = (
+                  document.getElementById(
+                    "support-details",
+                  ) as HTMLTextAreaElement
+                )?.value;
                 if (details) {
                   handleDetailsSubmit(details);
                 }
@@ -714,12 +818,13 @@ export function SupportAIAssistant() {
                             message.type === "user"
                               ? "bg-primary text-primary-foreground"
                               : message.type === "system"
-                              ? "w-full"
-                              : "bg-muted"
+                                ? "w-full"
+                                : "bg-muted"
                           }`}
                         >
                           <div className="text-sm">
-                            {message.type === "system" || message.type === "assistant" ? (
+                            {message.type === "system" ||
+                            message.type === "assistant" ? (
                               <div>{formatMessage(message.content)}</div>
                             ) : (
                               message.content
@@ -727,21 +832,26 @@ export function SupportAIAssistant() {
                           </div>
 
                           {/* Suggestions */}
-                          {message.suggestions && message.suggestions.length > 0 && (
-                            <div className="mt-3 space-y-1">
-                              {message.suggestions.map((suggestion, index) => (
-                                <Button
-                                  key={index}
-                                  variant="outline"
-                                  size="sm"
-                                  className="text-xs h-6 px-2 mr-1 mb-1"
-                                  onClick={() => handleSuggestionClick(suggestion)}
-                                >
-                                  {suggestion}
-                                </Button>
-                              ))}
-                            </div>
-                          )}
+                          {message.suggestions &&
+                            message.suggestions.length > 0 && (
+                              <div className="mt-3 space-y-1">
+                                {message.suggestions.map(
+                                  (suggestion, index) => (
+                                    <Button
+                                      key={index}
+                                      variant="outline"
+                                      size="sm"
+                                      className="text-xs h-6 px-2 mr-1 mb-1"
+                                      onClick={() =>
+                                        handleSuggestionClick(suggestion)
+                                      }
+                                    >
+                                      {suggestion}
+                                    </Button>
+                                  ),
+                                )}
+                              </div>
+                            )}
 
                           {/* Action Buttons */}
                           {message.actions && message.actions.length > 0 && (
@@ -752,7 +862,9 @@ export function SupportAIAssistant() {
                                   variant={action.variant || "secondary"}
                                   size="sm"
                                   className="text-xs h-7 px-3 mr-1 mb-1"
-                                  onClick={() => handleActionClick(action.action)}
+                                  onClick={() =>
+                                    handleActionClick(action.action)
+                                  }
                                 >
                                   {action.icon}
                                   <span className="ml-1">{action.label}</span>
@@ -802,7 +914,9 @@ export function SupportAIAssistant() {
                       placeholder="Type your message..."
                       value={inputMessage}
                       onChange={(e) => setInputMessage(e.target.value)}
-                      onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
+                      onKeyPress={(e) =>
+                        e.key === "Enter" && handleSendMessage()
+                      }
                       className="flex-1"
                     />
                     <Button
@@ -820,7 +934,9 @@ export function SupportAIAssistant() {
                     {crmStatus && (
                       <div className="flex items-center justify-center gap-4 mt-1 text-xs text-muted-foreground">
                         <div className="flex items-center gap-1">
-                          <div className={`w-2 h-2 ${crmStatus.enabled ? 'bg-green-500' : 'bg-gray-400'} rounded-full`}></div>
+                          <div
+                            className={`w-2 h-2 ${crmStatus.enabled ? "bg-green-500" : "bg-gray-400"} rounded-full`}
+                          ></div>
                           {crmStatus.provider}
                         </div>
                         <div className="flex items-center gap-1">
