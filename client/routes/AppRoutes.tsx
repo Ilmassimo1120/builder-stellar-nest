@@ -379,17 +379,7 @@ const AppRoutes = () => (
       path="/pricing"
       element={
         <PublicLazyRoute>
-          <Placeholder
-            title="Pricing Plans"
-            description="Choose the right plan for your electrical contracting business"
-            features={[
-              "Plan comparison",
-              "Feature breakdown",
-              "Custom pricing",
-              "Enterprise options",
-              "Free trial",
-            ]}
-          />
+          <Pricing />
         </PublicLazyRoute>
       }
     />
