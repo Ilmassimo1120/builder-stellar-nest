@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -2358,7 +2358,7 @@ export default function ProjectWizard() {
                 <li>• Dynamic load balancing to optimize power usage</li>
                 <li>• Time-of-use scheduling to reduce peak demand</li>
                 <li>• Smart charging algorithms to manage multiple vehicles</li>
-                <li>• Integration with building management systems</li>
+                <li>��� Integration with building management systems</li>
               </ul>
             </div>
           </div>
