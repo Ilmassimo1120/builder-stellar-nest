@@ -68,7 +68,7 @@ const Integrations = () => {
       name: "QuickBooks",
       category: "accounting",
       description: "Sync your financial data automatically with QuickBooks Online and Desktop",
-      logo: "https://via.placeholder.com/60x60/2CA01C/FFFFFF?text=QB",
+      logo: "https://logo.clearbit.com/quickbooks.intuit.com",
       isPopular: true,
       rating: 4.8,
       reviews: 2450,
