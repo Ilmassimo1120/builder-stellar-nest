@@ -465,13 +465,27 @@ export default function TrainingPublic() {
                   and grown their businesses with our comprehensive training programs.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <Button size="lg" variant="secondary" className="text-primary">
-                    Start Free Trial
-                    <ArrowRight className="ml-2 w-5 h-5" />
+                  <Button
+                    size="lg"
+                    variant="secondary"
+                    className="text-primary font-semibold px-8 py-4 text-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
+                    asChild
+                  >
+                    <Link to="/register">
+                      🚀 Start Free Trial
+                      <ArrowRight className="ml-2 w-5 h-5" />
+                    </Link>
                   </Button>
-                  <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-primary">
-                    Schedule Demo
-                    <Calendar className="ml-2 w-5 h-5" />
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="border-2 border-white text-white hover:bg-white hover:text-primary font-semibold px-8 py-4 text-lg shadow-md hover:shadow-lg transition-all duration-200"
+                    asChild
+                  >
+                    <Link to="/contact">
+                      📅 Schedule Demo
+                      <Calendar className="ml-2 w-5 h-5" />
+                    </Link>
                   </Button>
                 </div>
               </CardContent>
