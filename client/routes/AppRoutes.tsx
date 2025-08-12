@@ -349,17 +349,7 @@ const AppRoutes = () => (
       path="/features"
       element={
         <PublicLazyRoute>
-          <Placeholder
-            title="Features"
-            description="Comprehensive overview of ChargeSource capabilities"
-            features={[
-              "Feature comparison",
-              "Use cases",
-              "Benefits overview",
-              "ROI calculator",
-              "Demo videos",
-            ]}
-          />
+          <Features />
         </PublicLazyRoute>
       }
     />
