@@ -197,7 +197,6 @@ export default function HelpCentre() {
           <div className="flex justify-between items-center py-4">
             <Link to="/" className="flex items-center space-x-2">
               <Logo />
-              <span className="font-bold text-xl">ChargeSource</span>
             </Link>
             <nav className="hidden md:flex space-x-8">
               <Link
