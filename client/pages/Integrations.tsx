@@ -94,7 +94,7 @@ const Integrations = () => {
       name: "Xero",
       category: "accounting",
       description: "Cloud-based accounting software for small businesses",
-      logo: "https://via.placeholder.com/60x60/13B5EA/FFFFFF?text=XE",
+      logo: "https://logo.clearbit.com/xero.com",
       isPopular: true,
       rating: 4.5,
       reviews: 1680,
