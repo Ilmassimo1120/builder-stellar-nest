@@ -276,7 +276,7 @@ export function SupportAIAssistant() {
     setCurrentStep("complete");
 
     // Try to push contact to CRM
-    await pushContactToCRM(description);
+    const crmResult = await pushContactToCRM(description);
 
     const category = supportCategories.find(c => c.id === supportRequest.category);
     const crmIntegrationInfo = crmStatus?.enabled
