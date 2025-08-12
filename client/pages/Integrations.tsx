@@ -107,7 +107,7 @@ const Integrations = () => {
       name: "Pipedrive",
       category: "crm",
       description: "Sales-focused CRM that helps you organize leads and deals",
-      logo: "https://via.placeholder.com/60x60/7B68EE/FFFFFF?text=PD",
+      logo: "https://logo.clearbit.com/pipedrive.com",
       isPopular: true,
       rating: 4.5,
       reviews: 1340,
