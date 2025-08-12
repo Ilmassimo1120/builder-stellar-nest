@@ -148,9 +148,6 @@ export default function HelpCentrePublic() {
               <Link to="/training-public" className="text-muted-foreground hover:text-foreground">
                 Training
               </Link>
-              <Link to="/help-centre-public" className="text-foreground font-medium">
-                Help Centre
-              </Link>
             </nav>
             <div className="flex items-center space-x-4">
               <Link to="/login">
