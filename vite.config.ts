@@ -19,10 +19,6 @@ export default defineConfig(({ mode }) => ({
     target: "es2020",
     rollupOptions: {
       external: [],
-      treeshake: {
-        moduleSideEffects: false,
-        propertyReadSideEffects: false
-      },
       output: {
         manualChunks: {
           vendor: ["react", "react-dom", "sonner"],
