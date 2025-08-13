@@ -24,7 +24,6 @@ export default defineConfig(({ mode }) => ({
           vendor: ["react", "react-dom", "sonner"],
           "date-utils": ["date-fns"],
           "charts": ["recharts"],
-          "animation": ["framer-motion"],
         },
       },
     },
