@@ -285,6 +285,32 @@ export default function ConnectionDiagnostics() {
     setRunning(false);
   };
 
+  const runAutomaticFixes = async () => {
+    setFixing(true);
+    setFixResults([]);
+
+    try {
+      console.log('🔧 Starting automatic connection fixes...');
+      const fixes = await connectionFixService.runAllFixes();
+      setFixResults(fixes);
+
+      // Re-run diagnostics after fixes to see if issues were resolved
+      setTimeout(() => {
+        runComprehensiveDiagnostics();
+      }, 1000);
+
+    } catch (error) {
+      console.error('Error running automatic fixes:', error);
+      setFixResults([{
+        success: false,
+        message: 'Failed to run automatic fixes',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      }]);
+    } finally {
+      setFixing(false);
+    }
+  };
+
   const getStatusIcon = (status: DiagnosticResult['status']) => {
     switch (status) {
       case 'success':
