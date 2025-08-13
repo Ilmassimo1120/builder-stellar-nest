@@ -304,12 +304,23 @@ export default function ConnectionDiagnostics() {
         });
       }
     } else {
-      // Add info for development environment
+      // Add info for non-Netlify environment
+      const hostname = window.location.hostname;
+      let skipReason = "development environment";
+
+      if (hostname.includes("fly.dev")) {
+        skipReason = "Fly.dev deployment (not Netlify)";
+      } else if (hostname === "localhost" || hostname.includes("127.0.0.1")) {
+        skipReason = "local development environment";
+      } else {
+        skipReason = "non-Netlify deployment";
+      }
+
       newResults.push({
         test: "Netlify Functions",
         status: "warning",
-        message: "Skipped in development environment",
-        details: "Netlify functions are only available in production deployments",
+        message: `Skipped in ${skipReason}`,
+        details: `Currently running on ${hostname}. Netlify functions only available when deployed to Netlify.`,
       });
     }
 
