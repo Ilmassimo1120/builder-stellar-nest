@@ -48,6 +48,7 @@ export default defineConfig(({ mode }) => ({
     alias: {
       "@": path.resolve(__dirname, "./client"),
       "@shared": path.resolve(__dirname, "./shared"),
+      "framer-motion": "framer-motion/dist/framer-motion.es.js",
     },
   },
   define: {
