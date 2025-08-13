@@ -23,7 +23,9 @@ const Customers = lazy(() => import("../pages/Customers"));
 const EnhancedFileStorage = lazy(() => import("../pages/EnhancedFileStorage"));
 const FileStorage = lazy(() => import("../pages/FileStorage"));
 const CloudStatus = lazy(() => import("../pages/CloudStatus"));
-const ConnectionDiagnostics = lazy(() => import("../pages/ConnectionDiagnostics"));
+const ConnectionDiagnostics = lazy(
+  () => import("../pages/ConnectionDiagnostics"),
+);
 const NotFound = lazy(() => import("../pages/NotFound"));
 const Placeholder = lazy(() => import("../pages/Placeholder"));
 const AuthTest = lazy(() => import("../pages/AuthTest"));
