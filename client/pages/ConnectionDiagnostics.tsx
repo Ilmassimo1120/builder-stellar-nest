@@ -235,10 +235,13 @@ export default function ConnectionDiagnostics() {
       });
     }
 
-    // Test 6: Netlify Functions (if in production)
+    // Test 6: Netlify Functions (only if deployed on Netlify)
     if (
       window.location.hostname !== "localhost" &&
-      !window.location.hostname.includes("127.0.0.1")
+      !window.location.hostname.includes("127.0.0.1") &&
+      !window.location.hostname.includes("fly.dev") &&
+      (window.location.hostname.includes("netlify.app") ||
+       window.location.hostname.includes("netlify.com"))
     ) {
       try {
         console.log("🚀 Testing Netlify functions...");
