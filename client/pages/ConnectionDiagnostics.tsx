@@ -503,6 +503,50 @@ export default function ConnectionDiagnostics() {
           </Card>
         )}
 
+        {fixResults.length > 0 && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <AlertTriangle className="h-5 w-5 text-blue-500" />
+                Automatic Fix Results
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {fixResults.map((result, index) => (
+                <Alert key={index} className={
+                  result.success ? 'border-green-200' : 'border-red-200'
+                }>
+                  <div className="flex items-start gap-3">
+                    {result.success ? (
+                      <CheckCircle className="h-4 w-4 text-green-500" />
+                    ) : (
+                      <XCircle className="h-4 w-4 text-red-500" />
+                    )}
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="font-medium">{result.message}</span>
+                        <Badge variant={result.success ? "default" : "destructive"} className={result.success ? "bg-green-500" : ""}>
+                          {result.success ? "Fixed" : "Failed"}
+                        </Badge>
+                      </div>
+                      <AlertDescription className="text-sm">
+                        {result.details && (
+                          <div className="mb-1">{result.details}</div>
+                        )}
+                        {result.action && (
+                          <div className="text-xs text-muted-foreground italic">
+                            Action needed: {result.action}
+                          </div>
+                        )}
+                      </AlertDescription>
+                    </div>
+                  </div>
+                </Alert>
+              ))}
+            </CardContent>
+          </Card>
+        )}
+
         {results.length > 0 && getRecommendations().length > 0 && (
           <Card>
             <CardHeader>
