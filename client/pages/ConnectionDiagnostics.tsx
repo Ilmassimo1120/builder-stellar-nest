@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { CheckCircle, XCircle, AlertTriangle, RefreshCw, Server, Cloud, Database } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { directSupabase, testBucketAccess } from '@/lib/directSupabase';
+import { connectionFixService, type FixResult } from '@/lib/services/connectionFixService';
 
 interface DiagnosticResult {
   test: string;
