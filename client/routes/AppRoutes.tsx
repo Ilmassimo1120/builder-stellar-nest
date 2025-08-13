@@ -312,6 +312,14 @@ const AppRoutes = () => (
       }
     />
     <Route
+      path="/connection-diagnostics"
+      element={
+        <PublicLazyRoute>
+          <ConnectionDiagnostics />
+        </PublicLazyRoute>
+      }
+    />
+    <Route
       path="/auth-test"
       element={
         <PublicLazyRoute>
