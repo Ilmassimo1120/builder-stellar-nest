@@ -241,7 +241,7 @@ export default function ConnectionDiagnostics() {
       !window.location.hostname.includes("127.0.0.1") &&
       !window.location.hostname.includes("fly.dev") &&
       (window.location.hostname.includes("netlify.app") ||
-       window.location.hostname.includes("netlify.com"))
+        window.location.hostname.includes("netlify.com"))
     ) {
       try {
         console.log("🚀 Testing Netlify functions...");
@@ -249,20 +249,20 @@ export default function ConnectionDiagnostics() {
 
         // Try the correct Netlify function path for serverless-http
         const response = await fetch("/.netlify/functions/api", {
-          method: 'POST',
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
-            'X-Forwarded-Proto': 'https'
+            "Content-Type": "application/json",
+            "X-Forwarded-Proto": "https",
           },
-          body: JSON.stringify({})
+          body: JSON.stringify({}),
         });
 
         const timing = Date.now() - startTime;
 
         if (response.ok) {
-          const contentType = response.headers.get('content-type') || '';
+          const contentType = response.headers.get("content-type") || "";
 
-          if (contentType.includes('application/json')) {
+          if (contentType.includes("application/json")) {
             const data = await response.json();
             newResults.push({
               test: "Netlify Functions",
@@ -298,9 +298,9 @@ export default function ConnectionDiagnostics() {
           test: "Netlify Functions",
           status: "error",
           message: "Netlify functions connection failed",
-          details: errorMessage.includes('Unexpected token') ?
-            'Function returned HTML page instead of JSON - likely not deployed or configured incorrectly' :
-            errorMessage,
+          details: errorMessage.includes("Unexpected token")
+            ? "Function returned HTML page instead of JSON - likely not deployed or configured incorrectly"
+            : errorMessage,
         });
       }
     } else {
