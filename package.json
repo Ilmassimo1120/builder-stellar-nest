@@ -55,7 +55,8 @@
     "date-fns": "^3.6.0",
     "recharts": "^2.12.7",
     "framer-motion": "^12.6.2",
-    "react-hook-form": "^7.53.0"
+    "react-hook-form": "^7.53.0",
+    "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
     "@hookform/resolvers": "^3.9.0",
