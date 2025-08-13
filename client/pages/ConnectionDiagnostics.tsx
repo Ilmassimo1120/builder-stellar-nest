@@ -396,23 +396,44 @@ export default function ConnectionDiagnostics() {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <Button 
-              onClick={runComprehensiveDiagnostics} 
-              disabled={running}
-              className="w-full"
-            >
-              {running ? (
-                <>
-                  <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
-                  Running Comprehensive Diagnostics...
-                </>
-              ) : (
-                <>
-                  <Server className="h-4 w-4 mr-2" />
-                  Run Full Diagnostics
-                </>
-              )}
-            </Button>
+            <div className="flex gap-2">
+              <Button
+                onClick={runComprehensiveDiagnostics}
+                disabled={running || fixing}
+                className="flex-1"
+              >
+                {running ? (
+                  <>
+                    <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                    Running Diagnostics...
+                  </>
+                ) : (
+                  <>
+                    <Server className="h-4 w-4 mr-2" />
+                    Run Diagnostics
+                  </>
+                )}
+              </Button>
+
+              <Button
+                onClick={runAutomaticFixes}
+                disabled={running || fixing}
+                variant="outline"
+                className="flex-1"
+              >
+                {fixing ? (
+                  <>
+                    <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                    Fixing Issues...
+                  </>
+                ) : (
+                  <>
+                    <AlertTriangle className="h-4 w-4 mr-2" />
+                    Auto-Fix Issues
+                  </>
+                )}
+              </Button>
+            </div>
 
             {results.length > 0 && (
               <div className="mt-6">
