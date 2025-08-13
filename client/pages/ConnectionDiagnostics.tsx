@@ -19,6 +19,8 @@ interface DiagnosticResult {
 export default function ConnectionDiagnostics() {
   const [running, setRunning] = useState(false);
   const [results, setResults] = useState<DiagnosticResult[]>([]);
+  const [fixing, setFixing] = useState(false);
+  const [fixResults, setFixResults] = useState<FixResult[]>([]);
 
   const runComprehensiveDiagnostics = async () => {
     setRunning(true);
