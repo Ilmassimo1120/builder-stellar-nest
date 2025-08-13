@@ -23,12 +23,12 @@ export default defineConfig(({ mode }) => ({
         manualChunks: {
           vendor: ["react", "react-dom", "sonner"],
           "date-utils": ["date-fns"],
-          "charts": ["recharts"],
+          charts: ["recharts"],
         },
       },
     },
     commonjsOptions: {
-      include: /node_modules/
+      include: /node_modules/,
     },
     chunkSizeWarningLimit: 1000,
   },
