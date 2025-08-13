@@ -243,18 +243,42 @@ export default function ConnectionDiagnostics() {
       try {
         console.log("🚀 Testing Netlify functions...");
         const startTime = Date.now();
-        const response = await fetch("/.netlify/functions/api/ping");
+
+        // Try the correct Netlify function path for serverless-http
+        const response = await fetch("/.netlify/functions/api", {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Forwarded-Proto': 'https'
+          },
+          body: JSON.stringify({})
+        });
+
         const timing = Date.now() - startTime;
 
         if (response.ok) {
-          const data = await response.json();
-          newResults.push({
-            test: "Netlify Functions",
-            status: "success",
-            message: "Netlify functions responding",
-            details: `Response: ${data.message || "Success"}, Response time: ${timing}ms`,
-            timing,
-          });
+          const contentType = response.headers.get('content-type') || '';
+
+          if (contentType.includes('application/json')) {
+            const data = await response.json();
+            newResults.push({
+              test: "Netlify Functions",
+              status: "success",
+              message: "Netlify functions responding",
+              details: `Response: ${data.message || "Success"}, Response time: ${timing}ms`,
+              timing,
+            });
+          } else {
+            // Got HTML instead of JSON
+            const text = await response.text();
+            newResults.push({
+              test: "Netlify Functions",
+              status: "error",
+              message: "Function returned HTML instead of JSON",
+              details: `Expected JSON but got HTML. Function may not be deployed correctly.`,
+              timing,
+            });
+          }
         } else {
           newResults.push({
             test: "Netlify Functions",
@@ -270,10 +294,20 @@ export default function ConnectionDiagnostics() {
         newResults.push({
           test: "Netlify Functions",
           status: "error",
-          message: errorMessage,
-          details: "Netlify functions connection failed.",
+          message: "Netlify functions connection failed",
+          details: errorMessage.includes('Unexpected token') ?
+            'Function returned HTML page instead of JSON - likely not deployed or configured incorrectly' :
+            errorMessage,
         });
       }
+    } else {
+      // Add info for development environment
+      newResults.push({
+        test: "Netlify Functions",
+        status: "warning",
+        message: "Skipped in development environment",
+        details: "Netlify functions are only available in production deployments",
+      });
     }
 
     // Test 7: External Connectivity
