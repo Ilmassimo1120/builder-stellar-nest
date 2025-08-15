@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 import { ArrowLeft, User, LogOut } from "lucide-react";
 
 export default function OAuthTest() {
-  const { user, isAuthenticated, logout } = useSupabaseAuth();
+  const { user, isAuthenticated, logout } = useAuth();
 
   const handleLogout = async () => {
     await logout();
