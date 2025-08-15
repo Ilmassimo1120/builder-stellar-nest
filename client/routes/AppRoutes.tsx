@@ -167,6 +167,14 @@ const AppRoutes = () => (
       }
     />
     <Route
+      path="/simple-api-test"
+      element={
+        <PublicLazyRoute>
+          <SimpleApiTest />
+        </PublicLazyRoute>
+      }
+    />
+    <Route
       path="/client/quote/:quoteId"
       element={
         <PublicLazyRoute>
