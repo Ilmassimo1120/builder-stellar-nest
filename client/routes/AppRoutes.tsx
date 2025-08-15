@@ -116,6 +116,14 @@ const AppRoutes = () => (
       }
     />
     <Route
+      path="/oauth-debug"
+      element={
+        <PublicLazyRoute>
+          <OAuthDebug />
+        </PublicLazyRoute>
+      }
+    />
+    <Route
       path="/client/quote/:quoteId"
       element={
         <PublicLazyRoute>
