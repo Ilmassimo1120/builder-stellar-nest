@@ -317,6 +317,7 @@ export function SupabaseAuthProvider({ children }: { children: ReactNode }) {
     isAuthenticated: !!session,
     isLoading,
     login,
+    loginWithGoogle,
     register,
     logout,
     updateUser,
