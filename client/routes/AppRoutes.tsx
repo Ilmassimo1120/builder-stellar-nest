@@ -17,6 +17,7 @@ const Register = lazy(() => import("../pages/Register"));
 const OAuthCallback = lazy(() => import("../pages/OAuthCallback"));
 const OAuthTest = lazy(() => import("../pages/OAuthTest"));
 const OAuthIntegrationTest = lazy(() => import("../pages/OAuthIntegrationTest"));
+const OAuthDebug = lazy(() => import("../pages/OAuthDebug"));
 const Catalogue = lazy(() => import("../pages/Catalogue"));
 const AdminCatalogue = lazy(() => import("../pages/AdminCatalogue"));
 const Settings = lazy(() => import("../pages/Settings"));
