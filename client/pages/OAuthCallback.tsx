@@ -38,7 +38,39 @@ export default function OAuthCallback() {
           return;
         }
 
-        if (data.session) {
+        if (data.session && data.session.user) {
+          // Create user in local auth system from OAuth data
+          const oauthUser = data.session.user;
+          const userMetadata = oauthUser.user_metadata || {};
+
+          // Generate UUID compatible ID
+          const generateUUID = () => {
+            return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
+              /[xy]/g,
+              function (c) {
+                const r = (Math.random() * 16) | 0;
+                const v = c === "x" ? r : (r & 0x3) | 0x8;
+                return v.toString(16);
+              },
+            );
+          };
+
+          const localUser = {
+            id: oauthUser.id || generateUUID(),
+            email: oauthUser.email || '',
+            name: userMetadata.full_name || userMetadata.name || oauthUser.email?.split('@')[0] || 'Google User',
+            firstName: userMetadata.given_name || '',
+            lastName: userMetadata.family_name || '',
+            company: 'Google OAuth User',
+            role: 'user' as const,
+            verified: true,
+            loginTime: new Date().toISOString(),
+            registrationDate: new Date().toISOString(),
+          };
+
+          // Store in localStorage (matching the existing auth system)
+          localStorage.setItem("chargeSourceUser", JSON.stringify(localUser));
+
           setStatus('success');
           // Small delay to show success state
           setTimeout(() => {
