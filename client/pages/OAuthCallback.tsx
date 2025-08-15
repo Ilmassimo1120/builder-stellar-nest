@@ -10,7 +10,7 @@ import { Loader2, CheckCircle2, XCircle } from "lucide-react";
 export default function OAuthCallback() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { user, isAuthenticated, isLoading } = useSupabaseAuth();
+  const { user, isAuthenticated, isLoading } = useAuth();
   const [status, setStatus] = useState<'processing' | 'success' | 'error'>('processing');
   const [errorMessage, setErrorMessage] = useState('');
 
