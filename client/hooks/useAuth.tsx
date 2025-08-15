@@ -38,6 +38,7 @@ interface AuthContextType {
     password: string,
     rememberMe?: boolean,
   ) => Promise<boolean>;
+  loginWithGoogle: () => Promise<boolean>;
   register: (userData: any) => Promise<boolean>;
   logout: () => void;
   updateUser: (userData: Partial<User>) => void;
