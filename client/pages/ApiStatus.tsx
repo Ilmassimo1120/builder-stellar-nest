@@ -203,6 +203,17 @@ export default function ApiStatus() {
           </p>
         </div>
 
+        {/* FullStory Warning */}
+        {isFullStoryDetected && (
+          <Alert variant="destructive">
+            <Eye className="h-4 w-4" />
+            <AlertDescription>
+              <strong>FullStory Analytics Detected:</strong> Automatic API testing is disabled because FullStory
+              is intercepting fetch requests. Please test API endpoints manually by clicking the links below.
+            </AlertDescription>
+          </Alert>
+        )}
+
         {/* Environment Info */}
         <Card>
           <CardHeader>
@@ -214,15 +225,20 @@ export default function ApiStatus() {
                   <Globe className="w-5 h-5 text-green-500" />
                 )}
                 Environment: {environment === 'local' ? 'Local Development' : 'Deployed'}
+                {isFullStoryDetected && (
+                  <Badge variant="destructive" className="ml-2">
+                    FullStory Active
+                  </Badge>
+                )}
               </span>
-              <Button 
-                onClick={testAllEndpoints} 
-                disabled={isLoading}
+              <Button
+                onClick={testAllEndpoints}
+                disabled={isLoading || isFullStoryDetected}
                 size="sm"
                 className="flex items-center gap-2"
               >
                 <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
-                Test All
+                {isFullStoryDetected ? 'Auto-Test Disabled' : 'Test All'}
               </Button>
             </CardTitle>
           </CardHeader>
