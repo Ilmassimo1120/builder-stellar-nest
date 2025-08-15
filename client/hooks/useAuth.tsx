@@ -6,6 +6,7 @@ import React, {
   ReactNode,
 } from "react";
 import { UserRole, rbacService } from "@/lib/rbac";
+import { supabase } from "@/lib/supabase";
 
 export interface User {
   id: string;
