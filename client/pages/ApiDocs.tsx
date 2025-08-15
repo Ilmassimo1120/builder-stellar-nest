@@ -148,20 +148,30 @@ export default function ApiDocs() {
           </div>
         </div>
 
+        {/* FullStory Warning */}
+        {isFullStoryDetected && (
+          <Alert variant="destructive">
+            <AlertDescription>
+              <strong>FullStory Analytics Detected:</strong> Automatic API data fetching is disabled.
+              Static endpoint information is shown below. Test endpoints manually using the links.
+            </AlertDescription>
+          </Alert>
+        )}
+
         {/* API Overview */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
-              <span>API Overview</span>
-              <Button 
-                size="sm" 
-                variant="outline" 
+              <span>API Overview {isFullStoryDetected && <Badge variant="outline" className="ml-2">Static Mode</Badge>}</span>
+              <Button
+                size="sm"
+                variant="outline"
                 onClick={fetchApiData}
-                disabled={loading}
+                disabled={loading || isFullStoryDetected}
                 className="flex items-center gap-2"
               >
                 <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
-                Refresh
+                {isFullStoryDetected ? 'Auto-Refresh Disabled' : 'Refresh'}
               </Button>
             </CardTitle>
           </CardHeader>
