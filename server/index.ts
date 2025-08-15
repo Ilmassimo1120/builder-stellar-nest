@@ -14,6 +14,50 @@ export function createServer() {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
 
+  // API index route - lists all available endpoints
+  app.get("/api", (_req, res) => {
+    const apiRoutes = [
+      {
+        method: "GET",
+        path: "/api/ping",
+        description: "Health check endpoint",
+        example: `${_req.protocol}://${_req.get('host')}/api/ping`
+      },
+      {
+        method: "GET",
+        path: "/api/demo",
+        description: "Demo data endpoint",
+        example: `${_req.protocol}://${_req.get('host')}/api/demo`
+      },
+      {
+        method: "POST",
+        path: "/api/create-storage-buckets",
+        description: "Create Supabase storage buckets",
+        example: `${_req.protocol}://${_req.get('host')}/api/create-storage-buckets`
+      },
+      {
+        method: "POST",
+        path: "/api/crm/leads",
+        description: "Submit CRM lead data",
+        example: `${_req.protocol}://${_req.get('host')}/api/crm/leads`
+      },
+      {
+        method: "POST",
+        path: "/api/email/demo-confirmation",
+        description: "Send demo confirmation email",
+        example: `${_req.protocol}://${_req.get('host')}/api/email/demo-confirmation`
+      }
+    ];
+
+    res.json({
+      title: "ChargeSource API",
+      version: "1.0.0",
+      timestamp: new Date().toISOString(),
+      endpoints: apiRoutes,
+      totalEndpoints: apiRoutes.length
+    });
+  });
+
   // Example API routes
   app.get("/api/ping", (_req, res) => {
     const ping = process.env.PING_MESSAGE ?? "ping";
