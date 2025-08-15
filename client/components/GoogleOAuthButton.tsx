@@ -16,7 +16,7 @@ export function GoogleOAuthButton({
   disabled = false,
   variant = "outline",
 }: GoogleOAuthButtonProps) {
-  const { loginWithGoogle } = useSupabaseAuth();
+  const { loginWithGoogle } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
