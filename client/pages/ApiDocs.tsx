@@ -26,10 +26,23 @@ export default function ApiDocs() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  // Detect FullStory to prevent fetch errors
+  const isFullStoryDetected = !!(
+    (window as any).FS ||
+    document.querySelector('script[src*="fullstory"]') ||
+    document.querySelector('script[src*="fs.js"]') ||
+    (window.fetch && window.fetch.toString().includes('messageHandler'))
+  );
+
   const fetchApiData = async () => {
+    if (isFullStoryDetected) {
+      setError("FullStory detected - automatic API fetching disabled. Please test endpoints manually.");
+      return;
+    }
+
     setLoading(true);
     setError("");
-    
+
     try {
       const response = await fetch('/api');
       if (!response.ok) {
@@ -45,7 +58,49 @@ export default function ApiDocs() {
   };
 
   useEffect(() => {
-    fetchApiData();
+    if (!isFullStoryDetected) {
+      fetchApiData();
+    } else {
+      // Provide static data when FullStory is detected
+      setApiData({
+        title: "ChargeSource API",
+        version: "1.0.0",
+        timestamp: new Date().toISOString(),
+        totalEndpoints: 5,
+        endpoints: [
+          {
+            method: "GET",
+            path: "/api",
+            description: "API Index - lists all available endpoints",
+            example: `${window.location.origin}/api`
+          },
+          {
+            method: "GET",
+            path: "/api/ping",
+            description: "Health check endpoint",
+            example: `${window.location.origin}/api/ping`
+          },
+          {
+            method: "GET",
+            path: "/api/demo",
+            description: "Demo data endpoint",
+            example: `${window.location.origin}/api/demo`
+          },
+          {
+            method: "POST",
+            path: "/api/create-storage-buckets",
+            description: "Create Supabase storage buckets",
+            example: `${window.location.origin}/api/create-storage-buckets`
+          },
+          {
+            method: "POST",
+            path: "/api/crm/leads",
+            description: "Submit CRM lead data",
+            example: `${window.location.origin}/api/crm/leads`
+          }
+        ]
+      });
+    }
   }, []);
 
   const copyToClipboard = (text: string) => {
