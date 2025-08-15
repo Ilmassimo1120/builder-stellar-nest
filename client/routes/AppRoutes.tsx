@@ -107,6 +107,14 @@ const AppRoutes = () => (
       }
     />
     <Route
+      path="/oauth-integration-test"
+      element={
+        <PublicLazyRoute>
+          <OAuthIntegrationTest />
+        </PublicLazyRoute>
+      }
+    />
+    <Route
       path="/client/quote/:quoteId"
       element={
         <PublicLazyRoute>
