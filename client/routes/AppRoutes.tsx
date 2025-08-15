@@ -89,6 +89,14 @@ const AppRoutes = () => (
       }
     />
     <Route
+      path="/auth/callback"
+      element={
+        <PublicLazyRoute>
+          <OAuthCallback />
+        </PublicLazyRoute>
+      }
+    />
+    <Route
       path="/client/quote/:quoteId"
       element={
         <PublicLazyRoute>
