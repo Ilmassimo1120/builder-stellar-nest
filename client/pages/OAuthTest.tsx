@@ -1,6 +1,6 @@
 import React from "react";
 import { GoogleOAuthButton } from "@/components/GoogleOAuthButton";
-import { useSupabaseAuth } from "@/hooks/useSupabaseAuth";
+import { useAuth } from "@/hooks/useAuth";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/ui/logo";
