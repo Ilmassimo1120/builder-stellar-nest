@@ -142,6 +142,14 @@ const AppRoutes = () => (
       }
     />
     <Route
+      path="/ApiDocs"
+      element={
+        <PublicLazyRoute>
+          <ApiDocs />
+        </PublicLazyRoute>
+      }
+    />
+    <Route
       path="/api-status"
       element={
         <PublicLazyRoute>
