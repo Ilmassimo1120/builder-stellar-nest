@@ -160,6 +160,30 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const loginWithGoogle = async (): Promise<boolean> => {
+    try {
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`,
+          queryParams: {
+            access_type: 'offline',
+            prompt: 'consent',
+          },
+        }
+      });
+
+      if (error) throw error;
+
+      // OAuth will redirect, so we return true immediately
+      // The actual session will be handled after redirect
+      return true;
+    } catch (error) {
+      console.error("Google OAuth error:", error);
+      return false;
+    }
+  };
+
   const register = async (userData: any): Promise<boolean> => {
     try {
       // Generate a proper UUID for compatibility with database
