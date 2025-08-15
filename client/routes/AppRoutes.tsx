@@ -14,6 +14,7 @@ const QuoteBuilder = lazy(() => import("../pages/QuoteBuilder"));
 const ClientPortal = lazy(() => import("../pages/ClientPortal"));
 const Login = lazy(() => import("../pages/Login"));
 const Register = lazy(() => import("../pages/Register"));
+const OAuthCallback = lazy(() => import("../pages/OAuthCallback"));
 const Catalogue = lazy(() => import("../pages/Catalogue"));
 const AdminCatalogue = lazy(() => import("../pages/AdminCatalogue"));
 const Settings = lazy(() => import("../pages/Settings"));
