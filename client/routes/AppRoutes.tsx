@@ -20,6 +20,7 @@ const OAuthIntegrationTest = lazy(() => import("../pages/OAuthIntegrationTest"))
 const OAuthDebug = lazy(() => import("../pages/OAuthDebug"));
 const ApiDocs = lazy(() => import("../pages/ApiDocs"));
 const ApiStatus = lazy(() => import("../pages/ApiStatus"));
+const SimpleApiTest = lazy(() => import("../pages/SimpleApiTest"));
 const Catalogue = lazy(() => import("../pages/Catalogue"));
 const AdminCatalogue = lazy(() => import("../pages/AdminCatalogue"));
 const Settings = lazy(() => import("../pages/Settings"));
