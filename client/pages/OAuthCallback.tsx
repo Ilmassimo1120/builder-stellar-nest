@@ -72,9 +72,9 @@ export default function OAuthCallback() {
           localStorage.setItem("chargeSourceUser", JSON.stringify(localUser));
 
           setStatus('success');
-          // Small delay to show success state
+          // Small delay to show success state, then reload to refresh auth state
           setTimeout(() => {
-            navigate('/dashboard');
+            window.location.href = '/dashboard';
           }, 1500);
         } else {
           setStatus('error');
