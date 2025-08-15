@@ -60,11 +60,47 @@ export default function ApiStatus() {
 
   const testEndpoint = async (endpoint: string): Promise<TestResult> => {
     const startTime = Date.now();
-    
+
     try {
-      const response = await fetch(endpoint);
+      // If FullStory is detected, provide manual testing info instead
+      if (isFullStoryDetected) {
+        return {
+          endpoint,
+          status: 'error',
+          responseTime: Date.now() - startTime,
+          error: 'FullStory detected - automatic testing disabled. Please test manually.'
+        };
+      }
+
+      // Create a safe fetch wrapper
+      const safeFetch = async (url: string) => {
+        // Try to use original fetch if available
+        const originalFetch = (window as any)._originalFetch || window.fetch;
+
+        // Add timeout to prevent hanging
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 10000);
+
+        try {
+          const response = await originalFetch(url, {
+            signal: controller.signal,
+            method: 'GET',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+            },
+          });
+          clearTimeout(timeoutId);
+          return response;
+        } catch (err) {
+          clearTimeout(timeoutId);
+          throw err;
+        }
+      };
+
+      const response = await safeFetch(endpoint);
       const responseTime = Date.now() - startTime;
-      
+
       if (!response.ok) {
         return {
           endpoint,
@@ -73,9 +109,9 @@ export default function ApiStatus() {
           error: `HTTP ${response.status}: ${response.statusText}`
         };
       }
-      
+
       const data = await response.json();
-      
+
       return {
         endpoint,
         status: 'success',
@@ -83,11 +119,24 @@ export default function ApiStatus() {
         data
       };
     } catch (error) {
+      const responseTime = Date.now() - startTime;
+      let errorMessage = 'Unknown error';
+
+      if (error instanceof Error) {
+        if (error.name === 'AbortError') {
+          errorMessage = 'Request timeout (10s)';
+        } else if (error.message.includes('fetch')) {
+          errorMessage = 'Fetch API compromised (likely FullStory). Try manual testing.';
+        } else {
+          errorMessage = error.message;
+        }
+      }
+
       return {
         endpoint,
         status: 'error',
-        responseTime: Date.now() - startTime,
-        error: error instanceof Error ? error.message : 'Unknown error'
+        responseTime,
+        error: errorMessage
       };
     }
   };
