@@ -37,6 +37,7 @@ interface SupabaseAuthContextType {
     password: string,
     rememberMe?: boolean,
   ) => Promise<boolean>;
+  loginWithGoogle: () => Promise<boolean>;
   register: (userData: RegisterData) => Promise<boolean>;
   logout: () => Promise<void>;
   updateUser: (userData: Partial<User>) => Promise<void>;
