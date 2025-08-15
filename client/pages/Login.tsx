@@ -136,6 +136,27 @@ export default function Login() {
             </CardDescription>
           </CardHeader>
           <CardContent>
+            {/* Google OAuth Button */}
+            <div className="space-y-4">
+              <GoogleOAuthButton
+                text="Continue with Google"
+                variant="outline"
+                className="border-primary/20 hover:bg-primary/5"
+              />
+
+              {/* Divider */}
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <span className="w-full border-t" />
+                </div>
+                <div className="relative flex justify-center text-xs uppercase">
+                  <span className="bg-background px-2 text-muted-foreground">
+                    Or continue with email
+                  </span>
+                </div>
+              </div>
+            </div>
+
             <form onSubmit={handleSubmit} className="space-y-4">
               {error && (
                 <Alert variant="destructive">
