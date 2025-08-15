@@ -266,10 +266,52 @@ export default function ApiStatus() {
           </CardContent>
         </Card>
 
+        {/* Manual Testing Section for FullStory */}
+        {isFullStoryDetected && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Eye className="w-5 h-5 text-yellow-500" />
+                Manual API Testing
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <Alert>
+                <AlertTriangle className="h-4 w-4" />
+                <AlertDescription>
+                  Since FullStory is interfering with fetch requests, please test these API endpoints manually:
+                </AlertDescription>
+              </Alert>
+
+              <div className="grid gap-2">
+                {endpoints.map((endpoint, index) => (
+                  <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
+                    <div>
+                      <code className="text-sm font-mono">{endpoint.path}</code>
+                      <span className="text-sm text-muted-foreground ml-2">
+                        - {endpoint.description}
+                      </span>
+                    </div>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => window.open(endpoint.path, '_blank')}
+                    >
+                      Test Manually
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
         {/* Test Results */}
         <Card>
           <CardHeader>
-            <CardTitle>Endpoint Test Results</CardTitle>
+            <CardTitle>
+              {isFullStoryDetected ? 'Automatic Testing Disabled' : 'Endpoint Test Results'}
+            </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             {testResults.map((result, index) => (
