@@ -17,6 +17,8 @@ export default function ApiStatus() {
   const [testResults, setTestResults] = useState<TestResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [environment, setEnvironment] = useState<'local' | 'deployed'>('local');
+  const [isFullStoryDetected, setIsFullStoryDetected] = useState(false);
+  const [fetchMethod, setFetchMethod] = useState<'native' | 'iframe' | 'manual'>('native');
 
   const endpoints = [
     { path: '/api', method: 'GET', description: 'API Index' },
@@ -24,13 +26,36 @@ export default function ApiStatus() {
     { path: '/api/demo', method: 'GET', description: 'Demo Data' },
   ];
 
-  useEffect(() => {
-    // Detect environment
+  // Detect problematic environments
+  const detectEnvironmentIssues = () => {
     const hostname = window.location.hostname;
-    setEnvironment(hostname === 'localhost' || hostname === '127.0.0.1' ? 'local' : 'deployed');
-    
-    // Auto-test on load
-    testAllEndpoints();
+    const isLocal = hostname === 'localhost' || hostname === '127.0.0.1';
+    setEnvironment(isLocal ? 'local' : 'deployed');
+
+    // Check for FullStory
+    const hasFullStory = !!(
+      (window as any).FS ||
+      document.querySelector('script[src*="fullstory"]') ||
+      document.querySelector('script[src*="fs.js"]') ||
+      (window.fetch && window.fetch.toString().includes('messageHandler'))
+    );
+
+    setIsFullStoryDetected(hasFullStory);
+
+    if (hasFullStory) {
+      setFetchMethod('manual');
+    } else {
+      setFetchMethod('native');
+    }
+  };
+
+  useEffect(() => {
+    detectEnvironmentIssues();
+
+    // Auto-test on load if fetch is safe
+    if (!isFullStoryDetected) {
+      testAllEndpoints();
+    }
   }, []);
 
   const testEndpoint = async (endpoint: string): Promise<TestResult> => {
