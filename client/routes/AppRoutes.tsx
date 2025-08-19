@@ -12,6 +12,7 @@ const ProjectDetail = lazy(() => import("../pages/ProjectDetail"));
 const Quotes = lazy(() => import("../pages/Quotes"));
 const QuoteBuilder = lazy(() => import("../pages/QuoteBuilder"));
 const ClientPortal = lazy(() => import("../pages/ClientPortal"));
+const ClientPortalDemo = lazy(() => import("../pages/ClientPortalDemo"));
 const Login = lazy(() => import("../pages/Login"));
 const Register = lazy(() => import("../pages/Register"));
 const OAuthCallback = lazy(() => import("../pages/OAuthCallback"));
