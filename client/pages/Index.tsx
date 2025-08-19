@@ -175,7 +175,7 @@ export default function Index() {
               <Link to="/login">Sign In</Link>
             </Button>
             <Button size="sm" asChild>
-              <Link to="/dashboard">Get Started</Link>
+              <Link to={isAuthenticated ? "/dashboard" : "/login"}>Get Started</Link>
             </Button>
           </div>
         </div>
