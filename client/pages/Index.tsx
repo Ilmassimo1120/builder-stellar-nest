@@ -31,6 +31,7 @@ import { Logo } from "@/components/ui/logo";
 import { useAuth } from "@/hooks/useAuth";
 
 export default function Index() {
+  const { isAuthenticated } = useAuth();
   const features = [
     {
       icon: <Zap className="w-8 h-8 text-primary" />,
