@@ -205,8 +205,10 @@ export default function Index() {
                 Start Free Trial
               </Link>
             </Button>
-            <Button variant="outline" size="lg" className="text-lg px-8 py-4">
-              Watch Demo
+            <Button variant="outline" size="lg" className="text-lg px-8 py-4" asChild>
+              <Link to="/client-portal-demo">
+                View Client Portal Demo
+              </Link>
             </Button>
           </div>
 
