@@ -84,18 +84,20 @@ export default function AuthTest() {
             </div>
 
             {/* getUser test */}
-            <Alert variant={authState.getUser?.success ? 'default' : 'destructive'}>
+            <Alert variant={authState.getUser?.success ? 'default' : 'default'}>
               <AlertDescription>
                 <div className="font-semibold">
-                  getUser(): {authState.getUser?.success ? '✅ Success' : '❌ Failed'}
+                  getUser(): {authState.getUser?.success ? '✅ Authenticated' : '🔒 No Active Session'}
                 </div>
                 {authState.getUser?.success ? (
                   <div className="text-sm mt-1">
                     User: {authState.getUser.email} (ID: {authState.getUser.userId})
                   </div>
                 ) : (
-                  <div className="text-sm mt-1 text-red-600">
-                    Error: {authState.getUser?.error || 'Unknown error'}
+                  <div className="text-sm mt-1 text-muted-foreground">
+                    {authState.getUser?.error?.includes('Auth session missing')
+                      ? 'No user is currently logged in to Supabase'
+                      : `Error: ${authState.getUser?.error || 'Unknown error'}`}
                   </div>
                 )}
               </AlertDescription>
