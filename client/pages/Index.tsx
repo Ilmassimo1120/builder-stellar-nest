@@ -137,12 +137,14 @@ export default function Index() {
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <Logo size="xl" />
           <nav className="hidden md:flex items-center space-x-6 -ml-px justify-center flex-1">
-            <Link
-              to="/dashboard"
-              className="text-sm font-medium hover:text-primary transition-colors"
-            >
-              Dashboard
-            </Link>
+            {isAuthenticated && (
+              <Link
+                to="/dashboard"
+                className="text-sm font-medium hover:text-primary transition-colors"
+              >
+                Dashboard
+              </Link>
+            )}
             <Link
               to="/features"
               className="text-sm font-medium hover:text-primary transition-colors"
