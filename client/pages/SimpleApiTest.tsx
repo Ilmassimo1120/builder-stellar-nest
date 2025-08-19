@@ -12,7 +12,7 @@ export default function SimpleApiTest() {
     (window as any).FS ||
     document.querySelector('script[src*="fullstory"]') ||
     document.querySelector('script[src*="fs.js"]') ||
-    (window.fetch && window.fetch.toString().includes('messageHandler'))
+    (window.fetch && window.fetch.toString().includes('fullstory'))
   );
 
   const environment = window.location.hostname === 'localhost' ? 'local' : 'deployed';
