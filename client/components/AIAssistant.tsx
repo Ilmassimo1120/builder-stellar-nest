@@ -265,7 +265,7 @@ Need help with specific compliance requirements?`;
 
 **Electrical Problems:**
 • Circuit breaker tripping → Check load, connections
-�� Earth fault → Inspect cable integrity, connections
+• Earth fault → Inspect cable integrity, connections
 • Overheating → Verify ventilation, load management
 
 **Communication Issues:**
@@ -278,12 +278,14 @@ Need help with specific compliance requirements?`;
 • Cable not releasing → Emergency release procedure
 • Payment failures → Network and backend verification
 
+If these solutions don't resolve your issue, our support team can provide personalized assistance with your specific problem.
+
 What specific issue are you experiencing?`;
       suggestions = [
         "Circuit breaker keeps tripping",
         "Charger won't start",
         "Network connectivity issues",
-        "Safety system activated",
+        "Get human support help",
       ];
       actions = [
         {
@@ -292,7 +294,7 @@ What specific issue are you experiencing?`;
           icon: <Settings className="w-4 h-4" />,
         },
         {
-          label: "Contact Support",
+          label: "Contact Support Team",
           action: "support",
           icon: <HelpCircle className="w-4 h-4" />,
         },
