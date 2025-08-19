@@ -484,7 +484,7 @@ export default function HelpCentre() {
                   Australian Contractors" - a 50-page resource covering
                   everything from site assessment to project completion.
                 </p>
-                <Button size="lg" variant="secondary" className="text-primary">
+                <Button size="lg" variant="secondary" className="text-white">
                   Download Free Guide
                   <Download className="ml-2 w-5 h-5" />
                 </Button>
