@@ -336,8 +336,6 @@ export default function DocumentTest() {
         </div>
       </div>
 
-      {/* FullStory-Safe Storage Test - Primary testing method */}
-      <OfflineStorageTest />
 
       {/* Raw Bucket Verification - Check if buckets actually exist */}
       <BucketVerifier />
