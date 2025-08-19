@@ -1170,8 +1170,8 @@ export default function Dashboard() {
                   <p className="text-sm text-purple-700 mb-2">
                     Join our upcoming EV charging certification courses.
                   </p>
-                  <Button size="sm" variant="outline" className="w-full">
-                    View Courses
+                  <Button size="sm" variant="outline" className="w-full" asChild>
+                    <Link to="/training">View Courses</Link>
                   </Button>
                 </div>
               </div>
