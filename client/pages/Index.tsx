@@ -144,6 +144,12 @@ export default function Index() {
               Features
             </Link>
             <Link
+              to="/products"
+              className="text-sm font-medium hover:text-primary transition-colors"
+            >
+              Products
+            </Link>
+            <Link
               to="/integrations"
               className="text-sm font-medium hover:text-primary transition-colors"
             >
