@@ -1,5 +1,4 @@
 import { supabase } from "../supabase";
-import { localFileStorageService } from "./localFileStorageService";
 
 export interface FileUpload {
   file: File;
@@ -240,19 +239,11 @@ class FileStorageService {
               },
             };
 
-            const localResult =
-              await localFileStorageService.simulateBasicFileUpload(
-                upload,
-                onProgress,
-              );
-            uploadData = { path: localResult.path };
-            uploadError = null;
-            console.log(
-              "✅ File stored locally as fallback:",
-              localResult.name,
+            throw new Error(
+              `File upload failed: ${uploadError.message}. Please check your Supabase connection.`,
             );
-          } catch (localError) {
-            console.error("Local storage fallback failed:", localError);
+          } catch (fallbackError) {
+            console.error("Upload failed:", fallbackError);
             throw new Error(
               `All storage methods failed: ${edgeFunctionError.message}`,
             );
