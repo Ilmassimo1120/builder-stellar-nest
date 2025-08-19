@@ -729,7 +729,19 @@ const Integrations = () => {
               <Plus className="w-4 h-4 mr-2" />
               Request Integration
             </Button>
-            <Button size="lg" variant="outline">
+            <Button
+              size="lg"
+              variant="outline"
+              onClick={() => {
+                // Trigger the Support AI Assistant
+                const supportButton = document.querySelector('[data-support-trigger]') as HTMLButtonElement;
+                if (supportButton) {
+                  supportButton.click();
+                } else {
+                  window.dispatchEvent(new CustomEvent('openSupportAssistant'));
+                }
+              }}
+            >
               <HelpCircle className="w-4 h-4 mr-2" />
               Contact Support
             </Button>
