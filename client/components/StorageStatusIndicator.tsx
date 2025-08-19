@@ -12,7 +12,6 @@ import {
   RefreshCw,
   Info,
 } from "lucide-react";
-import { localFileStorageService } from "@/lib/services/localFileStorageService";
 import CORSFixGuide from "./CORSFixGuide";
 
 interface StorageStatusIndicatorProps {
@@ -24,27 +23,12 @@ export default function StorageStatusIndicator({
   className,
   showDetails = false,
 }: StorageStatusIndicatorProps) {
-  const [localStats, setLocalStats] = useState({
-    totalFiles: 0,
-    totalSize: 0,
-    storageUsed: "0 B",
-  });
   const [showGuide, setShowGuide] = useState(false);
   const [isOnline, setIsOnline] = useState(navigator.onLine);
 
   useEffect(() => {
-    const updateStats = () => {
-      const stats = localFileStorageService.getLocalStorageUsage();
-      setLocalStats(stats);
-    };
-
     const handleOnline = () => setIsOnline(true);
     const handleOffline = () => setIsOnline(false);
-
-    updateStats();
-
-    // Update stats every 5 seconds
-    const interval = setInterval(updateStats, 5000);
 
     // Listen for online/offline events
     window.addEventListener("online", handleOnline);
