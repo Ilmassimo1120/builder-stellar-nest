@@ -245,7 +245,6 @@ export default function TrainingPublic() {
               >
                 <Link to="/register">
                   Start Free Trial
-                  <ArrowRight className="ml-2 w-5 h-5" />
                 </Link>
               </Button>
               <Button
