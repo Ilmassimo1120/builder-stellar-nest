@@ -606,12 +606,14 @@ Could you please be more specific about what you need help with?`;
         setTimeout(() => {
           setIsOpen(false);
           // Trigger the Support AI Assistant to open
-          const supportButton = document.querySelector('[data-support-trigger]') as HTMLButtonElement;
+          const supportButton = document.querySelector(
+            "[data-support-trigger]",
+          ) as HTMLButtonElement;
           if (supportButton) {
             supportButton.click();
           } else {
             // Fallback: dispatch a custom event
-            window.dispatchEvent(new CustomEvent('openSupportAssistant'));
+            window.dispatchEvent(new CustomEvent("openSupportAssistant"));
           }
         }, 1500);
         break;

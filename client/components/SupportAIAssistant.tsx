@@ -149,10 +149,10 @@ export function SupportAIAssistant() {
       setIsOpen(true);
     };
 
-    window.addEventListener('openSupportAssistant', handleOpenSupport);
+    window.addEventListener("openSupportAssistant", handleOpenSupport);
 
     return () => {
-      window.removeEventListener('openSupportAssistant', handleOpenSupport);
+      window.removeEventListener("openSupportAssistant", handleOpenSupport);
     };
   }, []);
 

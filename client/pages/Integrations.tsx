@@ -734,11 +734,13 @@ const Integrations = () => {
               variant="outline"
               onClick={() => {
                 // Trigger the Support AI Assistant
-                const supportButton = document.querySelector('[data-support-trigger]') as HTMLButtonElement;
+                const supportButton = document.querySelector(
+                  "[data-support-trigger]",
+                ) as HTMLButtonElement;
                 if (supportButton) {
                   supportButton.click();
                 } else {
-                  window.dispatchEvent(new CustomEvent('openSupportAssistant'));
+                  window.dispatchEvent(new CustomEvent("openSupportAssistant"));
                 }
               }}
             >
