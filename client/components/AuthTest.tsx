@@ -7,6 +7,7 @@ import { supabase } from '@/lib/supabase';
 export default function AuthTest() {
   const [authState, setAuthState] = useState<any>(null);
   const [loading, setLoading] = useState(false);
+  const [loginLoading, setLoginLoading] = useState(false);
 
   const testAuth = async () => {
     setLoading(true);
