@@ -223,7 +223,7 @@ DC installations require specialized expertise:
 • Earth leakage protection (RCD)
 • Adequate earthing systems
 • Cable sizing for continuous load
-• Emergency stop requirements
+��� Emergency stop requirements
 • Accessibility compliance (DDA)
 
 **Testing Requirements:**
@@ -472,6 +472,41 @@ What specific information are you looking for?`;
       ];
     }
 
+    // Check for support-related queries
+    else if (
+      message.includes("support") ||
+      message.includes("help me") ||
+      message.includes("assistance") ||
+      message.includes("human") ||
+      message.includes("agent")
+    ) {
+      response = `🙋‍♂️ **Get Human Support**
+
+I can connect you directly with our specialized support team! Our human experts can provide:
+
+• **Personal assistance** with complex technical issues
+• **Live troubleshooting** for urgent problems
+• **Custom solutions** for unique installations
+• **Account and billing** support
+• **Sales consultations** for new projects
+
+Our support team responds within 30 minutes to 8 hours depending on the issue priority.
+
+Would you like me to connect you with a support specialist now?`;
+      suggestions = [
+        "Yes, connect me with support",
+        "What are the response times?",
+        "I'll try AI help first",
+      ];
+      actions = [
+        {
+          label: "Connect with Support Team",
+          action: "support",
+          icon: <HelpCircle className="w-4 h-4" />,
+        },
+      ];
+    }
+
     // Fallback for unrecognized queries
     else {
       response = `I'd be happy to help! 🤖 As your EV charging specialist, I can assist with:
@@ -488,12 +523,21 @@ What specific information are you looking for?`;
 • Feature navigation and tutorials
 • Data export and reporting
 
+If you need personalized assistance, I can also connect you with our human support team.
+
 Could you please be more specific about what you need help with?`;
       suggestions = [
         "Installation help",
         "Standards and compliance",
         "Platform features",
-        "Troubleshooting guide",
+        "Connect with support team",
+      ];
+      actions = [
+        {
+          label: "Contact Support Team",
+          action: "support",
+          icon: <HelpCircle className="w-4 h-4" />,
+        },
       ];
     }
 
@@ -686,7 +730,7 @@ Could you please be more specific about what you need help with?`;
     const complianceMessage: ChatMessage = {
       id: `compliance-${Date.now()}`,
       type: "assistant",
-      content: `🛡️ **Compliance Checklist**\n\n**Pre-Installation Requirements:**\n✅ Site assessment completed\n✅ Electrical design approved by authority\n✅ Permits obtained\n✅ Equipment compliance certificates verified\n\n**Installation Compliance:**\n✅ AS/NZS 3000 wiring rules followed\n✅ Cable sizing per AS/NZS 3008\n✅ RCD protection installed (Type A minimum)\n✅ Circuit protection correctly sized\n✅ Earthing system verified\n\n**Testing Requirements (AS/NZS 3017):**\n✅ Insulation resistance testing (>1MΩ)\n✅ Earth continuity verification\n✅ RCD functionality testing\n✅ Polarity verification\n✅ Voltage measurements\n\n**Documentation:**\n✅ Installation certificate completed\n✅ Test results recorded\n✅ Compliance statement issued\n✅ Client handover documentation\n\n**Ongoing Requirements:**\n✅ Periodic testing schedule established\n✅ Maintenance procedures documented\n✅ Emergency contact information provided`,
+      content: `🛡️ **Compliance Checklist**\n\n**Pre-Installation Requirements:**\n✅ Site assessment completed\n✅ Electrical design approved by authority\n✅ Permits obtained\n✅ Equipment compliance certificates verified\n\n**Installation Compliance:**\n✅ AS/NZS 3000 wiring rules followed\n✅ Cable sizing per AS/NZS 3008\n✅ RCD protection installed (Type A minimum)\n✅ Circuit protection correctly sized\n✅ Earthing system verified\n\n**Testing Requirements (AS/NZS 3017):**\n✅ Insulation resistance testing (>1MΩ)\n✅ Earth continuity verification\n�� RCD functionality testing\n✅ Polarity verification\n✅ Voltage measurements\n\n**Documentation:**\n✅ Installation certificate completed\n✅ Test results recorded\n✅ Compliance statement issued\n✅ Client handover documentation\n\n**Ongoing Requirements:**\n✅ Periodic testing schedule established\n✅ Maintenance procedures documented\n✅ Emergency contact information provided`,
       timestamp: new Date(),
       suggestions: [
         "Download test sheets",
