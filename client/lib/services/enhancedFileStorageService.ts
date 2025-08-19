@@ -1,5 +1,4 @@
 import { supabase } from "../supabase";
-import { localFileStorageService } from "./localFileStorageService";
 
 export type BucketName =
   | "product-images"
@@ -473,32 +472,9 @@ class EnhancedFileStorageService {
             `⚠️ Cloud storage unavailable (${errorMessage}), using local fallback for: ${request.file.name}`,
           );
 
-          try {
-            // Use local storage fallback
-            const localResult =
-              await localFileStorageService.simulateFileUpload(request);
-            console.log(
-              "✅ File stored locally as fallback:",
-              localResult.fileName,
-            );
-
-            // Add metadata to indicate this is a local fallback
-            localResult.tags = [
-              ...(localResult.tags || []),
-              "local-fallback",
-              "pending-sync",
-            ];
-            localResult.description = localResult.description
-              ? `${localResult.description} (Stored locally - will sync when cloud storage is available)`
-              : "Stored locally - will sync when cloud storage is available";
-
-            return localResult;
-          } catch (localError) {
-            console.error("Local storage fallback also failed:", localError);
-            throw new Error(
-              `Both cloud and local storage failed: ${errorMessage}`,
-            );
-          }
+          throw new Error(
+            `Storage upload failed: ${errorMessage}. Please check your Supabase connection.`,
+          );
         } else {
           throw storageError; // Re-throw for unexpected errors
         }
@@ -613,20 +589,9 @@ class EnhancedFileStorageService {
           `⚠️ Cloud services unavailable, attempting local storage fallback...`,
         );
 
-        try {
-          // Use local storage as complete fallback
-          const localResult =
-            await localFileStorageService.simulateFileUpload(request);
-          console.log(
-            "✅ File stored locally as complete fallback:",
-            localResult.fileName,
-          );
-          return localResult;
-        } catch (localError) {
-          throw new Error(
-            `Upload failed: Cloud storage, database, and local fallback all unavailable. ${localError.message}`,
-          );
-        }
+        throw new Error(
+          `Upload failed: Both cloud storage and database are unavailable. Please check your Supabase connection.`,
+        );
       } else if (!uploadSuccess) {
         console.warn(
           `⚠️ File metadata saved but file not stored in cloud. Set up storage buckets.`,
