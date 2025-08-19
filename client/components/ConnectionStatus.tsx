@@ -28,11 +28,10 @@ export default function ConnectionStatus() {
       if (typeof window !== "undefined") {
         const hasFullStory =
           !!(window as any).FS ||
-          document.querySelector('script[src*="fullstory"]');
-        const hasFetchInterception =
-          window.fetch && window.fetch.toString().includes("messageHandler");
+          document.querySelector('script[src*="fullstory"]') ||
+          (window.fetch && window.fetch.toString().includes("fullstory"));
 
-        if (hasFullStory || hasFetchInterception) {
+        if (hasFullStory) {
           console.log(
             "🔄 ConnectionStatus: Monitoring tools detected, using local mode",
           );
