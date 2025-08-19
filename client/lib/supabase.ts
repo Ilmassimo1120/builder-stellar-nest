@@ -29,7 +29,7 @@ if (supabaseAnonKey.includes("your-anon-key") || supabaseAnonKey.length < 100) {
   );
 }
 
-// Create Supabase client
+// Create Supabase client with FullStory bypass
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     autoRefreshToken: true,
@@ -40,6 +40,10 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
     params: {
       eventsPerSecond: 10,
     },
+  },
+  global: {
+    // Use smart fetch that bypasses FullStory when detected
+    fetch: smartFetch,
   },
 });
 
