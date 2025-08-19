@@ -194,6 +194,14 @@ const AppRoutes = () => (
         </PublicLazyRoute>
       }
     />
+    <Route
+      path="/client-portal-demo"
+      element={
+        <PublicLazyRoute>
+          <ClientPortalDemo />
+        </PublicLazyRoute>
+      }
+    />
 
     {/* Protected Routes */}
     <Route
