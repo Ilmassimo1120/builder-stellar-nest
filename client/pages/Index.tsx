@@ -204,7 +204,7 @@ export default function Index() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
             <Button size="lg" className="text-lg px-8" asChild>
               <Link to={isAuthenticated ? "/dashboard" : "/login"}>
-                Start Free Trial <ArrowRight className="ml-2 w-5 h-5" />
+                Start Free Trial
               </Link>
             </Button>
             <Button variant="outline" size="lg" className="text-lg px-8">
