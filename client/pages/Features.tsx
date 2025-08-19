@@ -247,7 +247,6 @@ const Features = () => {
             <Button size="lg" asChild>
               <Link to="/register">
                 Start Free Trial
-                <ArrowRight className="w-4 h-4 ml-2" />
               </Link>
             </Button>
             <Button size="lg" variant="outline" asChild>
@@ -496,7 +495,6 @@ const Features = () => {
             <Button size="lg" asChild>
               <Link to="/register">
                 Start Free Trial
-                <ArrowRight className="w-4 h-4 ml-2" />
               </Link>
             </Button>
             <Button size="lg" variant="outline" asChild>
