@@ -53,7 +53,7 @@ export default function IndexWorking() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/register">
               <Button size="lg" className="flex items-center gap-2">
-                Start Free Trial <ArrowRight className="h-4 w-4" />
+                Start Free Trial
               </Button>
             </Link>
             <Link to="/demo">
