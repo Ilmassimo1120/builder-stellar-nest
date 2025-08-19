@@ -44,7 +44,6 @@ import ClearStorageButton from "@/components/ClearStorageButton";
 import SupabaseDebugger from "@/components/SupabaseDebugger";
 import DirectStorageTest from "@/components/DirectStorageTest";
 import BucketVerifier from "@/components/BucketVerifier";
-import OfflineStorageTest from "@/components/OfflineStorageTest";
 
 export default function DocumentTest() {
   const { user } = useAuth();
