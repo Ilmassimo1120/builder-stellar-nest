@@ -623,7 +623,7 @@ export default function Index() {
                   asChild
                 >
                   <Link to={isAuthenticated ? "/dashboard" : "/login"}>
-                    Get Started Free <ArrowRight className="ml-2 w-5 h-5" />
+                    Get Started Free
                   </Link>
                 </Button>
                 <Button
