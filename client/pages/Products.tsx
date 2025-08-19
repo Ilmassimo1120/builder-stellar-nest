@@ -36,7 +36,8 @@ const Products = () => {
     {
       icon: Home,
       title: "Residential EV Chargers",
-      description: "Complete range of home EV charging solutions for Australian households",
+      description:
+        "Complete range of home EV charging solutions for Australian households",
       products: [
         "AC Wallbox Chargers (7.4kW - 22kW)",
         "Smart Home Integration",
@@ -50,7 +51,8 @@ const Products = () => {
     {
       icon: Factory,
       title: "Commercial EV Chargers",
-      description: "High-performance charging infrastructure for businesses and fleet operators",
+      description:
+        "High-performance charging infrastructure for businesses and fleet operators",
       products: [
         "DC Fast Chargers (50kW - 350kW)",
         "Multi-Port AC Charging Stations",
@@ -64,7 +66,8 @@ const Products = () => {
     {
       icon: Car,
       title: "Public Charging Infrastructure",
-      description: "Scalable solutions for public charging networks and destinations",
+      description:
+        "Scalable solutions for public charging networks and destinations",
       products: [
         "Ultra-Fast DC Chargers",
         "Destination Charging Solutions",
@@ -119,19 +122,39 @@ const Products = () => {
   const accessories = [
     {
       name: "Installation Accessories",
-      items: ["Mounting pedestals", "Cable management", "Ground anchors", "Signage"],
+      items: [
+        "Mounting pedestals",
+        "Cable management",
+        "Ground anchors",
+        "Signage",
+      ],
     },
     {
       name: "Safety Equipment",
-      items: ["Emergency stops", "Earth leakage protection", "Surge protection", "Isolation switches"],
+      items: [
+        "Emergency stops",
+        "Earth leakage protection",
+        "Surge protection",
+        "Isolation switches",
+      ],
     },
     {
       name: "Smart Features",
-      items: ["Load management", "Solar integration", "Time-of-use scheduling", "Remote monitoring"],
+      items: [
+        "Load management",
+        "Solar integration",
+        "Time-of-use scheduling",
+        "Remote monitoring",
+      ],
     },
     {
       name: "Compliance & Testing",
-      items: ["AS/NZS certification", "Installation testing", "Commissioning", "Compliance reports"],
+      items: [
+        "AS/NZS certification",
+        "Installation testing",
+        "Commissioning",
+        "Compliance reports",
+      ],
     },
   ];
 
@@ -200,8 +223,9 @@ const Products = () => {
             Solutions
           </h1>
           <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
-            From residential wall boxes to commercial fast chargers, discover our comprehensive 
-            range of EV charging products designed for Australian conditions and standards.
+            From residential wall boxes to commercial fast chargers, discover
+            our comprehensive range of EV charging products designed for
+            Australian conditions and standards.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
             <Button size="lg" className="text-lg px-8" asChild>
@@ -222,8 +246,8 @@ const Products = () => {
               Product Categories
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Choose from our comprehensive range of EV charging solutions, 
-              each designed to meet specific installation requirements and use cases.
+              Choose from our comprehensive range of EV charging solutions, each
+              designed to meet specific installation requirements and use cases.
             </p>
           </div>
 
@@ -279,8 +303,8 @@ const Products = () => {
               Featured Products
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Our most popular and reliable EV charging solutions, 
-              trusted by Australian electrical contractors nationwide.
+              Our most popular and reliable EV charging solutions, trusted by
+              Australian electrical contractors nationwide.
             </p>
           </div>
 
@@ -349,8 +373,8 @@ const Products = () => {
               Accessories & Services
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Complete your EV charging installation with our comprehensive range 
-              of accessories and professional services.
+              Complete your EV charging installation with our comprehensive
+              range of accessories and professional services.
             </p>
           </div>
 
@@ -387,8 +411,8 @@ const Products = () => {
               Why Choose Our Products?
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Every product in our range is carefully selected for Australian conditions 
-              and backed by comprehensive support.
+              Every product in our range is carefully selected for Australian
+              conditions and backed by comprehensive support.
             </p>
           </div>
 
@@ -399,10 +423,11 @@ const Products = () => {
               </div>
               <h3 className="font-semibold text-lg mb-2">AS/NZS Certified</h3>
               <p className="text-sm text-muted-foreground">
-                All products meet Australian and New Zealand electrical standards
+                All products meet Australian and New Zealand electrical
+                standards
               </p>
             </div>
-            
+
             <div className="text-center">
               <div className="w-16 h-16 bg-secondary/10 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Award className="w-8 h-8 text-secondary" />
@@ -412,7 +437,7 @@ const Products = () => {
                 Partner with industry leaders like ABB, Tesla, and EVBox
               </p>
             </div>
-            
+
             <div className="text-center">
               <div className="w-16 h-16 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Users className="w-8 h-8 text-accent" />
@@ -422,7 +447,7 @@ const Products = () => {
                 Technical support and training from our specialist team
               </p>
             </div>
-            
+
             <div className="text-center">
               <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Clock className="w-8 h-8 text-primary" />
@@ -445,8 +470,8 @@ const Products = () => {
                 Ready to Explore Our Products?
               </h3>
               <p className="text-xl mb-8 text-primary-foreground/90 max-w-2xl mx-auto">
-                Browse our complete catalogue or speak with our specialists 
-                to find the perfect EV charging solution for your project.
+                Browse our complete catalogue or speak with our specialists to
+                find the perfect EV charging solution for your project.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button
@@ -466,9 +491,7 @@ const Products = () => {
                   className="text-lg px-8 bg-white/10 border-white/20 text-white hover:bg-white/20"
                   asChild
                 >
-                  <Link to="/contact">
-                    Contact Specialist
-                  </Link>
+                  <Link to="/contact">Contact Specialist</Link>
                 </Button>
               </div>
             </CardContent>
@@ -483,7 +506,8 @@ const Products = () => {
             <div>
               <Logo size="sm" className="mb-4" />
               <p className="text-sm text-muted-foreground mb-4">
-                Comprehensive EV charging solutions for Australian electrical contractors.
+                Comprehensive EV charging solutions for Australian electrical
+                contractors.
               </p>
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <MapPin className="w-4 h-4" />
@@ -495,22 +519,34 @@ const Products = () => {
               <h4 className="font-semibold mb-4">Products</h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li>
-                  <Link to="/products" className="hover:text-primary transition-colors">
+                  <Link
+                    to="/products"
+                    className="hover:text-primary transition-colors"
+                  >
                     Residential Chargers
                   </Link>
                 </li>
                 <li>
-                  <Link to="/products" className="hover:text-primary transition-colors">
+                  <Link
+                    to="/products"
+                    className="hover:text-primary transition-colors"
+                  >
                     Commercial Chargers
                   </Link>
                 </li>
                 <li>
-                  <Link to="/products" className="hover:text-primary transition-colors">
+                  <Link
+                    to="/products"
+                    className="hover:text-primary transition-colors"
+                  >
                     DC Fast Chargers
                   </Link>
                 </li>
                 <li>
-                  <Link to="/products" className="hover:text-primary transition-colors">
+                  <Link
+                    to="/products"
+                    className="hover:text-primary transition-colors"
+                  >
                     Accessories
                   </Link>
                 </li>
@@ -521,22 +557,34 @@ const Products = () => {
               <h4 className="font-semibold mb-4">Support</h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li>
-                  <Link to="/help" className="hover:text-primary transition-colors">
+                  <Link
+                    to="/help"
+                    className="hover:text-primary transition-colors"
+                  >
                     Installation Guides
                   </Link>
                 </li>
                 <li>
-                  <Link to="/help" className="hover:text-primary transition-colors">
+                  <Link
+                    to="/help"
+                    className="hover:text-primary transition-colors"
+                  >
                     Technical Support
                   </Link>
                 </li>
                 <li>
-                  <Link to="/training" className="hover:text-primary transition-colors">
+                  <Link
+                    to="/training"
+                    className="hover:text-primary transition-colors"
+                  >
                     Training
                   </Link>
                 </li>
                 <li>
-                  <Link to="/compliance" className="hover:text-primary transition-colors">
+                  <Link
+                    to="/compliance"
+                    className="hover:text-primary transition-colors"
+                  >
                     Compliance
                   </Link>
                 </li>
@@ -547,22 +595,34 @@ const Products = () => {
               <h4 className="font-semibold mb-4">Company</h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li>
-                  <Link to="/about" className="hover:text-primary transition-colors">
+                  <Link
+                    to="/about"
+                    className="hover:text-primary transition-colors"
+                  >
                     About Us
                   </Link>
                 </li>
                 <li>
-                  <Link to="/contact" className="hover:text-primary transition-colors">
+                  <Link
+                    to="/contact"
+                    className="hover:text-primary transition-colors"
+                  >
                     Contact
                   </Link>
                 </li>
                 <li>
-                  <Link to="/careers" className="hover:text-primary transition-colors">
+                  <Link
+                    to="/careers"
+                    className="hover:text-primary transition-colors"
+                  >
                     Careers
                   </Link>
                 </li>
                 <li>
-                  <Link to="/news" className="hover:text-primary transition-colors">
+                  <Link
+                    to="/news"
+                    className="hover:text-primary transition-colors"
+                  >
                     News
                   </Link>
                 </li>
