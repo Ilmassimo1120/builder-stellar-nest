@@ -35,13 +35,10 @@ export default function StorageStatusIndicator({
     window.addEventListener("offline", handleOffline);
 
     return () => {
-      clearInterval(interval);
       window.removeEventListener("online", handleOnline);
       window.removeEventListener("offline", handleOffline);
     };
   }, []);
-
-  const hasLocalFiles = localStats.totalFiles > 0;
 
   return (
     <div className={className}>
@@ -60,20 +57,13 @@ export default function StorageStatusIndicator({
         </Badge>
 
         {/* Storage Status */}
-        {hasLocalFiles ? (
-          <Badge variant="secondary" className="flex items-center space-x-1">
-            <HardDrive className="h-3 w-3" />
-            <span>{localStats.totalFiles} local files</span>
-          </Badge>
-        ) : (
-          <Badge variant="outline" className="flex items-center space-x-1">
-            <Cloud className="h-3 w-3" />
-            <span>Cloud ready</span>
-          </Badge>
-        )}
+        <Badge variant={isOnline ? "outline" : "secondary"} className="flex items-center space-x-1">
+          <Cloud className="h-3 w-3" />
+          <span>{isOnline ? "Cloud ready" : "Offline mode"}</span>
+        </Badge>
 
-        {/* Show help button if there are local files or if offline */}
-        {(hasLocalFiles || !isOnline) && (
+        {/* Show help button if offline */}
+        {!isOnline && (
           <Button
             variant="ghost"
             size="sm"
@@ -85,17 +75,6 @@ export default function StorageStatusIndicator({
         )}
       </div>
 
-      {/* Status details */}
-      {showDetails && hasLocalFiles && (
-        <Alert className="mt-2">
-          <HardDrive className="h-4 w-4" />
-          <AlertDescription>
-            {localStats.totalFiles} files stored locally (
-            {localStats.storageUsed} used). Files will sync to cloud storage
-            when connection is restored.
-          </AlertDescription>
-        </Alert>
-      )}
 
       {/* Network status warning */}
       {!isOnline && (
