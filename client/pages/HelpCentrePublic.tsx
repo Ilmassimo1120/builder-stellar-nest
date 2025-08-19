@@ -321,10 +321,19 @@ export default function HelpCentrePublic() {
                       training materials, and expert support.
                     </p>
                     <div className="space-y-3">
-                      <Button size="lg" className="w-full px-8 py-4 text-lg" asChild>
+                      <Button
+                        size="lg"
+                        className="w-full px-8 py-4 text-lg"
+                        asChild
+                      >
                         <Link to="/register">Start Free Trial</Link>
                       </Button>
-                      <Button variant="outline" size="lg" className="w-full px-8 py-4 text-lg" asChild>
+                      <Button
+                        variant="outline"
+                        size="lg"
+                        className="w-full px-8 py-4 text-lg"
+                        asChild
+                      >
                         <Link to="/contact">Contact Sales</Link>
                       </Button>
                     </div>
@@ -417,9 +426,7 @@ export default function HelpCentrePublic() {
                     className="bg-primary hover:bg-primary/90 text-white font-semibold px-8 py-4 text-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
                     asChild
                   >
-                    <Link to="/register">
-                      Start Free Trial
-                    </Link>
+                    <Link to="/register">Start Free Trial</Link>
                   </Button>
                   <Button
                     size="lg"

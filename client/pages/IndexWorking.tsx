@@ -1,18 +1,24 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
-import { 
-  Zap, 
-  Calculator, 
-  Package, 
-  Users, 
-  Share2, 
-  PlugZap, 
-  CheckCircle2, 
-  ArrowRight, 
-  Star 
+import {
+  Zap,
+  Calculator,
+  Package,
+  Users,
+  Share2,
+  PlugZap,
+  CheckCircle2,
+  ArrowRight,
+  Star,
 } from "lucide-react";
 
 export default function IndexWorking() {
@@ -48,11 +54,15 @@ export default function IndexWorking() {
             Streamline Your EV Charging Projects
           </h1>
           <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Complete project management, quoting, and installation workflow for electrical contractors specializing in EV charging infrastructure.
+            Complete project management, quoting, and installation workflow for
+            electrical contractors specializing in EV charging infrastructure.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/register">
-              <Button size="lg" className="flex items-center gap-2 px-8 py-4 text-lg">
+              <Button
+                size="lg"
+                className="flex items-center gap-2 px-8 py-4 text-lg"
+              >
                 Start Free Trial
               </Button>
             </Link>
@@ -71,7 +81,8 @@ export default function IndexWorking() {
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold mb-4">Everything You Need</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              From initial quote to final installation, manage your entire EV charging project lifecycle.
+              From initial quote to final installation, manage your entire EV
+              charging project lifecycle.
             </p>
           </div>
 
@@ -81,7 +92,8 @@ export default function IndexWorking() {
                 <Calculator className="h-10 w-10 text-primary mb-4" />
                 <CardTitle>Smart Quoting</CardTitle>
                 <CardDescription>
-                  Generate accurate quotes with our comprehensive product database and pricing engine.
+                  Generate accurate quotes with our comprehensive product
+                  database and pricing engine.
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -91,7 +103,8 @@ export default function IndexWorking() {
                 <Package className="h-10 w-10 text-primary mb-4" />
                 <CardTitle>Project Management</CardTitle>
                 <CardDescription>
-                  Track projects from concept to completion with integrated workflow management.
+                  Track projects from concept to completion with integrated
+                  workflow management.
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -101,7 +114,8 @@ export default function IndexWorking() {
                 <Users className="h-10 w-10 text-primary mb-4" />
                 <CardTitle>Client Portal</CardTitle>
                 <CardDescription>
-                  Give clients real-time access to project progress, documents, and communications.
+                  Give clients real-time access to project progress, documents,
+                  and communications.
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -111,7 +125,8 @@ export default function IndexWorking() {
                 <Share2 className="h-10 w-10 text-primary mb-4" />
                 <CardTitle>Document Management</CardTitle>
                 <CardDescription>
-                  Centralized storage for drawings, permits, photos, and compliance documents.
+                  Centralized storage for drawings, permits, photos, and
+                  compliance documents.
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -121,7 +136,8 @@ export default function IndexWorking() {
                 <Zap className="h-10 w-10 text-primary mb-4" />
                 <CardTitle>Product Catalog</CardTitle>
                 <CardDescription>
-                  Access to comprehensive EV charging equipment with real-time pricing and availability.
+                  Access to comprehensive EV charging equipment with real-time
+                  pricing and availability.
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -131,7 +147,8 @@ export default function IndexWorking() {
                 <CheckCircle2 className="h-10 w-10 text-primary mb-4" />
                 <CardTitle>Quality Assurance</CardTitle>
                 <CardDescription>
-                  Built-in quality checks and compliance tracking for professional installations.
+                  Built-in quality checks and compliance tracking for
+                  professional installations.
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -144,7 +161,8 @@ export default function IndexWorking() {
         <div className="container mx-auto text-center">
           <h2 className="text-3xl font-bold mb-4">Ready to Get Started?</h2>
           <p className="text-muted-foreground mb-8 max-w-xl mx-auto">
-            Join hundreds of electrical contractors who trust ChargeSource for their EV infrastructure projects.
+            Join hundreds of electrical contractors who trust ChargeSource for
+            their EV infrastructure projects.
           </p>
           <Link to="/register">
             <Button size="lg">Start Your Free Trial</Button>
