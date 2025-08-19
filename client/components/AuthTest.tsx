@@ -133,9 +133,17 @@ export default function AuthTest() {
         <CardTitle>🔐 Authentication Test</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        <Button onClick={testAuth} disabled={loading}>
-          {loading ? 'Testing...' : 'Test Authentication'}
-        </Button>
+        <div className="flex gap-2 flex-wrap">
+          <Button onClick={testAuth} disabled={loading}>
+            {loading ? 'Testing...' : 'Test Authentication'}
+          </Button>
+          <Button onClick={quickTestLogin} disabled={loginLoading} variant="outline">
+            {loginLoading ? 'Logging in...' : 'Quick Test Login'}
+          </Button>
+          <Button onClick={testLogout} variant="outline" size="sm">
+            Logout
+          </Button>
+        </div>
 
         {authState && (
           <div className="space-y-3">
