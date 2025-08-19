@@ -180,7 +180,7 @@ Would you like specific guidance for your charger type?`;
           },
         ];
       } else if (message.includes("dc") || message.includes("fast")) {
-        response = `⚡ **DC Fast Charging Installation**
+        response = `��� **DC Fast Charging Installation**
 
 DC installations require specialized expertise:
 
@@ -223,7 +223,7 @@ DC installations require specialized expertise:
 • Earth leakage protection (RCD)
 • Adequate earthing systems
 • Cable sizing for continuous load
-��� Emergency stop requirements
+• Emergency stop requirements
 • Accessibility compliance (DDA)
 
 **Testing Requirements:**
@@ -593,16 +593,27 @@ Could you please be more specific about what you need help with?`;
         setIsOpen(false);
         break;
       case "support":
-        // Close the AI Assistant
-        setIsOpen(false);
-        // Trigger the Support AI Assistant to open
-        const supportButton = document.querySelector('[data-support-trigger]') as HTMLButtonElement;
-        if (supportButton) {
-          supportButton.click();
-        } else {
-          // Fallback: dispatch a custom event
-          window.dispatchEvent(new CustomEvent('openSupportAssistant'));
-        }
+        // Add a message confirming the handoff
+        const handoffMessage: ChatMessage = {
+          id: `handoff-${Date.now()}`,
+          type: "assistant",
+          content: `🔄 **Connecting you with Support**\n\nI'm opening our Support Assistant for you. This will help you get connected with the right specialist for your specific needs.\n\nOur support team will be able to provide personalized assistance and can access your account details if needed.`,
+          timestamp: new Date(),
+        };
+        setMessages((prev) => [...prev, handoffMessage]);
+
+        // Close the AI Assistant after a brief delay
+        setTimeout(() => {
+          setIsOpen(false);
+          // Trigger the Support AI Assistant to open
+          const supportButton = document.querySelector('[data-support-trigger]') as HTMLButtonElement;
+          if (supportButton) {
+            supportButton.click();
+          } else {
+            // Fallback: dispatch a custom event
+            window.dispatchEvent(new CustomEvent('openSupportAssistant'));
+          }
+        }, 1500);
         break;
       case "pricing-calculator":
         handlePricingCalculator();
@@ -730,7 +741,7 @@ Could you please be more specific about what you need help with?`;
     const complianceMessage: ChatMessage = {
       id: `compliance-${Date.now()}`,
       type: "assistant",
-      content: `🛡️ **Compliance Checklist**\n\n**Pre-Installation Requirements:**\n✅ Site assessment completed\n✅ Electrical design approved by authority\n✅ Permits obtained\n✅ Equipment compliance certificates verified\n\n**Installation Compliance:**\n✅ AS/NZS 3000 wiring rules followed\n✅ Cable sizing per AS/NZS 3008\n✅ RCD protection installed (Type A minimum)\n✅ Circuit protection correctly sized\n✅ Earthing system verified\n\n**Testing Requirements (AS/NZS 3017):**\n✅ Insulation resistance testing (>1MΩ)\n✅ Earth continuity verification\n�� RCD functionality testing\n✅ Polarity verification\n✅ Voltage measurements\n\n**Documentation:**\n✅ Installation certificate completed\n✅ Test results recorded\n✅ Compliance statement issued\n✅ Client handover documentation\n\n**Ongoing Requirements:**\n✅ Periodic testing schedule established\n✅ Maintenance procedures documented\n✅ Emergency contact information provided`,
+      content: `🛡️ **Compliance Checklist**\n\n**Pre-Installation Requirements:**\n✅ Site assessment completed\n✅ Electrical design approved by authority\n✅ Permits obtained\n✅ Equipment compliance certificates verified\n\n**Installation Compliance:**\n✅ AS/NZS 3000 wiring rules followed\n✅ Cable sizing per AS/NZS 3008\n✅ RCD protection installed (Type A minimum)\n✅ Circuit protection correctly sized\n✅ Earthing system verified\n\n**Testing Requirements (AS/NZS 3017):**\n✅ Insulation resistance testing (>1MΩ)\n✅ Earth continuity verification\n✅ RCD functionality testing\n✅ Polarity verification\n✅ Voltage measurements\n\n**Documentation:**\n✅ Installation certificate completed\n✅ Test results recorded\n✅ Compliance statement issued\n✅ Client handover documentation\n\n**Ongoing Requirements:**\n✅ Periodic testing schedule established\n✅ Maintenance procedures documented\n✅ Emergency contact information provided`,
       timestamp: new Date(),
       suggestions: [
         "Download test sheets",
