@@ -28,6 +28,7 @@ import {
   Clock,
 } from "lucide-react";
 import { Logo } from "@/components/ui/logo";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function Index() {
   const features = [
