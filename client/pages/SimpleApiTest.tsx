@@ -12,30 +12,31 @@ export default function SimpleApiTest() {
     (window as any).FS ||
     document.querySelector('script[src*="fullstory"]') ||
     document.querySelector('script[src*="fs.js"]') ||
-    (window.fetch && window.fetch.toString().includes('fullstory'))
+    (window.fetch && window.fetch.toString().includes("fullstory"))
   );
 
-  const environment = window.location.hostname === 'localhost' ? 'local' : 'deployed';
+  const environment =
+    window.location.hostname === "localhost" ? "local" : "deployed";
 
   const endpoints = [
     {
-      path: '/api',
-      method: 'GET',
-      description: 'API Index - Lists all available endpoints',
-      expectedResponse: 'JSON object with endpoints array'
+      path: "/api",
+      method: "GET",
+      description: "API Index - Lists all available endpoints",
+      expectedResponse: "JSON object with endpoints array",
     },
     {
-      path: '/api/ping',
-      method: 'GET', 
-      description: 'Health check endpoint',
-      expectedResponse: '{"message": "ping"}'
+      path: "/api/ping",
+      method: "GET",
+      description: "Health check endpoint",
+      expectedResponse: '{"message": "ping"}',
     },
     {
-      path: '/api/demo',
-      method: 'GET',
-      description: 'Demo data endpoint',
-      expectedResponse: 'Demo response object'
-    }
+      path: "/api/demo",
+      method: "GET",
+      description: "Demo data endpoint",
+      expectedResponse: "Demo response object",
+    },
   ];
 
   return (
@@ -63,7 +64,7 @@ export default function SimpleApiTest() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="text-center p-4 bg-muted rounded-lg">
                 <div className="text-2xl font-bold text-primary">
-                  {environment === 'local' ? 'Local' : 'Deployed'}
+                  {environment === "local" ? "Local" : "Deployed"}
                 </div>
                 <div className="text-sm text-muted-foreground">Environment</div>
               </div>
@@ -89,8 +90,9 @@ export default function SimpleApiTest() {
               <Alert variant="destructive">
                 <Eye className="h-4 w-4" />
                 <AlertDescription>
-                  <strong>FullStory Analytics Active:</strong> This tool intercepts fetch requests. 
-                  Use manual testing below to check API endpoints.
+                  <strong>FullStory Analytics Active:</strong> This tool
+                  intercepts fetch requests. Use manual testing below to check
+                  API endpoints.
                 </AlertDescription>
               </Alert>
             )}
@@ -109,7 +111,7 @@ export default function SimpleApiTest() {
             <Alert>
               <CheckCircle2 className="h-4 w-4" />
               <AlertDescription>
-                Click the buttons below to test each API endpoint in a new tab. 
+                Click the buttons below to test each API endpoint in a new tab.
                 This bypasses any fetch interception issues.
               </AlertDescription>
             </Alert>
@@ -124,20 +126,20 @@ export default function SimpleApiTest() {
                         {endpoint.path}
                       </code>
                     </div>
-                    <Button 
+                    <Button
                       size="sm"
-                      onClick={() => window.open(endpoint.path, '_blank')}
+                      onClick={() => window.open(endpoint.path, "_blank")}
                       className="flex items-center gap-2"
                     >
                       <ExternalLink className="w-3 h-3" />
                       Test
                     </Button>
                   </div>
-                  
+
                   <p className="text-sm text-muted-foreground">
                     {endpoint.description}
                   </p>
-                  
+
                   <div className="text-xs text-muted-foreground">
                     <strong>Expected:</strong> {endpoint.expectedResponse}
                   </div>
@@ -156,8 +158,14 @@ export default function SimpleApiTest() {
             <div className="space-y-2">
               <h4 className="font-semibold">If you get 404 errors:</h4>
               <ul className="list-disc list-inside text-sm text-muted-foreground space-y-1">
-                <li><strong>Local:</strong> Make sure dev server is running with `npm run dev`</li>
-                <li><strong>Deployed:</strong> Check if Netlify functions are properly deployed</li>
+                <li>
+                  <strong>Local:</strong> Make sure dev server is running with
+                  `npm run dev`
+                </li>
+                <li>
+                  <strong>Deployed:</strong> Check if Netlify functions are
+                  properly deployed
+                </li>
                 <li>Try the `/api/ping` endpoint first - it's the simplest</li>
               </ul>
             </div>
@@ -172,7 +180,9 @@ export default function SimpleApiTest() {
                   <Link to="/api-docs">Full API Documentation</Link>
                 </Button>
                 <Button variant="outline" size="sm" asChild>
-                  <a href="/api" target="_blank">Raw API JSON</a>
+                  <a href="/api" target="_blank">
+                    Raw API JSON
+                  </a>
                 </Button>
               </div>
             </div>

@@ -3,11 +3,19 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { CheckCircle2, XCircle, AlertTriangle, RefreshCw, Globe, Monitor, Eye } from "lucide-react";
+import {
+  CheckCircle2,
+  XCircle,
+  AlertTriangle,
+  RefreshCw,
+  Globe,
+  Monitor,
+  Eye,
+} from "lucide-react";
 
 interface TestResult {
   endpoint: string;
-  status: 'success' | 'error' | 'pending';
+  status: "success" | "error" | "pending";
   responseTime?: number;
   data?: any;
   error?: string;
@@ -16,36 +24,38 @@ interface TestResult {
 export default function ApiStatus() {
   const [testResults, setTestResults] = useState<TestResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [environment, setEnvironment] = useState<'local' | 'deployed'>('local');
+  const [environment, setEnvironment] = useState<"local" | "deployed">("local");
   const [isFullStoryDetected, setIsFullStoryDetected] = useState(false);
-  const [fetchMethod, setFetchMethod] = useState<'native' | 'iframe' | 'manual'>('native');
+  const [fetchMethod, setFetchMethod] = useState<
+    "native" | "iframe" | "manual"
+  >("native");
 
   const endpoints = [
-    { path: '/api', method: 'GET', description: 'API Index' },
-    { path: '/api/ping', method: 'GET', description: 'Health Check' },
-    { path: '/api/demo', method: 'GET', description: 'Demo Data' },
+    { path: "/api", method: "GET", description: "API Index" },
+    { path: "/api/ping", method: "GET", description: "Health Check" },
+    { path: "/api/demo", method: "GET", description: "Demo Data" },
   ];
 
   // Detect problematic environments
   const detectEnvironmentIssues = () => {
     const hostname = window.location.hostname;
-    const isLocal = hostname === 'localhost' || hostname === '127.0.0.1';
-    setEnvironment(isLocal ? 'local' : 'deployed');
+    const isLocal = hostname === "localhost" || hostname === "127.0.0.1";
+    setEnvironment(isLocal ? "local" : "deployed");
 
     // Check for FullStory
     const hasFullStory = !!(
       (window as any).FS ||
       document.querySelector('script[src*="fullstory"]') ||
       document.querySelector('script[src*="fs.js"]') ||
-      (window.fetch && window.fetch.toString().includes('fullstory'))
+      (window.fetch && window.fetch.toString().includes("fullstory"))
     );
 
     setIsFullStoryDetected(hasFullStory);
 
     if (hasFullStory) {
-      setFetchMethod('manual');
+      setFetchMethod("manual");
     } else {
-      setFetchMethod('native');
+      setFetchMethod("native");
     }
   };
 
@@ -66,9 +76,10 @@ export default function ApiStatus() {
       if (isFullStoryDetected) {
         return {
           endpoint,
-          status: 'error',
+          status: "error",
           responseTime: Date.now() - startTime,
-          error: 'FullStory detected - automatic testing disabled. Please test manually.'
+          error:
+            "FullStory detected - automatic testing disabled. Please test manually.",
         };
       }
 
@@ -84,10 +95,10 @@ export default function ApiStatus() {
         try {
           const response = await originalFetch(url, {
             signal: controller.signal,
-            method: 'GET',
+            method: "GET",
             headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json',
+              Accept: "application/json",
+              "Content-Type": "application/json",
             },
           });
           clearTimeout(timeoutId);
@@ -104,9 +115,9 @@ export default function ApiStatus() {
       if (!response.ok) {
         return {
           endpoint,
-          status: 'error',
+          status: "error",
           responseTime,
-          error: `HTTP ${response.status}: ${response.statusText}`
+          error: `HTTP ${response.status}: ${response.statusText}`,
         };
       }
 
@@ -114,19 +125,20 @@ export default function ApiStatus() {
 
       return {
         endpoint,
-        status: 'success',
+        status: "success",
         responseTime,
-        data
+        data,
       };
     } catch (error) {
       const responseTime = Date.now() - startTime;
-      let errorMessage = 'Unknown error';
+      let errorMessage = "Unknown error";
 
       if (error instanceof Error) {
-        if (error.name === 'AbortError') {
-          errorMessage = 'Request timeout (10s)';
-        } else if (error.message.includes('fetch')) {
-          errorMessage = 'Fetch API compromised (likely FullStory). Try manual testing.';
+        if (error.name === "AbortError") {
+          errorMessage = "Request timeout (10s)";
+        } else if (error.message.includes("fetch")) {
+          errorMessage =
+            "Fetch API compromised (likely FullStory). Try manual testing.";
         } else {
           errorMessage = error.message;
         }
@@ -134,39 +146,39 @@ export default function ApiStatus() {
 
       return {
         endpoint,
-        status: 'error',
+        status: "error",
         responseTime,
-        error: errorMessage
+        error: errorMessage,
       };
     }
   };
 
   const testAllEndpoints = async () => {
     setIsLoading(true);
-    
+
     // Initialize with pending status
-    const pendingResults = endpoints.map(ep => ({
+    const pendingResults = endpoints.map((ep) => ({
       endpoint: ep.path,
-      status: 'pending' as const
+      status: "pending" as const,
     }));
     setTestResults(pendingResults);
 
     // Test each endpoint
     const results = await Promise.all(
-      endpoints.map(ep => testEndpoint(ep.path))
+      endpoints.map((ep) => testEndpoint(ep.path)),
     );
-    
+
     setTestResults(results);
     setIsLoading(false);
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'success':
+      case "success":
         return <CheckCircle2 className="w-4 h-4 text-green-500" />;
-      case 'error':
+      case "error":
         return <XCircle className="w-4 h-4 text-red-500" />;
-      case 'pending':
+      case "pending":
         return <RefreshCw className="w-4 h-4 text-yellow-500 animate-spin" />;
       default:
         return <AlertTriangle className="w-4 h-4 text-gray-500" />;
@@ -175,18 +187,18 @@ export default function ApiStatus() {
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'success':
+      case "success":
         return <Badge className="bg-green-100 text-green-800">Working</Badge>;
-      case 'error':
+      case "error":
         return <Badge variant="destructive">Error</Badge>;
-      case 'pending':
+      case "pending":
         return <Badge variant="secondary">Testing...</Badge>;
       default:
         return <Badge variant="outline">Unknown</Badge>;
     }
   };
 
-  const successCount = testResults.filter(r => r.status === 'success').length;
+  const successCount = testResults.filter((r) => r.status === "success").length;
   const totalCount = endpoints.length;
 
   return (
@@ -208,8 +220,10 @@ export default function ApiStatus() {
           <Alert variant="destructive">
             <Eye className="h-4 w-4" />
             <AlertDescription>
-              <strong>FullStory Analytics Detected:</strong> Automatic API testing is disabled because FullStory
-              is intercepting fetch requests. Please test API endpoints manually by clicking the links below.
+              <strong>FullStory Analytics Detected:</strong> Automatic API
+              testing is disabled because FullStory is intercepting fetch
+              requests. Please test API endpoints manually by clicking the links
+              below.
             </AlertDescription>
           </Alert>
         )}
@@ -219,12 +233,13 @@ export default function ApiStatus() {
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
               <span className="flex items-center gap-2">
-                {environment === 'local' ? (
+                {environment === "local" ? (
                   <Monitor className="w-5 h-5 text-blue-500" />
                 ) : (
                   <Globe className="w-5 h-5 text-green-500" />
                 )}
-                Environment: {environment === 'local' ? 'Local Development' : 'Deployed'}
+                Environment:{" "}
+                {environment === "local" ? "Local Development" : "Deployed"}
                 {isFullStoryDetected && (
                   <Badge variant="destructive" className="ml-2">
                     FullStory Active
@@ -237,8 +252,10 @@ export default function ApiStatus() {
                 size="sm"
                 className="flex items-center gap-2"
               >
-                <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
-                {isFullStoryDetected ? 'Auto-Test Disabled' : 'Test All'}
+                <RefreshCw
+                  className={`w-4 h-4 ${isLoading ? "animate-spin" : ""}`}
+                />
+                {isFullStoryDetected ? "Auto-Test Disabled" : "Test All"}
               </Button>
             </CardTitle>
           </CardHeader>
@@ -248,13 +265,17 @@ export default function ApiStatus() {
                 <div className="text-2xl font-bold text-primary">
                   {successCount}/{totalCount}
                 </div>
-                <div className="text-sm text-muted-foreground">Endpoints Working</div>
+                <div className="text-sm text-muted-foreground">
+                  Endpoints Working
+                </div>
               </div>
               <div className="text-center p-4 bg-muted rounded-lg">
                 <div className="text-2xl font-bold text-primary">
                   {window.location.hostname}
                 </div>
-                <div className="text-sm text-muted-foreground">Current Host</div>
+                <div className="text-sm text-muted-foreground">
+                  Current Host
+                </div>
               </div>
               <div className="text-center p-4 bg-muted rounded-lg">
                 <div className="text-2xl font-bold text-primary">
@@ -279,13 +300,17 @@ export default function ApiStatus() {
               <Alert>
                 <AlertTriangle className="h-4 w-4" />
                 <AlertDescription>
-                  Since FullStory is interfering with fetch requests, please test these API endpoints manually:
+                  Since FullStory is interfering with fetch requests, please
+                  test these API endpoints manually:
                 </AlertDescription>
               </Alert>
 
               <div className="grid gap-2">
                 {endpoints.map((endpoint, index) => (
-                  <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
+                  <div
+                    key={index}
+                    className="flex items-center justify-between p-3 border rounded-lg"
+                  >
                     <div>
                       <code className="text-sm font-mono">{endpoint.path}</code>
                       <span className="text-sm text-muted-foreground ml-2">
@@ -295,7 +320,7 @@ export default function ApiStatus() {
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => window.open(endpoint.path, '_blank')}
+                      onClick={() => window.open(endpoint.path, "_blank")}
                     >
                       Test Manually
                     </Button>
@@ -310,7 +335,9 @@ export default function ApiStatus() {
         <Card>
           <CardHeader>
             <CardTitle>
-              {isFullStoryDetected ? 'Automatic Testing Disabled' : 'Endpoint Test Results'}
+              {isFullStoryDetected
+                ? "Automatic Testing Disabled"
+                : "Endpoint Test Results"}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -330,7 +357,7 @@ export default function ApiStatus() {
                     </span>
                   )}
                 </div>
-                
+
                 {result.error && (
                   <Alert variant="destructive" className="mt-2">
                     <AlertTriangle className="h-4 w-4" />
@@ -339,7 +366,7 @@ export default function ApiStatus() {
                     </AlertDescription>
                   </Alert>
                 )}
-                
+
                 {result.data && (
                   <div className="mt-2">
                     <details className="cursor-pointer">
@@ -364,27 +391,35 @@ export default function ApiStatus() {
           </CardHeader>
           <CardContent className="space-y-3">
             <div className="text-sm space-y-2">
-              <p><strong>Current URL:</strong> {window.location.href}</p>
-              <p><strong>Base URL:</strong> {window.location.origin}</p>
-              <p><strong>User Agent:</strong> {navigator.userAgent}</p>
+              <p>
+                <strong>Current URL:</strong> {window.location.href}
+              </p>
+              <p>
+                <strong>Base URL:</strong> {window.location.origin}
+              </p>
+              <p>
+                <strong>User Agent:</strong> {navigator.userAgent}
+              </p>
             </div>
-            
-            {environment === 'deployed' && (
+
+            {environment === "deployed" && (
               <Alert>
                 <AlertTriangle className="h-4 w-4" />
                 <AlertDescription>
-                  <strong>Deployed Environment:</strong> API requests are routed through Netlify Functions.
-                  If you see 404 errors, the serverless function may need to be deployed.
+                  <strong>Deployed Environment:</strong> API requests are routed
+                  through Netlify Functions. If you see 404 errors, the
+                  serverless function may need to be deployed.
                 </AlertDescription>
               </Alert>
             )}
-            
-            {environment === 'local' && (
+
+            {environment === "local" && (
               <Alert>
                 <AlertTriangle className="h-4 w-4" />
                 <AlertDescription>
-                  <strong>Local Development:</strong> API requests are handled by the Vite dev server.
-                  Make sure the server is running with <code>npm run dev</code>.
+                  <strong>Local Development:</strong> API requests are handled
+                  by the Vite dev server. Make sure the server is running with{" "}
+                  <code>npm run dev</code>.
                 </AlertDescription>
               </Alert>
             )}

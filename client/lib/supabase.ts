@@ -426,16 +426,21 @@ const isProblematicEnvironment = (): boolean => {
 
   // Only check for FullStory specifically - other analytics tools don't interfere with Supabase
   const hasFS = !!(window as any).FS;
-  const hasFullStoryScript = !!document.querySelector('script[src*="fullstory"]');
+  const hasFullStoryScript = !!document.querySelector(
+    'script[src*="fullstory"]',
+  );
 
   // Only check for FullStory-specific fetch interception
-  const fetchString = window.fetch ? window.fetch.toString() : '';
+  const fetchString = window.fetch ? window.fetch.toString() : "";
   const hasFullStoryFetchIntercept = fetchString.includes("fullstory");
 
-  const isFullStoryDetected = hasFS || hasFullStoryScript || hasFullStoryFetchIntercept;
+  const isFullStoryDetected =
+    hasFS || hasFullStoryScript || hasFullStoryFetchIntercept;
 
   if (isFullStoryDetected) {
-    console.log("❌ FullStory detected - switching to local mode to prevent fetch interference");
+    console.log(
+      "❌ FullStory detected - switching to local mode to prevent fetch interference",
+    );
   }
 
   return isFullStoryDetected;

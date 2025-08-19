@@ -31,12 +31,14 @@ export default function ApiDocs() {
     (window as any).FS ||
     document.querySelector('script[src*="fullstory"]') ||
     document.querySelector('script[src*="fs.js"]') ||
-    (window.fetch && window.fetch.toString().includes('fullstory'))
+    (window.fetch && window.fetch.toString().includes("fullstory"))
   );
 
   const fetchApiData = async () => {
     if (isFullStoryDetected) {
-      setError("FullStory detected - automatic API fetching disabled. Please test endpoints manually.");
+      setError(
+        "FullStory detected - automatic API fetching disabled. Please test endpoints manually.",
+      );
       return;
     }
 
@@ -44,7 +46,7 @@ export default function ApiDocs() {
     setError("");
 
     try {
-      const response = await fetch('/api');
+      const response = await fetch("/api");
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
@@ -72,33 +74,33 @@ export default function ApiDocs() {
             method: "GET",
             path: "/api",
             description: "API Index - lists all available endpoints",
-            example: `${window.location.origin}/api`
+            example: `${window.location.origin}/api`,
           },
           {
             method: "GET",
             path: "/api/ping",
             description: "Health check endpoint",
-            example: `${window.location.origin}/api/ping`
+            example: `${window.location.origin}/api/ping`,
           },
           {
             method: "GET",
             path: "/api/demo",
             description: "Demo data endpoint",
-            example: `${window.location.origin}/api/demo`
+            example: `${window.location.origin}/api/demo`,
           },
           {
             method: "POST",
             path: "/api/create-storage-buckets",
             description: "Create Supabase storage buckets",
-            example: `${window.location.origin}/api/create-storage-buckets`
+            example: `${window.location.origin}/api/create-storage-buckets`,
           },
           {
             method: "POST",
             path: "/api/crm/leads",
             description: "Submit CRM lead data",
-            example: `${window.location.origin}/api/crm/leads`
-          }
-        ]
+            example: `${window.location.origin}/api/crm/leads`,
+          },
+        ],
       });
     }
   }, []);
@@ -109,17 +111,22 @@ export default function ApiDocs() {
 
   const getMethodColor = (method: string) => {
     switch (method.toUpperCase()) {
-      case 'GET': return 'bg-green-100 text-green-800 border-green-200';
-      case 'POST': return 'bg-blue-100 text-blue-800 border-blue-200';
-      case 'PUT': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      case 'DELETE': return 'bg-red-100 text-red-800 border-red-200';
-      default: return 'bg-gray-100 text-gray-800 border-gray-200';
+      case "GET":
+        return "bg-green-100 text-green-800 border-green-200";
+      case "POST":
+        return "bg-blue-100 text-blue-800 border-blue-200";
+      case "PUT":
+        return "bg-yellow-100 text-yellow-800 border-yellow-200";
+      case "DELETE":
+        return "bg-red-100 text-red-800 border-red-200";
+      default:
+        return "bg-gray-100 text-gray-800 border-gray-200";
     }
   };
 
   const testEndpoint = async (endpoint: ApiEndpoint) => {
-    if (endpoint.method === 'GET') {
-      window.open(endpoint.example, '_blank');
+    if (endpoint.method === "GET") {
+      window.open(endpoint.example, "_blank");
     } else {
       // For POST/PUT/DELETE, just copy the URL for now
       copyToClipboard(endpoint.example);
@@ -152,8 +159,9 @@ export default function ApiDocs() {
         {isFullStoryDetected && (
           <Alert variant="destructive">
             <AlertDescription>
-              <strong>FullStory Analytics Detected:</strong> Automatic API data fetching is disabled.
-              Static endpoint information is shown below. Test endpoints manually using the links.
+              <strong>FullStory Analytics Detected:</strong> Automatic API data
+              fetching is disabled. Static endpoint information is shown below.
+              Test endpoints manually using the links.
             </AlertDescription>
           </Alert>
         )}
@@ -162,7 +170,14 @@ export default function ApiDocs() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
-              <span>API Overview {isFullStoryDetected && <Badge variant="outline" className="ml-2">Static Mode</Badge>}</span>
+              <span>
+                API Overview{" "}
+                {isFullStoryDetected && (
+                  <Badge variant="outline" className="ml-2">
+                    Static Mode
+                  </Badge>
+                )}
+              </span>
               <Button
                 size="sm"
                 variant="outline"
@@ -170,8 +185,10 @@ export default function ApiDocs() {
                 disabled={loading || isFullStoryDetected}
                 className="flex items-center gap-2"
               >
-                <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
-                {isFullStoryDetected ? 'Auto-Refresh Disabled' : 'Refresh'}
+                <RefreshCw
+                  className={`w-4 h-4 ${loading ? "animate-spin" : ""}`}
+                />
+                {isFullStoryDetected ? "Auto-Refresh Disabled" : "Refresh"}
               </Button>
             </CardTitle>
           </CardHeader>
@@ -179,7 +196,9 @@ export default function ApiDocs() {
             {loading && (
               <div className="text-center py-8">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
-                <p className="mt-2 text-muted-foreground">Loading API data...</p>
+                <p className="mt-2 text-muted-foreground">
+                  Loading API data...
+                </p>
               </div>
             )}
 
@@ -195,19 +214,27 @@ export default function ApiDocs() {
               <div className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div className="text-center p-4 bg-muted rounded-lg">
-                    <div className="text-2xl font-bold text-primary">{apiData.totalEndpoints}</div>
-                    <div className="text-sm text-muted-foreground">Total Endpoints</div>
+                    <div className="text-2xl font-bold text-primary">
+                      {apiData.totalEndpoints}
+                    </div>
+                    <div className="text-sm text-muted-foreground">
+                      Total Endpoints
+                    </div>
                   </div>
                   <div className="text-center p-4 bg-muted rounded-lg">
-                    <div className="text-2xl font-bold text-primary">{apiData.version}</div>
-                    <div className="text-sm text-muted-foreground">API Version</div>
+                    <div className="text-2xl font-bold text-primary">
+                      {apiData.version}
+                    </div>
+                    <div className="text-sm text-muted-foreground">
+                      API Version
+                    </div>
                   </div>
                   <div className="text-center p-4 bg-muted rounded-lg">
                     <div className="text-2xl font-bold text-primary">Live</div>
                     <div className="text-sm text-muted-foreground">Status</div>
                   </div>
                 </div>
-                
+
                 <div className="text-sm text-muted-foreground">
                   Last updated: {new Date(apiData.timestamp).toLocaleString()}
                 </div>
@@ -235,15 +262,15 @@ export default function ApiDocs() {
                       </code>
                     </div>
                     <div className="flex gap-2">
-                      <Button 
-                        size="sm" 
+                      <Button
+                        size="sm"
                         variant="outline"
                         onClick={() => copyToClipboard(endpoint.example)}
                       >
                         <Copy className="w-3 h-3" />
                       </Button>
-                      <Button 
-                        size="sm" 
+                      <Button
+                        size="sm"
                         variant="outline"
                         onClick={() => testEndpoint(endpoint)}
                       >
@@ -251,11 +278,11 @@ export default function ApiDocs() {
                       </Button>
                     </div>
                   </div>
-                  
+
                   <p className="text-sm text-muted-foreground">
                     {endpoint.description}
                   </p>
-                  
+
                   <div className="bg-muted p-2 rounded">
                     <code className="text-xs">{endpoint.example}</code>
                   </div>
@@ -288,9 +315,7 @@ export default function ApiDocs() {
                 </a>
               </Button>
               <Button asChild variant="outline" className="justify-start">
-                <Link to="/oauth-debug">
-                  OAuth Debug Tool
-                </Link>
+                <Link to="/oauth-debug">OAuth Debug Tool</Link>
               </Button>
             </div>
           </CardContent>
