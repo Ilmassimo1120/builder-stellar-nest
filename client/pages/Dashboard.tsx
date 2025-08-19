@@ -1141,7 +1141,20 @@ export default function Dashboard() {
                     Our technical team is here to help with installations and
                     troubleshooting.
                   </p>
-                  <Button size="sm" variant="outline" className="w-full">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="w-full"
+                    onClick={() => {
+                      // Trigger the Support AI Assistant
+                      const supportButton = document.querySelector('[data-support-trigger]') as HTMLButtonElement;
+                      if (supportButton) {
+                        supportButton.click();
+                      } else {
+                        window.dispatchEvent(new CustomEvent('openSupportAssistant'));
+                      }
+                    }}
+                  >
                     Contact Support
                   </Button>
                 </div>
