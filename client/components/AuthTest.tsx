@@ -9,6 +9,65 @@ export default function AuthTest() {
   const [loading, setLoading] = useState(false);
   const [loginLoading, setLoginLoading] = useState(false);
 
+  const quickTestLogin = async () => {
+    setLoginLoading(true);
+    try {
+      // Try to sign in with a test user or sign up if it doesn't exist
+      const testEmail = 'test@chargesource.com.au';
+      const testPassword = 'testpass123';
+
+      // First try to sign in
+      let { data, error } = await supabase.auth.signInWithPassword({
+        email: testEmail,
+        password: testPassword,
+      });
+
+      // If sign in fails, try to sign up
+      if (error && error.message.includes('Invalid login')) {
+        console.log('Test user not found, creating...');
+        const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+          email: testEmail,
+          password: testPassword,
+          options: {
+            data: {
+              first_name: 'Test',
+              last_name: 'User',
+            },
+          },
+        });
+
+        if (signUpError) {
+          throw signUpError;
+        }
+
+        data = signUpData;
+      } else if (error) {
+        throw error;
+      }
+
+      if (data.user) {
+        alert('✅ Test login successful! You can now run the authentication test.');
+        // Auto-run the auth test after successful login
+        setTimeout(testAuth, 1000);
+      }
+    } catch (error) {
+      console.error('Test login failed:', error);
+      alert(`❌ Test login failed: ${error instanceof Error ? error.message : String(error)}`);
+    } finally {
+      setLoginLoading(false);
+    }
+  };
+
+  const testLogout = async () => {
+    try {
+      await supabase.auth.signOut();
+      alert('✅ Logged out successfully');
+      setAuthState(null);
+    } catch (error) {
+      alert(`❌ Logout failed: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  };
+
   const testAuth = async () => {
     setLoading(true);
     const results: any = {
