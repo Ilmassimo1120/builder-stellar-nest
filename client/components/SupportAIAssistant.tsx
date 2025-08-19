@@ -143,6 +143,19 @@ export function SupportAIAssistant() {
     scrollToBottom();
   }, [messages]);
 
+  // Listen for events from other components to open support
+  useEffect(() => {
+    const handleOpenSupport = () => {
+      setIsOpen(true);
+    };
+
+    window.addEventListener('openSupportAssistant', handleOpenSupport);
+
+    return () => {
+      window.removeEventListener('openSupportAssistant', handleOpenSupport);
+    };
+  }, []);
+
   // Initialize CRM status
   useEffect(() => {
     const initializeCrmStatus = async () => {
