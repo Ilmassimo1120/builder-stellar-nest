@@ -37,7 +37,7 @@ export default function ApiStatus() {
       (window as any).FS ||
       document.querySelector('script[src*="fullstory"]') ||
       document.querySelector('script[src*="fs.js"]') ||
-      (window.fetch && window.fetch.toString().includes('messageHandler'))
+      (window.fetch && window.fetch.toString().includes('fullstory'))
     );
 
     setIsFullStoryDetected(hasFullStory);
