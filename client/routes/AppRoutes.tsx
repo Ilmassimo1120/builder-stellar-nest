@@ -39,6 +39,7 @@ const AuthTest = lazy(() => import("../pages/AuthTest"));
 const DocumentTest = lazy(() => import("../pages/DocumentTest"));
 const SimpleTest = lazy(() => import("../pages/SimpleTest"));
 const Features = lazy(() => import("../pages/Features"));
+const Products = lazy(() => import("../pages/Products"));
 const Integrations = lazy(() => import("../pages/Integrations"));
 const Contact = lazy(() => import("../pages/Contact"));
 const Pricing = lazy(() => import("../pages/Pricing"));
