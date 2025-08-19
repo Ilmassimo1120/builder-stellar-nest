@@ -415,47 +415,25 @@ export const setupDatabase = async () => {
   }
 };
 
-// Check if we're in a problematic environment (FullStory, etc.)
+// Check if we're in a problematic environment (FullStory specifically)
 const isProblematicEnvironment = (): boolean => {
   if (typeof window === "undefined") return false;
 
-  console.log("🔍 Debug: Checking for problematic environment...");
-
-  // Check for FullStory specifically
+  // Only check for FullStory specifically - other analytics tools don't interfere with Supabase
   const hasFS = !!(window as any).FS;
   const hasFullStoryScript = !!document.querySelector('script[src*="fullstory"]');
-  console.log("🔍 FullStory checks:", { hasFS, hasFullStoryScript });
 
-  if (hasFS || hasFullStoryScript) {
-    console.log("❌ FullStory detected - switching to local mode");
-    return true;
-  }
-
-  // Check if fetch is wrapped/intercepted
+  // Only check for FullStory-specific fetch interception
   const fetchString = window.fetch ? window.fetch.toString() : '';
-  const hasFetchIntercept = fetchString.includes("messageHandler") ||
-                           fetchString.includes("fullstory") ||
-                           fetchString.includes("eval");
-  console.log("🔍 Fetch intercept check:", { hasFetchIntercept, fetchStringLength: fetchString.length });
+  const hasFullStoryFetchIntercept = fetchString.includes("fullstory");
 
-  if (hasFetchIntercept) {
-    console.log("❌ Fetch interception detected - switching to local mode");
-    return true;
+  const isFullStoryDetected = hasFS || hasFullStoryScript || hasFullStoryFetchIntercept;
+
+  if (isFullStoryDetected) {
+    console.log("❌ FullStory detected - switching to local mode to prevent fetch interference");
   }
 
-  // Check for other monitoring tools
-  const hasDataLayer = !!(window as any).dataLayer;
-  const hasGtag = !!(window as any).gtag;
-  const hasAnalytics = !!(window as any).analytics;
-  console.log("🔍 Analytics checks:", { hasDataLayer, hasGtag, hasAnalytics });
-
-  if (hasDataLayer || hasGtag || hasAnalytics) {
-    console.log("❌ Analytics tools detected - switching to local mode");
-    return true;
-  }
-
-  console.log("✅ No problematic environment detected");
-  return false;
+  return isFullStoryDetected;
 };
 
 // Auto-initialize Supabase connection on app startup
