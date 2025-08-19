@@ -104,22 +104,22 @@ export default function AuthTest() {
             </Alert>
 
             {/* getSession test */}
-            <Alert variant={authState.getSession?.success ? 'default' : 'destructive'}>
+            <Alert variant={authState.getSession?.success ? 'default' : 'default'}>
               <AlertDescription>
                 <div className="font-semibold">
-                  getSession(): {authState.getSession?.success ? '✅ Success' : '❌ Failed'}
+                  getSession(): {authState.getSession?.success ? '✅ Valid Session' : '🔒 No Session'}
                 </div>
                 {authState.getSession?.success ? (
                   <div className="text-sm mt-1">
                     {authState.getSession.session ? (
                       <>Session: {authState.getSession.session.email} (Expires: {authState.getSession.session.expiresAt})</>
                     ) : (
-                      'No active session'
+                      'Session available but no user data'
                     )}
                   </div>
                 ) : (
-                  <div className="text-sm mt-1 text-red-600">
-                    Error: {authState.getSession?.error || 'Unknown error'}
+                  <div className="text-sm mt-1 text-muted-foreground">
+                    No active authentication session found
                   </div>
                 )}
               </AlertDescription>
