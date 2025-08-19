@@ -489,6 +489,15 @@ const AppRoutes = () => (
     />
 
     <Route
+      path="/products"
+      element={
+        <PublicLazyRoute>
+          <Products />
+        </PublicLazyRoute>
+      }
+    />
+
+    <Route
       path="/integrations"
       element={
         <PublicLazyRoute>
