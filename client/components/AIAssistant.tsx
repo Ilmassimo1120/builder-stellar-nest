@@ -427,12 +427,21 @@ Need help designing a load management system?`;
 • Troubleshooting and maintenance
 • Platform features and navigation
 
+For personalized support from our human experts, I can connect you directly with our support team.
+
 How can I help you today?`;
       suggestions = [
         "Help with installation",
         "Australian standards guide",
         "Create new project",
-        "Platform navigation",
+        "Talk to support team",
+      ];
+      actions = [
+        {
+          label: "Contact Support Team",
+          action: "support",
+          icon: <HelpCircle className="w-4 h-4" />,
+        },
       ];
     }
 
