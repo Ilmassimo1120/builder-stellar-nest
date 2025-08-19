@@ -321,10 +321,10 @@ export default function HelpCentrePublic() {
                       training materials, and expert support.
                     </p>
                     <div className="space-y-3">
-                      <Button className="w-full" asChild>
+                      <Button size="lg" className="w-full px-8 py-4 text-lg" asChild>
                         <Link to="/register">Start Free Trial</Link>
                       </Button>
-                      <Button variant="outline" className="w-full" asChild>
+                      <Button variant="outline" size="lg" className="w-full px-8 py-4 text-lg" asChild>
                         <Link to="/contact">Contact Sales</Link>
                       </Button>
                     </div>

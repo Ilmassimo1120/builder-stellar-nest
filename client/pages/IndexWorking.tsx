@@ -52,12 +52,12 @@ export default function IndexWorking() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/register">
-              <Button size="lg" className="flex items-center gap-2">
+              <Button size="lg" className="flex items-center gap-2 px-8 py-4 text-lg">
                 Start Free Trial
               </Button>
             </Link>
             <Link to="/demo">
-              <Button size="lg" variant="outline">
+              <Button size="lg" variant="outline" className="px-8 py-4 text-lg">
                 View Demo
               </Button>
             </Link>
