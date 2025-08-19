@@ -46,8 +46,9 @@ const demoQuote = {
   version: 1,
   status: "viewed" as const,
   title: "EV Charging Infrastructure - Corporate Headquarters",
-  description: "Complete EV charging solution for corporate office building including AC and DC charging stations for employee and visitor use.",
-  
+  description:
+    "Complete EV charging solution for corporate office building including AC and DC charging stations for employee and visitor use.",
+
   clientInfo: {
     id: "client-1",
     name: "Sarah Johnson",
@@ -64,7 +65,8 @@ const demoQuote = {
     projectName: "Corporate EV Charging Hub",
     siteAddress: "123 Collins Street, Melbourne VIC 3000",
     siteType: "Commercial Office Building",
-    projectObjective: "Install comprehensive EV charging infrastructure for employees and visitors",
+    projectObjective:
+      "Install comprehensive EV charging infrastructure for employees and visitors",
   },
 
   lineItems: [
@@ -72,7 +74,8 @@ const demoQuote = {
       id: "line-1",
       type: "charger" as const,
       name: "22kW AC Charging Station",
-      description: "Dual-socket AC charging station suitable for employee parking areas",
+      description:
+        "Dual-socket AC charging station suitable for employee parking areas",
       category: "chargers",
       quantity: 8,
       unitPrice: 12000,
@@ -93,7 +96,8 @@ const demoQuote = {
       id: "line-2",
       type: "charger" as const,
       name: "50kW DC Fast Charging Station",
-      description: "High-speed DC charging for visitor parking and fleet vehicles",
+      description:
+        "High-speed DC charging for visitor parking and fleet vehicles",
       category: "chargers",
       quantity: 2,
       unitPrice: 65000,
@@ -114,7 +118,8 @@ const demoQuote = {
       id: "line-3",
       type: "installation" as const,
       name: "Professional Installation & Commissioning",
-      description: "Complete installation including electrical work, permits, and grid connection",
+      description:
+        "Complete installation including electrical work, permits, and grid connection",
       category: "installation",
       quantity: 1,
       unitPrice: 45000,
@@ -141,7 +146,8 @@ const demoQuote = {
       id: "line-5",
       type: "service" as const,
       name: "Annual Maintenance Package",
-      description: "Comprehensive maintenance and support including 24/7 monitoring",
+      description:
+        "Comprehensive maintenance and support including 24/7 monitoring",
       category: "service",
       quantity: 1,
       unitPrice: 8000,
@@ -163,9 +169,12 @@ const demoQuote = {
 
   settings: {
     validityDays: 30,
-    terms: "Payment terms: 30% deposit on acceptance, 40% on delivery, 30% on completion and commissioning. All prices include GST.",
-    notes: "This quote includes all necessary permits, grid connection coordination, and compliance certifications. Installation timeframe is 8-12 weeks from order confirmation.",
-    paymentTerms: "Staged payments - 30% deposit, 40% on delivery, 30% on completion",
+    terms:
+      "Payment terms: 30% deposit on acceptance, 40% on delivery, 30% on completion and commissioning. All prices include GST.",
+    notes:
+      "This quote includes all necessary permits, grid connection coordination, and compliance certifications. Installation timeframe is 8-12 weeks from order confirmation.",
+    paymentTerms:
+      "Staged payments - 30% deposit, 40% on delivery, 30% on completion",
     warranty: "36 months comprehensive warranty with 24/7 support",
     deliveryTerms: "8-12 weeks from order confirmation",
   },
@@ -179,7 +188,8 @@ const demoQuote = {
       id: "comment-1",
       userId: "admin",
       userName: "David Chen - ChargeSource",
-      message: "We've included optional weather protection canopies for the outdoor stations. These can be removed if not required to reduce the total cost.",
+      message:
+        "We've included optional weather protection canopies for the outdoor stations. These can be removed if not required to reduce the total cost.",
       timestamp: "2024-01-15T11:30:00.000Z",
       isInternal: false,
     },
@@ -187,7 +197,8 @@ const demoQuote = {
       id: "comment-2",
       userId: "client",
       userName: "Sarah Johnson",
-      message: "Thanks for the detailed proposal. The weather protection looks necessary given our location. Can we discuss the maintenance package options?",
+      message:
+        "Thanks for the detailed proposal. The weather protection looks necessary given our location. Can we discuss the maintenance package options?",
       timestamp: "2024-01-15T14:45:00.000Z",
       isInternal: false,
     },
@@ -198,7 +209,8 @@ const demoQuote = {
       id: "view-1",
       viewedAt: "2024-01-15T13:15:00.000Z",
       ipAddress: "203.123.45.67",
-      userAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
+      userAgent:
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
     },
   ],
 
@@ -212,7 +224,9 @@ export default function ClientPortalDemo() {
   const { toast } = useToast();
   const [quote] = useState(demoQuote);
   const [showDecisionDialog, setShowDecisionDialog] = useState(false);
-  const [decisionType, setDecisionType] = useState<"accepted" | "rejected" | null>(null);
+  const [decisionType, setDecisionType] = useState<
+    "accepted" | "rejected" | null
+  >(null);
   const [decisionComments, setDecisionComments] = useState("");
   const [newComment, setNewComment] = useState("");
   const [submittingDecision, setSubmittingDecision] = useState(false);
@@ -227,15 +241,16 @@ export default function ClientPortalDemo() {
 
     try {
       setSubmittingDecision(true);
-      
+
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      await new Promise((resolve) => setTimeout(resolve, 1500));
 
       setShowDecisionDialog(false);
       setDecisionComments("");
 
       toast({
-        title: decisionType === "accepted" ? "Quote Accepted" : "Quote Rejected",
+        title:
+          decisionType === "accepted" ? "Quote Accepted" : "Quote Rejected",
         description: `Thank you for your ${decisionType === "accepted" ? "acceptance" : "feedback"}. We'll be in touch soon.`,
       });
     } catch (error) {
@@ -335,10 +350,13 @@ export default function ClientPortalDemo() {
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
             <div className="flex items-center gap-2">
               <Eye className="w-5 h-5 text-blue-600" />
-              <span className="font-medium text-blue-800">Quote Under Review</span>
+              <span className="font-medium text-blue-800">
+                Quote Under Review
+              </span>
             </div>
             <p className="text-blue-700 mt-2">
-              This quote is currently being reviewed by your team. You can accept, decline, or add comments below.
+              This quote is currently being reviewed by your team. You can
+              accept, decline, or add comments below.
             </p>
           </div>
         </div>
@@ -423,7 +441,8 @@ export default function ClientPortalDemo() {
                               ${item.totalPrice.toLocaleString()}
                             </div>
                             <div className="text-sm text-muted-foreground">
-                              {item.quantity} × ${item.unitPrice.toLocaleString()}
+                              {item.quantity} × $
+                              {item.unitPrice.toLocaleString()}
                             </div>
                           </div>
                         </div>
@@ -572,7 +591,7 @@ export default function ClientPortalDemo() {
                   <XCircle className="w-4 h-4 mr-2" />
                   Decline Quote
                 </Button>
-                
+
                 <Button
                   className="flex-1 sm:flex-none bg-green-600 hover:bg-green-700"
                   onClick={() => handleDecision("accepted")}
