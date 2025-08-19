@@ -265,7 +265,7 @@ Need help with specific compliance requirements?`;
 
 **Electrical Problems:**
 • Circuit breaker tripping → Check load, connections
-• Earth fault → Inspect cable integrity, connections
+�� Earth fault → Inspect cable integrity, connections
 • Overheating → Verify ventilation, load management
 
 **Communication Issues:**
@@ -538,8 +538,16 @@ Could you please be more specific about what you need help with?`;
         setIsOpen(false);
         break;
       case "support":
-        console.log("Opening support");
+        // Close the AI Assistant
         setIsOpen(false);
+        // Trigger the Support AI Assistant to open
+        const supportButton = document.querySelector('[data-support-trigger]') as HTMLButtonElement;
+        if (supportButton) {
+          supportButton.click();
+        } else {
+          // Fallback: dispatch a custom event
+          window.dispatchEvent(new CustomEvent('openSupportAssistant'));
+        }
         break;
       case "pricing-calculator":
         handlePricingCalculator();
