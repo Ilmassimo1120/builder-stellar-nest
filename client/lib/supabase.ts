@@ -1,4 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
+import { smartFetch, isFullStoryActive } from "./fetchBypass";
 
 // Supabase configuration - requires environment variables
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
