@@ -419,33 +419,42 @@ export const setupDatabase = async () => {
 const isProblematicEnvironment = (): boolean => {
   if (typeof window === "undefined") return false;
 
+  console.log("🔍 Debug: Checking for problematic environment...");
+
   // Check for FullStory specifically
-  if (
-    (window as any).FS ||
-    document.querySelector('script[src*="fullstory"]')
-  ) {
+  const hasFS = !!(window as any).FS;
+  const hasFullStoryScript = !!document.querySelector('script[src*="fullstory"]');
+  console.log("🔍 FullStory checks:", { hasFS, hasFullStoryScript });
+
+  if (hasFS || hasFullStoryScript) {
+    console.log("❌ FullStory detected - switching to local mode");
     return true;
   }
 
   // Check if fetch is wrapped/intercepted
-  if (
-    window.fetch &&
-    (window.fetch.toString().includes("messageHandler") ||
-      window.fetch.toString().includes("fullstory") ||
-      window.fetch.toString().includes("eval"))
-  ) {
+  const fetchString = window.fetch ? window.fetch.toString() : '';
+  const hasFetchIntercept = fetchString.includes("messageHandler") ||
+                           fetchString.includes("fullstory") ||
+                           fetchString.includes("eval");
+  console.log("🔍 Fetch intercept check:", { hasFetchIntercept, fetchStringLength: fetchString.length });
+
+  if (hasFetchIntercept) {
+    console.log("❌ Fetch interception detected - switching to local mode");
     return true;
   }
 
   // Check for other monitoring tools
-  if (
-    (window as any).dataLayer ||
-    (window as any).gtag ||
-    (window as any).analytics
-  ) {
+  const hasDataLayer = !!(window as any).dataLayer;
+  const hasGtag = !!(window as any).gtag;
+  const hasAnalytics = !!(window as any).analytics;
+  console.log("🔍 Analytics checks:", { hasDataLayer, hasGtag, hasAnalytics });
+
+  if (hasDataLayer || hasGtag || hasAnalytics) {
+    console.log("❌ Analytics tools detected - switching to local mode");
     return true;
   }
 
+  console.log("✅ No problematic environment detected");
   return false;
 };
 
