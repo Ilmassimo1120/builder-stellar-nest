@@ -574,7 +574,8 @@ class QuoteService {
         const evnetLineItem: Omit<QuoteLineItem, "id" | "totalPrice"> = {
           type: "service",
           name: "Charge N Go EVNet Chargepoint Management Platform",
-          description: "Comprehensive chargepoint management platform service providing real-time monitoring, remote management, billing integration, and analytics for EV charging networks. Includes 24/7 support and maintenance.",
+          description:
+            "Comprehensive chargepoint management platform service providing real-time monitoring, remote management, billing integration, and analytics for EV charging networks. Includes 24/7 support and maintenance.",
           category: "services",
           quantity: 1,
           unitPrice: 2500,
@@ -592,11 +593,11 @@ class QuoteService {
               "Analytics and reporting dashboard",
               "OCPP 1.6/2.0.1 compliance",
               "Load balancing and smart charging",
-              "24/7 technical support"
+              "24/7 technical support",
             ],
             supportedChargers: "All OCPP-compliant chargers",
             uptime: "99.9% SLA",
-            implementation: "2-4 weeks setup"
+            implementation: "2-4 weeks setup",
           },
         };
 
