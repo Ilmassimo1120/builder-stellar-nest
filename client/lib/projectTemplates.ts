@@ -311,6 +311,8 @@ export const projectTemplates: ProjectTemplate[] = [
       connectorTypes: ["Type 2 AC", "CCS2", "CHAdeMO"],
       weatherProtection: true,
       networkConnectivity: "4g",
+      managementPlatform: true,
+      evnetPlatform: true,
     },
     gridCapacity: {
       upgradeNeeded: true,
