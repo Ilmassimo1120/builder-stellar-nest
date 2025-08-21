@@ -525,6 +525,95 @@ class ProductCatalogService {
         createdAt: "2024-01-15T10:00:00Z",
         updatedAt: "2024-01-15T10:00:00Z",
       },
+      // EVNet Chargepoint Management Platform
+      {
+        id: "prod-011",
+        sku: "EVNET-CMP-PLATFORM",
+        name: "Charge N Go EVNet Chargepoint Management Platform",
+        description:
+          "Comprehensive chargepoint management platform service providing real-time monitoring, remote management, billing integration, and analytics for EV charging networks. Includes 24/7 support and maintenance.",
+        category: "services",
+        subcategory: "management-platform",
+        brand: "Charge N Go",
+        model: "EVNet Platform",
+        specifications: {
+          serviceType: "SaaS Platform Management",
+          features: [
+            "Real-time chargepoint monitoring",
+            "Remote diagnostics and control",
+            "User management and authentication",
+            "Billing and payment processing",
+            "Energy management and optimization",
+            "Mobile app for users and operators",
+            "Analytics and reporting dashboard",
+            "OCPP 1.6/2.0.1 compliance",
+            "Load balancing and smart charging",
+            "Maintenance scheduling and alerts",
+            "Revenue tracking and optimization",
+            "Multi-tenant support",
+            "API integration capabilities",
+            "White-label customization options"
+          ],
+          supportedChargers: "All OCPP-compliant chargers",
+          maxChargepoints: "Unlimited",
+          dataRetention: "5 years",
+          uptime: "99.9% SLA",
+          support: "24/7 technical support",
+          implementation: "2-4 weeks setup",
+          integrations: [
+            "Payment gateways",
+            "Energy suppliers",
+            "Fleet management systems",
+            "Building management systems",
+            "Third-party APIs"
+          ],
+          compliance: [
+            "GDPR compliant",
+            "ISO 27001 security",
+            "PCI DSS payment security",
+            "OCPP certified"
+          ],
+          monitoring: [
+            "Chargepoint status",
+            "Energy consumption",
+            "Session management",
+            "Fault detection",
+            "Performance analytics",
+            "User behavior insights"
+          ]
+        },
+        pricing: {
+          cost: 1200,
+          listPrice: 1800,
+          recommendedRetail: 2500,
+        },
+        inventory: {
+          inStock: 999,
+          reserved: 0,
+          available: 999,
+          leadTime: "2-4 weeks implementation",
+        },
+        supplier: {
+          id: "sup-chargengo",
+          name: "Charge N Go Technologies",
+          partNumber: "CNG-EVNET-CMP",
+          minimumOrderQuantity: 1,
+        },
+        images: [
+          "/images/services/evnet-platform-dashboard.jpg",
+          "/images/services/evnet-mobile-app.jpg",
+          "/images/services/evnet-analytics.jpg"
+        ],
+        documents: [
+          "/docs/evnet-platform-datasheet.pdf",
+          "/docs/evnet-implementation-guide.pdf",
+          "/docs/evnet-api-documentation.pdf",
+          "/docs/evnet-service-agreement.pdf"
+        ],
+        isActive: true,
+        createdAt: "2024-01-15T10:00:00Z",
+        updatedAt: "2024-01-15T10:00:00Z",
+      },
     ];
   }
 
