@@ -568,6 +568,40 @@ class QuoteService {
 
         this.addLineItem(quote.id, canopyLineItem);
       }
+
+      // EVNet Management Platform if enabled
+      if (chargerSelection.evnetPlatform) {
+        const evnetLineItem: Omit<QuoteLineItem, "id" | "totalPrice"> = {
+          type: "service",
+          name: "Charge N Go EVNet Chargepoint Management Platform",
+          description: "Comprehensive chargepoint management platform service providing real-time monitoring, remote management, billing integration, and analytics for EV charging networks. Includes 24/7 support and maintenance.",
+          category: "services",
+          quantity: 1,
+          unitPrice: 2500,
+          cost: 1200,
+          markup: this.calculateMarginForCategory("services"),
+          unit: "platform",
+          specifications: {
+            features: [
+              "Real-time chargepoint monitoring",
+              "Remote diagnostics and control",
+              "User management and authentication",
+              "Billing and payment processing",
+              "Energy management and optimization",
+              "Mobile app for users and operators",
+              "Analytics and reporting dashboard",
+              "OCPP 1.6/2.0.1 compliance",
+              "Load balancing and smart charging",
+              "24/7 technical support"
+            ],
+            supportedChargers: "All OCPP-compliant chargers",
+            uptime: "99.9% SLA",
+            implementation: "2-4 weeks setup"
+          },
+        };
+
+        this.addLineItem(quote.id, evnetLineItem);
+      }
     }
   }
 
