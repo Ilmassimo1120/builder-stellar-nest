@@ -439,6 +439,14 @@ const AppRoutes = () => (
       }
     />
     <Route
+      path="/evnet-test"
+      element={
+        <PublicLazyRoute>
+          <EVNetTest />
+        </PublicLazyRoute>
+      }
+    />
+    <Route
       path="/AuthTest"
       element={
         <PublicLazyRoute>
