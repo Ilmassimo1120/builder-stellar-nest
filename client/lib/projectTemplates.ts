@@ -54,6 +54,8 @@ interface ChargerSelection {
   connectorTypes: string[];
   weatherProtection: boolean;
   networkConnectivity: string;
+  managementPlatform?: boolean;
+  evnetPlatform?: boolean;
 }
 
 interface GridCapacity {
