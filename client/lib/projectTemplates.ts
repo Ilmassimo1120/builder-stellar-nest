@@ -807,6 +807,8 @@ export const applyTemplate = (template: ProjectTemplate) => {
       connectorTypes: template.chargerSelection.connectorTypes || [],
       weatherProtection: template.chargerSelection.weatherProtection || false,
       networkConnectivity: template.chargerSelection.networkConnectivity || "",
+      managementPlatform: template.chargerSelection.managementPlatform || false,
+      evnetPlatform: template.chargerSelection.evnetPlatform || false,
     },
     gridCapacity: {
       currentSupply: "",
