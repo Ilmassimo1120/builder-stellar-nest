@@ -172,6 +172,13 @@ class CategoryService {
             categoryId: "services",
             order: 2,
           },
+          {
+            id: "management-platform",
+            name: "Management Platform",
+            description: "Software platforms for chargepoint management and monitoring",
+            categoryId: "services",
+            order: 3,
+          },
         ],
       },
     ];
