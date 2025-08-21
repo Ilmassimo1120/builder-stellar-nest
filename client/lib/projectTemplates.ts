@@ -438,6 +438,8 @@ export const projectTemplates: ProjectTemplate[] = [
       connectorTypes: ["Type 2 AC", "CCS2"],
       weatherProtection: true,
       networkConnectivity: "ethernet",
+      managementPlatform: true,
+      evnetPlatform: true,
     },
     gridCapacity: {
       upgradeNeeded: true,
