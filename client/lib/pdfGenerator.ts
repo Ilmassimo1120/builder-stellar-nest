@@ -24,7 +24,10 @@ class PDFGenerator {
    * Generate a client-side PDF using html2canvas + jsPDF.
    * Renders an offscreen HTML snapshot of the quote and converts it to an A4 PDF.
    */
-  async generateQuotePDF(quote: Quote, options: PDFOptions = {}): Promise<void> {
+  async generateQuotePDF(
+    quote: Quote,
+    options: PDFOptions = {},
+  ): Promise<void> {
     const finalOptions = { ...this.defaultOptions, ...options };
 
     const htmlContent = this.generateQuoteHTML(quote, finalOptions);
@@ -50,7 +53,11 @@ class PDFGenerator {
 
       const imgData = canvas.toDataURL("image/png");
 
-      const pdf = new jsPDF({ unit: "mm", format: "a4", orientation: "portrait" });
+      const pdf = new jsPDF({
+        unit: "mm",
+        format: "a4",
+        orientation: "portrait",
+      });
       const pageWidth = pdf.internal.pageSize.getWidth();
       const pageHeight = pdf.internal.pageSize.getHeight();
 
@@ -66,7 +73,10 @@ class PDFGenerator {
         let offsetY = 0;
 
         while (remainingHeightPx > 0) {
-          const sliceHeightMm = Math.min(pageHeight, (remainingHeightPx / pxPerMm));
+          const sliceHeightMm = Math.min(
+            pageHeight,
+            remainingHeightPx / pxPerMm,
+          );
           const sliceHeightPx = Math.round(sliceHeightMm * pxPerMm);
 
           // Create temporary canvas to hold the slice
@@ -75,11 +85,29 @@ class PDFGenerator {
           sliceCanvas.height = sliceHeightPx;
           const ctx = sliceCanvas.getContext("2d");
           if (ctx) {
-            ctx.drawImage(canvas, 0, offsetY, canvas.width, sliceHeightPx, 0, 0, canvas.width, sliceHeightPx);
+            ctx.drawImage(
+              canvas,
+              0,
+              offsetY,
+              canvas.width,
+              sliceHeightPx,
+              0,
+              0,
+              canvas.width,
+              sliceHeightPx,
+            );
             const sliceData = sliceCanvas.toDataURL("image/png");
-            const sliceHeightMmActual = (sliceHeightPx * imgWidthMm) / canvas.width;
+            const sliceHeightMmActual =
+              (sliceHeightPx * imgWidthMm) / canvas.width;
 
-            pdf.addImage(sliceData, "PNG", 0, 0, imgWidthMm, sliceHeightMmActual);
+            pdf.addImage(
+              sliceData,
+              "PNG",
+              0,
+              0,
+              imgWidthMm,
+              sliceHeightMmActual,
+            );
           }
 
           remainingHeightPx -= sliceHeightPx;
@@ -89,7 +117,8 @@ class PDFGenerator {
         }
       }
 
-      const fileName = finalOptions.fileName || `quote-${quote.quoteNumber}.pdf`;
+      const fileName =
+        finalOptions.fileName || `quote-${quote.quoteNumber}.pdf`;
       pdf.save(fileName);
     } catch (err) {
       console.error("Client-side PDF generation failed:", err);
@@ -100,7 +129,9 @@ class PDFGenerator {
   }
 
   private waitForImages(container: HTMLElement): Promise<void> {
-    const imgs = Array.from(container.querySelectorAll("img")) as HTMLImageElement[];
+    const imgs = Array.from(
+      container.querySelectorAll("img"),
+    ) as HTMLImageElement[];
     if (imgs.length === 0) return Promise.resolve();
 
     return Promise.all(
@@ -181,33 +212,36 @@ class PDFGenerator {
     content += `<div><div class="section-title">Bill To</div><div>${quote.clientInfo.company || quote.clientInfo.name}</div><div>${quote.clientInfo.contactPerson}</div><div>${quote.clientInfo.email}</div><div>${quote.clientInfo.phone}</div></div>`;
 
     if (quote.title || quote.description) {
-      content += `<div style="margin-top:12px"><div class="section-title">Project Details</div>${quote.title ? `<div style="font-weight:600">${quote.title}</div>` : ''}${quote.description ? `<div>${quote.description}</div>` : ''}</div>`;
+      content += `<div style="margin-top:12px"><div class="section-title">Project Details</div>${quote.title ? `<div style="font-weight:600">${quote.title}</div>` : ""}${quote.description ? `<div>${quote.description}</div>` : ""}</div>`;
     }
 
     if (quote.lineItems.length > 0) {
       content += `<div style="margin-top:12px"><div class="section-title">Quote Items</div><table class="items-table"><thead><tr><th>Description</th><th>Qty</th><th>Unit Price</th><th>Total</th></tr></thead><tbody>`;
       for (const item of quote.lineItems) {
-        content += `<tr><td><div style="font-weight:600">${item.name}</div>${item.description ? `<div style="font-size:11px;color:#6b7280">${item.description}</div>` : ''}${options.includeSpecifications && item.specifications ? `<div style="font-size:10px;color:#9ca3af">${this.generateSpecifications(item.specifications)}</div>` : ''}${item.isOptional ? `<div class="badge">Optional</div>` : ''}</td><td style="text-align:center">${item.quantity}</td><td style="text-align:right">$${item.unitPrice.toLocaleString()}</td><td style="text-align:right">$${item.totalPrice.toLocaleString()}</td></tr>`;
+        content += `<tr><td><div style="font-weight:600">${item.name}</div>${item.description ? `<div style="font-size:11px;color:#6b7280">${item.description}</div>` : ""}${options.includeSpecifications && item.specifications ? `<div style="font-size:10px;color:#9ca3af">${this.generateSpecifications(item.specifications)}</div>` : ""}${item.isOptional ? `<div class="badge">Optional</div>` : ""}</td><td style="text-align:center">${item.quantity}</td><td style="text-align:right">$${item.unitPrice.toLocaleString()}</td><td style="text-align:right">$${item.totalPrice.toLocaleString()}</td></tr>`;
       }
       content += `</tbody></table></div>`;
     }
 
     content += `<div style="margin-top:8px;float:right;width:320px"><table class="totals-table">`;
     content += `<tr><td>Subtotal:</td><td style="text-align:right">$${quote.totals.subtotal.toLocaleString()}</td></tr>`;
-    if (quote.totals.discount > 0) content += `<tr><td>Discount:</td><td style="text-align:right;color:#059669">-$${quote.totals.discount.toLocaleString()}</td></tr>`;
+    if (quote.totals.discount > 0)
+      content += `<tr><td>Discount:</td><td style="text-align:right;color:#059669">-$${quote.totals.discount.toLocaleString()}</td></tr>`;
     content += `<tr><td>GST (10%):</td><td style="text-align:right">$${quote.totals.gst.toLocaleString()}</td></tr>`;
     content += `<tr style="font-weight:700"><td>Total:</td><td style="text-align:right">$${quote.totals.total.toLocaleString()}</td></tr>`;
     content += `</table></div><div style="clear:both"></div>`;
 
     if (options.includeTerms) {
-      content += `<div style="margin-top:16px"><div class="section-title">Terms & Conditions</div><div style="font-size:11px;color:#6b7280"><div><strong>Payment Terms:</strong> ${quote.settings.paymentTerms}</div><div><strong>Warranty:</strong> ${quote.settings.warranty}</div><div><strong>Delivery:</strong> ${quote.settings.deliveryTerms}</div><div style="margin-top:8px">${quote.settings.terms ? quote.settings.terms : ''}</div></div></div>`;
+      content += `<div style="margin-top:16px"><div class="section-title">Terms & Conditions</div><div style="font-size:11px;color:#6b7280"><div><strong>Payment Terms:</strong> ${quote.settings.paymentTerms}</div><div><strong>Warranty:</strong> ${quote.settings.warranty}</div><div><strong>Delivery:</strong> ${quote.settings.deliveryTerms}</div><div style="margin-top:8px">${quote.settings.terms ? quote.settings.terms : ""}</div></div></div>`;
     }
 
     return content;
   }
 
   private generateSpecifications(specs: Record<string, any>): string {
-    return Object.entries(specs).map(([k, v]) => `${k}: ${v}`).join(' • ');
+    return Object.entries(specs)
+      .map(([k, v]) => `${k}: ${v}`)
+      .join(" • ");
   }
 
   private generateFooter(quote: Quote): string {
@@ -217,8 +251,12 @@ class PDFGenerator {
   generateEmailShareLink(quote: Quote): string {
     const baseUrl = window.location.origin;
     const clientPortalUrl = `${baseUrl}/client/quote/${quote.id}?token=${this.generateAccessToken(quote)}`;
-    const subject = encodeURIComponent(`Quote ${quote.quoteNumber} - ${quote.title || 'EV Charging Project'}`);
-    const body = encodeURIComponent(`Dear ${quote.clientInfo.contactPerson},\n\nPlease find your quote at: ${clientPortalUrl}\n\nQuote Number: ${quote.quoteNumber}\nTotal: $${quote.totals.total.toLocaleString()}\n\nBest regards,\nChargeSource`);
+    const subject = encodeURIComponent(
+      `Quote ${quote.quoteNumber} - ${quote.title || "EV Charging Project"}`,
+    );
+    const body = encodeURIComponent(
+      `Dear ${quote.clientInfo.contactPerson},\n\nPlease find your quote at: ${clientPortalUrl}\n\nQuote Number: ${quote.quoteNumber}\nTotal: $${quote.totals.total.toLocaleString()}\n\nBest regards,\nChargeSource`,
+    );
     return `mailto:${quote.clientInfo.email}?subject=${subject}&body=${body}`;
   }
 
