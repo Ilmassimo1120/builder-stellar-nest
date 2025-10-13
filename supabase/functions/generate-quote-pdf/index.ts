@@ -1,57 +1,43 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { PDFDocument, StandardFonts, rgb } from "https://esm.sh/pdf-lib@2.4.0";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-interface QuoteData {
-  id: string;
-  quoteNumber: string;
-  title: string;
-  clientInfo: any;
-  lineItems: any[];
-  totals: any;
-  settings: any;
-  validUntil: string;
-}
-
 serve(async (req) => {
-  // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
   }
 
   try {
-    // Create Supabase client
-    const supabaseClient = createClient(
-      Deno.env.get("SUPABASE_URL") ?? "",
-      Deno.env.get("SUPABASE_ANON_KEY") ?? "",
-      {
-        global: {
-          headers: { Authorization: req.headers.get("Authorization")! },
-        },
-      },
-    );
+    const SUPABASE_URL = Deno.env.get("SUPABASE_URL") ?? "";
+    const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? Deno.env.get("SUPABASE_ACCESS_TOKEN") ?? "";
 
-    // Get user from auth token
-    const {
-      data: { user },
-      error: userError,
-    } = await supabaseClient.auth.getUser();
-
-    if (userError || !user) {
-      return new Response(JSON.stringify({ error: "Unauthorized" }), {
-        status: 401,
+    if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
+      return new Response(JSON.stringify({ error: "Missing Supabase configuration" }), {
+        status: 500,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
-    const { quoteId } = await req.json();
+    const supabaseClient = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
+      global: { headers: { Authorization: req.headers.get("Authorization") ?? "" } },
+    });
 
-    // Fetch quote data from Supabase
+    // Parse body
+    const body = await req.json().catch(() => ({}));
+    const quoteId = body.quoteId || body.quote_id;
+    if (!quoteId) {
+      return new Response(JSON.stringify({ error: "quoteId is required" }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // Fetch quote
     const { data: quote, error: quoteError } = await supabaseClient
       .from("quotes")
       .select("*")
@@ -65,110 +51,151 @@ serve(async (req) => {
       });
     }
 
-    // Generate PDF using Puppeteer or similar
-    // For now, return a placeholder response
-    const pdfData = await generatePDF(quote);
+    // Create PDF with pdf-lib
+    const pdfBytes = await buildQuotePdf(quote);
 
-    return new Response(pdfData, {
-      headers: {
-        ...corsHeaders,
-        "Content-Type": "application/pdf",
-        "Content-Disposition": `attachment; filename="quote-${quote.quote_number}.pdf"`,
-      },
+    // Upload to storage (private bucket 'quote-attachments')
+    const bucket = "quote-attachments";
+    const filePath = `quotes/${quoteId}/quote-${quote.quote_number || quoteId}-${Date.now()}.pdf`;
+
+    const { data: uploadData, error: uploadError } = await supabaseClient.storage
+      .from(bucket)
+      .upload(filePath, pdfBytes, { contentType: "application/pdf", upsert: true });
+
+    if (uploadError) {
+      console.error("Storage upload failed:", uploadError);
+      return new Response(JSON.stringify({ error: "Failed to upload PDF to storage" }), {
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // Create a signed URL valid for 24 hours
+    const expiresIn = 60 * 60 * 24;
+    const { data: signed, error: signedError } = await supabaseClient.storage
+      .from(bucket)
+      .createSignedUrl(filePath, expiresIn);
+
+    if (signedError) {
+      console.error("Signed URL creation failed:", signedError);
+    }
+
+    // Attach to quote attachments metadata (append)
+    const attachment = {
+      id: crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}`,
+      name: filePath.split("/").pop(),
+      url: signed?.signedUrl ?? filePath,
+      type: "application/pdf",
+      size: pdfBytes.length,
+      uploadedAt: new Date().toISOString(),
+      uploadedBy: null,
+    };
+
+    // Merge into existing attachments array if present
+    const currentAttachments = quote.attachments || [];
+    const newAttachments = [...currentAttachments, attachment];
+
+    const { data: updatedQuote, error: updateError } = await supabaseClient
+      .from("quotes")
+      .update({ attachments: newAttachments })
+      .eq("id", quoteId)
+      .select()
+      .single();
+
+    if (updateError) {
+      console.error("Failed to update quote attachments:", updateError);
+    }
+
+    return new Response(JSON.stringify({ success: true, file: attachment }), {
+      status: 200,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
-  } catch (error) {
-    return new Response(JSON.stringify({ error: error.message }), {
+  } catch (err) {
+    console.error("generate-quote-pdf error:", err);
+    return new Response(JSON.stringify({ error: err instanceof Error ? err.message : String(err) }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
 });
 
-async function generatePDF(quote: any): Promise<Uint8Array> {
-  // This is a simplified PDF generation
-  // In production, you'd use libraries like jsPDF, Puppeteer, or PDFKit
+async function buildQuotePdf(quote: any): Promise<Uint8Array> {
+  const pdfDoc = await PDFDocument.create();
+  const page = pdfDoc.addPage();
+  const { width, height } = page.getSize();
 
-  const htmlContent = `
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <title>Quote ${quote.quote_number}</title>
-        <style>
-            body { font-family: Arial, sans-serif; margin: 40px; }
-            .header { text-align: center; margin-bottom: 40px; }
-            .client-info { margin-bottom: 30px; }
-            .line-items { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
-            .line-items th, .line-items td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-            .line-items th { background-color: #f2f2f2; }
-            .totals { text-align: right; margin-top: 20px; }
-            .total { font-size: 18px; font-weight: bold; }
-        </style>
-    </head>
-    <body>
-        <div class="header">
-            <h1>QUOTATION</h1>
-            <h2>Quote #${quote.quote_number}</h2>
-            <p>Date: ${new Date().toLocaleDateString()}</p>
-        </div>
-        
-        <div class="client-info">
-            <h3>Bill To:</h3>
-            <p><strong>${quote.client_info.company || quote.client_info.name}</strong></p>
-            <p>${quote.client_info.contactPerson}</p>
-            <p>${quote.client_info.email}</p>
-            <p>${quote.client_info.phone}</p>
-            <p>${quote.client_info.address}</p>
-        </div>
-        
-        <table class="line-items">
-            <thead>
-                <tr>
-                    <th>Description</th>
-                    <th>Qty</th>
-                    <th>Unit Price</th>
-                    <th>Total</th>
-                </tr>
-            </thead>
-            <tbody>
-                ${quote.line_items
-                  .map(
-                    (item: any) => `
-                    <tr>
-                        <td>
-                            <strong>${item.name}</strong>
-                            <br><small>${item.description}</small>
-                        </td>
-                        <td>${item.quantity}</td>
-                        <td>$${item.unitPrice.toLocaleString()}</td>
-                        <td>$${item.totalPrice.toLocaleString()}</td>
-                    </tr>
-                `,
-                  )
-                  .join("")}
-            </tbody>
-        </table>
-        
-        <div class="totals">
-            <p>Subtotal: $${quote.totals.subtotal.toLocaleString()}</p>
-            <p>GST (10%): $${quote.totals.gst.toLocaleString()}</p>
-            <p class="total">Total: $${quote.totals.total.toLocaleString()}</p>
-        </div>
-        
-        ${
-          quote.settings.terms
-            ? `
-            <div style="margin-top: 40px;">
-                <h3>Terms & Conditions</h3>
-                <p>${quote.settings.terms}</p>
-            </div>
-        `
-            : ""
-        }
-    </body>
-    </html>
-  `;
+  const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+  const boldFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
 
-  // For demo purposes, return HTML as bytes
-  // In production, convert HTML to PDF using Puppeteer
-  return new TextEncoder().encode(htmlContent);
+  const margin = 40;
+  let y = height - margin;
+
+  // Header
+  page.drawText("ChargeSource", { x: margin, y: y, size: 18, font: boldFont, color: rgb(0.1, 0.1, 0.1) });
+  page.drawText("QUOTATION", { x: width - margin - 100, y: y, size: 16, font: boldFont });
+  y -= 24;
+
+  page.drawText(`Quote #: ${quote.quote_number || quote.quoteNumber || quote.id}` , { x: width - margin - 200, y, size: 10, font, color: rgb(0.3,0.3,0.3) });
+  y -= 18;
+  page.drawText(`Date: ${new Date().toLocaleDateString()}`, { x: width - margin - 200, y, size: 10, font, color: rgb(0.3,0.3,0.3) });
+  y -= 28;
+
+  // Client info
+  page.drawText("Bill To:", { x: margin, y, size: 12, font: boldFont });
+  y -= 16;
+  const client = quote.client_info || quote.clientInfo || {};
+  const clientLines = [client.company || client.name, client.contactPerson, client.email, client.phone, client.address].filter(Boolean);
+  for (const line of clientLines) {
+    page.drawText(String(line), { x: margin, y, size: 10, font });
+    y -= 14;
+  }
+
+  y -= 8;
+
+  // Table header
+  page.drawText("Description", { x: margin, y, size: 10, font: boldFont });
+  page.drawText("Qty", { x: width - margin - 120, y, size: 10, font: boldFont });
+  page.drawText("Unit", { x: width - margin - 90, y, size: 10, font: boldFont });
+  page.drawText("Total", { x: width - margin - 40, y, size: 10, font: boldFont });
+  y -= 16;
+
+  // Line items
+  const items = quote.line_items || quote.lineItems || [];
+  for (const item of items) {
+    if (y < margin + 60) {
+      // new page
+      const newPage = pdfDoc.addPage();
+      y = newPage.getSize().height - margin;
+      Object.assign(page, newPage);
+    }
+
+    page.drawText((item.name || "Untitled").slice(0, 80), { x: margin, y, size: 10, font });
+    page.drawText(String(item.quantity ?? item.qty ?? 1), { x: width - margin - 120, y, size: 10, font });
+    page.drawText(`$${Number(item.unitPrice ?? item.price ?? 0).toFixed(2)}`, { x: width - margin - 90, y, size: 10, font });
+    page.drawText(`$${Number(item.totalPrice ?? item.total ?? (item.quantity * (item.unitPrice ?? item.price ?? 0))).toFixed(2)}`, { x: width - margin - 40, y, size: 10, font });
+    y -= 14;
+
+    if (item.description) {
+      const desc = (item.description || "").slice(0, 200);
+      page.drawText(desc, { x: margin + 8, y, size: 9, font: font, color: rgb(0.4,0.4,0.4) });
+      y -= 12;
+    }
+  }
+
+  y -= 8;
+
+  // Totals
+  const totals = quote.totals || quote.totals || { subtotal: 0, gst: 0, total: 0, discount: 0 };
+  page.drawText(`Subtotal: $${Number(totals.subtotal ?? 0).toFixed(2)}`, { x: width - margin - 180, y, size: 10, font });
+  y -= 14;
+  if (totals.discount && totals.discount > 0) {
+    page.drawText(`Discount: -$${Number(totals.discount ?? 0).toFixed(2)}`, { x: width - margin - 180, y, size: 10, font, color: rgb(0.0,0.5,0.2) });
+    y -= 14;
+  }
+  page.drawText(`GST (10%): $${Number(totals.gst ?? 0).toFixed(2)}`, { x: width - margin - 180, y, size: 10, font });
+  y -= 16;
+  page.drawText(`Total: $${Number(totals.total ?? 0).toFixed(2)}`, { x: width - margin - 180, y, size: 12, font: boldFont });
+
+  const pdfBytes = await pdfDoc.save();
+  return pdfBytes;
 }
