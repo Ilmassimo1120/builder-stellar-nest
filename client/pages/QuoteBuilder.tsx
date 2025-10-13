@@ -379,11 +379,12 @@ export default function QuoteBuilder() {
         description: "Quote PDF is being generated...",
       });
 
-      await advancedPDFGenerator.generateQuotePDF(quote, {
+      await pdfGenerator.generateQuotePDF(quote, {
         includeHeader: true,
         includeFooter: true,
         includeTerms: true,
         includeSpecifications: true,
+        fileName: `quote-${quote.quoteNumber}.pdf`,
       });
 
       toast({
