@@ -64,7 +64,7 @@ import {
   ProductCatalogueItem,
 } from "@/lib/quoteTypes";
 import { quoteService } from "@/lib/quoteService";
-import { advancedPDFGenerator } from "@/lib/advancedPDFGenerator";
+import { pdfGenerator } from "@/lib/pdfGenerator";
 import ProductCatalogBrowser from "@/components/ProductCatalogBrowser";
 import ProductComparison from "@/components/ProductComparison";
 
