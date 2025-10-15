@@ -872,7 +872,7 @@ export default function Dashboard() {
                                         loadProjects(); // Reload projects
                                       }
                                     }}
-                                    className="text-red-600 hover:text-red-600"
+                                    className="text-red-600 hover:text-red-600" aria-label="Delete draft"
                                   >
                                     <MoreHorizontal className="w-4 h-4" />
                                   </Button>
