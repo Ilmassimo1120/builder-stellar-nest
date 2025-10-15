@@ -341,9 +341,9 @@ const Products = () => {
                     </div>
                   </div>
                   <ul className="space-y-1 mb-4">
-                    {product.features.map((feature, featureIndex) => (
+                    {product.features.map((feature) => (
                       <li
-                        key={featureIndex}
+                        key={feature}
                         className="flex items-center gap-2 text-xs"
                       >
                         <CheckCircle className="w-3 h-3 text-green-500" />
