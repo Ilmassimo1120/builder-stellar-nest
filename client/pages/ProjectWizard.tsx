@@ -316,9 +316,7 @@ export default function ProjectWizard() {
       };
 
       // Get existing drafts
-      const existingDrafts = JSON.parse(
-        localStorage.getItem("chargeSourceDrafts") || "[]",
-      );
+      const existingDrafts = safeGetLocal("chargeSourceDrafts", []);
 
       // Update or add draft
       const draftIndex = existingDrafts.findIndex(
