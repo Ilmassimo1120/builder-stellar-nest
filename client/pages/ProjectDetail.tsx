@@ -169,9 +169,7 @@ export default function ProjectDetail() {
       setLoading(true);
 
       // Load from localStorage projects
-      const localProjects = JSON.parse(
-        localStorage.getItem("chargeSourceProjects") || "[]",
-      );
+      const localProjects = safeGetLocal("chargeSourceProjects", []);
       let foundProject = localProjects.find((p: any) => p.id === projectId);
 
       // Load from drafts if not found in projects
