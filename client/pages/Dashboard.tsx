@@ -861,11 +861,7 @@ export default function Dashboard() {
                                     size="sm"
                                     onClick={() => {
                                       if (confirm("Delete this draft?")) {
-                                        const drafts = JSON.parse(
-                                          localStorage.getItem(
-                                            "chargeSourceDrafts",
-                                          ) || "[]",
-                                        );
+                                        const drafts = safeGetLocal("chargeSourceDrafts", []);
                                         const filteredDrafts = drafts.filter(
                                           (d: any) => d.id !== project.id,
                                         );
