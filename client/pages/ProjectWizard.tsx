@@ -360,9 +360,7 @@ export default function ProjectWizard() {
     draftId: string,
   ): Promise<ProjectDraft | null> => {
     try {
-      const drafts = JSON.parse(
-        localStorage.getItem("chargeSourceDrafts") || "[]",
-      );
+      const drafts = safeGetLocal("chargeSourceDrafts", []);
       return drafts.find((d: ProjectDraft) => d.id === draftId) || null;
     } catch {
       return null;
