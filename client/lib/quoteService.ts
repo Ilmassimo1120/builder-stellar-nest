@@ -378,9 +378,7 @@ class QuoteService {
       }
 
       // Also check project drafts if not found in main projects
-      const drafts = JSON.parse(
-        localStorage.getItem("chargeSourceProjectDrafts") || "[]",
-      );
+      const drafts = safeGetLocal("chargeSourceProjectDrafts", []);
       const draft = drafts.find((d: any) => d.id === projectId);
 
       if (draft) {
