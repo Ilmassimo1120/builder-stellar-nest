@@ -4,11 +4,10 @@ import { vi } from "vitest";
 /**
  * Mock localStorage for testing
  */
-export const mockLocalStorage = () => {
-  const store: Record<string, string> = {};
-
-  return {
-    getItem: vi.fn((key: string) => store[key] || null),
+export const createMockLocalStorage = (initial: Record<string, string> = {}) => {
+  const store: Record<string, string> = { ...initial };
+  const mock = {
+    getItem: vi.fn((key: string) => (key in store ? store[key] : null)),
     setItem: vi.fn((key: string, value: string) => {
       store[key] = value;
     }),
@@ -18,7 +17,41 @@ export const mockLocalStorage = () => {
     clear: vi.fn(() => {
       Object.keys(store).forEach((key) => delete store[key]);
     }),
+    _getStore: () => store,
   };
+
+  const install = () => {
+    try {
+      (globalThis as any).__originalLocalStorage__ = (globalThis as any).localStorage;
+    } catch (e) {
+      // ignore
+    }
+    Object.defineProperty(globalThis, "localStorage", {
+      configurable: true,
+      enumerable: true,
+      writable: true,
+      value: mock,
+    });
+  };
+
+  const uninstall = () => {
+    try {
+      const original = (globalThis as any).__originalLocalStorage__;
+      if (original) {
+        Object.defineProperty(globalThis, "localStorage", {
+          configurable: true,
+          enumerable: true,
+          writable: true,
+          value: original,
+        });
+        delete (globalThis as any).__originalLocalStorage__;
+      }
+    } catch (e) {
+      // ignore
+    }
+  };
+
+  return { mock, install, uninstall };
 };
 
 /**
