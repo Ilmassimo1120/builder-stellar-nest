@@ -1,6 +1,4 @@
 import { createClient } from "@supabase/supabase-js";
-
-import { createClient } from "@supabase/supabase-js";
 import { safeGetLocal } from "./safeLocalStorage";
 
 // Direct Supabase client that bypasses environment checks
