@@ -431,8 +431,8 @@ export default function Pricing() {
             </div>
 
             <div className="space-y-6">
-              {faq.map((item, index) => (
-                <Card key={index}>
+              {faq.map((item) => (
+                <Card key={item.question}>
                   <CardHeader>
                     <CardTitle className="text-lg">{item.question}</CardTitle>
                   </CardHeader>
