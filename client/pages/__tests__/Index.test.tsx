@@ -3,6 +3,7 @@ import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import Index from '../Index';
 import { vi, describe, it, expect } from 'vitest';
+import '@testing-library/jest-dom';
 
 vi.mock('../../hooks/useAuth', () => ({
   useAuth: () => ({ isAuthenticated: false }),
