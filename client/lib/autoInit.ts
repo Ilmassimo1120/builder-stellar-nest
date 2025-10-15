@@ -1,5 +1,6 @@
 import { initializeSupabase, isConnectedToSupabase } from "./supabase";
 import { migrationService } from "./services/migrationService";
+import { safeGetLocal } from "./safeLocalStorage";
 
 class AutoInitializationService {
   private initialized = false;
