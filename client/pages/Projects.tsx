@@ -83,6 +83,7 @@ import {
 } from "lucide-react";
 import { Logo } from "@/components/ui/logo";
 import { projectService, autoConfigureSupabase } from "@/lib/supabase";
+import { safeGetLocal, generateId } from "@/lib/safeLocalStorage";
 import { useAuth } from "@/hooks/useAuth";
 
 // Google Maps integration types
