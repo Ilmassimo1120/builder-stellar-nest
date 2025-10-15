@@ -34,28 +34,6 @@ import { features, stats } from './homeData';
 export default function Index() {
   const { isAuthenticated } = useAuth();
 
-  const stats = [
-    {
-      value: "500+",
-      label: "Active Contractors",
-      icon: <Users className="w-5 h-5" />,
-    },
-    {
-      value: "15,000+",
-      label: "Projects Completed",
-      icon: <CheckCircle2 className="w-5 h-5" />,
-    },
-    {
-      value: "$50M+",
-      label: "Revenue Generated",
-      icon: <DollarSign className="w-5 h-5" />,
-    },
-    {
-      value: "50+",
-      label: "Supplier Partners",
-      icon: <Package className="w-5 h-5" />,
-    },
-  ];
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted/30">
