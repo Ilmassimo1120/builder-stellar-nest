@@ -132,7 +132,7 @@ describe("Projects Component", () => {
     });
 
     // Click on more options menu
-    const moreButton = screen.getAllByRole("button")[0]; // First more button
+    const moreButton = screen.getByRole("button", { name: /project actions/i });
     fireEvent.click(moreButton);
 
     // Click on View Details
