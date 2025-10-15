@@ -438,8 +438,8 @@ export default function Training() {
                         What you'll learn:
                       </h4>
                       <ul className="space-y-2">
-                        {path.features.slice(0, 4).map((feature, index) => (
-                          <li key={index} className="flex items-start text-sm">
+                        {path.features.slice(0, 4).map((feature) => (
+                          <li key={feature} className="flex items-start text-sm">
                             <CheckCircle2 className="w-4 h-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
                             {feature}
                           </li>
@@ -519,8 +519,8 @@ export default function Training() {
                     <div className="space-y-2 mb-4">
                       <h4 className="font-semibold text-sm">Course modules:</h4>
                       <ul className="text-sm text-muted-foreground space-y-1">
-                        {course.modules.map((module, index) => (
-                          <li key={index}>• {module}</li>
+                        {course.modules.map((module) => (
+                          <li key={module}>• {module}</li>
                         ))}
                       </ul>
                     </div>
@@ -550,8 +550,8 @@ export default function Training() {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              {certifications.map((cert, index) => (
-                <Card key={index} className="text-center">
+              {certifications.map((cert) => (
+                <Card key={cert.title} className="text-center">
                   <CardHeader>
                     <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
                       <Award className="w-10 h-10 text-primary" />
@@ -570,8 +570,8 @@ export default function Training() {
                           Requirements:
                         </h4>
                         <ul className="text-sm text-muted-foreground space-y-1">
-                          {cert.requirements.map((req, reqIndex) => (
-                            <li key={reqIndex}>• {req}</li>
+                          {cert.requirements.map((req) => (
+                            <li key={req}>• {req}</li>
                           ))}
                         </ul>
                       </div>
@@ -607,8 +607,8 @@ export default function Training() {
               <div className="lg:w-2/3">
                 <h2 className="text-2xl font-bold mb-6">Upcoming Webinars</h2>
                 <div className="space-y-4">
-                  {upcomingWebinars.map((webinar, index) => (
-                    <Card key={index}>
+                  {upcomingWebinars.map((webinar) => (
+                    <Card key={webinar.title}>
                       <CardContent className="p-6">
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
