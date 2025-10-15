@@ -157,9 +157,9 @@ export default function IndexWorking() {
             Join hundreds of electrical contractors who trust ChargeSource for
             their EV infrastructure projects.
           </p>
-          <Link to="/register">
-            <Button size="lg">Start Your Free Trial</Button>
-          </Link>
+          <Button size="lg" asChild>
+            <Link to="/register">Start Your Free Trial</Link>
+          </Button>
         </div>
       </section>
 
