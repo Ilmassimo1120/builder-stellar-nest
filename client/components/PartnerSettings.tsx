@@ -20,6 +20,7 @@ import {
   Package,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { safeGetLocal } from "@/lib/safeLocalStorage";
 import {
   Card,
   CardContent,
