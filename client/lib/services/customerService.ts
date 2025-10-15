@@ -13,6 +13,7 @@ import {
 import { NativeCustomerProvider } from "./customerProviders/nativeProvider";
 import { HubSpotCustomerProvider } from "./customerProviders/hubspotProvider";
 import { PipedriveCustomerProvider } from "./customerProviders/pipedriveProvider";
+import { safeGetLocal } from "../safeLocalStorage";
 
 export class CustomerService {
   private providers: Map<string, CustomerProvider> = new Map();
