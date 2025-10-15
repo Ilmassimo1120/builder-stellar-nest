@@ -369,7 +369,7 @@ export default function FileManager({
                           <span className="text-3xl">{getFileIcon(file.mimeType)}</span>
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                              <Button variant="ghost" size="sm">
+                              <Button variant="ghost" size="sm" aria-label="File actions">
                                 <MoreVertical className="h-4 w-4" />
                               </Button>
                             </DropdownMenuTrigger>
