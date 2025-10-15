@@ -134,8 +134,8 @@ export default function TestConnection() {
 
           {results.length > 0 && (
             <div className="bg-black text-green-400 p-4 rounded font-mono text-sm max-h-96 overflow-y-auto">
-              {results.map((result, index) => (
-                <div key={index} className="mb-1">
+              {results.map((result) => (
+                <div key={result} className="mb-1">
                   {result}
                 </div>
               ))}
