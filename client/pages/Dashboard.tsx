@@ -217,12 +217,10 @@ export default function Dashboard() {
       }
 
       // Load from localStorage as fallback or additional
-      const localProjects = JSON.parse(
-        localStorage.getItem("chargeSourceProjects") || "[]",
-      );
-      const formattedLocalProjects = localProjects.map((project: any) => ({
-        id: project.id || `PRJ-${Date.now()}`,
-        name: project.projectInfo?.name || project.name || "Unnamed Project",
+      const localProjects = safeGetLocal("chargeSourceProjects", []);
+    const formattedLocalProjects = localProjects.map((project: any) => ({
+      id: project.id || generateId("PRJ-"),
+      name: project.projectInfo?.name || project.name || "Unnamed Project",
         client:
           project.projectInfo?.client ||
           project.client_name ||
@@ -241,11 +239,9 @@ export default function Dashboard() {
       }));
 
       // Load drafts for the current user
-      const drafts = JSON.parse(
-        localStorage.getItem("chargeSourceDrafts") || "[]",
-      );
-      const userDrafts = drafts
-        .filter((draft: any) => draft.userId === user?.id)
+      const drafts = safeGetLocal("chargeSourceDrafts", []);
+    const userDrafts = drafts
+      .filter((draft: any) => draft.userId === user?.id)
         .map((draft: any) => ({
           id: draft.id,
           name: draft.draftName || "Untitled Draft",
@@ -298,7 +294,7 @@ export default function Dashboard() {
     if (!user) return;
 
     try {
-      const editDraftId = `edit-${project.id}-${Date.now()}`;
+      const editDraftId = generateId(`edit-${project.id}-`);
       const now = new Date().toISOString();
 
       // Use preserved original detailed project data
