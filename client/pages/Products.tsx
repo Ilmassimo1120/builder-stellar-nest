@@ -379,16 +379,16 @@ const Products = () => {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {accessories.map((accessory, index) => (
-              <Card key={index} className="h-full border-border/50">
+            {accessories.map((accessory) => (
+              <Card key={accessory.name} className="h-full border-border/50">
                 <CardHeader>
                   <CardTitle className="text-lg">{accessory.name}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <ul className="space-y-2">
-                    {accessory.items.map((item, itemIndex) => (
+                    {accessory.items.map((item) => (
                       <li
-                        key={itemIndex}
+                        key={item}
                         className="flex items-center gap-2 text-sm"
                       >
                         <Package className="w-3 h-3 text-accent" />
