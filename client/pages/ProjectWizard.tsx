@@ -890,9 +890,7 @@ export default function ProjectWizard() {
       };
 
       // Save to localStorage
-      const existingProjects = JSON.parse(
-        localStorage.getItem("chargeSourceProjects") || "[]",
-      );
+      const existingProjects = safeGetLocal("chargeSourceProjects", []);
 
       if (isEditMode && projectId) {
         // Update existing project
