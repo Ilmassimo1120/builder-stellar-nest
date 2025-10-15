@@ -327,9 +327,9 @@ export default function HelpCentre() {
               <div className="lg:w-2/3">
                 <h2 className="text-2xl font-bold mb-6">Popular Articles</h2>
                 <div className="space-y-4">
-                  {popularArticles.map((article, index) => (
+                  {popularArticles.map((article) => (
                     <Card
-                      key={index}
+                      key={article.title}
                       className="hover:shadow-md transition-shadow cursor-pointer"
                     >
                       <CardContent className="p-6">
