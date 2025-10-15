@@ -35,6 +35,7 @@ import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Logo } from "@/components/ui/logo";
 import { useAuth } from "@/hooks/useAuth";
+import { safeGetLocal } from "@/lib/safeLocalStorage";
 import {
   ArrowLeft,
   Calendar,
