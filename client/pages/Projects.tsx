@@ -638,9 +638,7 @@ export default function Projects() {
       }
 
       // Remove from localStorage
-      const localProjects = JSON.parse(
-        localStorage.getItem("chargeSourceProjects") || "[]",
-      );
+      const localProjects = safeGetLocal("chargeSourceProjects", []);
       const filteredLocalProjects = localProjects.filter(
         (p: any) => p.id !== projectId,
       );
