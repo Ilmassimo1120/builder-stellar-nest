@@ -409,9 +409,7 @@ export default function Dashboard() {
       };
 
       // Save the edit draft
-      const existingDrafts = JSON.parse(
-        localStorage.getItem("chargeSourceDrafts") || "[]",
-      );
+      const existingDrafts = safeGetLocal("chargeSourceDrafts", []);
       existingDrafts.unshift(editDraft);
       localStorage.setItem(
         "chargeSourceDrafts",
