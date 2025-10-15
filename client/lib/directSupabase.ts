@@ -47,8 +47,7 @@ export const testLogout = () => {
 };
 
 export const getTestUser = () => {
-  const stored = localStorage.getItem("directSupabaseUser");
-  return stored ? JSON.parse(stored) : null;
+  return safeGetLocal("directSupabaseUser", null);
 };
 
 // Test if buckets are accessible
