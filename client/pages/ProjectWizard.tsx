@@ -293,7 +293,7 @@ export default function ProjectWizard() {
     try {
       setIsDraftSaving(true);
 
-      const draftId = currentDraftId || `draft-${Date.now()}-${user.id}`;
+      const draftId = currentDraftId || generateId(`draft-${user.id}-`);
       const now = new Date().toISOString();
 
       const draft: ProjectDraft = {
