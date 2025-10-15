@@ -1,6 +1,7 @@
 import { supabase } from "../supabase";
 import { supabaseQuoteService } from "./supabaseQuoteService";
 import { supabaseProductService } from "./supabaseProductService";
+import { safeGetLocal } from "../safeLocalStorage";
 
 class MigrationService {
   async migrateLocalStorageToSupabase(currentUser?: any): Promise<{
