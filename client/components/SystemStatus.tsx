@@ -45,14 +45,13 @@ export default function SystemStatus() {
 
     // Check 2: Auth System
     try {
-      const storedUser = localStorage.getItem("chargeSourceUser");
+      const storedUser = safeGetLocal("chargeSourceUser", null);
       if (storedUser) {
-        const userData = JSON.parse(storedUser);
         results.push({
           name: "Authentication",
           status: "success",
-          message: `Logged in as ${userData.email} (${userData.role})`,
-          details: userData
+          message: `Logged in as ${storedUser.email} (${storedUser.role})`,
+          details: storedUser
         });
       } else {
         results.push({
