@@ -646,9 +646,7 @@ export default function Projects() {
       );
 
       // Remove from drafts
-      const drafts = JSON.parse(
-        localStorage.getItem("chargeSourceDrafts") || "[]",
-      );
+      const drafts = safeGetLocal("chargeSourceDrafts", []);
       const filteredDrafts = drafts.filter((d: any) => d.id !== projectId);
       localStorage.setItem(
         "chargeSourceDrafts",
@@ -1256,7 +1254,7 @@ export default function Projects() {
               )}
               {isSupabaseConnected && (
                 <Badge variant="outline" className="text-xs">
-                  ☁️ Cloud Storage
+                  ☁�� Cloud Storage
                 </Badge>
               )}
             </div>
