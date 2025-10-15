@@ -10,8 +10,11 @@ export function safeParse<T>(str: string | null, fallback: T): T {
 
 export function safeGetLocal<T = any>(key: string, fallback: T): T {
   try {
-    const raw = localStorage.getItem(key);
-    return safeParse<T>(raw, fallback);
+    if (typeof globalThis !== 'undefined' && typeof (globalThis as any).localStorage !== 'undefined') {
+      const raw = (globalThis as any).localStorage.getItem(key);
+      return safeParse<T>(raw, fallback);
+    }
+    return fallback;
   } catch (err) {
     console.warn("safeGetLocal: error accessing localStorage", err);
     return fallback;
