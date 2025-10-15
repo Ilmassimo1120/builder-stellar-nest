@@ -341,8 +341,8 @@ export default function ApiStatus() {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            {testResults.map((result, index) => (
-              <div key={index} className="border rounded-lg p-4">
+            {testResults.map((result) => (
+              <div key={result.endpoint} className="border rounded-lg p-4">
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-3">
                     {getStatusIcon(result.status)}
