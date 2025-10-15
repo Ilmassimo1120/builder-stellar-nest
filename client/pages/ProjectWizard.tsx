@@ -860,7 +860,7 @@ export default function ProjectWizard() {
   const handleLocalStorageSubmit = async () => {
     try {
       const currentProjectId =
-        isEditMode && projectId ? projectId : `PRJ-${Date.now()}`;
+        isEditMode && projectId ? projectId : generateId("PRJ-");
       const now = new Date().toISOString();
       const recommendations = getChargerRecommendations();
 
