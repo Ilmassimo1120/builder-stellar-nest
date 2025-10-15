@@ -302,7 +302,7 @@ export default function ProjectWizard() {
         draftName: generateDraftName(),
         currentStep,
         createdAt: currentDraftId
-          ? JSON.parse(localStorage.getItem("chargeSourceDrafts") || "[]").find(
+          ? safeGetLocal("chargeSourceDrafts", []).find(
               (d: any) => d.id === draftId,
             )?.createdAt || now
           : now,
