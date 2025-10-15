@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import { UserRole, rbacService } from "@/lib/rbac";
 import { supabase } from "@/lib/supabase";
+import { safeGetLocal } from "@/lib/safeLocalStorage";
 
 export interface User {
   id: string;
