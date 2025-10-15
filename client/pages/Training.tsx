@@ -652,8 +652,8 @@ export default function Training() {
                   Training Resources
                 </h3>
                 <div className="space-y-4">
-                  {resources.map((resource, index) => (
-                    <Card key={index}>
+                  {resources.map((resource) => (
+                    <Card key={resource.title}>
                       <CardContent className="p-4">
                         <div className="flex items-start gap-3">
                           {resource.icon}
