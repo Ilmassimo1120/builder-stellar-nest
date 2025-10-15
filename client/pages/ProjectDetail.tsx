@@ -174,9 +174,7 @@ export default function ProjectDetail() {
 
       // Load from drafts if not found in projects
       if (!foundProject) {
-        const drafts = JSON.parse(
-          localStorage.getItem("chargeSourceDrafts") || "[]",
-        );
+        const drafts = safeGetLocal("chargeSourceDrafts", []);
         foundProject = drafts.find((d: any) => d.id === projectId);
       }
 
