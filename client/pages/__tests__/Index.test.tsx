@@ -18,8 +18,8 @@ describe('Index landing page', () => {
 
     expect(
       screen.getByRole('heading', { name: /Streamline Your/i })
-    ).toBeInTheDocument();
+    ).toBeTruthy();
 
-    expect(screen.getByRole('link', { name: /Start Free Trial|Get Started/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Start Free Trial|Get Started/i })).toBeTruthy();
   });
 });
