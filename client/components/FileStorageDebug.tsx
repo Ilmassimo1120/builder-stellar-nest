@@ -7,6 +7,7 @@ import { Separator } from "./ui/separator";
 import { safeFileStorageService } from "@/lib/services/safeFileStorageService";
 import { bucketInitService } from "@/lib/services/bucketInitService";
 import { supabase } from "@/lib/supabase";
+import { safeGetLocal } from "@/lib/safeLocalStorage";
 
 export default function FileStorageDebug() {
   const [results, setResults] = useState<any>({});
