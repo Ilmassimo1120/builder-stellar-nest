@@ -15,7 +15,7 @@ import {
   ClientDecision,
 } from "./quoteTypes";
 import { productCatalog } from "./productCatalog";
-import { generateId } from "./safeLocalStorage";
+import { generateId, safeGetLocal } from "./safeLocalStorage";
 
 // Default margin settings
 const DEFAULT_MARGIN_SETTINGS: MarginSettings = {
