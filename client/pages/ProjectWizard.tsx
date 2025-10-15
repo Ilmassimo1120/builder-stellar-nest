@@ -484,7 +484,7 @@ export default function ProjectWizard() {
       // First try to get from localStorage (for now)
       const storedProjects = localStorage.getItem("chargeSourceProjects");
       if (storedProjects) {
-        const projects = JSON.parse(storedProjects);
+        const projects = safeGetLocal("chargeSourceProjects", []);
         const project = projects.find((p: any) => p.id === projectId);
 
         if (project) {
