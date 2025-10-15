@@ -414,6 +414,7 @@ export default function EnhancedFileManager({
                     variant={viewMode === "grid" ? "default" : "ghost"}
                     size="sm"
                     onClick={() => setViewMode("grid")}
+                    aria-label="Grid view"
                   >
                     <Grid className="h-4 w-4" />
                   </Button>
