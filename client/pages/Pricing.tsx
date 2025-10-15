@@ -372,9 +372,9 @@ export default function Pricing() {
                           Everything included:
                         </h4>
                         <ul className="space-y-2">
-                          {plan.features.map((feature, index) => (
+                          {plan.features.map((feature) => (
                             <li
-                              key={index}
+                              key={feature}
                               className="flex items-start text-sm"
                             >
                               <Check className="w-4 h-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
