@@ -116,12 +116,12 @@ export default function ProjectsWorking() {
               Manage your EV charging infrastructure projects
             </p>
           </div>
-          <Link to="/projects/new">
-            <Button className="flex items-center gap-2">
+          <Button className="flex items-center gap-2" asChild>
+            <Link to="/projects/new">
               <Plus className="h-4 w-4" />
               New Project
-            </Button>
-          </Link>
+            </Link>
+          </Button>
         </div>
       </header>
 
