@@ -161,9 +161,9 @@ export default function GlobalSettings() {
   // Load configuration from localStorage
   useEffect(() => {
     try {
-      const savedConfig = localStorage.getItem("chargeSourceGlobalConfig");
-      if (savedConfig) {
-        setConfig({ ...defaultConfig, ...JSON.parse(savedConfig) });
+      const savedConfig = safeGetLocal("chargeSourceGlobalConfig", {});
+      if (savedConfig && Object.keys(savedConfig).length > 0) {
+        setConfig({ ...defaultConfig, ...savedConfig });
       }
     } catch (error) {
       console.error("Error loading global config:", error);
