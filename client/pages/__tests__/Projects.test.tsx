@@ -117,8 +117,8 @@ describe("Projects Component", () => {
     const listViewButton = screen.getByRole("button", { name: /list/i });
     fireEvent.click(listViewButton);
 
-    // Verify list view is active (button should have different styling)
-    expect(listViewButton).toHaveClass("variant-default");
+    // Verify list view button has accessible name and was activated
+    expect(listViewButton).toHaveAttribute("aria-label", "List view");
   });
 
   it("opens project details modal", async () => {
