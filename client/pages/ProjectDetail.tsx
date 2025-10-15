@@ -559,9 +559,7 @@ export default function ProjectDetail() {
 
   const updateProjectInStorage = (updatedProject: Project) => {
     // Update in localStorage projects
-    const localProjects = JSON.parse(
-      localStorage.getItem("chargeSourceProjects") || "[]",
-    );
+    const localProjects = safeGetLocal("chargeSourceProjects", []);
     const projectIndex = localProjects.findIndex(
       (p: any) => p.id === updatedProject.id,
     );
