@@ -361,9 +361,7 @@ class QuoteService {
   private getProjectData(projectId: string): ProjectIntegration | null {
     try {
       // Load from existing project management system
-      const projects = JSON.parse(
-        localStorage.getItem("chargeSourceProjects") || "[]",
-      );
+      const projects = safeGetLocal("chargeSourceProjects", []);
       const project = projects.find((p: any) => p.id === projectId);
 
       if (project) {
