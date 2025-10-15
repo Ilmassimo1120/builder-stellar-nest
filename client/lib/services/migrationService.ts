@@ -20,9 +20,9 @@ class MigrationService {
         } = await supabase.auth.getUser();
         if (authError || !supabaseUser) {
           // Try to get user from localStorage auth system
-          const localUser = localStorage.getItem("chargeSourceUser");
+          const localUser = safeGetLocal("chargeSourceUser", null);
           if (localUser) {
-            user = JSON.parse(localUser);
+            user = localUser;
           } else {
             // For auto-migration, create a temporary user ID
             console.log("Creating temporary user for auto-migration");
