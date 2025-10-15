@@ -306,9 +306,9 @@ export default function ApiStatus() {
               </Alert>
 
               <div className="grid gap-2">
-                {endpoints.map((endpoint, index) => (
+                {endpoints.map((endpoint) => (
                   <div
-                    key={index}
+                    key={endpoint.path}
                     className="flex items-center justify-between p-3 border rounded-lg"
                   >
                     <div>
