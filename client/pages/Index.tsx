@@ -172,9 +172,9 @@ export default function Index() {
                 </CardHeader>
                 <CardContent>
                   <ul className="space-y-2">
-                    {feature.items.map((item, itemIndex) => (
+                    {feature.items.map((item) => (
                       <li
-                        key={itemIndex}
+                        key={item}
                         className="flex items-center gap-2 text-sm"
                       >
                         <CheckCircle2 className="w-4 h-4 text-secondary" />
