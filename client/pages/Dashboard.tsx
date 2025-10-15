@@ -218,9 +218,9 @@ export default function Dashboard() {
 
       // Load from localStorage as fallback or additional
       const localProjects = safeGetLocal("chargeSourceProjects", []);
-    const formattedLocalProjects = localProjects.map((project: any) => ({
-      id: project.id || generateId("PRJ-"),
-      name: project.projectInfo?.name || project.name || "Unnamed Project",
+      const formattedLocalProjects = localProjects.map((project: any) => ({
+        id: project.id || generateId("PRJ-"),
+        name: project.projectInfo?.name || project.name || "Unnamed Project",
         client:
           project.projectInfo?.client ||
           project.client_name ||
@@ -240,8 +240,8 @@ export default function Dashboard() {
 
       // Load drafts for the current user
       const drafts = safeGetLocal("chargeSourceDrafts", []);
-    const userDrafts = drafts
-      .filter((draft: any) => draft.userId === user?.id)
+      const userDrafts = drafts
+        .filter((draft: any) => draft.userId === user?.id)
         .map((draft: any) => ({
           id: draft.id,
           name: draft.draftName || "Untitled Draft",

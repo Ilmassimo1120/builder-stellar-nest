@@ -1,42 +1,45 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  Files, 
-  Download, 
-  Trash2, 
-  Eye, 
-  Search, 
-  Filter, 
-  Grid, 
+import React, { useState, useEffect } from "react";
+import {
+  Files,
+  Download,
+  Trash2,
+  Eye,
+  Search,
+  Filter,
+  Grid,
   List,
   MoreVertical,
   Share,
-  Info
-} from 'lucide-react';
-import { Button } from './ui/button';
-import { Input } from './ui/input';
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import { Badge } from './ui/badge';
-import { 
-  DropdownMenu, 
-  DropdownMenuContent, 
-  DropdownMenuItem, 
-  DropdownMenuTrigger 
-} from './ui/dropdown-menu';
-import { 
-  Select, 
-  SelectContent, 
-  SelectItem, 
-  SelectTrigger, 
-  SelectValue 
-} from './ui/select';
-import { Alert, AlertDescription } from './ui/alert';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
-import { cn } from '@/lib/utils';
-import { fileStorageService, StoredFile } from '@/lib/services/fileStorageService';
-import FileUpload from './FileUpload';
+  Info,
+} from "lucide-react";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { Badge } from "./ui/badge";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
+import { Alert, AlertDescription } from "./ui/alert";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
+import { cn } from "@/lib/utils";
+import {
+  fileStorageService,
+  StoredFile,
+} from "@/lib/services/fileStorageService";
+import FileUpload from "./FileUpload";
 
 interface FileManagerProps {
-  category?: 'general' | 'project' | 'quote' | 'product' | 'user' | 'public';
+  category?: "general" | "project" | "quote" | "product" | "user" | "public";
   metadata?: {
     projectId?: string;
     quoteId?: string;
@@ -47,24 +50,24 @@ interface FileManagerProps {
   className?: string;
 }
 
-type ViewMode = 'grid' | 'list';
-type SortBy = 'name' | 'size' | 'date' | 'type';
+type ViewMode = "grid" | "list";
+type SortBy = "name" | "size" | "date" | "type";
 
 export default function FileManager({
   category,
   metadata,
   allowUpload = true,
   allowDelete = true,
-  className
+  className,
 }: FileManagerProps) {
   const [files, setFiles] = useState<StoredFile[]>([]);
   const [filteredFiles, setFilteredFiles] = useState<StoredFile[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [viewMode, setViewMode] = useState<ViewMode>('grid');
-  const [sortBy, setSortBy] = useState<SortBy>('date');
-  const [filterType, setFilterType] = useState<string>('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [viewMode, setViewMode] = useState<ViewMode>("grid");
+  const [sortBy, setSortBy] = useState<SortBy>("date");
+  const [filterType, setFilterType] = useState<string>("all");
   const [selectedFiles, setSelectedFiles] = useState<Set<string>>(new Set());
 
   // Load files on mount and when category changes
@@ -78,24 +81,28 @@ export default function FileManager({
 
     // Apply search filter
     if (searchTerm) {
-      filtered = filtered.filter(file =>
-        file.name.toLowerCase().includes(searchTerm.toLowerCase())
+      filtered = filtered.filter((file) =>
+        file.name.toLowerCase().includes(searchTerm.toLowerCase()),
       );
     }
 
     // Apply type filter
-    if (filterType !== 'all') {
-      filtered = filtered.filter(file => {
+    if (filterType !== "all") {
+      filtered = filtered.filter((file) => {
         switch (filterType) {
-          case 'images':
-            return file.mimeType.startsWith('image/');
-          case 'documents':
-            return file.mimeType.includes('pdf') || 
-                   file.mimeType.includes('document') || 
-                   file.mimeType.includes('word');
-          case 'spreadsheets':
-            return file.mimeType.includes('spreadsheet') || 
-                   file.mimeType.includes('excel');
+          case "images":
+            return file.mimeType.startsWith("image/");
+          case "documents":
+            return (
+              file.mimeType.includes("pdf") ||
+              file.mimeType.includes("document") ||
+              file.mimeType.includes("word")
+            );
+          case "spreadsheets":
+            return (
+              file.mimeType.includes("spreadsheet") ||
+              file.mimeType.includes("excel")
+            );
           default:
             return true;
         }
@@ -105,13 +112,15 @@ export default function FileManager({
     // Apply sorting
     filtered.sort((a, b) => {
       switch (sortBy) {
-        case 'name':
+        case "name":
           return a.name.localeCompare(b.name);
-        case 'size':
+        case "size":
           return b.size - a.size;
-        case 'date':
-          return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-        case 'type':
+        case "date":
+          return (
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          );
+        case "type":
           return a.mimeType.localeCompare(b.mimeType);
         default:
           return 0;
@@ -128,21 +137,21 @@ export default function FileManager({
       const userFiles = await fileStorageService.listUserFiles(category);
       setFiles(userFiles);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load files');
+      setError(err instanceof Error ? err.message : "Failed to load files");
     } finally {
       setLoading(false);
     }
   };
 
   const handleUploadComplete = (uploadedFiles: StoredFile[]) => {
-    setFiles(prev => [...uploadedFiles, ...prev]);
+    setFiles((prev) => [...uploadedFiles, ...prev]);
   };
 
   const handleDownload = async (file: StoredFile) => {
     try {
       const blob = await fileStorageService.downloadFile(file.path);
       const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
+      const a = document.createElement("a");
       a.href = url;
       a.download = file.name;
       document.body.appendChild(a);
@@ -150,7 +159,7 @@ export default function FileManager({
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Download failed');
+      setError(err instanceof Error ? err.message : "Download failed");
     }
   };
 
@@ -161,62 +170,64 @@ export default function FileManager({
 
     try {
       await fileStorageService.deleteFile(file.path);
-      setFiles(prev => prev.filter(f => f.id !== file.id));
+      setFiles((prev) => prev.filter((f) => f.id !== file.id));
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Delete failed');
+      setError(err instanceof Error ? err.message : "Delete failed");
     }
   };
 
   const handleView = async (file: StoredFile) => {
     try {
       const signedUrl = await fileStorageService.getSignedUrl(file.path);
-      window.open(signedUrl, '_blank');
+      window.open(signedUrl, "_blank");
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Preview failed');
+      setError(err instanceof Error ? err.message : "Preview failed");
     }
   };
 
   const formatFileSize = (bytes: number) => {
-    if (bytes === 0) return '0 Bytes';
+    if (bytes === 0) return "0 Bytes";
     const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const sizes = ["Bytes", "KB", "MB", "GB"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     });
   };
 
   const getFileIcon = (mimeType: string) => {
-    if (mimeType.startsWith('image/')) {
-      return '🖼️';
-    } else if (mimeType.includes('pdf')) {
-      return '📄';
-    } else if (mimeType.includes('document') || mimeType.includes('word')) {
-      return '📝';
-    } else if (mimeType.includes('spreadsheet') || mimeType.includes('excel')) {
-      return '📊';
+    if (mimeType.startsWith("image/")) {
+      return "🖼️";
+    } else if (mimeType.includes("pdf")) {
+      return "📄";
+    } else if (mimeType.includes("document") || mimeType.includes("word")) {
+      return "📝";
+    } else if (mimeType.includes("spreadsheet") || mimeType.includes("excel")) {
+      return "📊";
     }
-    return '📁';
+    return "📁";
   };
 
   const getFileTypeLabel = (mimeType: string) => {
-    if (mimeType.startsWith('image/')) return 'Image';
-    if (mimeType.includes('pdf')) return 'PDF';
-    if (mimeType.includes('document') || mimeType.includes('word')) return 'Document';
-    if (mimeType.includes('spreadsheet') || mimeType.includes('excel')) return 'Spreadsheet';
-    return 'File';
+    if (mimeType.startsWith("image/")) return "Image";
+    if (mimeType.includes("pdf")) return "PDF";
+    if (mimeType.includes("document") || mimeType.includes("word"))
+      return "Document";
+    if (mimeType.includes("spreadsheet") || mimeType.includes("excel"))
+      return "Spreadsheet";
+    return "File";
   };
 
   const toggleFileSelection = (fileId: string) => {
-    setSelectedFiles(prev => {
+    setSelectedFiles((prev) => {
       const newSet = new Set(prev);
       if (newSet.has(fileId)) {
         newSet.delete(fileId);
@@ -228,7 +239,7 @@ export default function FileManager({
   };
 
   const selectAllFiles = () => {
-    setSelectedFiles(new Set(filteredFiles.map(f => f.id)));
+    setSelectedFiles(new Set(filteredFiles.map((f) => f.id)));
   };
 
   const clearSelection = () => {
@@ -244,7 +255,7 @@ export default function FileManager({
   }
 
   return (
-    <div className={cn('space-y-6', className)}>
+    <div className={cn("space-y-6", className)}>
       {error && (
         <Alert variant="destructive">
           <AlertDescription>{error}</AlertDescription>
@@ -307,7 +318,10 @@ export default function FileManager({
                 </Select>
 
                 {/* Sort */}
-                <Select value={sortBy} onValueChange={(value) => setSortBy(value as SortBy)}>
+                <Select
+                  value={sortBy}
+                  onValueChange={(value) => setSortBy(value as SortBy)}
+                >
                   <SelectTrigger className="w-[150px]">
                     <SelectValue placeholder="Sort by" />
                   </SelectTrigger>
@@ -322,17 +336,17 @@ export default function FileManager({
                 {/* View Mode */}
                 <div className="flex border rounded-md">
                   <Button
-                    variant={viewMode === 'grid' ? 'default' : 'ghost'}
+                    variant={viewMode === "grid" ? "default" : "ghost"}
                     size="sm"
-                    onClick={() => setViewMode('grid')}
+                    onClick={() => setViewMode("grid")}
                     aria-label="Grid view"
                   >
                     <Grid className="h-4 w-4" />
                   </Button>
                   <Button
-                    variant={viewMode === 'list' ? 'default' : 'ghost'}
+                    variant={viewMode === "list" ? "default" : "ghost"}
                     size="sm"
-                    onClick={() => setViewMode('list')}
+                    onClick={() => setViewMode("list")}
                     aria-label="List view"
                   >
                     <List className="h-4 w-4" />
@@ -349,8 +363,8 @@ export default function FileManager({
                 <Files className="mx-auto h-16 w-16 text-muted-foreground mb-4" />
                 <h3 className="text-lg font-medium mb-2">No files found</h3>
                 <p className="text-muted-foreground">
-                  {files.length === 0 
-                    ? "Upload some files to get started" 
+                  {files.length === 0
+                    ? "Upload some files to get started"
                     : "Try adjusting your search or filter"}
                 </p>
               </CardContent>
@@ -358,7 +372,7 @@ export default function FileManager({
           ) : (
             <Card>
               <CardContent className="p-6">
-                {viewMode === 'grid' ? (
+                {viewMode === "grid" ? (
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                     {filteredFiles.map((file) => (
                       <div
@@ -366,24 +380,34 @@ export default function FileManager({
                         className="border rounded-lg p-4 hover:shadow-md transition-shadow"
                       >
                         <div className="flex items-center justify-between mb-3">
-                          <span className="text-3xl">{getFileIcon(file.mimeType)}</span>
+                          <span className="text-3xl">
+                            {getFileIcon(file.mimeType)}
+                          </span>
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                              <Button variant="ghost" size="sm" aria-label="File actions">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                aria-label="File actions"
+                              >
                                 <MoreVertical className="h-4 w-4" />
                               </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent>
-                              <DropdownMenuItem onClick={() => handleView(file)}>
+                              <DropdownMenuItem
+                                onClick={() => handleView(file)}
+                              >
                                 <Eye className="h-4 w-4 mr-2" />
                                 View
                               </DropdownMenuItem>
-                              <DropdownMenuItem onClick={() => handleDownload(file)}>
+                              <DropdownMenuItem
+                                onClick={() => handleDownload(file)}
+                              >
                                 <Download className="h-4 w-4 mr-2" />
                                 Download
                               </DropdownMenuItem>
                               {allowDelete && (
-                                <DropdownMenuItem 
+                                <DropdownMenuItem
                                   onClick={() => handleDelete(file)}
                                   className="text-red-600"
                                 >
@@ -394,11 +418,14 @@ export default function FileManager({
                             </DropdownMenuContent>
                           </DropdownMenu>
                         </div>
-                        
-                        <h4 className="font-medium text-sm mb-2 truncate" title={file.name}>
+
+                        <h4
+                          className="font-medium text-sm mb-2 truncate"
+                          title={file.name}
+                        >
                           {file.name}
                         </h4>
-                        
+
                         <div className="space-y-1 text-xs text-muted-foreground">
                           <div className="flex justify-between">
                             <span>{getFileTypeLabel(file.mimeType)}</span>
@@ -417,7 +444,9 @@ export default function FileManager({
                         className="flex items-center justify-between p-3 border rounded-lg hover:bg-muted/50"
                       >
                         <div className="flex items-center space-x-3 flex-1 min-w-0">
-                          <span className="text-xl">{getFileIcon(file.mimeType)}</span>
+                          <span className="text-xl">
+                            {getFileIcon(file.mimeType)}
+                          </span>
                           <div className="flex-1 min-w-0">
                             <p className="font-medium truncate">{file.name}</p>
                             <div className="flex items-center space-x-4 text-sm text-muted-foreground">

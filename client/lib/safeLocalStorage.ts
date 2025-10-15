@@ -20,7 +20,10 @@ export function safeGetLocal<T = any>(key: string, fallback: T): T {
 
 export function generateId(prefix = "", index?: number): string {
   try {
-    if (typeof crypto !== "undefined" && typeof (crypto as any).randomUUID === "function") {
+    if (
+      typeof crypto !== "undefined" &&
+      typeof (crypto as any).randomUUID === "function"
+    ) {
       return prefix + (crypto as any).randomUUID();
     }
   } catch (e) {

@@ -563,22 +563,33 @@ export default function QuoteBuilder() {
             <Badge className={getStatusColor(quote.status)} variant="secondary">
               {quote.status}
             </Badge>
-            <Button variant="outline" size="sm" onClick={generatePDF} disabled={saving}>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={generatePDF}
+              disabled={saving}
+            >
               <Download className="w-4 h-4 mr-2" />
               PDF
             </Button>
 
-            {(quote as any).attachments && (quote as any).attachments.length > 0 && (
-              <div className="flex items-center space-x-2">
-                {(quote as any).attachments.map((att: any) => (
-                  <a key={att.id || att.name} href={att.url} target="_blank" rel="noreferrer">
-                    <Button variant="ghost" size="sm">
-                      <Download className="w-4 h-4 mr-2" /> {att.name}
-                    </Button>
-                  </a>
-                ))}
-              </div>
-            )}
+            {(quote as any).attachments &&
+              (quote as any).attachments.length > 0 && (
+                <div className="flex items-center space-x-2">
+                  {(quote as any).attachments.map((att: any) => (
+                    <a
+                      key={att.id || att.name}
+                      href={att.url}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <Button variant="ghost" size="sm">
+                        <Download className="w-4 h-4 mr-2" /> {att.name}
+                      </Button>
+                    </a>
+                  ))}
+                </div>
+              )}
 
             <Button
               variant="outline"

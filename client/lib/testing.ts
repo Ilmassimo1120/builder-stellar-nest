@@ -3,7 +3,9 @@ import { vi } from "vitest";
 /**
  * Mock localStorage for testing
  */
-export const createMockLocalStorage = (initial: Record<string, string> = {}) => {
+export const createMockLocalStorage = (
+  initial: Record<string, string> = {},
+) => {
   const store: Record<string, string> = { ...initial };
   const mock = {
     getItem: vi.fn((key: string) => (key in store ? store[key] : null)),
@@ -21,7 +23,9 @@ export const createMockLocalStorage = (initial: Record<string, string> = {}) => 
 
   const install = () => {
     try {
-      (globalThis as any).__originalLocalStorage__ = (globalThis as any).localStorage;
+      (globalThis as any).__originalLocalStorage__ = (
+        globalThis as any
+      ).localStorage;
     } catch (e) {
       // ignore
     }

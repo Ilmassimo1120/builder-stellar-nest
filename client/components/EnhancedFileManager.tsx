@@ -459,7 +459,11 @@ export default function EnhancedFileManager({
                           <FileIcon className="h-8 w-8 text-muted-foreground" />
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                              <Button variant="ghost" size="sm" aria-label="File actions">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                aria-label="File actions"
+                              >
                                 <MoreVertical className="h-4 w-4" />
                               </Button>
                             </DropdownMenuTrigger>
@@ -636,7 +640,11 @@ export default function EnhancedFileManager({
                           </Button>
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                              <Button variant="ghost" size="sm" aria-label="File actions">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                aria-label="File actions"
+                              >
                                 <MoreVertical className="h-4 w-4" />
                               </Button>
                             </DropdownMenuTrigger>

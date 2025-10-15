@@ -64,7 +64,10 @@ class QuoteService {
     try {
       this.quotes = safeGetLocal("chargeSourceQuotes", this.quotes);
 
-      this.templates = safeGetLocal("chargeSourceQuoteTemplates", this.templates);
+      this.templates = safeGetLocal(
+        "chargeSourceQuoteTemplates",
+        this.templates,
+      );
 
       this.marginSettings = {
         ...DEFAULT_MARGIN_SETTINGS,

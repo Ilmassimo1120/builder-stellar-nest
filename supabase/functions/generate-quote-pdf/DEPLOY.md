@@ -31,11 +31,12 @@ Deployment steps for supabase/functions/generate-quote-pdf
    - Alternatively, call the function directly (authenticated) via curl:
 
      curl -X POST "https://<project>.supabase.co/functions/v1/generate-quote-pdf" \
-       -H "Authorization: Bearer <SERVICE_ROLE_KEY>" \
-       -H "Content-Type: application/json" \
-       -d '{"quoteId":"<quote-id>"}'
+      -H "Authorization: Bearer <SERVICE_ROLE_KEY>" \
+      -H "Content-Type: application/json" \
+      -d '{"quoteId":"<quote-id>"}'
 
 6. Troubleshooting:
+
    - Check function logs in Supabase dashboard -> Functions -> select function -> Logs.
    - Ensure service role key has storage permissions and DB write permissions.
    - If attachment signed URL fails, verify bucket CORS and permissions.
