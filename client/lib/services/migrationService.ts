@@ -168,8 +168,7 @@ class MigrationService {
 
   private getLocalStorageData(key: string): any {
     try {
-      const data = localStorage.getItem(key);
-      return data ? JSON.parse(data) : null;
+      return safeGetLocal(key, null);
     } catch (error) {
       console.error(`Error reading ${key} from localStorage:`, error);
       return null;
