@@ -24,6 +24,8 @@ interface UserPreferences {
   lastUpdated: string;
 }
 
+import { safeGetLocal } from "./safeLocalStorage";
+
 class UserPreferencesService {
   private storageKey = "chargeSourceUserPreferences";
   private allPreferences: UserPreferences[] = [];
