@@ -122,8 +122,8 @@ export default function Index() {
 
           {/* Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16">
-            {stats.map((stat, index) => (
-              <div key={index} className="text-center">
+            {stats.map((stat) => (
+              <div key={stat.label} className="text-center">
                 <div className="flex items-center justify-center mb-2 text-primary">
                   {stat.icon}
                 </div>
