@@ -482,7 +482,7 @@ export default function ProjectWizard() {
   const loadExistingProject = async (projectId: string) => {
     try {
       // First try to get from localStorage (for now)
-      const storedProjects = localStorage.getItem("chargeSourceProjects");
+      const projects = safeGetLocal("chargeSourceProjects", []);
       if (storedProjects) {
         const projects = safeGetLocal("chargeSourceProjects", []);
         const project = projects.find((p: any) => p.id === projectId);
