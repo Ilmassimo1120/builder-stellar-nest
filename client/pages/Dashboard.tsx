@@ -908,7 +908,7 @@ export default function Dashboard() {
                                     <Calculator className="w-4 h-4 mr-1" />
                                     Quote
                                   </Button>
-                                  <Button variant="ghost" size="sm">
+                                  <Button variant="ghost" size="sm" aria-label="Project actions">
                                     <MoreHorizontal className="w-4 h-4" />
                                   </Button>
                                 </>
