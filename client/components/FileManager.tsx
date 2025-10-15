@@ -325,6 +325,7 @@ export default function FileManager({
                     variant={viewMode === 'grid' ? 'default' : 'ghost'}
                     size="sm"
                     onClick={() => setViewMode('grid')}
+                    aria-label="Grid view"
                   >
                     <Grid className="h-4 w-4" />
                   </Button>
@@ -332,6 +333,7 @@ export default function FileManager({
                     variant={viewMode === 'list' ? 'default' : 'ghost'}
                     size="sm"
                     onClick={() => setViewMode('list')}
+                    aria-label="List view"
                   >
                     <List className="h-4 w-4" />
                   </Button>
