@@ -60,15 +60,15 @@ export function useThrottle<T extends (...args: any[]) => any>(
 /**
  * Local storage hook with error handling and JSON parsing
  */
+import { safeGetLocal } from "./safeLocalStorage";
+
 export function useLocalStorage<T>(
   key: string,
   defaultValue: T,
 ): [T, (value: T | ((prev: T) => T)) => void] {
   const getValue = useCallback((): T => {
     try {
-      const item = localStorage.getItem(key);
-      if (item === null) return defaultValue;
-      return JSON.parse(item);
+      return safeGetLocal<T>(key, defaultValue);
     } catch (error) {
       console.warn(`Error reading localStorage key "${key}":`, error);
       return defaultValue;
