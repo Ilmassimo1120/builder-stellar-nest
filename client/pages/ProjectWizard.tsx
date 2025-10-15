@@ -919,9 +919,7 @@ export default function ProjectWizard() {
 
       // Remove draft if it exists (project is now complete)
       if (currentDraftId) {
-        const drafts = JSON.parse(
-          localStorage.getItem("chargeSourceDrafts") || "[]",
-        );
+        const drafts = safeGetLocal("chargeSourceDrafts", []);
         const filteredDrafts = drafts.filter(
           (d: ProjectDraft) => d.id !== currentDraftId,
         );
