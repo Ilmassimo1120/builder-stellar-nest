@@ -663,7 +663,7 @@ export default function Projects() {
   const handleDuplicateProject = (project: Project) => {
     const duplicatedProject = {
       ...project,
-      id: `PRJ-${Date.now()}`,
+      id: generateId("PRJ-"),
       name: `${project.name} (Copy)`,
       status: "Planning",
       progress: 0,
