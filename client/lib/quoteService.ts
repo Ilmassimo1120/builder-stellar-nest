@@ -62,23 +62,14 @@ class QuoteService {
   // Storage operations
   private loadFromStorage(): void {
     try {
-      const quotesData = localStorage.getItem("chargeSourceQuotes");
-      if (quotesData) {
-        this.quotes = JSON.parse(quotesData);
-      }
+      this.quotes = safeGetLocal("chargeSourceQuotes", this.quotes);
 
-      const templatesData = localStorage.getItem("chargeSourceQuoteTemplates");
-      if (templatesData) {
-        this.templates = JSON.parse(templatesData);
-      }
+      this.templates = safeGetLocal("chargeSourceQuoteTemplates", this.templates);
 
-      const marginsData = localStorage.getItem("chargeSourceMarginSettings");
-      if (marginsData) {
-        this.marginSettings = {
-          ...DEFAULT_MARGIN_SETTINGS,
-          ...JSON.parse(marginsData),
-        };
-      }
+      this.marginSettings = {
+        ...DEFAULT_MARGIN_SETTINGS,
+        ...safeGetLocal("chargeSourceMarginSettings", {}),
+      };
     } catch (error) {
       console.error("Error loading quote data from storage:", error);
     }
