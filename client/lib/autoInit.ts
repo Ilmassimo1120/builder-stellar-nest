@@ -62,12 +62,7 @@ class AutoInitializationService {
         console.log("📦 Automatically migrating local data to cloud...");
 
         // Try to get current user for migration
-        const localUser = localStorage.getItem("chargeSourceUser");
-        let user = null;
-
-        if (localUser) {
-          user = JSON.parse(localUser);
-        }
+        const user = safeGetLocal("chargeSourceUser", null);
 
         // Perform silent migration
         const result =
