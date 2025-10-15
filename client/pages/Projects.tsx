@@ -312,9 +312,7 @@ export default function Projects() {
       }));
 
       // Load drafts for current user
-      const drafts = JSON.parse(
-        localStorage.getItem("chargeSourceDrafts") || "[]",
-      );
+      const drafts = safeGetLocal("chargeSourceDrafts", []);
       const userDrafts = drafts
         .filter((draft: any) => draft.userId === user?.id)
         .map((draft: any) => ({
@@ -1258,7 +1256,7 @@ export default function Projects() {
               )}
               {isSupabaseConnected && (
                 <Badge variant="outline" className="text-xs">
-                  ��️ Cloud Storage
+                  ☁️ Cloud Storage
                 </Badge>
               )}
             </div>
