@@ -674,9 +674,7 @@ export default function Projects() {
       createdAt: new Date().toISOString(),
     };
 
-    const localProjects = JSON.parse(
-      localStorage.getItem("chargeSourceProjects") || "[]",
-    );
+    const localProjects = safeGetLocal("chargeSourceProjects", []);
     localProjects.unshift(duplicatedProject);
     localStorage.setItem("chargeSourceProjects", JSON.stringify(localProjects));
 
@@ -1260,7 +1258,7 @@ export default function Projects() {
               )}
               {isSupabaseConnected && (
                 <Badge variant="outline" className="text-xs">
-                  ☁️ Cloud Storage
+                  ��️ Cloud Storage
                 </Badge>
               )}
             </div>
