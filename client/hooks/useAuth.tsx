@@ -64,10 +64,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const checkSession = () => {
       try {
-        const storedUser = localStorage.getItem("chargeSourceUser");
+        const storedUser = safeGetLocal("chargeSourceUser", null);
         if (storedUser) {
-          const userData = JSON.parse(storedUser);
-          setUser(userData);
+          setUser(storedUser as any);
         }
       } catch (error) {
         console.error("Error loading user session:", error);
