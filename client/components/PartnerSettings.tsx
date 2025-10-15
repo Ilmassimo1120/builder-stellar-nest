@@ -215,9 +215,9 @@ export default function PartnerSettings() {
       const storageKey = canEditAll
         ? "chargeSourcePartnerConfig"
         : `chargeSourcePartnerConfig_${user?.id}`;
-      const savedConfig = localStorage.getItem(storageKey);
-      if (savedConfig) {
-        setConfig({ ...defaultPartnerConfig, ...JSON.parse(savedConfig) });
+      const savedConfig = safeGetLocal(storageKey, {});
+      if (savedConfig && Object.keys(savedConfig).length > 0) {
+        setConfig({ ...defaultPartnerConfig, ...savedConfig });
       } else if (user?.company) {
         // Pre-populate with user data
         setConfig((prev) => ({
