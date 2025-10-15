@@ -211,19 +211,12 @@ export default function ProjectsWorking() {
 
                   {/* Actions */}
                   <div className="flex gap-2 pt-4">
-                    <Link to={`/projects/${project.id}`} className="flex-1">
-                      <Button variant="outline" size="sm" className="w-full">
-                        View Details
-                      </Button>
-                    </Link>
-                    <Link
-                      to={`/projects/${project.id}/edit`}
-                      className="flex-1"
-                    >
-                      <Button size="sm" className="w-full">
-                        Edit
-                      </Button>
-                    </Link>
+                    <Button variant="outline" size="sm" className="flex-1" asChild>
+                      <Link to={`/projects/${project.id}`}>View Details</Link>
+                    </Button>
+                    <Button size="sm" className="flex-1" asChild>
+                      <Link to={`/projects/${project.id}/edit`}>Edit</Link>
+                    </Button>
                   </div>
                 </div>
               </CardContent>

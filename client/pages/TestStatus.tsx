@@ -329,9 +329,9 @@ export default function TestStatus() {
           </p>
         </div>
         <div className="flex items-center space-x-2">
-          <Link to="/dashboard">
-            <Button variant="outline">← Dashboard</Button>
-          </Link>
+          <Button variant="outline" asChild>
+            <Link to="/dashboard">← Dashboard</Link>
+          </Button>
           {getStatusBadge(overallStatus)}
         </div>
       </div>
@@ -444,7 +444,7 @@ export default function TestStatus() {
       {/* Demo Credentials Section */}
       <Card>
         <CardHeader>
-          <CardTitle>🧪 Demo Authentication</CardTitle>
+          <CardTitle>���� Demo Authentication</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

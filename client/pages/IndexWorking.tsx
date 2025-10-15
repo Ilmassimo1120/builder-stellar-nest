@@ -33,12 +33,12 @@ export default function IndexWorking() {
               <h1 className="text-2xl font-bold">ChargeSource</h1>
             </div>
             <div className="flex items-center space-x-4">
-              <Link to="/login">
-                <Button variant="outline">Login</Button>
-              </Link>
-              <Link to="/register">
-                <Button>Get Started</Button>
-              </Link>
+              <Button variant="outline" asChild>
+                <Link to="/login">Login</Link>
+              </Button>
+              <Button asChild>
+                <Link to="/register">Get Started</Link>
+              </Button>
             </div>
           </div>
         </div>
@@ -58,19 +58,12 @@ export default function IndexWorking() {
             electrical contractors specializing in EV charging infrastructure.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/register">
-              <Button
-                size="lg"
-                className="flex items-center gap-2 px-8 py-4 text-lg"
-              >
-                Start Free Trial
-              </Button>
-            </Link>
-            <Link to="/demo">
-              <Button size="lg" variant="outline" className="px-8 py-4 text-lg">
-                View Demo
-              </Button>
-            </Link>
+            <Button size="lg" className="flex items-center gap-2 px-8 py-4 text-lg" asChild>
+              <Link to="/register">Start Free Trial</Link>
+            </Button>
+            <Button size="lg" variant="outline" className="px-8 py-4 text-lg" asChild>
+              <Link to="/demo">View Demo</Link>
+            </Button>
           </div>
         </div>
       </section>

@@ -97,45 +97,36 @@ export default function DashboardWorking() {
       <div className="p-6">
         {/* Quick Actions */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-          <Link to="/projects/new">
-            <Button className="w-full h-16 flex flex-col gap-2">
+          <Button className="w-full h-16 flex flex-col gap-2" asChild>
+            <Link to="/projects/new">
               <Plus className="h-5 w-5" />
               New Project
-            </Button>
-          </Link>
-          <Link to="/quotes/new">
-            <Button
-              variant="outline"
-              className="w-full h-16 flex flex-col gap-2"
-            >
+            </Link>
+          </Button>
+          <Button variant="outline" className="w-full h-16 flex flex-col gap-2" asChild>
+            <Link to="/quotes/new">
               <Calculator className="h-5 w-5" />
               Create Quote
-            </Button>
-          </Link>
-          <Link to="/catalogue">
-            <Button
-              variant="outline"
-              className="w-full h-16 flex flex-col gap-2"
-            >
+            </Link>
+          </Button>
+          <Button variant="outline" className="w-full h-16 flex flex-col gap-2" asChild>
+            <Link to="/catalogue">
               <Package className="h-5 w-5" />
               Browse Catalog
-            </Button>
-          </Link>
-          <Link to="/customers">
-            <Button
-              variant="outline"
-              className="w-full h-16 flex flex-col gap-2"
-            >
+            </Link>
+          </Button>
+          <Button variant="outline" className="w-full h-16 flex flex-col gap-2" asChild>
+            <Link to="/customers">
               <Users className="h-5 w-5" />
               Manage Clients
-            </Button>
-          </Link>
+            </Link>
+          </Button>
         </div>
 
         {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          {stats.map((stat, index) => (
-            <Card key={index}>
+          {stats.map((stat) => (
+            <Card key={stat.title}>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">
                   {stat.title}
@@ -191,11 +182,9 @@ export default function DashboardWorking() {
                 ))}
               </div>
               <div className="mt-4">
-                <Link to="/projects">
-                  <Button variant="outline" className="w-full">
-                    View All Projects
-                  </Button>
-                </Link>
+                  <Button variant="outline" className="w-full" asChild>
+                  <Link to="/projects">View All Projects</Link>
+                </Button>
               </div>
             </CardContent>
           </Card>
@@ -229,11 +218,9 @@ export default function DashboardWorking() {
                 ))}
               </div>
               <div className="mt-4">
-                <Link to="/quotes">
-                  <Button variant="outline" className="w-full">
-                    View All Quotes
-                  </Button>
-                </Link>
+                <Button variant="outline" className="w-full" asChild>
+                  <Link to="/quotes">View All Quotes</Link>
+                </Button>
               </div>
             </CardContent>
           </Card>
