@@ -442,8 +442,8 @@ export default function HelpCentre() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {resources.map((resource, index) => (
-                <Card key={index} className="hover:shadow-lg transition-shadow">
+              {resources.map((resource) => (
+                <Card key={resource.title} className="hover:shadow-lg transition-shadow">
                   <CardHeader className="text-center">
                     <div className="flex justify-center mb-4">
                       {resource.icon}
