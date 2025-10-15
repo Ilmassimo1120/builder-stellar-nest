@@ -422,6 +422,7 @@ export default function EnhancedFileManager({
                     variant={viewMode === "list" ? "default" : "ghost"}
                     size="sm"
                     onClick={() => setViewMode("list")}
+                    aria-label="List view"
                   >
                     <List className="h-4 w-4" />
                   </Button>
