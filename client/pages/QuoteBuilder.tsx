@@ -64,7 +64,7 @@ import {
   ProductCatalogueItem,
 } from "@/lib/quoteTypes";
 import { quoteService } from "@/lib/quoteService";
-import { pdfGenerator } from "@/lib/pdfGenerator";
+import supabaseQuoteService from "@/lib/services/supabaseQuoteService";
 import ProductCatalogBrowser from "@/components/ProductCatalogBrowser";
 import ProductComparison from "@/components/ProductComparison";
 
@@ -368,7 +368,7 @@ export default function QuoteBuilder() {
     }
   };
 
-  // Generate PDF
+  // Generate PDF (server-side via Supabase Edge Function)
   const generatePDF = async () => {
     if (!quote) return;
 
@@ -379,18 +379,73 @@ export default function QuoteBuilder() {
         description: "Quote PDF is being generated...",
       });
 
-      await pdfGenerator.generateQuotePDF(quote, {
-        includeHeader: true,
-        includeFooter: true,
-        includeTerms: true,
-        includeSpecifications: true,
-        fileName: `quote-${quote.quoteNumber}.pdf`,
-      });
+      const result: any = await supabaseQuoteService.generatePDF(quote.id);
 
-      toast({
-        title: "PDF Generated",
-        description: "Quote PDF has been downloaded successfully.",
-      });
+      // result is expected to be the JSON returned by the Edge function: { success: true, file: { ... } }
+      let attachment = null;
+      if (result && typeof result === "object") {
+        if (result.file) attachment = result.file;
+        else if (result.data && result.data.file) attachment = result.data.file;
+      }
+
+      // If a Blob was returned (fallback), create an object URL and attach
+      if (attachment) {
+        const updatedQuote = {
+          ...quote,
+          // append attachment to local quote attachments for immediate UI feedback
+          attachments: [...((quote as any).attachments || []), attachment],
+        } as any;
+
+        setQuote(updatedQuote);
+        try {
+          quoteService.updateQuote(updatedQuote);
+        } catch (e) {
+          // ignore local update failures
+        }
+
+        toast({
+          title: "PDF Generated",
+          description: "Quote PDF saved and attached to quote.",
+        });
+      } else if (result instanceof Blob) {
+        const url = URL.createObjectURL(result);
+        const name = `quote-${quote.quoteNumber || quote.id}.pdf`;
+        const attachmentObj = {
+          id: String(Date.now()),
+          name,
+          url,
+          type: "application/pdf",
+          size: result.size,
+          uploadedAt: new Date().toISOString(),
+        } as any;
+
+        const updatedQuote = {
+          ...quote,
+          attachments: [...((quote as any).attachments || []), attachmentObj],
+        } as any;
+
+        setQuote(updatedQuote);
+        try {
+          quoteService.updateQuote(updatedQuote);
+        } catch (e) {}
+
+        // Trigger browser download
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = name;
+        a.click();
+        URL.revokeObjectURL(url);
+
+        toast({
+          title: "PDF Generated",
+          description: "Quote PDF downloaded and attached to quote.",
+        });
+      } else {
+        toast({
+          title: "PDF Generated",
+          description: "Quote PDF processed.",
+        });
+      }
     } catch (error) {
       console.error("PDF generation failed:", error);
       toast({
@@ -508,10 +563,23 @@ export default function QuoteBuilder() {
             <Badge className={getStatusColor(quote.status)} variant="secondary">
               {quote.status}
             </Badge>
-            <Button variant="outline" size="sm" onClick={generatePDF}>
+            <Button variant="outline" size="sm" onClick={generatePDF} disabled={saving}>
               <Download className="w-4 h-4 mr-2" />
               PDF
             </Button>
+
+            {(quote as any).attachments && (quote as any).attachments.length > 0 && (
+              <div className="flex items-center space-x-2">
+                {(quote as any).attachments.map((att: any) => (
+                  <a key={att.id || att.name} href={att.url} target="_blank" rel="noreferrer">
+                    <Button variant="ghost" size="sm">
+                      <Download className="w-4 h-4 mr-2" /> {att.name}
+                    </Button>
+                  </a>
+                ))}
+              </div>
+            )}
+
             <Button
               variant="outline"
               size="sm"
