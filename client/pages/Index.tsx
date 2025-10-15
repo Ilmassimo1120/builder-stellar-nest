@@ -29,6 +29,7 @@ import {
 } from "lucide-react";
 import { Logo } from "@/components/ui/logo";
 import { useAuth } from "@/hooks/useAuth";
+import { features, stats } from './homeData';
 
 export default function Index() {
   const { isAuthenticated } = useAuth();
