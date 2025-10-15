@@ -98,13 +98,12 @@ export default function FileStorageDebug() {
 
     // Test local auth
     try {
-      const storedUser = localStorage.getItem("chargeSourceUser");
+      const storedUser = safeGetLocal("chargeSourceUser", null);
       if (storedUser) {
-        const userData = JSON.parse(storedUser);
         localAuthResult = {
           success: true,
-          message: `Local auth user: ${userData.email} (${userData.role})`,
-          data: userData,
+          message: `Local auth user: ${storedUser.email} (${storedUser.role})`,
+          data: storedUser,
         };
       } else {
         localAuthResult = {
