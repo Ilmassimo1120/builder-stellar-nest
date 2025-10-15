@@ -405,8 +405,8 @@ export default function Pricing() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {additionalFeatures.map((feature, index) => (
-                <div key={index} className="text-center">
+              {additionalFeatures.map((feature) => (
+                <div key={feature.title} className="text-center">
                   <div className="flex justify-center mb-4">{feature.icon}</div>
                   <h3 className="font-semibold mb-2">{feature.title}</h3>
                   <p className="text-sm text-muted-foreground">
