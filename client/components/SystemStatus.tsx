@@ -4,6 +4,7 @@ import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { Alert, AlertDescription } from "./ui/alert";
 import { CheckCircle, XCircle, Clock, RefreshCw } from "lucide-react";
+import { safeGetLocal } from "@/lib/safeLocalStorage";
 
 interface SystemCheck {
   name: string;
