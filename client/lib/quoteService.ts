@@ -158,7 +158,7 @@ class QuoteService {
 
     const newQuote: Quote = {
       ...originalQuote,
-      id: `quote-${Date.now()}`,
+      id: generateId("quote-"),
       quoteNumber: generateQuoteNumber(),
       version: 1,
       status: "draft",
@@ -187,7 +187,7 @@ class QuoteService {
 
     const newLineItem: QuoteLineItem = {
       ...lineItem,
-      id: `line-${Date.now()}`,
+      id: generateId("line-"),
       totalPrice: this.calculateLineItemTotal(
         lineItem.quantity,
         lineItem.unitPrice,
@@ -338,7 +338,7 @@ class QuoteService {
   applyTemplate(quote: Quote, template: QuoteTemplate): Quote {
     const lineItems = template.lineItems.map((item) => ({
       ...item,
-      id: `line-${Date.now()}-${Math.random()}`,
+      id: generateId("line-"),
       totalPrice: this.calculateLineItemTotal(
         item.quantity,
         item.unitPrice,
