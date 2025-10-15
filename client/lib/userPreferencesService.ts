@@ -437,10 +437,7 @@ class UserPreferencesService {
 
   private loadFromStorage(): void {
     try {
-      const storedPreferences = localStorage.getItem(this.storageKey);
-      if (storedPreferences) {
-        this.allPreferences = JSON.parse(storedPreferences);
-      }
+      this.allPreferences = safeGetLocal(this.storageKey, []);
     } catch (error) {
       console.error("Error loading user preferences from storage:", error);
       this.allPreferences = [];
