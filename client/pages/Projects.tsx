@@ -277,11 +277,9 @@ export default function Projects() {
       }
 
       // Load from localStorage and preserve all detailed data
-      const localProjects = JSON.parse(
-        localStorage.getItem("chargeSourceProjects") || "[]",
-      );
+      const localProjects = safeGetLocal("chargeSourceProjects", []);
       const formattedLocalProjects = localProjects.map((project: any) => ({
-        id: project.id || `PRJ-${Date.now()}`,
+        id: project.id || generateId("PRJ-"),
         name: project.projectInfo?.name || project.name || "Unnamed Project",
         client:
           project.projectInfo?.client ||
