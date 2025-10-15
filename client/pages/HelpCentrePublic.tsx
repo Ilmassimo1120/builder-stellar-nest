@@ -281,9 +281,9 @@ export default function HelpCentrePublic() {
               <div className="lg:w-2/3">
                 <h2 className="text-2xl font-bold mb-6">Popular Topics</h2>
                 <div className="space-y-4">
-                  {popularTopics.map((topic, index) => (
+                  {popularTopics.map((topic) => (
                     <Card
-                      key={index}
+                      key={topic.title}
                       className="hover:shadow-md transition-shadow"
                     >
                       <CardContent className="p-6">
