@@ -569,10 +569,13 @@ export class CustomerService {
 
   private loadConfig(): CRMConfig {
     try {
-      const stored = localStorage.getItem("customerServiceConfig");
-      if (stored) {
-        return JSON.parse(stored);
-      }
+      return safeGetLocal("customerServiceConfig", {
+        provider: "native",
+        syncEnabled: false,
+        syncFrequency: "hourly",
+        autoCreateProjects: false,
+        autoSyncQuotes: false,
+      });
     } catch (error) {
       console.warn("Error loading customer service config:", error);
     }

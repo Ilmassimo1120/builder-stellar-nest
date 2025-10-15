@@ -1,5 +1,6 @@
 import { ProductCategory, ProductSubcategory } from "./productCatalog";
 import { productCatalog } from "./productCatalog";
+import { safeGetLocal, safeParse } from "./safeLocalStorage";
 
 class CategoryService {
   private categories: ProductCategory[] = [];
@@ -462,10 +463,7 @@ class CategoryService {
 
   private loadFromStorage(): void {
     try {
-      const storedCategories = localStorage.getItem(this.storageKey);
-      if (storedCategories) {
-        this.categories = JSON.parse(storedCategories);
-      }
+      this.categories = safeGetLocal(this.storageKey, []);
     } catch (error) {
       console.error("Error loading categories from storage:", error);
       this.categories = [];
@@ -479,7 +477,7 @@ class CategoryService {
 
   importCategories(categoriesJson: string): boolean {
     try {
-      const importedCategories = JSON.parse(categoriesJson);
+      const importedCategories = safeParse<any>(categoriesJson, []);
 
       // Basic validation
       if (!Array.isArray(importedCategories)) {

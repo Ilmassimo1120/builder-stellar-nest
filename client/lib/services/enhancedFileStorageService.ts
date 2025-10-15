@@ -1,4 +1,5 @@
 import { supabase } from "../supabase";
+import { safeGetLocal } from "../safeLocalStorage";
 
 export type BucketName =
   | "product-images"
@@ -280,15 +281,11 @@ class EnhancedFileStorageService {
 
       // Check local auth first (primary system)
       try {
-        const storedUser = localStorage.getItem("chargeSourceUser");
+        const storedUser = safeGetLocal("chargeSourceUser", null);
         if (storedUser) {
-          const userData = JSON.parse(storedUser);
-          user = {
-            id: userData.id,
-            email: userData.email,
-          };
+          user = { id: storedUser.id, email: storedUser.email };
           isAuthenticated = true;
-          console.log("Using local auth for upload:", userData.email);
+          console.log("Using local auth for upload:", storedUser.email);
         }
       } catch (error) {
         console.warn("Local auth check failed:", error);
@@ -648,10 +645,9 @@ class EnhancedFileStorageService {
 
       // Try local auth first
       try {
-        const storedUser = localStorage.getItem("chargeSourceUser");
+        const storedUser = safeGetLocal("chargeSourceUser", null);
         if (storedUser) {
-          const userData = JSON.parse(storedUser);
-          user = { id: userData.id, email: userData.email };
+          user = { id: storedUser.id, email: storedUser.email };
         }
       } catch (error) {
         console.warn("Local auth check failed for search:", error);

@@ -1,6 +1,7 @@
 import { ProductCatalogueItem } from "./quoteTypes";
 import { categoryService } from "./categoryService";
 import { userPreferencesService } from "./userPreferencesService";
+import { safeGetLocal } from "./safeLocalStorage";
 
 export interface ProductCategory {
   id: string;
@@ -804,10 +805,7 @@ class ProductCatalogService {
 
   private loadFromStorage(): void {
     try {
-      const storedProducts = localStorage.getItem("chargeSourceProducts");
-      if (storedProducts) {
-        this.products = JSON.parse(storedProducts);
-      }
+      this.products = safeGetLocal("chargeSourceProducts", []);
     } catch (error) {
       console.error("Error loading products from storage:", error);
     }

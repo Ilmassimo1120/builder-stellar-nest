@@ -246,25 +246,10 @@ export class NativeCustomerProvider implements CustomerProvider {
   // Helper methods for storage
   private loadFromStorage(): void {
     try {
-      const customersData = localStorage.getItem("nativeCustomers");
-      if (customersData) {
-        this.customers = JSON.parse(customersData);
-      }
-
-      const dealsData = localStorage.getItem("nativeDeals");
-      if (dealsData) {
-        this.deals = JSON.parse(dealsData);
-      }
-
-      const contactsData = localStorage.getItem("nativeContacts");
-      if (contactsData) {
-        this.contacts = JSON.parse(contactsData);
-      }
-
-      const lastSync = localStorage.getItem("nativeLastSync");
-      if (lastSync) {
-        this.lastSyncTime = lastSync;
-      }
+      this.customers = safeGetLocal("nativeCustomers", []);
+      this.deals = safeGetLocal("nativeDeals", []);
+      this.contacts = safeGetLocal("nativeContacts", []);
+      this.lastSyncTime = safeGetLocal("nativeLastSync", null);
     } catch (error) {
       console.warn("Error loading customer data from storage:", error);
     }
@@ -285,8 +270,8 @@ export class NativeCustomerProvider implements CustomerProvider {
 
   private getProjectLinks(): Record<string, string> {
     try {
-      const links = localStorage.getItem("customerProjectLinks");
-      return links ? JSON.parse(links) : {};
+      const links = safeGetLocal("customerProjectLinks", {});
+      return links || {};
     } catch {
       return {};
     }
@@ -294,8 +279,8 @@ export class NativeCustomerProvider implements CustomerProvider {
 
   private getQuoteLinks(): Record<string, string> {
     try {
-      const links = localStorage.getItem("customerQuoteLinks");
-      return links ? JSON.parse(links) : {};
+      const links = safeGetLocal("customerQuoteLinks", {});
+      return links || {};
     } catch {
       return {};
     }

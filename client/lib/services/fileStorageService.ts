@@ -1,4 +1,5 @@
 import { supabase } from "../supabase";
+import { safeGetLocal } from "../safeLocalStorage";
 
 export interface FileUpload {
   file: File;
@@ -102,15 +103,11 @@ class FileStorageService {
       let isAuthenticated = false;
 
       try {
-        const storedUser = localStorage.getItem("chargeSourceUser");
+        const storedUser = safeGetLocal("chargeSourceUser", null);
         if (storedUser) {
-          const userData = JSON.parse(storedUser);
-          user = {
-            id: userData.id,
-            email: userData.email,
-          };
+          user = { id: storedUser.id, email: storedUser.email };
           isAuthenticated = true;
-          console.log("Using local auth for file upload:", userData.email);
+          console.log("Using local auth for file upload:", storedUser.email);
         }
       } catch (error) {
         console.warn("Local auth check failed:", error);
@@ -343,10 +340,9 @@ class FileStorageService {
       let user = null;
 
       try {
-        const storedUser = localStorage.getItem("chargeSourceUser");
+        const storedUser = safeGetLocal("chargeSourceUser", null);
         if (storedUser) {
-          const userData = JSON.parse(storedUser);
-          user = { id: userData.id, email: userData.email };
+          user = { id: storedUser.id, email: storedUser.email };
         }
       } catch (error) {
         console.warn("Local auth check failed for file listing:", error);

@@ -1,5 +1,7 @@
 // Security utilities for ChargeSource app
 
+import { safeParse } from "./safeLocalStorage";
+
 /**
  * Input sanitization utilities
  */
@@ -204,7 +206,8 @@ export const secureStorage = {
       const itemStr = localStorage.getItem(key);
       if (!itemStr) return null;
 
-      const item = JSON.parse(itemStr);
+      const item = safeParse<any>(itemStr, null);
+      if (!item) return null;
       const now = new Date();
 
       if (now > new Date(item.expiration)) {
@@ -228,8 +231,8 @@ export const secureStorage = {
       try {
         const itemStr = localStorage.getItem(key);
         if (itemStr) {
-          const item = JSON.parse(itemStr);
-          if (item.expiration && new Date() > new Date(item.expiration)) {
+          const item = safeParse<any>(itemStr, null);
+          if (item && item.expiration && new Date() > new Date(item.expiration)) {
             localStorage.removeItem(key);
           }
         }

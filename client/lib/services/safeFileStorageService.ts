@@ -5,6 +5,7 @@ import {
   BucketName,
 } from "./enhancedFileStorageService";
 import { supabase } from "../supabase";
+import { safeGetLocal } from "../safeLocalStorage";
 
 /**
  * Safe wrapper around enhanced file storage service with comprehensive error handling
@@ -51,12 +52,11 @@ class SafeFileStorageService {
   }> {
     // Check local auth first (primary system)
     try {
-      const storedUser = localStorage.getItem("chargeSourceUser");
+      const storedUser = safeGetLocal("chargeSourceUser", null);
       if (storedUser) {
-        const userData = JSON.parse(storedUser);
         return {
           authenticated: true,
-          user: { id: userData.id, email: userData.email },
+          user: { id: storedUser.id, email: storedUser.email },
           error: null,
         };
       }

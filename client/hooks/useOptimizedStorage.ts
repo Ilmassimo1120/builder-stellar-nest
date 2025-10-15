@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 
 // Cache for localStorage values to prevent repeated JSON parsing
+import { safeGetLocal } from "@/lib/safeLocalStorage";
 const storageCache = new Map<string, any>();
 const listeners = new Map<string, Set<(value: any) => void>>();
 
@@ -204,9 +205,9 @@ export const storageUtils = {
   preloadKeys: (keys: string[]) => {
     keys.forEach((key) => {
       try {
-        const item = localStorage.getItem(key);
-        if (item !== null) {
-          storageCache.set(key, JSON.parse(item));
+        const parsed = safeGetLocal<any>(key, null);
+        if (parsed !== null) {
+          storageCache.set(key, parsed);
         }
       } catch (error) {
         console.warn(`Error preloading key "${key}":`, error);
