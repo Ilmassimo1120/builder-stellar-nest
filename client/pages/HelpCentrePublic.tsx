@@ -383,8 +383,8 @@ export default function HelpCentrePublic() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {supportOptions.map((option, index) => (
-                <Card key={index} className="text-center">
+              {supportOptions.map((option) => (
+                <Card key={option.title} className="text-center">
                   <CardHeader>
                     <div className="flex justify-center mb-4">
                       {option.icon}
