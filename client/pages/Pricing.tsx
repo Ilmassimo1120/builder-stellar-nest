@@ -359,16 +359,12 @@ export default function Pricing() {
                         className="w-full"
                         variant={plan.ctaVariant}
                         size="lg"
-                        asChild={plan.cta !== "Contact Sales"}
+                        asChild={true}
                       >
-                        {plan.cta === "Contact Sales" ? (
-                          <Link to="/contact">
-                            {plan.cta}
-                            <ArrowRight className="ml-2 w-4 h-4" />
-                          </Link>
-                        ) : (
-                          <Link to="/register">{plan.cta}</Link>
-                        )}
+                        <Link to={plan.cta === "Contact Sales" ? "/contact" : "/register"}>
+                          {plan.cta}
+                          {plan.cta === "Contact Sales" && <ArrowRight className="ml-2 w-4 h-4" />}
+                        </Link>
                       </Button>
 
                       <div className="space-y-3">
