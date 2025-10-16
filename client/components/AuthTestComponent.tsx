@@ -33,8 +33,8 @@ export default function AuthTestComponent() {
     try {
       // Test 1: Check Supabase client configuration
       addResult("📋 Testing Supabase Auth Configuration...");
-      addResult(`URL: ${supabase.supabaseUrl}`, "info");
-      addResult(`Key Present: ${supabase.supabaseKey ? "Yes" : "No"}`, "info");
+      addResult(`URL: ${import.meta.env.VITE_SUPABASE_URL}`, "info");
+      addResult(`Key Present: ${import.meta.env.VITE_SUPABASE_ANON_KEY ? "Yes" : "No"}`, "info");
 
       // Test 2: Check auth session
       addResult("🔐 Checking Current Auth Session...");
@@ -100,7 +100,7 @@ export default function AuthTestComponent() {
 
   const testSignUp = async () => {
     setTesting(true);
-    addResult("📝 Testing User Registration...");
+    addResult("���� Testing User Registration...");
 
     try {
       const testUser = {
