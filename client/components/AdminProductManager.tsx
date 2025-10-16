@@ -325,10 +325,11 @@ export default function AdminProductManager({
       setImageUploading(true);
 
       // Temporarily use a simple upload approach
-      const uploadResult = await enhancedFileStorageService.uploadFile(
+      const uploadResult = await enhancedFileStorageService.uploadFile({
         file,
-        "product-images" as any,
-      );
+        bucket: "product-images",
+        metadata: {},
+      });
 
       if (uploadResult) {
         // Add the uploaded image URL to the form data
