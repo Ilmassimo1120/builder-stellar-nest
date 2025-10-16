@@ -7,6 +7,7 @@ import {
   SyncResult,
   SyncStatus,
 } from "@shared/customer";
+import { safeGetLocal } from "../../safeLocalStorage";
 
 export class NativeCustomerProvider implements CustomerProvider {
   readonly name = "native";
