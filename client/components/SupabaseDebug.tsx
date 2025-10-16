@@ -23,11 +23,11 @@ export default function SupabaseDebug() {
 
       // Test 1: Basic connection
       try {
-        const response = await fetch(supabase.supabaseUrl + "/rest/v1/", {
+        const response = await fetch(import.meta.env.VITE_SUPABASE_URL + "/rest/v1/", {
           method: "GET",
           headers: {
-            apikey: supabase.supabaseKey,
-            Authorization: `Bearer ${supabase.supabaseKey}`,
+            apikey: import.meta.env.VITE_SUPABASE_ANON_KEY,
+            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
           },
         });
         addLog(`✅ REST API reachable: ${response.status}`);
@@ -78,7 +78,7 @@ export default function SupabaseDebug() {
           addLog(`❌ Cannot list tables: ${error.message}`);
         } else {
           addLog(`✅ Found ${data?.length || 0} tables in public schema`);
-          data?.forEach((table) => addLog(`  📑 Table: ${table.table_name}`));
+          data?.forEach((table) => addLog(`  ��� Table: ${table.table_name}`));
         }
       } catch (error) {
         addLog(`❌ Table listing failed: ${error}`);
