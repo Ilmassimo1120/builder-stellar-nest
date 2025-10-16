@@ -197,7 +197,7 @@ class FileStorageService {
 
           // Call secure upload edge function
           const response = await fetch(
-            `${supabase.supabaseUrl}/functions/v1/secure-file-upload`,
+            `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/secure-file-upload`,
             {
               method: "POST",
               headers: {
