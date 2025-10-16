@@ -23,13 +23,16 @@ export default function SupabaseDebug() {
 
       // Test 1: Basic connection
       try {
-        const response = await fetch(import.meta.env.VITE_SUPABASE_URL + "/rest/v1/", {
-          method: "GET",
-          headers: {
-            apikey: import.meta.env.VITE_SUPABASE_ANON_KEY,
-            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+        const response = await fetch(
+          import.meta.env.VITE_SUPABASE_URL + "/rest/v1/",
+          {
+            method: "GET",
+            headers: {
+              apikey: import.meta.env.VITE_SUPABASE_ANON_KEY,
+              Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+            },
           },
-        });
+        );
         addLog(`✅ REST API reachable: ${response.status}`);
       } catch (error) {
         addLog(`❌ REST API unreachable: ${error}`);

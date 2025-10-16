@@ -861,7 +861,10 @@ export default function Dashboard() {
                                     size="sm"
                                     onClick={() => {
                                       if (confirm("Delete this draft?")) {
-                                        const drafts = safeGetLocal("chargeSourceDrafts", []);
+                                        const drafts = safeGetLocal(
+                                          "chargeSourceDrafts",
+                                          [],
+                                        );
                                         const filteredDrafts = drafts.filter(
                                           (d: any) => d.id !== project.id,
                                         );
@@ -872,7 +875,8 @@ export default function Dashboard() {
                                         loadProjects(); // Reload projects
                                       }
                                     }}
-                                    className="text-red-600 hover:text-red-600" aria-label="Delete draft"
+                                    className="text-red-600 hover:text-red-600"
+                                    aria-label="Delete draft"
                                   >
                                     <MoreHorizontal className="w-4 h-4" />
                                   </Button>
@@ -908,7 +912,11 @@ export default function Dashboard() {
                                     <Calculator className="w-4 h-4 mr-1" />
                                     Quote
                                   </Button>
-                                  <Button variant="ghost" size="sm" aria-label="Project actions">
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    aria-label="Project actions"
+                                  >
                                     <MoreHorizontal className="w-4 h-4" />
                                   </Button>
                                 </>

@@ -29,11 +29,10 @@ import {
 } from "lucide-react";
 import { Logo } from "@/components/ui/logo";
 import { useAuth } from "@/hooks/useAuth";
-import { features, stats } from './homeData';
+import { features, stats } from "./homeData";
 
 export default function Index() {
   const { isAuthenticated } = useAuth();
-
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted/30">

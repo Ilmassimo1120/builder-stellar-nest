@@ -1,25 +1,27 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
-import Index from '../Index';
-import { vi, describe, it, expect } from 'vitest';
+import React from "react";
+import { render, screen } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
+import Index from "../Index";
+import { vi, describe, it, expect } from "vitest";
 
-vi.mock('../../hooks/useAuth', () => ({
+vi.mock("../../hooks/useAuth", () => ({
   useAuth: () => ({ isAuthenticated: false }),
 }));
 
-describe('Index landing page', () => {
-  it('renders hero and primary CTAs', () => {
+describe("Index landing page", () => {
+  it("renders hero and primary CTAs", () => {
     render(
       <MemoryRouter>
         <Index />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     expect(
-      screen.getByRole('heading', { name: /Streamline Your/i })
+      screen.getByRole("heading", { name: /Streamline Your/i }),
     ).toBeTruthy();
 
-    expect(screen.getByRole('link', { name: /Start Free Trial|Get Started/i })).toBeTruthy();
+    expect(
+      screen.getByRole("link", { name: /Start Free Trial|Get Started/i }),
+    ).toBeTruthy();
   });
 });

@@ -211,7 +211,12 @@ export default function ProjectsWorking() {
 
                   {/* Actions */}
                   <div className="flex gap-2 pt-4">
-                    <Button variant="outline" size="sm" className="flex-1" asChild>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="flex-1"
+                      asChild
+                    >
                       <Link to={`/projects/${project.id}`}>View Details</Link>
                     </Button>
                     <Button size="sm" className="flex-1" asChild>

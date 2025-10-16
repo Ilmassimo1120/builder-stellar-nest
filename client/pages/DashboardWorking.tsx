@@ -103,19 +103,31 @@ export default function DashboardWorking() {
               New Project
             </Link>
           </Button>
-          <Button variant="outline" className="w-full h-16 flex flex-col gap-2" asChild>
+          <Button
+            variant="outline"
+            className="w-full h-16 flex flex-col gap-2"
+            asChild
+          >
             <Link to="/quotes/new">
               <Calculator className="h-5 w-5" />
               Create Quote
             </Link>
           </Button>
-          <Button variant="outline" className="w-full h-16 flex flex-col gap-2" asChild>
+          <Button
+            variant="outline"
+            className="w-full h-16 flex flex-col gap-2"
+            asChild
+          >
             <Link to="/catalogue">
               <Package className="h-5 w-5" />
               Browse Catalog
             </Link>
           </Button>
-          <Button variant="outline" className="w-full h-16 flex flex-col gap-2" asChild>
+          <Button
+            variant="outline"
+            className="w-full h-16 flex flex-col gap-2"
+            asChild
+          >
             <Link to="/customers">
               <Users className="h-5 w-5" />
               Manage Clients
@@ -182,7 +194,7 @@ export default function DashboardWorking() {
                 ))}
               </div>
               <div className="mt-4">
-                  <Button variant="outline" className="w-full" asChild>
+                <Button variant="outline" className="w-full" asChild>
                   <Link to="/projects">View All Projects</Link>
                 </Button>
               </div>

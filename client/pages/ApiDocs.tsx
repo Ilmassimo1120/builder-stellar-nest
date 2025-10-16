@@ -251,7 +251,10 @@ export default function ApiDocs() {
             </CardHeader>
             <CardContent className="space-y-4">
               {apiData.endpoints.map((endpoint) => (
-                <div key={endpoint.path} className="border rounded-lg p-4 space-y-3">
+                <div
+                  key={endpoint.path}
+                  className="border rounded-lg p-4 space-y-3"
+                >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <Badge className={getMethodColor(endpoint.method)}>

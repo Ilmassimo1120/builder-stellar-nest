@@ -10,7 +10,10 @@ export function safeParse<T>(str: string | null, fallback: T): T {
 
 export function safeGetLocal<T = any>(key: string, fallback: T): T {
   try {
-    if (typeof globalThis !== 'undefined' && typeof (globalThis as any).localStorage !== 'undefined') {
+    if (
+      typeof globalThis !== "undefined" &&
+      typeof (globalThis as any).localStorage !== "undefined"
+    ) {
       const raw = (globalThis as any).localStorage.getItem(key);
       return safeParse<T>(raw, fallback);
     }

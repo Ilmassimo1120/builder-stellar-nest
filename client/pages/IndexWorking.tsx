@@ -58,10 +58,19 @@ export default function IndexWorking() {
             electrical contractors specializing in EV charging infrastructure.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="flex items-center gap-2 px-8 py-4 text-lg" asChild>
+            <Button
+              size="lg"
+              className="flex items-center gap-2 px-8 py-4 text-lg"
+              asChild
+            >
               <Link to="/register">Start Free Trial</Link>
             </Button>
-            <Button size="lg" variant="outline" className="px-8 py-4 text-lg" asChild>
+            <Button
+              size="lg"
+              variant="outline"
+              className="px-8 py-4 text-lg"
+              asChild
+            >
               <Link to="/demo">View Demo</Link>
             </Button>
           </div>

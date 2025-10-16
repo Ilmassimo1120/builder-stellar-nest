@@ -443,7 +443,10 @@ export default function HelpCentre() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {resources.map((resource) => (
-                <Card key={resource.title} className="hover:shadow-lg transition-shadow">
+                <Card
+                  key={resource.title}
+                  className="hover:shadow-lg transition-shadow"
+                >
                   <CardHeader className="text-center">
                     <div className="flex justify-center mb-4">
                       {resource.icon}

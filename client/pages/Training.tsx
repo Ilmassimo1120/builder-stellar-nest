@@ -439,7 +439,10 @@ export default function Training() {
                       </h4>
                       <ul className="space-y-2">
                         {path.features.slice(0, 4).map((feature) => (
-                          <li key={feature} className="flex items-start text-sm">
+                          <li
+                            key={feature}
+                            className="flex items-start text-sm"
+                          >
                             <CheckCircle2 className="w-4 h-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
                             {feature}
                           </li>

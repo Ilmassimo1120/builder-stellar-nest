@@ -7,20 +7,30 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/lib/supabase";
 import { useSupabaseAuth } from "@/hooks/useSupabaseAuth";
-import { CheckCircle2, XCircle, AlertCircle, User, Mail, Lock } from "lucide-react";
+import {
+  CheckCircle2,
+  XCircle,
+  AlertCircle,
+  User,
+  Mail,
+  Lock,
+} from "lucide-react";
 
 export default function AuthTestComponent() {
   const [testResults, setTestResults] = useState<string[]>([]);
   const [testing, setTesting] = useState(false);
   const [testEmail, setTestEmail] = useState("test@chargesource.demo");
   const [testPassword, setTestPassword] = useState("testpassword123");
-  
+
   const { user, isAuthenticated, login, register, logout } = useSupabaseAuth();
 
-  const addResult = (message: string, type: "success" | "error" | "info" = "info") => {
+  const addResult = (
+    message: string,
+    type: "success" | "error" | "info" = "info",
+  ) => {
     const timestamp = new Date().toLocaleTimeString();
     const emoji = type === "success" ? "✅" : type === "error" ? "❌" : "ℹ️";
-    setTestResults(prev => [...prev, `${timestamp} ${emoji} ${message}`]);
+    setTestResults((prev) => [...prev, `${timestamp} ${emoji} ${message}`]);
   };
 
   const clearResults = () => setTestResults([]);
@@ -34,12 +44,18 @@ export default function AuthTestComponent() {
       // Test 1: Check Supabase client configuration
       addResult("📋 Testing Supabase Auth Configuration...");
       addResult(`URL: ${import.meta.env.VITE_SUPABASE_URL}`, "info");
-      addResult(`Key Present: ${import.meta.env.VITE_SUPABASE_ANON_KEY ? "Yes" : "No"}`, "info");
+      addResult(
+        `Key Present: ${import.meta.env.VITE_SUPABASE_ANON_KEY ? "Yes" : "No"}`,
+        "info",
+      );
 
       // Test 2: Check auth session
       addResult("🔐 Checking Current Auth Session...");
-      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-      
+      const {
+        data: { session },
+        error: sessionError,
+      } = await supabase.auth.getSession();
+
       if (sessionError) {
         addResult(`Session Error: ${sessionError.message}`, "error");
       } else if (session) {
@@ -51,34 +67,46 @@ export default function AuthTestComponent() {
       // Test 3: Test auth endpoint connectivity
       addResult("🌐 Testing Auth Endpoint Connectivity...");
       try {
-        const response = await fetch(`${supabase.supabaseUrl}/auth/v1/settings`, {
-          headers: {
-            'apikey': supabase.supabaseKey
-          }
-        });
-        
+        const response = await fetch(
+          `${supabase.supabaseUrl}/auth/v1/settings`,
+          {
+            headers: {
+              apikey: supabase.supabaseKey,
+            },
+          },
+        );
+
         if (response.ok) {
           addResult("Auth Endpoint Reachable", "success");
           const settings = await response.json();
-          addResult(`Sign-up Enabled: ${settings.external_email_enabled || 'Unknown'}`, "info");
+          addResult(
+            `Sign-up Enabled: ${settings.external_email_enabled || "Unknown"}`,
+            "info",
+          );
         } else {
           addResult(`Auth Endpoint Error: ${response.status}`, "error");
         }
       } catch (error) {
-        addResult(`Auth Endpoint Test Failed: ${error instanceof Error ? error.message : 'Unknown error'}`, "error");
+        addResult(
+          `Auth Endpoint Test Failed: ${error instanceof Error ? error.message : "Unknown error"}`,
+          "error",
+        );
       }
 
       // Test 4: Test user creation capability (dry run)
       addResult("👤 Testing User Management Access...");
       try {
         const { data, error } = await supabase
-          .from('users')
-          .select('count')
+          .from("users")
+          .select("count")
           .limit(1);
-          
+
         if (error) {
-          if (error.code === 'PGRST116') {
-            addResult("Users table not found - need to run migrations", "error");
+          if (error.code === "PGRST116") {
+            addResult(
+              "Users table not found - need to run migrations",
+              "error",
+            );
           } else {
             addResult(`Users table access error: ${error.message}`, "error");
           }
@@ -86,13 +114,18 @@ export default function AuthTestComponent() {
           addResult("Users table accessible for auth integration", "success");
         }
       } catch (error) {
-        addResult(`User table test failed: ${error instanceof Error ? error.message : 'Unknown error'}`, "error");
+        addResult(
+          `User table test failed: ${error instanceof Error ? error.message : "Unknown error"}`,
+          "error",
+        );
       }
 
       addResult("🎉 Auth Configuration Test Complete", "success");
-      
     } catch (error) {
-      addResult(`Unexpected Error: ${error instanceof Error ? error.message : 'Unknown error'}`, "error");
+      addResult(
+        `Unexpected Error: ${error instanceof Error ? error.message : "Unknown error"}`,
+        "error",
+      );
     } finally {
       setTesting(false);
     }
@@ -108,11 +141,11 @@ export default function AuthTestComponent() {
         password: testPassword,
         firstName: "Test",
         lastName: "User",
-        company: "Test Company"
+        company: "Test Company",
       };
 
       const success = await register(testUser);
-      
+
       if (success) {
         addResult("Registration Successful!", "success");
         addResult("Check your email for verification link", "info");
@@ -120,7 +153,10 @@ export default function AuthTestComponent() {
         addResult("Registration Failed", "error");
       }
     } catch (error) {
-      addResult(`Registration Error: ${error instanceof Error ? error.message : 'Unknown error'}`, "error");
+      addResult(
+        `Registration Error: ${error instanceof Error ? error.message : "Unknown error"}`,
+        "error",
+      );
     } finally {
       setTesting(false);
     }
@@ -132,14 +168,17 @@ export default function AuthTestComponent() {
 
     try {
       const success = await login(testEmail, testPassword);
-      
+
       if (success) {
         addResult("Login Successful!", "success");
       } else {
         addResult("Login Failed - Check credentials", "error");
       }
     } catch (error) {
-      addResult(`Login Error: ${error instanceof Error ? error.message : 'Unknown error'}`, "error");
+      addResult(
+        `Login Error: ${error instanceof Error ? error.message : "Unknown error"}`,
+        "error",
+      );
     } finally {
       setTesting(false);
     }
@@ -153,7 +192,10 @@ export default function AuthTestComponent() {
       await logout();
       addResult("Logout Successful!", "success");
     } catch (error) {
-      addResult(`Logout Error: ${error instanceof Error ? error.message : 'Unknown error'}`, "error");
+      addResult(
+        `Logout Error: ${error instanceof Error ? error.message : "Unknown error"}`,
+        "error",
+      );
     } finally {
       setTesting(false);
     }
@@ -178,7 +220,10 @@ export default function AuthTestComponent() {
           <div className="p-4 bg-gray-50 rounded-lg">
             <h4 className="font-medium mb-2">Current Status</h4>
             <div className="text-sm space-y-1">
-              <div>Authentication: {isAuthenticated ? "✅ Logged In" : "❌ Not Logged In"}</div>
+              <div>
+                Authentication:{" "}
+                {isAuthenticated ? "✅ Logged In" : "❌ Not Logged In"}
+              </div>
               {user && (
                 <>
                   <div>User: {user.email}</div>
@@ -220,39 +265,35 @@ export default function AuthTestComponent() {
 
           {/* Test Actions */}
           <div className="flex flex-wrap gap-2">
-            <Button 
-              onClick={testAuthConfiguration} 
+            <Button
+              onClick={testAuthConfiguration}
               disabled={testing}
               variant="outline"
             >
               Test Auth Config
             </Button>
-            <Button 
-              onClick={testSignUp} 
+            <Button
+              onClick={testSignUp}
               disabled={testing || isAuthenticated}
               variant="outline"
             >
               Test Sign Up
             </Button>
-            <Button 
-              onClick={testSignIn} 
+            <Button
+              onClick={testSignIn}
               disabled={testing || isAuthenticated}
               variant="outline"
             >
               Test Sign In
             </Button>
-            <Button 
-              onClick={testSignOut} 
+            <Button
+              onClick={testSignOut}
               disabled={testing || !isAuthenticated}
               variant="outline"
             >
               Test Sign Out
             </Button>
-            <Button 
-              onClick={clearResults} 
-              disabled={testing}
-              variant="ghost"
-            >
+            <Button onClick={clearResults} disabled={testing} variant="ghost">
               Clear Results
             </Button>
           </div>
@@ -261,9 +302,12 @@ export default function AuthTestComponent() {
           <Alert>
             <AlertCircle className="h-4 w-4" />
             <AlertDescription>
-              <strong>Demo Users Available:</strong><br />
-              • demo@contractor.com.au / demo123<br />
-              • admin@chargesource.com.au / admin123<br />
+              <strong>Demo Users Available:</strong>
+              <br />
+              • demo@contractor.com.au / demo123
+              <br />
+              • admin@chargesource.com.au / admin123
+              <br />
               <em>You can also create new test accounts.</em>
             </AlertDescription>
           </Alert>
@@ -273,7 +317,10 @@ export default function AuthTestComponent() {
             <div className="bg-black text-green-400 p-4 rounded font-mono text-sm max-h-96 overflow-y-auto">
               <div className="flex items-center justify-between mb-2">
                 <span className="font-bold">Test Results:</span>
-                <Badge variant="outline" className="text-green-400 border-green-400">
+                <Badge
+                  variant="outline"
+                  className="text-green-400 border-green-400"
+                >
                   {testResults.length} entries
                 </Badge>
               </div>

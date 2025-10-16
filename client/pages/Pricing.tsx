@@ -361,9 +361,17 @@ export default function Pricing() {
                         size="lg"
                         asChild={true}
                       >
-                        <Link to={plan.cta === "Contact Sales" ? "/contact" : "/register"}>
+                        <Link
+                          to={
+                            plan.cta === "Contact Sales"
+                              ? "/contact"
+                              : "/register"
+                          }
+                        >
                           {plan.cta}
-                          {plan.cta === "Contact Sales" && <ArrowRight className="ml-2 w-4 h-4" />}
+                          {plan.cta === "Contact Sales" && (
+                            <ArrowRight className="ml-2 w-4 h-4" />
+                          )}
                         </Link>
                       </Button>
 
