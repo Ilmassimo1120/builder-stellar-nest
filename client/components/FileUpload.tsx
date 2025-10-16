@@ -90,7 +90,7 @@ export default function FileUpload({
             index === i ? { ...state, status: 'uploading' as const } : state
           ));
 
-          const fileUpload: FileUpload = {
+          const fileUpload: FileUploadType = {
             file,
             category,
             metadata
