@@ -26,9 +26,9 @@ export default function SupabaseConnectionTest() {
       );
 
       // Test 2: Check supabase client configuration
-      addResult(`📡 Supabase URL: ${supabase.supabaseUrl}`);
+      addResult(`📡 Supabase URL: ${import.meta.env.VITE_SUPABASE_URL}`);
       addResult(
-        `🔑 Supabase Key: ${supabase.supabaseKey ? "Present" : "Missing"}`,
+        `🔑 Supabase Key: ${import.meta.env.VITE_SUPABASE_ANON_KEY ? "Present" : "Missing"}`,
       );
 
       // Test 3: Try a simple connection test using health check
