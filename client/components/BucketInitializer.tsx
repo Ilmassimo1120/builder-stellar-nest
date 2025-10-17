@@ -152,7 +152,7 @@ export default function BucketInitializer() {
                   <strong>Errors:</strong>
                   <ul className="list-disc list-inside mt-1 text-sm">
                     {result.errors.map((error, index) => (
-                      <li key={index}>{error}</li>
+                      <li key={stableKey(error, index)}>{error}</li>
                     ))}
                   </ul>
                 </div>
