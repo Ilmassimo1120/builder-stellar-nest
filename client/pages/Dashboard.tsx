@@ -714,7 +714,7 @@ export default function Dashboard() {
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {quickActions.map((action, index) => (
-                <Link key={index} to={action.href}>
+                <Link key={stableKey(action, index)} to={action.href}>
                   <div className="p-4 rounded-lg border hover:border-primary transition-colors cursor-pointer group">
                     <div
                       className={`w-12 h-12 rounded-lg ${action.color} text-white flex items-center justify-center mb-3 group-hover:scale-105 transition-transform`}
