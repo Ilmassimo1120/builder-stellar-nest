@@ -8,7 +8,8 @@
     "noImplicitAny": false,
     "strictNullChecks": false,
     "noImplicitReturns": false,
-    "noImplicitThis": false
+    "noImplicitThis": false,
+    "types": ["vitest", "node"]
   },
   "include": ["client/**/*", "shared/**/*"],
   "exclude": ["node_modules", "dist"]
