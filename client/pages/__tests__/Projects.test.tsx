@@ -5,6 +5,7 @@ import { BrowserRouter } from "react-router-dom";
 import Projects from "../Projects";
 import { AuthProvider } from "../../hooks/useAuth";
 import {
+  createMockLocalStorage,
   mockLocalStorage,
   mockGoogleMaps,
   createTestProject,
