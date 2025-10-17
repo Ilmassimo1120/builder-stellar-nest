@@ -47,12 +47,13 @@ const renderWithProviders = (component: React.ReactElement) => {
 
 describe("Projects Component", () => {
   let mockStorage: ReturnType<typeof mockLocalStorage>;
+  let uninstallLocalStorage: (() => void) | null = null;
 
   beforeEach(() => {
-    mockStorage = mockLocalStorage();
-    Object.defineProperty(window, "localStorage", {
-      value: mockStorage,
-    });
+    const { mock, install, uninstall } = createMockLocalStorage();
+    mockStorage = mock;
+    install();
+    uninstallLocalStorage = uninstall;
 
     // Mock Google Maps
     mockGoogleMaps();
@@ -62,6 +63,7 @@ describe("Projects Component", () => {
   });
 
   afterEach(() => {
+    if (uninstallLocalStorage) uninstallLocalStorage();
     vi.restoreAllMocks();
   });
 
