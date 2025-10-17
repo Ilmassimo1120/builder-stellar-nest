@@ -366,7 +366,7 @@ export function CustomerDetail({ customer, onUpdate }: CustomerDetailProps) {
                         </div>
                       </div>
                       {deal.externalId && (
-                        <Button variant="ghost" size="sm">
+                        <Button variant="ghost" size="sm" aria-label="Open external deal">
                           <ExternalLink className="w-4 h-4" />
                         </Button>
                       )}
