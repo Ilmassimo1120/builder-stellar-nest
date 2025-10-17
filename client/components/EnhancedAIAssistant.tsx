@@ -395,7 +395,7 @@ I couldn't find any files matching your search for: **${searchResult.searchTerms
 
 **🛠️ Platform Features:**
 • Project creation and management
-• Quote generation and customization
+��� Quote generation and customization
 • File organization and sharing
 
 Could you be more specific about what you need help with? I can search your files or provide expert guidance.`;
@@ -534,7 +534,7 @@ Could you be more specific about what you need help with? I can search your file
       }
       if (line.startsWith("• ")) {
         return (
-          <div key={index} className="ml-4 text-sm">
+          <div key={stableKey(line, index)} className="ml-4 text-sm">
             {line}
           </div>
         );
