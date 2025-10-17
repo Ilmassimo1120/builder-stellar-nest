@@ -1084,7 +1084,7 @@ class EnhancedFileStorageService {
                 acc[bucket] = { files: 0, size: 0 };
                 return acc;
               },
-              {} as Record<BucketName, { files: number; size: number }>,
+              {} as Partial<Record<BucketName, { files: number; size: number }>>,
             ),
             categoryBreakdown: {},
           };
@@ -1138,7 +1138,7 @@ class EnhancedFileStorageService {
           };
           return acc;
         },
-        {} as Record<BucketName, { files: number; size: number }>,
+        {} as Partial<Record<BucketName, { files: number; size: number }>>,
       );
 
       const categoryBreakdown =
@@ -1179,7 +1179,7 @@ class EnhancedFileStorageService {
               acc[bucket] = { files: 0, size: 0 };
               return acc;
             },
-            {} as Record<BucketName, { files: number; size: number }>,
+            {} as Partial<Record<BucketName, { files: number; size: number }>>,
           ),
           categoryBreakdown: {},
         };
