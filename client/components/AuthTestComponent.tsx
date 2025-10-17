@@ -68,10 +68,10 @@ export default function AuthTestComponent() {
       addResult("🌐 Testing Auth Endpoint Connectivity...");
       try {
         const response = await fetch(
-          `${supabase.supabaseUrl}/auth/v1/settings`,
+          `${import.meta.env.VITE_SUPABASE_URL}/auth/v1/settings`,
           {
             headers: {
-              apikey: supabase.supabaseKey,
+              apikey: import.meta.env.VITE_SUPABASE_ANON_KEY,
             },
           },
         );
