@@ -215,11 +215,6 @@ export class BucketInitService {
         existing: existingRequired,
       };
 
-      return {
-        allExist: missing.length === 0,
-        missing,
-        existing: existingIds.filter((id) => requiredIds.includes(id)),
-      };
     } catch (error) {
       console.error("Error checking buckets:", error);
       return {
