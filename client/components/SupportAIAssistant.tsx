@@ -739,7 +739,10 @@ export function SupportAIAssistant() {
     return content.split("\n").map((line, index) => {
       if (line.startsWith("**") && line.endsWith("**")) {
         return (
-          <div key={stableKey(line, index)} className="font-semibold text-foreground mt-2 mb-1">
+          <div
+            key={stableKey(line, index)}
+            className="font-semibold text-foreground mt-2 mb-1"
+          >
             {line.slice(2, -2)}
           </div>
         );

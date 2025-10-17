@@ -162,7 +162,10 @@ class SupabaseQuoteService {
       totalPrice: 0, // Will be calculated by Edge Function
     };
 
-    const updatedLineItems = [...((quote as any).line_items || quote.lineItems || []), newLineItem];
+    const updatedLineItems = [
+      ...((quote as any).line_items || quote.lineItems || []),
+      newLineItem,
+    ];
 
     // Calculate totals using Edge Function
     const { data: calculation } = await supabase.functions.invoke(
@@ -203,12 +206,16 @@ class SupabaseQuoteService {
     const quote = await this.getQuote(quoteId);
     if (!quote) return null;
 
-    const lineItemIndex = ((quote as any).line_items || quote.lineItems || []).findIndex(
-      (item: any) => item.id === lineItemId,
-    );
+    const lineItemIndex = (
+      (quote as any).line_items ||
+      quote.lineItems ||
+      []
+    ).findIndex((item: any) => item.id === lineItemId);
     if (lineItemIndex === -1) return null;
 
-    const updatedLineItems = [...((quote as any).line_items || quote.lineItems || [])];
+    const updatedLineItems = [
+      ...((quote as any).line_items || quote.lineItems || []),
+    ];
     updatedLineItems[lineItemIndex] = {
       ...updatedLineItems[lineItemIndex],
       ...updates,
@@ -252,9 +259,11 @@ class SupabaseQuoteService {
     const quote = await this.getQuote(quoteId);
     if (!quote) return null;
 
-    const updatedLineItems = ((quote as any).line_items || quote.lineItems || []).filter(
-      (item: any) => item.id !== lineItemId,
-    );
+    const updatedLineItems = (
+      (quote as any).line_items ||
+      quote.lineItems ||
+      []
+    ).filter((item: any) => item.id !== lineItemId);
 
     // Recalculate totals
     const { data: calculation } = await supabase.functions.invoke(

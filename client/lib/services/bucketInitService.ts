@@ -207,14 +207,15 @@ export class BucketInitService {
       const requiredIds = this.buckets.map((b) => b.id);
       const missing = requiredIds.filter((id) => !existingIds.includes(id)); // requiredIds are BucketName[]
       // Ensure type compatibility by casting when comparing
-      const existingRequired = existingIds.filter((id) => requiredIds.includes(id as BucketName));
+      const existingRequired = existingIds.filter((id) =>
+        requiredIds.includes(id as BucketName),
+      );
 
       return {
         allExist: missing.length === 0,
         missing,
         existing: existingRequired,
       };
-
     } catch (error) {
       console.error("Error checking buckets:", error);
       return {
