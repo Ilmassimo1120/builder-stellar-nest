@@ -116,7 +116,7 @@ class SafeFileStorageService {
   async getStorageUsage(): Promise<{
     totalFiles: number;
     totalSize: number;
-    bucketBreakdown: Record<BucketName, { files: number; size: number }>;
+    bucketBreakdown: Partial<Record<BucketName, { files: number; size: number }>>;
     categoryBreakdown: Record<string, { files: number; size: number }>;
     error: string | null;
   }> {
