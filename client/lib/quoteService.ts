@@ -572,7 +572,7 @@ class QuoteService {
           unitPrice: 2500,
           cost: 1200,
           markup: this.calculateMarginForCategory("services"),
-          unit: "platform",
+          unit: "each",
           specifications: {
             features: [
               "Real-time chargepoint monitoring",
