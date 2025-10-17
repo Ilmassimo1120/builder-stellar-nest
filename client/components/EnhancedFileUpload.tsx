@@ -63,9 +63,11 @@ interface UploadState {
   result?: FileAsset;
 }
 
-const bucketInfo: Record<
-  BucketName,
-  { label: string; description: string; icon: string; maxSize: string }
+const bucketInfo: Partial<
+  Record<
+    BucketName,
+    { label: string; description: string; icon: string; maxSize: string }
+  >
 > = {
   "charge-source-user-files": {
     label: "User Files",
