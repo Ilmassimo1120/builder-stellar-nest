@@ -460,7 +460,6 @@ export function SupportAIAssistant() {
             value: 0, // Will be updated later when qualified
             stage: "prospect",
             probability: isNewCustomer ? 15 : 25, // Slightly higher probability for existing customers
-            description: `Sales inquiry submitted via Support AI Assistant:\n\n${description}`,
             expectedCloseDate: new Date(
               Date.now() + 30 * 24 * 60 * 60 * 1000,
             ).toISOString(), // 30 days from now
