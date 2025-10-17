@@ -553,7 +553,7 @@ class ProductCatalogService {
             "Revenue tracking and optimization",
             "Multi-tenant support",
             "API integration capabilities",
-            "White-label customization options"
+            "White-label customization options",
           ],
           supportedChargers: "All OCPP-compliant chargers",
           maxChargepoints: "Unlimited",
@@ -566,13 +566,13 @@ class ProductCatalogService {
             "Energy suppliers",
             "Fleet management systems",
             "Building management systems",
-            "Third-party APIs"
+            "Third-party APIs",
           ],
           compliance: [
             "GDPR compliant",
             "ISO 27001 security",
             "PCI DSS payment security",
-            "OCPP certified"
+            "OCPP certified",
           ],
           monitoring: [
             "Chargepoint status",
@@ -580,8 +580,8 @@ class ProductCatalogService {
             "Session management",
             "Fault detection",
             "Performance analytics",
-            "User behavior insights"
-          ]
+            "User behavior insights",
+          ],
         },
         pricing: {
           cost: 1200,
@@ -603,13 +603,13 @@ class ProductCatalogService {
         images: [
           "/images/services/evnet-platform-dashboard.jpg",
           "/images/services/evnet-mobile-app.jpg",
-          "/images/services/evnet-analytics.jpg"
+          "/images/services/evnet-analytics.jpg",
         ],
         documents: [
           "/docs/evnet-platform-datasheet.pdf",
           "/docs/evnet-implementation-guide.pdf",
           "/docs/evnet-api-documentation.pdf",
-          "/docs/evnet-service-agreement.pdf"
+          "/docs/evnet-service-agreement.pdf",
         ],
         isActive: true,
         createdAt: "2024-01-15T10:00:00Z",

@@ -2,7 +2,13 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
@@ -14,7 +20,7 @@ export default function LoginWorking() {
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  
+
   const { login } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -25,7 +31,7 @@ export default function LoginWorking() {
 
     try {
       const success = await login(email, password, rememberMe);
-      
+
       if (success) {
         toast({
           title: "Login Successful",
@@ -58,7 +64,9 @@ export default function LoginWorking() {
             <PlugZap className="h-10 w-10 text-primary" />
           </div>
           <CardTitle className="text-2xl">Welcome Back</CardTitle>
-          <CardDescription>Sign in to your ChargeSource account</CardDescription>
+          <CardDescription>
+            Sign in to your ChargeSource account
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -73,7 +81,7 @@ export default function LoginWorking() {
                 required
               />
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
               <Input
@@ -102,7 +110,10 @@ export default function LoginWorking() {
             </Button>
 
             <div className="text-center space-y-2">
-              <Link to="/forgot-password" className="text-sm text-primary hover:underline">
+              <Link
+                to="/forgot-password"
+                className="text-sm text-primary hover:underline"
+              >
                 Forgot your password?
               </Link>
               <p className="text-sm text-muted-foreground">
@@ -118,10 +129,18 @@ export default function LoginWorking() {
           <div className="mt-6 p-4 bg-muted rounded-lg">
             <p className="text-sm font-medium mb-2">Demo Credentials:</p>
             <div className="text-xs space-y-1 text-muted-foreground">
-              <p><strong>Admin:</strong> admin@chargesource.com.au</p>
-              <p><strong>Sales:</strong> sales@chargesource.com.au</p>
-              <p><strong>User:</strong> user@example.com</p>
-              <p><strong>Password:</strong> Any password works</p>
+              <p>
+                <strong>Admin:</strong> admin@chargesource.com.au
+              </p>
+              <p>
+                <strong>Sales:</strong> sales@chargesource.com.au
+              </p>
+              <p>
+                <strong>User:</strong> user@example.com
+              </p>
+              <p>
+                <strong>Password:</strong> Any password works
+              </p>
             </div>
           </div>
         </CardContent>

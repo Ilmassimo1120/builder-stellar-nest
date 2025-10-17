@@ -11,30 +11,32 @@ export default function OAuthCallback() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { user, isAuthenticated, isLoading } = useAuth();
-  const [status, setStatus] = useState<'processing' | 'success' | 'error'>('processing');
-  const [errorMessage, setErrorMessage] = useState('');
+  const [status, setStatus] = useState<"processing" | "success" | "error">(
+    "processing",
+  );
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     const handleOAuthCallback = async () => {
       try {
         // Check for error in URL params
-        const error = searchParams.get('error');
-        const errorDescription = searchParams.get('error_description');
-        
+        const error = searchParams.get("error");
+        const errorDescription = searchParams.get("error_description");
+
         if (error) {
-          console.error('OAuth error:', error, errorDescription);
-          setStatus('error');
-          setErrorMessage(errorDescription || 'Authentication failed');
+          console.error("OAuth error:", error, errorDescription);
+          setStatus("error");
+          setErrorMessage(errorDescription || "Authentication failed");
           return;
         }
 
         // Get the session from the URL hash/query params
         const { data, error: sessionError } = await supabase.auth.getSession();
-        
+
         if (sessionError) {
-          console.error('Session error:', sessionError);
-          setStatus('error');
-          setErrorMessage('Failed to get session');
+          console.error("Session error:", sessionError);
+          setStatus("error");
+          setErrorMessage("Failed to get session");
           return;
         }
 
@@ -57,12 +59,16 @@ export default function OAuthCallback() {
 
           const localUser = {
             id: oauthUser.id || generateUUID(),
-            email: oauthUser.email || '',
-            name: userMetadata.full_name || userMetadata.name || oauthUser.email?.split('@')[0] || 'Google User',
-            firstName: userMetadata.given_name || '',
-            lastName: userMetadata.family_name || '',
-            company: 'Google OAuth User',
-            role: 'user' as const,
+            email: oauthUser.email || "",
+            name:
+              userMetadata.full_name ||
+              userMetadata.name ||
+              oauthUser.email?.split("@")[0] ||
+              "Google User",
+            firstName: userMetadata.given_name || "",
+            lastName: userMetadata.family_name || "",
+            company: "Google OAuth User",
+            role: "user" as const,
             verified: true,
             loginTime: new Date().toISOString(),
             registrationDate: new Date().toISOString(),
@@ -71,19 +77,19 @@ export default function OAuthCallback() {
           // Store in localStorage (matching the existing auth system)
           localStorage.setItem("chargeSourceUser", JSON.stringify(localUser));
 
-          setStatus('success');
+          setStatus("success");
           // Small delay to show success state, then reload to refresh auth state
           setTimeout(() => {
-            window.location.href = '/dashboard';
+            window.location.href = "/dashboard";
           }, 1500);
         } else {
-          setStatus('error');
-          setErrorMessage('No session found');
+          setStatus("error");
+          setErrorMessage("No session found");
         }
       } catch (err) {
-        console.error('OAuth callback error:', err);
-        setStatus('error');
-        setErrorMessage('An unexpected error occurred');
+        console.error("OAuth callback error:", err);
+        setStatus("error");
+        setErrorMessage("An unexpected error occurred");
       }
     };
 
@@ -93,32 +99,32 @@ export default function OAuthCallback() {
   // If user is already authenticated, redirect to dashboard
   useEffect(() => {
     if (!isLoading && isAuthenticated && user) {
-      navigate('/dashboard');
+      navigate("/dashboard");
     }
   }, [isAuthenticated, isLoading, user, navigate]);
 
   const getStatusContent = () => {
     switch (status) {
-      case 'processing':
+      case "processing":
         return {
           icon: <Loader2 className="w-8 h-8 text-primary animate-spin" />,
           title: "Signing you in...",
           description: "Please wait while we complete your authentication.",
-          variant: "default" as const
+          variant: "default" as const,
         };
-      case 'success':
+      case "success":
         return {
           icon: <CheckCircle2 className="w-8 h-8 text-green-500" />,
           title: "Sign in successful!",
           description: "Redirecting to your dashboard...",
-          variant: "default" as const
+          variant: "default" as const,
         };
-      case 'error':
+      case "error":
         return {
           icon: <XCircle className="w-8 h-8 text-destructive" />,
           title: "Sign in failed",
           description: errorMessage,
-          variant: "destructive" as const
+          variant: "destructive" as const,
         };
     }
   };
@@ -138,9 +144,7 @@ export default function OAuthCallback() {
         {/* Status Card */}
         <Card className="shadow-lg border-primary/10">
           <CardHeader className="text-center">
-            <div className="flex justify-center mb-4">
-              {icon}
-            </div>
+            <div className="flex justify-center mb-4">{icon}</div>
             <CardTitle className="text-xl">{title}</CardTitle>
           </CardHeader>
           <CardContent className="text-center">
@@ -152,16 +156,16 @@ export default function OAuthCallback() {
               <p className="text-muted-foreground">{description}</p>
             )}
 
-            {status === 'error' && (
+            {status === "error" && (
               <div className="mt-4 space-y-2">
                 <button
-                  onClick={() => navigate('/login')}
+                  onClick={() => navigate("/login")}
                   className="w-full px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
                 >
                   Return to Login
                 </button>
                 <button
-                  onClick={() => window.location.href = '/'}
+                  onClick={() => (window.location.href = "/")}
                   className="w-full px-4 py-2 text-muted-foreground hover:text-foreground transition-colors"
                 >
                   Go to Homepage

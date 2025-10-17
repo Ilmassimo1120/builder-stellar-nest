@@ -7,30 +7,30 @@ const testCredentials = [
     email: "admin@chargesource.com.au",
     password: "password",
     expectedRole: "admin",
-    description: "Admin login"
+    description: "Admin login",
   },
   {
-    email: "globaladmin@chargesource.com.au", 
+    email: "globaladmin@chargesource.com.au",
     password: "password",
     expectedRole: "global_admin",
-    description: "Global admin login"
+    description: "Global admin login",
   },
   {
     email: "sales@chargesource.com.au",
-    password: "password", 
+    password: "password",
     expectedRole: "sales",
-    description: "Sales login"
+    description: "Sales login",
   },
   {
     email: "user@demo.com",
     password: "password",
-    expectedRole: "user", 
-    description: "Regular user login"
-  }
+    expectedRole: "user",
+    description: "Regular user login",
+  },
 ];
 
 console.log("✅ Demo credentials available:");
-testCredentials.forEach(cred => {
+testCredentials.forEach((cred) => {
   console.log(`   📧 ${cred.email} → ${cred.expectedRole} role`);
 });
 

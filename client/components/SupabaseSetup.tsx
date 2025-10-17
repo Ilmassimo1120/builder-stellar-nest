@@ -1,8 +1,20 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Database, Zap, CheckCircle2, ArrowRight, RefreshCw } from "lucide-react";
+import {
+  Database,
+  Zap,
+  CheckCircle2,
+  ArrowRight,
+  RefreshCw,
+} from "lucide-react";
 
 interface SupabaseSetupProps {
   isConnected: boolean;
@@ -17,50 +29,52 @@ export function SupabaseSetup({ isConnected, onRetry }: SupabaseSetupProps) {
     try {
       await onRetry();
     } catch (error) {
-      console.error('Error during retry:', error);
+      console.error("Error during retry:", error);
     } finally {
       setIsRetrying(false);
     }
   };
 
   const handleOpenMCP = () => {
-    console.log('🔗 Attempting to open MCP popover...');
+    console.log("🔗 Attempting to open MCP popover...");
 
     // Method 1: Use the Builder.io action link format
     try {
       // Create a proper link element and trigger it
-      const link = document.createElement('a');
-      link.href = '#open-mcp-popover';
-      link.style.display = 'none';
+      const link = document.createElement("a");
+      link.href = "#open-mcp-popover";
+      link.style.display = "none";
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-      console.log('✅ Triggered MCP popover via action link');
+      console.log("✅ Triggered MCP popover via action link");
       return; // Exit early if successful
     } catch (error) {
-      console.log('❌ Action link method failed:', error);
+      console.log("❌ Action link method failed:", error);
     }
 
     // Method 2: Try direct navigation
     try {
-      window.location.href = '#open-mcp-popover';
-      console.log('✅ Triggered via location.href');
+      window.location.href = "#open-mcp-popover";
+      console.log("✅ Triggered via location.href");
       return;
     } catch (error) {
-      console.log('❌ Location.href method failed:', error);
+      console.log("❌ Location.href method failed:", error);
     }
 
     // Method 3: Try hash change
     try {
-      window.location.hash = 'open-mcp-popover';
-      console.log('✅ Triggered via hash change');
+      window.location.hash = "open-mcp-popover";
+      console.log("✅ Triggered via hash change");
       return;
     } catch (error) {
-      console.log('❌ Hash change method failed:', error);
+      console.log("❌ Hash change method failed:", error);
     }
 
     // Fallback: Show user instructions
-    alert('To connect Supabase:\\n\\n1. Look for an "MCP" or "Integrations" button in the top toolbar\\n2. Click it to open the MCP popover\\n3. Find and connect to "Supabase"\\n4. Come back and click "Check Connection Again"\\n\\nNote: The MCP button is usually located in the top navigation or toolbar area.');
+    alert(
+      'To connect Supabase:\\n\\n1. Look for an "MCP" or "Integrations" button in the top toolbar\\n2. Click it to open the MCP popover\\n3. Find and connect to "Supabase"\\n4. Come back and click "Check Connection Again"\\n\\nNote: The MCP button is usually located in the top navigation or toolbar area.',
+    );
   };
 
   if (isConnected) {
@@ -68,7 +82,8 @@ export function SupabaseSetup({ isConnected, onRetry }: SupabaseSetupProps) {
       <Alert className="border-green-200 bg-green-50">
         <CheckCircle2 className="h-4 w-4 text-green-600" />
         <AlertDescription className="text-green-800">
-          ✅ Database connected successfully! Your projects will be saved to the cloud.
+          ✅ Database connected successfully! Your projects will be saved to the
+          cloud.
         </AlertDescription>
       </Alert>
     );
@@ -88,7 +103,9 @@ export function SupabaseSetup({ isConnected, onRetry }: SupabaseSetupProps) {
       <CardContent className="space-y-4">
         <div className="grid md:grid-cols-2 gap-4">
           <div>
-            <h4 className="font-medium text-blue-900 mb-2">📋 Easy Setup Steps:</h4>
+            <h4 className="font-medium text-blue-900 mb-2">
+              📋 Easy Setup Steps:
+            </h4>
             <ol className="text-sm text-blue-800 space-y-1">
               <li>1. Click "Open MCP popover" below</li>
               <li>2. Find and connect to "Supabase"</li>
@@ -106,7 +123,7 @@ export function SupabaseSetup({ isConnected, onRetry }: SupabaseSetupProps) {
             </ul>
           </div>
         </div>
-        
+
         <div className="flex flex-col sm:flex-row gap-3 pt-2">
           <a
             href="#open-mcp-popover"
@@ -125,27 +142,35 @@ export function SupabaseSetup({ isConnected, onRetry }: SupabaseSetupProps) {
             className="bg-gray-100 hover:bg-gray-200"
             onClick={() => {
               // Try multiple methods for MCP popover
-              console.log('🔗 Trying alternative MCP trigger...');
+              console.log("🔗 Trying alternative MCP trigger...");
 
               // Method 1: Try to click any button with "MCP" in its text
-              const allButtons = Array.from(document.querySelectorAll('button, [role="button"], a'));
-              const mcpButton = allButtons.find(btn =>
-                btn.textContent?.toLowerCase().includes('mcp') ||
-                btn.getAttribute('aria-label')?.toLowerCase().includes('mcp') ||
-                btn.getAttribute('title')?.toLowerCase().includes('mcp')
+              const allButtons = Array.from(
+                document.querySelectorAll('button, [role="button"], a'),
+              );
+              const mcpButton = allButtons.find(
+                (btn) =>
+                  btn.textContent?.toLowerCase().includes("mcp") ||
+                  btn
+                    .getAttribute("aria-label")
+                    ?.toLowerCase()
+                    .includes("mcp") ||
+                  btn.getAttribute("title")?.toLowerCase().includes("mcp"),
               );
 
               if (mcpButton) {
                 (mcpButton as HTMLElement).click();
-                console.log('✅ Found and clicked MCP button');
+                console.log("✅ Found and clicked MCP button");
                 return;
               }
 
               // Method 2: Try to trigger via data attributes
-              const mcpTriggers = document.querySelectorAll('[data-mcp], [data-mcp-trigger], [data-testid*="mcp"]');
+              const mcpTriggers = document.querySelectorAll(
+                '[data-mcp], [data-mcp-trigger], [data-testid*="mcp"]',
+              );
               if (mcpTriggers.length > 0) {
                 (mcpTriggers[0] as HTMLElement).click();
-                console.log('✅ Found and clicked MCP trigger');
+                console.log("✅ Found and clicked MCP trigger");
                 return;
               }
 
@@ -156,11 +181,7 @@ export function SupabaseSetup({ isConnected, onRetry }: SupabaseSetupProps) {
             <Zap className="w-4 h-4 mr-2" />
             Alternative MCP Trigger
           </Button>
-          <Button
-            variant="outline"
-            onClick={handleRetry}
-            disabled={isRetrying}
-          >
+          <Button variant="outline" onClick={handleRetry} disabled={isRetrying}>
             {isRetrying ? (
               <>
                 <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
@@ -177,18 +198,26 @@ export function SupabaseSetup({ isConnected, onRetry }: SupabaseSetupProps) {
 
         <Alert>
           <AlertDescription className="text-sm">
-            💡 <strong>No setup required!</strong> Once connected, the database schema will be created automatically
-            and your app will start saving to the cloud immediately.
+            💡 <strong>No setup required!</strong> Once connected, the database
+            schema will be created automatically and your app will start saving
+            to the cloud immediately.
           </AlertDescription>
         </Alert>
 
         {/* Debug Information */}
         <div className="text-xs text-blue-600 bg-blue-100 p-2 rounded">
           <details>
-            <summary className="cursor-pointer">🔧 Debug Info (click to expand)</summary>
+            <summary className="cursor-pointer">
+              🔧 Debug Info (click to expand)
+            </summary>
             <div className="mt-2 space-y-1">
-              <div>Current URL: {import.meta.env.VITE_SUPABASE_URL || 'Not set'}</div>
-              <div>Key Status: {import.meta.env.VITE_SUPABASE_ANON_KEY ? 'Set' : 'Not set'}</div>
+              <div>
+                Current URL: {import.meta.env.VITE_SUPABASE_URL || "Not set"}
+              </div>
+              <div>
+                Key Status:{" "}
+                {import.meta.env.VITE_SUPABASE_ANON_KEY ? "Set" : "Not set"}
+              </div>
               <div>Environment: {import.meta.env.MODE}</div>
               <div>Timestamp: {new Date().toISOString()}</div>
               <Button
@@ -197,16 +226,26 @@ export function SupabaseSetup({ isConnected, onRetry }: SupabaseSetupProps) {
                 className="mt-2 text-xs"
                 onClick={() => {
                   // Scan for MCP-related elements
-                  const allElements = Array.from(document.querySelectorAll('*'));
-                  const mcpElements = allElements.filter(el => {
-                    const text = el.textContent?.toLowerCase() || '';
-                    const attrs = Array.from(el.attributes).map(attr => `${attr.name}="${attr.value}"`).join(' ');
-                    return text.includes('mcp') || attrs.toLowerCase().includes('mcp') ||
-                           text.includes('integration') || attrs.toLowerCase().includes('integration');
+                  const allElements = Array.from(
+                    document.querySelectorAll("*"),
+                  );
+                  const mcpElements = allElements.filter((el) => {
+                    const text = el.textContent?.toLowerCase() || "";
+                    const attrs = Array.from(el.attributes)
+                      .map((attr) => `${attr.name}="${attr.value}"`)
+                      .join(" ");
+                    return (
+                      text.includes("mcp") ||
+                      attrs.toLowerCase().includes("mcp") ||
+                      text.includes("integration") ||
+                      attrs.toLowerCase().includes("integration")
+                    );
                   });
 
-                  console.log('🔍 Found MCP-related elements:', mcpElements);
-                  alert(`Found ${mcpElements.length} MCP-related elements. Check console for details.`);
+                  console.log("🔍 Found MCP-related elements:", mcpElements);
+                  alert(
+                    `Found ${mcpElements.length} MCP-related elements. Check console for details.`,
+                  );
                 }}
               >
                 🔍 Scan for MCP Elements

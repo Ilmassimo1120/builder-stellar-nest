@@ -11,28 +11,27 @@ export default function ConnectionTest() {
 
   const addLog = (message: string) => {
     const timestamp = new Date().toLocaleTimeString();
-    setLogs(prev => [...prev, `[${timestamp}] ${message}`]);
+    setLogs((prev) => [...prev, `[${timestamp}] ${message}`]);
     console.log(message);
   };
 
   const testConnection = async () => {
     setIsLoading(true);
     addLog("🔍 Starting connection test...");
-    
+
     try {
       // Test basic connection
       addLog("📡 Testing basic Supabase connection...");
       const basicConnection = await checkSupabaseConnection();
       addLog(`Basic connection result: ${basicConnection}`);
-      
+
       // Test auto-configuration
       addLog("🚀 Testing auto-configuration...");
       const autoConfig = await autoConfigureSupabase();
       addLog(`Auto-configuration result: ${autoConfig}`);
-      
+
       setIsConnected(autoConfig);
       addLog(`✅ Connection test completed. Connected: ${autoConfig}`);
-      
     } catch (error) {
       addLog(`❌ Connection test failed: ${error}`);
       setIsConnected(false);
@@ -66,16 +65,23 @@ export default function ConnectionTest() {
                 Clear Logs
               </Button>
             </div>
-            
+
             <div className="text-sm">
-              <strong>Status:</strong> {isConnected ? "🟢 Connected" : "🔴 Not Connected"}
+              <strong>Status:</strong>{" "}
+              {isConnected ? "🟢 Connected" : "🔴 Not Connected"}
             </div>
-            
+
             <div className="text-sm">
               <strong>Environment Variables:</strong>
               <ul className="list-disc list-inside ml-4">
-                <li>VITE_SUPABASE_URL: {import.meta.env.VITE_SUPABASE_URL || "Not set"}</li>
-                <li>VITE_SUPABASE_ANON_KEY: {import.meta.env.VITE_SUPABASE_ANON_KEY ? "Set" : "Not set"}</li>
+                <li>
+                  VITE_SUPABASE_URL:{" "}
+                  {import.meta.env.VITE_SUPABASE_URL || "Not set"}
+                </li>
+                <li>
+                  VITE_SUPABASE_ANON_KEY:{" "}
+                  {import.meta.env.VITE_SUPABASE_ANON_KEY ? "Set" : "Not set"}
+                </li>
               </ul>
             </div>
           </CardContent>
@@ -90,7 +96,9 @@ export default function ConnectionTest() {
           <CardContent>
             <div className="bg-gray-100 p-4 rounded-lg max-h-96 overflow-y-auto">
               {logs.length === 0 ? (
-                <div className="text-gray-500">No logs yet. Click "Test Connection" to start.</div>
+                <div className="text-gray-500">
+                  No logs yet. Click "Test Connection" to start.
+                </div>
               ) : (
                 <div className="space-y-1 text-sm font-mono">
                   {logs.map((log, index) => (

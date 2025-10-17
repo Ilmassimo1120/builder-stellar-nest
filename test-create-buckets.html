@@ -1,303 +1,448 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Create Storage Buckets</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        body { font-family: Arial, sans-serif; padding: 20px; max-width: 900px; margin: 0 auto; }
-        .bucket { margin: 10px 0; padding: 15px; border-radius: 8px; border: 1px solid #ddd; }
-        .create-btn { background: #28a745; color: white; padding: 12px 24px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
-        .create-btn:disabled { background: #6c757d; cursor: not-allowed; }
-        .test-btn { background: #007bff; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; margin-left: 10px; }
-        .success { background-color: #d4edda; border-color: #c3e6cb; color: #155724; }
-        .error { background-color: #f8d7da; border-color: #f5c6cb; color: #721c24; }
-        .warning { background-color: #fff3cd; border-color: #ffeaa7; color: #856404; }
-        .info { background-color: #d1ecf1; border-color: #bee5eb; color: #0c5460; }
-        .log { background: #f8f9fa; padding: 10px; border-radius: 5px; margin: 10px 0; font-family: monospace; white-space: pre-wrap; max-height: 300px; overflow-y: auto; }
-        .status { font-weight: bold; margin: 10px 0; }
-        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
-        th, td { padding: 10px; border: 1px solid #ddd; text-align: left; }
-        th { background: #f8f9fa; }
-        .exists { color: #28a745; font-weight: bold; }
-        .missing { color: #dc3545; font-weight: bold; }
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        max-width: 900px;
+        margin: 0 auto;
+      }
+      .bucket {
+        margin: 10px 0;
+        padding: 15px;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+      }
+      .create-btn {
+        background: #28a745;
+        color: white;
+        padding: 12px 24px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+      }
+      .create-btn:disabled {
+        background: #6c757d;
+        cursor: not-allowed;
+      }
+      .test-btn {
+        background: #007bff;
+        color: white;
+        padding: 8px 16px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-left: 10px;
+      }
+      .success {
+        background-color: #d4edda;
+        border-color: #c3e6cb;
+        color: #155724;
+      }
+      .error {
+        background-color: #f8d7da;
+        border-color: #f5c6cb;
+        color: #721c24;
+      }
+      .warning {
+        background-color: #fff3cd;
+        border-color: #ffeaa7;
+        color: #856404;
+      }
+      .info {
+        background-color: #d1ecf1;
+        border-color: #bee5eb;
+        color: #0c5460;
+      }
+      .log {
+        background: #f8f9fa;
+        padding: 10px;
+        border-radius: 5px;
+        margin: 10px 0;
+        font-family: monospace;
+        white-space: pre-wrap;
+        max-height: 300px;
+        overflow-y: auto;
+      }
+      .status {
+        font-weight: bold;
+        margin: 10px 0;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+      }
+      th,
+      td {
+        padding: 10px;
+        border: 1px solid #ddd;
+        text-align: left;
+      }
+      th {
+        background: #f8f9fa;
+      }
+      .exists {
+        color: #28a745;
+        font-weight: bold;
+      }
+      .missing {
+        color: #dc3545;
+        font-weight: bold;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <h1>🪣 ChargeSource Storage Bucket Creation</h1>
-    
+
     <div class="warning bucket">
-        <strong>⚠️ Important:</strong> This tool uses the service role key to create storage buckets. 
-        The service role key should be kept secure and not exposed in production environments.
+      <strong>⚠️ Important:</strong> This tool uses the service role key to
+      create storage buckets. The service role key should be kept secure and not
+      exposed in production environments.
     </div>
 
     <div class="info bucket">
-        <strong>📋 Required Buckets for ChargeSource:</strong>
-        <table>
-            <tr><th>Bucket Name</th><th>Visibility</th><th>Max Size</th><th>Purpose</th></tr>
-            <tr><td>product-images</td><td>Public</td><td>10MB</td><td>Product catalog images</td></tr>
-            <tr><td>documents</td><td>Private</td><td>50MB</td><td>Project documents and files</td></tr>
-            <tr><td>quote-attachments</td><td>Private</td><td>20MB</td><td>Quote attachments</td></tr>
-        </table>
+      <strong>📋 Required Buckets for ChargeSource:</strong>
+      <table>
+        <tr>
+          <th>Bucket Name</th>
+          <th>Visibility</th>
+          <th>Max Size</th>
+          <th>Purpose</th>
+        </tr>
+        <tr>
+          <td>product-images</td>
+          <td>Public</td>
+          <td>10MB</td>
+          <td>Product catalog images</td>
+        </tr>
+        <tr>
+          <td>documents</td>
+          <td>Private</td>
+          <td>50MB</td>
+          <td>Project documents and files</td>
+        </tr>
+        <tr>
+          <td>quote-attachments</td>
+          <td>Private</td>
+          <td>20MB</td>
+          <td>Quote attachments</td>
+        </tr>
+      </table>
     </div>
 
-    <div style="margin: 20px 0;">
-        <button onclick="testConnection()" id="testBtn" class="test-btn">Test Connection</button>
-        <button onclick="createBuckets()" id="createBtn" class="create-btn">Create Storage Buckets</button>
+    <div style="margin: 20px 0">
+      <button onclick="testConnection()" id="testBtn" class="test-btn">
+        Test Connection
+      </button>
+      <button onclick="createBuckets()" id="createBtn" class="create-btn">
+        Create Storage Buckets
+      </button>
     </div>
 
     <div id="status" class="status"></div>
     <div id="results"></div>
-    <div id="logs" class="log" style="display: none;"></div>
+    <div id="logs" class="log" style="display: none"></div>
 
     <script>
-        const SUPABASE_URL = 'https://tepmkljodsifaexmrinl.supabase.co';
-        const SERVICE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlcG1rbGpvZHNpZmFaeG1yaW5sIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NDYwNDAyNSwiZXhwIjoyMDcwMTgwMDI1fQ.PHiElAzc4cV0nGZhTXKdWRaxOT7Zhne2uM4vWCfmy3w';
+      const SUPABASE_URL = "https://tepmkljodsifaexmrinl.supabase.co";
+      const SERVICE_KEY =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlcG1rbGpvZHNpZmFaeG1yaW5sIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NDYwNDAyNSwiZXhwIjoyMDcwMTgwMDI1fQ.PHiElAzc4cV0nGZhTXKdWRaxOT7Zhne2uM4vWCfmy3w";
 
-        const supabase = window.supabase.createClient(SUPABASE_URL, SERVICE_KEY, {
-            auth: { autoRefreshToken: false, persistSession: false }
-        });
+      const supabase = window.supabase.createClient(SUPABASE_URL, SERVICE_KEY, {
+        auth: { autoRefreshToken: false, persistSession: false },
+      });
 
-        const buckets = [
-            {
-                name: 'product-images',
-                public: true,
-                allowedMimeTypes: ['image/jpeg', 'image/png', 'image/webp'],
-                fileSizeLimit: 10 * 1024 * 1024,
-                description: 'Public product catalog images'
-            },
-            {
-                name: 'documents',
-                public: false,
-                allowedMimeTypes: [
-                    'application/pdf',
-                    'application/msword',
-                    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                    'application/vnd.ms-excel',
-                    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                    'text/plain',
-                    'text/csv'
-                ],
-                fileSizeLimit: 50 * 1024 * 1024,
-                description: 'Private project documents and files'
-            },
-            {
-                name: 'quote-attachments',
-                public: false,
-                allowedMimeTypes: ['application/pdf', 'image/jpeg', 'image/png'],
-                fileSizeLimit: 20 * 1024 * 1024,
-                description: 'Private quote attachments and supporting documents'
-            }
-        ];
+      const buckets = [
+        {
+          name: "product-images",
+          public: true,
+          allowedMimeTypes: ["image/jpeg", "image/png", "image/webp"],
+          fileSizeLimit: 10 * 1024 * 1024,
+          description: "Public product catalog images",
+        },
+        {
+          name: "documents",
+          public: false,
+          allowedMimeTypes: [
+            "application/pdf",
+            "application/msword",
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            "application/vnd.ms-excel",
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            "text/plain",
+            "text/csv",
+          ],
+          fileSizeLimit: 50 * 1024 * 1024,
+          description: "Private project documents and files",
+        },
+        {
+          name: "quote-attachments",
+          public: false,
+          allowedMimeTypes: ["application/pdf", "image/jpeg", "image/png"],
+          fileSizeLimit: 20 * 1024 * 1024,
+          description: "Private quote attachments and supporting documents",
+        },
+      ];
 
-        let logs = [];
+      let logs = [];
 
-        function log(message) {
-            const timestamp = new Date().toLocaleTimeString();
-            const logEntry = `[${timestamp}] ${message}`;
-            logs.push(logEntry);
-            console.log(message);
-            
-            const logsEl = document.getElementById('logs');
-            logsEl.style.display = 'block';
-            logsEl.textContent = logs.join('\n');
-            logsEl.scrollTop = logsEl.scrollHeight;
-        }
+      function log(message) {
+        const timestamp = new Date().toLocaleTimeString();
+        const logEntry = `[${timestamp}] ${message}`;
+        logs.push(logEntry);
+        console.log(message);
 
-        function setStatus(message, className = '') {
-            const status = document.getElementById('status');
-            status.textContent = message;
-            status.className = `status ${className}`;
-        }
+        const logsEl = document.getElementById("logs");
+        logsEl.style.display = "block";
+        logsEl.textContent = logs.join("\n");
+        logsEl.scrollTop = logsEl.scrollHeight;
+      }
 
-        function setResults(html) {
-            document.getElementById('results').innerHTML = html;
-        }
+      function setStatus(message, className = "") {
+        const status = document.getElementById("status");
+        status.textContent = message;
+        status.className = `status ${className}`;
+      }
 
-        async function testConnection() {
-            const testBtn = document.getElementById('testBtn');
-            testBtn.disabled = true;
-            testBtn.textContent = 'Testing...';
-            
-            logs = [];
-            log('🔍 Testing Supabase connection with service role...');
-            setStatus('Testing connection...', 'info');
+      function setResults(html) {
+        document.getElementById("results").innerHTML = html;
+      }
 
-            try {
-                // Test basic connection
-                const { data, error } = await supabase.storage.listBuckets();
-                
-                if (error) {
-                    throw error;
-                }
+      async function testConnection() {
+        const testBtn = document.getElementById("testBtn");
+        testBtn.disabled = true;
+        testBtn.textContent = "Testing...";
 
-                log('✅ Connection successful!');
-                log(`📋 Found ${data.length} existing buckets: ${data.map(b => b.name).join(', ') || 'none'}`);
-                
-                setStatus('✅ Connection successful!', 'success');
-                
-                // Check which buckets exist
-                const existingNames = data.map(b => b.name);
-                const missing = buckets.filter(b => !existingNames.includes(b.name));
-                const existing = buckets.filter(b => existingNames.includes(b.name));
-                
-                let html = '<h3>📊 Bucket Status:</h3>';
-                html += '<table><tr><th>Bucket</th><th>Status</th><th>Description</th></tr>';
-                
-                buckets.forEach(bucket => {
-                    const exists = existingNames.includes(bucket.name);
-                    html += `
+        logs = [];
+        log("🔍 Testing Supabase connection with service role...");
+        setStatus("Testing connection...", "info");
+
+        try {
+          // Test basic connection
+          const { data, error } = await supabase.storage.listBuckets();
+
+          if (error) {
+            throw error;
+          }
+
+          log("✅ Connection successful!");
+          log(
+            `📋 Found ${data.length} existing buckets: ${data.map((b) => b.name).join(", ") || "none"}`,
+          );
+
+          setStatus("✅ Connection successful!", "success");
+
+          // Check which buckets exist
+          const existingNames = data.map((b) => b.name);
+          const missing = buckets.filter(
+            (b) => !existingNames.includes(b.name),
+          );
+          const existing = buckets.filter((b) =>
+            existingNames.includes(b.name),
+          );
+
+          let html = "<h3>📊 Bucket Status:</h3>";
+          html +=
+            "<table><tr><th>Bucket</th><th>Status</th><th>Description</th></tr>";
+
+          buckets.forEach((bucket) => {
+            const exists = existingNames.includes(bucket.name);
+            html += `
                         <tr>
                             <td><strong>${bucket.name}</strong></td>
-                            <td class="${exists ? 'exists' : 'missing'}">${exists ? '✅ EXISTS' : '❌ MISSING'}</td>
+                            <td class="${exists ? "exists" : "missing"}">${exists ? "✅ EXISTS" : "❌ MISSING"}</td>
                             <td>${bucket.description}</td>
                         </tr>
                     `;
-                });
-                
-                html += '</table>';
-                
-                if (missing.length > 0) {
-                    html += `<div class="warning bucket"><strong>⚠️ ${missing.length} bucket(s) need to be created.</strong></div>`;
-                } else {
-                    html += `<div class="success bucket"><strong>🎉 All required buckets exist!</strong></div>`;
-                }
-                
-                setResults(html);
+          });
 
-            } catch (error) {
-                log(`❌ Connection failed: ${error.message}`);
-                setStatus('❌ Connection failed', 'error');
-                setResults(`<div class="error bucket"><strong>Error:</strong> ${error.message}</div>`);
-            } finally {
-                testBtn.disabled = false;
-                testBtn.textContent = 'Test Connection';
-            }
+          html += "</table>";
+
+          if (missing.length > 0) {
+            html += `<div class="warning bucket"><strong>⚠️ ${missing.length} bucket(s) need to be created.</strong></div>`;
+          } else {
+            html += `<div class="success bucket"><strong>🎉 All required buckets exist!</strong></div>`;
+          }
+
+          setResults(html);
+        } catch (error) {
+          log(`❌ Connection failed: ${error.message}`);
+          setStatus("❌ Connection failed", "error");
+          setResults(
+            `<div class="error bucket"><strong>Error:</strong> ${error.message}</div>`,
+          );
+        } finally {
+          testBtn.disabled = false;
+          testBtn.textContent = "Test Connection";
         }
+      }
 
-        async function createBuckets() {
-            const createBtn = document.getElementById('createBtn');
-            createBtn.disabled = true;
-            createBtn.textContent = 'Creating Buckets...';
-            
-            logs = [];
-            log('🚀 Starting bucket creation process...');
-            setStatus('Creating buckets...', 'info');
+      async function createBuckets() {
+        const createBtn = document.getElementById("createBtn");
+        createBtn.disabled = true;
+        createBtn.textContent = "Creating Buckets...";
 
-            try {
-                // First check existing buckets
-                log('🔍 Checking existing buckets...');
-                const { data: existingBuckets, error: listError } = await supabase.storage.listBuckets();
-                
-                if (listError) {
-                    throw listError;
-                }
+        logs = [];
+        log("🚀 Starting bucket creation process...");
+        setStatus("Creating buckets...", "info");
 
-                const existingNames = existingBuckets.map(b => b.name);
-                log(`📋 Found ${existingBuckets.length} existing buckets: ${existingNames.join(', ') || 'none'}`);
+        try {
+          // First check existing buckets
+          log("🔍 Checking existing buckets...");
+          const { data: existingBuckets, error: listError } =
+            await supabase.storage.listBuckets();
 
-                let created = 0;
-                let existing = 0;
-                let errors = 0;
-                const results = [];
+          if (listError) {
+            throw listError;
+          }
 
-                // Create each bucket
-                for (const bucket of buckets) {
-                    if (existingNames.includes(bucket.name)) {
-                        log(`✅ ${bucket.name} - Already exists`);
-                        existing++;
-                        results.push({ name: bucket.name, status: 'exists', message: 'Already exists' });
-                        continue;
-                    }
+          const existingNames = existingBuckets.map((b) => b.name);
+          log(
+            `📋 Found ${existingBuckets.length} existing buckets: ${existingNames.join(", ") || "none"}`,
+          );
 
-                    log(`🆕 Creating ${bucket.name}...`);
-                    
-                    const { data, error } = await supabase.storage.createBucket(bucket.name, {
-                        public: bucket.public,
-                        allowedMimeTypes: bucket.allowedMimeTypes,
-                        fileSizeLimit: bucket.fileSizeLimit
-                    });
+          let created = 0;
+          let existing = 0;
+          let errors = 0;
+          const results = [];
 
-                    if (error) {
-                        if (error.message.includes('already exists') || error.message.includes('duplicate')) {
-                            log(`✅ ${bucket.name} - Already exists (detected from error)`);
-                            existing++;
-                            results.push({ name: bucket.name, status: 'exists', message: 'Already exists' });
-                        } else {
-                            log(`❌ ${bucket.name} - Failed: ${error.message}`);
-                            errors++;
-                            results.push({ name: bucket.name, status: 'error', message: error.message });
-                        }
-                    } else {
-                        log(`✅ ${bucket.name} - Created successfully!`);
-                        created++;
-                        results.push({ name: bucket.name, status: 'created', message: 'Created successfully' });
-                    }
-                }
+          // Create each bucket
+          for (const bucket of buckets) {
+            if (existingNames.includes(bucket.name)) {
+              log(`✅ ${bucket.name} - Already exists`);
+              existing++;
+              results.push({
+                name: bucket.name,
+                status: "exists",
+                message: "Already exists",
+              });
+              continue;
+            }
 
-                // Summary
-                log(`\n📊 Summary: Created ${created}, Already existed ${existing}, Errors ${errors}`);
-                
-                if (errors === 0) {
-                    setStatus('🎉 All buckets are ready!', 'success');
-                    log('🎉 All storage buckets are ready for use!');
-                } else {
-                    setStatus(`⚠️ ${errors} bucket(s) had errors`, 'warning');
-                }
+            log(`🆕 Creating ${bucket.name}...`);
 
-                // Display results
-                let html = '<h3>📊 Creation Results:</h3>';
-                html += '<table><tr><th>Bucket</th><th>Result</th><th>Message</th></tr>';
-                
-                results.forEach(result => {
-                    const statusClass = result.status === 'created' ? 'success' : 
-                                      result.status === 'exists' ? 'info' : 'error';
-                    const statusIcon = result.status === 'created' ? '🆕' :
-                                     result.status === 'exists' ? '✅' : '❌';
-                    
-                    html += `
+            const { data, error } = await supabase.storage.createBucket(
+              bucket.name,
+              {
+                public: bucket.public,
+                allowedMimeTypes: bucket.allowedMimeTypes,
+                fileSizeLimit: bucket.fileSizeLimit,
+              },
+            );
+
+            if (error) {
+              if (
+                error.message.includes("already exists") ||
+                error.message.includes("duplicate")
+              ) {
+                log(`✅ ${bucket.name} - Already exists (detected from error)`);
+                existing++;
+                results.push({
+                  name: bucket.name,
+                  status: "exists",
+                  message: "Already exists",
+                });
+              } else {
+                log(`❌ ${bucket.name} - Failed: ${error.message}`);
+                errors++;
+                results.push({
+                  name: bucket.name,
+                  status: "error",
+                  message: error.message,
+                });
+              }
+            } else {
+              log(`✅ ${bucket.name} - Created successfully!`);
+              created++;
+              results.push({
+                name: bucket.name,
+                status: "created",
+                message: "Created successfully",
+              });
+            }
+          }
+
+          // Summary
+          log(
+            `\n📊 Summary: Created ${created}, Already existed ${existing}, Errors ${errors}`,
+          );
+
+          if (errors === 0) {
+            setStatus("🎉 All buckets are ready!", "success");
+            log("🎉 All storage buckets are ready for use!");
+          } else {
+            setStatus(`⚠️ ${errors} bucket(s) had errors`, "warning");
+          }
+
+          // Display results
+          let html = "<h3>📊 Creation Results:</h3>";
+          html +=
+            "<table><tr><th>Bucket</th><th>Result</th><th>Message</th></tr>";
+
+          results.forEach((result) => {
+            const statusClass =
+              result.status === "created"
+                ? "success"
+                : result.status === "exists"
+                  ? "info"
+                  : "error";
+            const statusIcon =
+              result.status === "created"
+                ? "🆕"
+                : result.status === "exists"
+                  ? "✅"
+                  : "❌";
+
+            html += `
                         <tr class="${statusClass}">
                             <td><strong>${result.name}</strong></td>
                             <td>${statusIcon} ${result.status.toUpperCase()}</td>
                             <td>${result.message}</td>
                         </tr>
                     `;
-                });
-                
-                html += '</table>';
-                
-                if (errors === 0) {
-                    html += `
+          });
+
+          html += "</table>";
+
+          if (errors === 0) {
+            html += `
                         <div class="success bucket">
                             <strong>🎉 Success!</strong> All storage buckets are ready.<br>
                             You can now test file uploads in the ChargeSource app.
                         </div>
                     `;
-                } else {
-                    html += `
+          } else {
+            html += `
                         <div class="error bucket">
                             <strong>⚠️ Issues detected.</strong> Check the errors above and try again if needed.
                         </div>
                     `;
-                }
-                
-                setResults(html);
+          }
 
-            } catch (error) {
-                log(`❌ Bucket creation failed: ${error.message}`);
-                setStatus('❌ Creation failed', 'error');
-                setResults(`<div class="error bucket"><strong>Error:</strong> ${error.message}</div>`);
-            } finally {
-                createBtn.disabled = false;
-                createBtn.textContent = 'Create Storage Buckets';
-            }
+          setResults(html);
+        } catch (error) {
+          log(`❌ Bucket creation failed: ${error.message}`);
+          setStatus("❌ Creation failed", "error");
+          setResults(
+            `<div class="error bucket"><strong>Error:</strong> ${error.message}</div>`,
+          );
+        } finally {
+          createBtn.disabled = false;
+          createBtn.textContent = "Create Storage Buckets";
         }
+      }
 
-        // Auto-test connection on page load
-        window.addEventListener('load', () => {
-            setTimeout(testConnection, 1000);
-        });
+      // Auto-test connection on page load
+      window.addEventListener("load", () => {
+        setTimeout(testConnection, 1000);
+      });
     </script>
-</body>
+  </body>
 </html>

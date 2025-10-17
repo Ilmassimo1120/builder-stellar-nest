@@ -7,7 +7,13 @@ interface GoogleOAuthButtonProps {
   text?: string;
   className?: string;
   disabled?: boolean;
-  variant?: "default" | "outline" | "secondary" | "ghost" | "link" | "destructive";
+  variant?:
+    | "default"
+    | "outline"
+    | "secondary"
+    | "ghost"
+    | "link"
+    | "destructive";
 }
 
 export function GoogleOAuthButton({

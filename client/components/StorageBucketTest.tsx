@@ -9,15 +9,15 @@ import { bucketInitService } from "@/lib/services/bucketInitService";
 import FileUpload from "./FileUpload";
 import SupabaseStorageDiagnostics from "./SupabaseStorageDiagnostics";
 import CORSFixGuide from "./CORSFixGuide";
-import { 
-  Folder, 
-  Upload, 
-  CheckCircle2, 
-  XCircle, 
-  AlertTriangle, 
+import {
+  Folder,
+  Upload,
+  CheckCircle2,
+  XCircle,
+  AlertTriangle,
   RefreshCw,
   HardDrive,
-  Database
+  Database,
 } from "lucide-react";
 
 interface BucketStatus {
@@ -30,7 +30,7 @@ interface BucketStatus {
 
 interface TestResult {
   test: string;
-  status: 'success' | 'error' | 'warning' | 'info';
+  status: "success" | "error" | "warning" | "info";
   message: string;
   details?: string;
 }
@@ -41,15 +41,30 @@ export default function StorageBucketTest() {
   const [testing, setTesting] = useState(false);
   const [bucketsTested, setBucketsTested] = useState(false);
 
-  const addResult = (test: string, status: TestResult['status'], message: string, details?: string) => {
+  const addResult = (
+    test: string,
+    status: TestResult["status"],
+    message: string,
+    details?: string,
+  ) => {
     const timestamp = new Date().toLocaleTimeString();
-    const emoji = status === 'success' ? '✅' : status === 'error' ? '❌' : status === 'warning' ? '⚠️' : 'ℹ️';
-    setTestResults(prev => [...prev, {
-      test: `${timestamp} ${emoji} ${test}`,
-      status,
-      message,
-      details
-    }]);
+    const emoji =
+      status === "success"
+        ? "✅"
+        : status === "error"
+          ? "❌"
+          : status === "warning"
+            ? "⚠️"
+            : "ℹ️";
+    setTestResults((prev) => [
+      ...prev,
+      {
+        test: `${timestamp} ${emoji} ${test}`,
+        status,
+        message,
+        details,
+      },
+    ]);
   };
 
   const clearResults = () => setTestResults([]);
@@ -64,74 +79,139 @@ export default function StorageBucketTest() {
       addResult("API Connectivity", "info", "Testing storage API...");
       try {
         const { data: buckets, error } = await supabase.storage.listBuckets();
-        
+
         if (error) {
-        const isCORSError = error.message.includes('Failed to fetch') || error.message.includes('CORS');
-        addResult("API Connectivity", "error", `Storage API error: ${error.message}`,
-          isCORSError ? "CORS Issue: Go to 'Fix CORS' tab for step-by-step instructions." : "Cannot access storage API. Check project configuration.");
-      } else {
-          addResult("API Connectivity", "success", "Storage API accessible", 
-            `Found ${buckets?.length || 0} existing buckets`);
-          
+          const isCORSError =
+            error.message.includes("Failed to fetch") ||
+            error.message.includes("CORS");
+          addResult(
+            "API Connectivity",
+            "error",
+            `Storage API error: ${error.message}`,
+            isCORSError
+              ? "CORS Issue: Go to 'Fix CORS' tab for step-by-step instructions."
+              : "Cannot access storage API. Check project configuration.",
+          );
+        } else {
+          addResult(
+            "API Connectivity",
+            "success",
+            "Storage API accessible",
+            `Found ${buckets?.length || 0} existing buckets`,
+          );
+
           // Show existing buckets
           if (buckets && buckets.length > 0) {
-            const bucketNames = buckets.map(b => b.name).join(', ');
-            addResult("Existing Buckets", "info", `Current buckets: ${bucketNames}`);
+            const bucketNames = buckets.map((b) => b.name).join(", ");
+            addResult(
+              "Existing Buckets",
+              "info",
+              `Current buckets: ${bucketNames}`,
+            );
           } else {
-            addResult("Existing Buckets", "warning", "No storage buckets found", 
-              "You need to create storage buckets for file uploads to work.");
+            addResult(
+              "Existing Buckets",
+              "warning",
+              "No storage buckets found",
+              "You need to create storage buckets for file uploads to work.",
+            );
           }
         }
       } catch (error) {
-        addResult("API Connectivity", "error", `Connection failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
-          "Network or CORS issue. Check your internet connection and Supabase project settings.");
+        addResult(
+          "API Connectivity",
+          "error",
+          `Connection failed: ${error instanceof Error ? error.message : "Unknown error"}`,
+          "Network or CORS issue. Check your internet connection and Supabase project settings.",
+        );
       }
 
       // Test 2: Check bucket initialization service
-      addResult("Bucket Service", "info", "Testing bucket initialization service...");
+      addResult(
+        "Bucket Service",
+        "info",
+        "Testing bucket initialization service...",
+      );
       try {
         const bucketCheck = await bucketInitService.checkBuckets();
-        
+
         if (bucketCheck.allExist) {
-          addResult("Required Buckets", "success", "All required buckets exist", 
-            `Found: ${bucketCheck.existing.join(', ')}`);
+          addResult(
+            "Required Buckets",
+            "success",
+            "All required buckets exist",
+            `Found: ${bucketCheck.existing.join(", ")}`,
+          );
         } else {
-          addResult("Required Buckets", "warning", "Missing required buckets", 
-            `Missing: ${bucketCheck.missing.join(', ')}`);
+          addResult(
+            "Required Buckets",
+            "warning",
+            "Missing required buckets",
+            `Missing: ${bucketCheck.missing.join(", ")}`,
+          );
         }
 
         // Get detailed status
         const status = await bucketInitService.getBucketStatus();
         setBucketStatus(status.buckets);
         setBucketsTested(true);
-        
       } catch (error) {
-        addResult("Bucket Service", "error", `Service test failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+        addResult(
+          "Bucket Service",
+          "error",
+          `Service test failed: ${error instanceof Error ? error.message : "Unknown error"}`,
+        );
       }
 
       // Test 3: Test file upload permissions (without actually uploading)
       addResult("Permissions", "info", "Testing upload permissions...");
       try {
-        const { data: { user }, error: userError } = await supabase.auth.getUser();
-        
+        const {
+          data: { user },
+          error: userError,
+        } = await supabase.auth.getUser();
+
         if (userError) {
-          addResult("User Auth", "warning", "No active user session", 
-            "File uploads require authentication. Login to test upload functionality.");
+          addResult(
+            "User Auth",
+            "warning",
+            "No active user session",
+            "File uploads require authentication. Login to test upload functionality.",
+          );
         } else if (user) {
-          addResult("User Auth", "success", `Authenticated as: ${user.email}`, 
-            "Ready for file uploads");
+          addResult(
+            "User Auth",
+            "success",
+            `Authenticated as: ${user.email}`,
+            "Ready for file uploads",
+          );
         } else {
-          addResult("User Auth", "warning", "Anonymous user", 
-            "File uploads may be restricted for anonymous users");
+          addResult(
+            "User Auth",
+            "warning",
+            "Anonymous user",
+            "File uploads may be restricted for anonymous users",
+          );
         }
       } catch (error) {
-        addResult("Permissions", "error", `Auth check failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+        addResult(
+          "Permissions",
+          "error",
+          `Auth check failed: ${error instanceof Error ? error.message : "Unknown error"}`,
+        );
       }
 
-      addResult("Storage Test", "success", "Storage connection test completed!");
-
+      addResult(
+        "Storage Test",
+        "success",
+        "Storage connection test completed!",
+      );
     } catch (error) {
-      addResult("Storage Test", "error", `Test failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      addResult(
+        "Storage Test",
+        "error",
+        `Test failed: ${error instanceof Error ? error.message : "Unknown error"}`,
+      );
     } finally {
       setTesting(false);
     }
@@ -143,50 +223,81 @@ export default function StorageBucketTest() {
 
     try {
       const result = await bucketInitService.initializeBuckets();
-      
+
       if (result.success) {
-        addResult("Bucket Init", "success", "Bucket initialization completed!", 
-          `Created: ${result.created.length}, Existing: ${result.existing.length}, Errors: ${result.errors.length}`);
-        
+        addResult(
+          "Bucket Init",
+          "success",
+          "Bucket initialization completed!",
+          `Created: ${result.created.length}, Existing: ${result.existing.length}, Errors: ${result.errors.length}`,
+        );
+
         if (result.created.length > 0) {
-          addResult("New Buckets", "success", `Created buckets: ${result.created.join(', ')}`);
+          addResult(
+            "New Buckets",
+            "success",
+            `Created buckets: ${result.created.join(", ")}`,
+          );
         }
-        
+
         if (result.existing.length > 0) {
-          addResult("Existing Buckets", "info", `Already existed: ${result.existing.join(', ')}`);
+          addResult(
+            "Existing Buckets",
+            "info",
+            `Already existed: ${result.existing.join(", ")}`,
+          );
         }
-        
+
         if (result.errors.length > 0) {
-          addResult("Bucket Errors", "error", `Errors: ${result.errors.join(', ')}`);
+          addResult(
+            "Bucket Errors",
+            "error",
+            `Errors: ${result.errors.join(", ")}`,
+          );
         }
       } else {
-        addResult("Bucket Init", "error", "Bucket initialization failed", 
-          `Errors: ${result.errors.join(', ')}`);
+        addResult(
+          "Bucket Init",
+          "error",
+          "Bucket initialization failed",
+          `Errors: ${result.errors.join(", ")}`,
+        );
       }
 
       // Refresh bucket status
       const status = await bucketInitService.getBucketStatus();
       setBucketStatus(status.buckets);
-      
     } catch (error) {
-      addResult("Bucket Init", "error", `Initialization failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      addResult(
+        "Bucket Init",
+        "error",
+        `Initialization failed: ${error instanceof Error ? error.message : "Unknown error"}`,
+      );
     } finally {
       setTesting(false);
     }
   };
 
-  const getStatusIcon = (status: TestResult['status']) => {
+  const getStatusIcon = (status: TestResult["status"]) => {
     switch (status) {
-      case 'success': return <CheckCircle2 className="w-4 h-4 text-green-500" />;
-      case 'error': return <XCircle className="w-4 h-4 text-red-500" />;
-      case 'warning': return <AlertTriangle className="w-4 h-4 text-yellow-500" />;
-      case 'info': return <Database className="w-4 h-4 text-blue-500" />;
+      case "success":
+        return <CheckCircle2 className="w-4 h-4 text-green-500" />;
+      case "error":
+        return <XCircle className="w-4 h-4 text-red-500" />;
+      case "warning":
+        return <AlertTriangle className="w-4 h-4 text-yellow-500" />;
+      case "info":
+        return <Database className="w-4 h-4 text-blue-500" />;
     }
   };
 
   const handleUploadComplete = (files: any[]) => {
-    addResult("File Upload", "success", `Successfully uploaded ${files.length} file(s)`, 
-      files.map(f => f.name).join(', '));
+    addResult(
+      "File Upload",
+      "success",
+      `Successfully uploaded ${files.length} file(s)`,
+      files.map((f) => f.name).join(", "),
+    );
   };
 
   const handleUploadError = (error: string) => {
@@ -218,8 +329,8 @@ export default function StorageBucketTest() {
 
             <TabsContent value="test" className="space-y-4">
               <div className="flex gap-2">
-                <Button 
-                  onClick={testStorageConnection} 
+                <Button
+                  onClick={testStorageConnection}
                   disabled={testing}
                   variant="outline"
                 >
@@ -235,18 +346,18 @@ export default function StorageBucketTest() {
                     </>
                   )}
                 </Button>
-                
-                <Button 
-                  onClick={initializeBuckets} 
+
+                <Button
+                  onClick={initializeBuckets}
                   disabled={testing}
                   variant="outline"
                 >
                   <Folder className="w-4 h-4 mr-2" />
                   Initialize Buckets
                 </Button>
-                
-                <Button 
-                  onClick={clearResults} 
+
+                <Button
+                  onClick={clearResults}
                   disabled={testing}
                   variant="ghost"
                 >
@@ -259,15 +370,22 @@ export default function StorageBucketTest() {
                 <div className="bg-black text-green-400 p-4 rounded font-mono text-sm max-h-96 overflow-y-auto">
                   <div className="flex items-center justify-between mb-2">
                     <span className="font-bold">Storage Test Results:</span>
-                    <Badge variant="outline" className="text-green-400 border-green-400">
+                    <Badge
+                      variant="outline"
+                      className="text-green-400 border-green-400"
+                    >
                       {testResults.length} entries
                     </Badge>
                   </div>
                   {testResults.map((result, index) => (
                     <div key={index} className="mb-1">
-                      <div>{result.test}: {result.message}</div>
+                      <div>
+                        {result.test}: {result.message}
+                      </div>
                       {result.details && (
-                        <div className="text-blue-300 text-xs ml-4">└─ {result.details}</div>
+                        <div className="text-blue-300 text-xs ml-4">
+                          └─ {result.details}
+                        </div>
                       )}
                     </div>
                   ))}
@@ -278,10 +396,13 @@ export default function StorageBucketTest() {
             <TabsContent value="buckets" className="space-y-4">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-medium">Required Storage Buckets</h3>
+                  <h3 className="text-lg font-medium">
+                    Required Storage Buckets
+                  </h3>
                   {bucketsTested && (
                     <Badge variant="outline">
-                      {bucketStatus.filter(b => b.exists).length} / {bucketStatus.length} Ready
+                      {bucketStatus.filter((b) => b.exists).length} /{" "}
+                      {bucketStatus.length} Ready
                     </Badge>
                   )}
                 </div>
@@ -295,12 +416,14 @@ export default function StorageBucketTest() {
                   </Alert>
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    {bucketStatus.map(bucket => (
+                    {bucketStatus.map((bucket) => (
                       <Card key={bucket.id} className="p-4">
                         <div className="flex items-start justify-between mb-2">
                           <div className="flex items-center gap-2">
                             <Folder className="w-4 h-4" />
-                            <span className="font-medium text-sm">{bucket.name}</span>
+                            <span className="font-medium text-sm">
+                              {bucket.name}
+                            </span>
                           </div>
                           {bucket.exists ? (
                             <CheckCircle2 className="w-4 h-4 text-green-500" />
@@ -309,7 +432,9 @@ export default function StorageBucketTest() {
                           )}
                         </div>
                         <div className="text-xs text-muted-foreground space-y-1">
-                          <div>Status: {bucket.exists ? "Exists" : "Missing"}</div>
+                          <div>
+                            Status: {bucket.exists ? "Exists" : "Missing"}
+                          </div>
                           <div>Max Size: {bucket.maxSize}</div>
                           <div>File Types: {bucket.allowedTypes}</div>
                         </div>
@@ -321,8 +446,9 @@ export default function StorageBucketTest() {
                 <Alert>
                   <AlertTriangle className="h-4 w-4" />
                   <AlertDescription>
-                    <strong>Bucket Creation:</strong> If buckets are missing, click "Initialize Buckets" 
-                    in the Connection Test tab to create them automatically.
+                    <strong>Bucket Creation:</strong> If buckets are missing,
+                    click "Initialize Buckets" in the Connection Test tab to
+                    create them automatically.
                   </AlertDescription>
                 </Alert>
               </div>
@@ -333,8 +459,9 @@ export default function StorageBucketTest() {
                 <Alert>
                   <Upload className="h-4 w-4" />
                   <AlertDescription>
-                    <strong>File Upload Test:</strong> Use this to test the actual file upload functionality. 
-                    You must be logged in to upload files.
+                    <strong>File Upload Test:</strong> Use this to test the
+                    actual file upload functionality. You must be logged in to
+                    upload files.
                   </AlertDescription>
                 </Alert>
 

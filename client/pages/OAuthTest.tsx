@@ -39,9 +39,7 @@ export default function OAuthTest() {
           <h1 className="text-3xl font-bold text-foreground mb-2">
             OAuth Test Page
           </h1>
-          <p className="text-muted-foreground">
-            Test Google OAuth integration
-          </p>
+          <p className="text-muted-foreground">Test Google OAuth integration</p>
         </div>
 
         {/* OAuth Test Card */}
@@ -62,10 +60,18 @@ export default function OAuthTest() {
                     </span>
                   </div>
                   <div className="text-sm text-green-700">
-                    <p><strong>Email:</strong> {user.email}</p>
-                    <p><strong>Name:</strong> {user.name}</p>
-                    <p><strong>ID:</strong> {user.id}</p>
-                    <p><strong>Role:</strong> {user.role}</p>
+                    <p>
+                      <strong>Email:</strong> {user.email}
+                    </p>
+                    <p>
+                      <strong>Name:</strong> {user.name}
+                    </p>
+                    <p>
+                      <strong>ID:</strong> {user.id}
+                    </p>
+                    <p>
+                      <strong>Role:</strong> {user.role}
+                    </p>
                   </div>
                 </div>
 
@@ -78,11 +84,9 @@ export default function OAuthTest() {
                     <LogOut className="w-4 h-4 mr-2" />
                     Sign Out
                   </Button>
-                  
+
                   <Button asChild className="w-full">
-                    <Link to="/dashboard">
-                      Go to Dashboard
-                    </Link>
+                    <Link to="/dashboard">Go to Dashboard</Link>
                   </Button>
                 </div>
               </div>
@@ -90,8 +94,8 @@ export default function OAuthTest() {
               <div className="space-y-4">
                 <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
                   <p className="text-sm text-blue-700">
-                    <strong>Note:</strong> Google OAuth requires proper configuration in your Supabase project.
-                    Make sure you have:
+                    <strong>Note:</strong> Google OAuth requires proper
+                    configuration in your Supabase project. Make sure you have:
                   </p>
                   <ul className="list-disc list-inside text-xs text-blue-600 mt-2 space-y-1">
                     <li>Enabled Google provider in Supabase Auth settings</li>
@@ -100,7 +104,7 @@ export default function OAuthTest() {
                   </ul>
                 </div>
 
-                <GoogleOAuthButton 
+                <GoogleOAuthButton
                   text="Test Google Sign-In"
                   variant="default"
                 />

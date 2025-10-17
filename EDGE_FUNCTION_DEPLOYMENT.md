@@ -39,6 +39,7 @@ SUPABASE_SERVICE_ROLE_KEY=<your-service-role-key>
 ### 3. Configure CORS (if needed)
 
 Add to your Supabase project settings → API → CORS:
+
 ```
 http://localhost:8080
 https://your-production-domain.com
@@ -47,6 +48,7 @@ https://your-production-domain.com
 ### 4. Verify Deployment
 
 Test the function by checking:
+
 - Supabase Dashboard → Edge Functions
 - Function should appear as "Active"
 - Test with a file upload in your application
@@ -76,6 +78,7 @@ chargesource/
 ## Error Handling
 
 The function returns appropriate HTTP status codes:
+
 - `405`: Method not allowed (non-POST requests)
 - `401`: Missing authorization header
 - `403`: Authentication failed
@@ -86,6 +89,7 @@ The function returns appropriate HTTP status codes:
 ## Client Integration
 
 The ChargeSource application has been updated to use this Edge Function instead of direct storage uploads, providing:
+
 - Better error handling
 - Enhanced security
 - Consistent authentication flow
@@ -94,6 +98,7 @@ The ChargeSource application has been updated to use this Edge Function instead 
 ## Monitoring
 
 Monitor function performance in:
+
 - Supabase Dashboard → Edge Functions → Logs
 - Real-time error tracking
 - Performance metrics

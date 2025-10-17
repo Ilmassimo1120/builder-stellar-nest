@@ -43,8 +43,8 @@ export default function FileStorageDebug() {
         bucketInit: {
           success: result.success,
           message: `Created: ${result.created.length}, Existing: ${result.existing.length}, Errors: ${result.errors.length}`,
-          data: result
-        }
+          data: result,
+        },
       }));
     } catch (error) {
       console.error("Bucket initialization failed:", error);
@@ -53,8 +53,8 @@ export default function FileStorageDebug() {
         bucketInit: {
           success: false,
           message: error instanceof Error ? error.message : "Unknown error",
-          error
-        }
+          error,
+        },
       }));
     } finally {
       setInitializingBuckets(false);
@@ -194,14 +194,14 @@ export default function FileStorageDebug() {
         success: status.allExist,
         message: status.allExist
           ? `All ${status.existing.length} buckets exist`
-          : `Missing ${status.missing.length} buckets: ${status.missing.join(', ')}`,
-        data: status
+          : `Missing ${status.missing.length} buckets: ${status.missing.join(", ")}`,
+        data: status,
       };
     } catch (error) {
       return {
         success: false,
         message: `Bucket check failed: ${error instanceof Error ? error.message : String(error)}`,
-        error
+        error,
       };
     }
   };
@@ -229,8 +229,12 @@ export default function FileStorageDebug() {
             <div className="flex items-center justify-between">
               <h3 className="text-lg font-semibold">Storage Buckets</h3>
               <div className="flex items-center space-x-2">
-                <Badge variant={bucketStatus.allExist ? "default" : "destructive"}>
-                  {bucketStatus.allExist ? "✅ All Ready" : `❌ ${bucketStatus.missing.length} Missing`}
+                <Badge
+                  variant={bucketStatus.allExist ? "default" : "destructive"}
+                >
+                  {bucketStatus.allExist
+                    ? "✅ All Ready"
+                    : `❌ ${bucketStatus.missing.length} Missing`}
                 </Badge>
                 {!bucketStatus.allExist && (
                   <Button

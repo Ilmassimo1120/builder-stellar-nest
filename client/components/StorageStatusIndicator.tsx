@@ -57,7 +57,10 @@ export default function StorageStatusIndicator({
         </Badge>
 
         {/* Storage Status */}
-        <Badge variant={isOnline ? "outline" : "secondary"} className="flex items-center space-x-1">
+        <Badge
+          variant={isOnline ? "outline" : "secondary"}
+          className="flex items-center space-x-1"
+        >
           <Cloud className="h-3 w-3" />
           <span>{isOnline ? "Cloud ready" : "Offline mode"}</span>
         </Badge>
@@ -74,7 +77,6 @@ export default function StorageStatusIndicator({
           </Button>
         )}
       </div>
-
 
       {/* Network status warning */}
       {!isOnline && (

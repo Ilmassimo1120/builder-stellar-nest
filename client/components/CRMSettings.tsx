@@ -135,12 +135,12 @@ export function CRMSettings() {
       setSuccess(null);
 
       const success = await customerService.setConfig({
-        provider: data.provider || 'native',
-        ...data
+        provider: data.provider || "native",
+        ...data,
       });
 
       if (success) {
-        setConfig({ provider: data.provider || 'native', ...data } as any);
+        setConfig({ provider: data.provider || "native", ...data } as any);
         setSuccess("Configuration saved successfully!");
 
         // Update connection status

@@ -1,10 +1,22 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Logo } from "@/components/ui/logo";
@@ -22,7 +34,7 @@ import {
   Zap,
   CheckCircle2,
   Shield,
-  Clock
+  Clock,
 } from "lucide-react";
 
 export default function Register() {
@@ -34,7 +46,7 @@ export default function Register() {
   const [currentStep, setCurrentStep] = useState(1);
   const totalSteps = 2;
   const [error, setError] = useState("");
-  
+
   const [formData, setFormData] = useState({
     // Personal Details
     firstName: "",
@@ -43,7 +55,7 @@ export default function Register() {
     phone: "",
     password: "",
     confirmPassword: "",
-    
+
     // Business Details
     companyName: "",
     businessType: "",
@@ -52,16 +64,18 @@ export default function Register() {
     servicesOffered: [] as string[],
     businessAddress: "",
     website: "",
-    
+
     // Agreements
     agreeTerms: false,
-    agreeMarketing: false
+    agreeMarketing: false,
   });
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
     if (error) setError("");
   };
@@ -69,7 +83,7 @@ export default function Register() {
   const handleSelectChange = (name: string, value: string) => {
     setFormData({
       ...formData,
-      [name]: value
+      [name]: value,
     });
     if (error) setError("");
   };
@@ -77,9 +91,9 @@ export default function Register() {
   const handleServiceToggle = (service: string, checked: boolean) => {
     setFormData({
       ...formData,
-      servicesOffered: checked 
+      servicesOffered: checked
         ? [...formData.servicesOffered, service]
-        : formData.servicesOffered.filter(s => s !== service)
+        : formData.servicesOffered.filter((s) => s !== service),
     });
   };
 
@@ -87,10 +101,13 @@ export default function Register() {
     if (!formData.firstName.trim()) return "First name is required";
     if (!formData.lastName.trim()) return "Last name is required";
     if (!formData.email.trim()) return "Email is required";
-    if (!formData.email.includes("@")) return "Please enter a valid email address";
+    if (!formData.email.includes("@"))
+      return "Please enter a valid email address";
     if (!formData.password) return "Password is required";
-    if (formData.password.length < 8) return "Password must be at least 8 characters";
-    if (formData.password !== formData.confirmPassword) return "Passwords do not match";
+    if (formData.password.length < 8)
+      return "Password must be at least 8 characters";
+    if (formData.password !== formData.confirmPassword)
+      return "Passwords do not match";
     return null;
   };
 
@@ -118,7 +135,7 @@ export default function Register() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     const error = validateStep2();
     if (error) {
       setError(error);
@@ -130,7 +147,7 @@ export default function Register() {
 
     try {
       // Simulate registration - In a real app, this would call an API
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      await new Promise((resolve) => setTimeout(resolve, 2000));
 
       // Use the auth hook to register
       const success = await register(formData);
@@ -141,7 +158,6 @@ export default function Register() {
       } else {
         throw new Error("Registration failed");
       }
-
     } catch (error) {
       setError("Registration failed. Please try again.");
     } finally {
@@ -157,7 +173,7 @@ export default function Register() {
     "Solar + EV Charging Integration",
     "Electrical Panel Upgrades",
     "Grid Connection & Utility Coordination",
-    "Maintenance & Support Services"
+    "Maintenance & Support Services",
   ];
 
   return (
@@ -168,9 +184,12 @@ export default function Register() {
           <div className="flex justify-center mb-4">
             <Logo size="xl" />
           </div>
-          <h1 className="text-3xl font-bold text-foreground mb-2">Join ChargeSource</h1>
+          <h1 className="text-3xl font-bold text-foreground mb-2">
+            Join ChargeSource
+          </h1>
           <p className="text-muted-foreground">
-            Create your contractor account and start managing EV infrastructure projects
+            Create your contractor account and start managing EV infrastructure
+            projects
           </p>
         </div>
 
@@ -178,21 +197,33 @@ export default function Register() {
         <div className="mb-8">
           <div className="flex items-center justify-center space-x-4">
             <div className="flex items-center">
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                currentStep >= 1 ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'
-              }`}>
+              <div
+                className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                  currentStep >= 1
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-muted text-muted-foreground"
+                }`}
+              >
                 {currentStep > 1 ? <CheckCircle2 className="w-4 h-4" /> : "1"}
               </div>
               <span className="ml-2 text-sm font-medium">Personal Details</span>
             </div>
-            <div className={`h-1 w-16 ${currentStep > 1 ? 'bg-primary' : 'bg-muted'}`} />
+            <div
+              className={`h-1 w-16 ${currentStep > 1 ? "bg-primary" : "bg-muted"}`}
+            />
             <div className="flex items-center">
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                currentStep >= 2 ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'
-              }`}>
+              <div
+                className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                  currentStep >= 2
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-muted text-muted-foreground"
+                }`}
+              >
                 2
               </div>
-              <span className="ml-2 text-sm font-medium">Business Information</span>
+              <span className="ml-2 text-sm font-medium">
+                Business Information
+              </span>
             </div>
           </div>
         </div>
@@ -201,17 +232,28 @@ export default function Register() {
         <Card className="shadow-lg border-primary/10">
           <CardHeader className="space-y-1 pb-6">
             <CardTitle className="text-2xl font-semibold text-center">
-              {currentStep === 1 ? "Create Your Account" : "Business Information"}
+              {currentStep === 1
+                ? "Create Your Account"
+                : "Business Information"}
             </CardTitle>
             <CardDescription className="text-center">
-              {currentStep === 1 
-                ? "Let's start with your personal details" 
-                : "Tell us about your electrical contracting business"
-              }
+              {currentStep === 1
+                ? "Let's start with your personal details"
+                : "Tell us about your electrical contracting business"}
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <form onSubmit={currentStep === 1 ? (e) => { e.preventDefault(); handleNext(); } : handleSubmit} className="space-y-4">
+            <form
+              onSubmit={
+                currentStep === 1
+                  ? (e) => {
+                      e.preventDefault();
+                      handleNext();
+                    }
+                  : handleSubmit
+              }
+              className="space-y-4"
+            >
               {error && (
                 <Alert variant="destructive">
                   <AlertDescription>{error}</AlertDescription>
@@ -307,7 +349,11 @@ export default function Register() {
                         onClick={() => setShowPassword(!showPassword)}
                         className="absolute right-3 top-3 h-4 w-4 text-muted-foreground hover:text-foreground transition-colors"
                       >
-                        {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                        {showPassword ? (
+                          <EyeOff className="h-4 w-4" />
+                        ) : (
+                          <Eye className="h-4 w-4" />
+                        )}
                       </button>
                     </div>
                   </div>
@@ -328,10 +374,16 @@ export default function Register() {
                       />
                       <button
                         type="button"
-                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        onClick={() =>
+                          setShowConfirmPassword(!showConfirmPassword)
+                        }
                         className="absolute right-3 top-3 h-4 w-4 text-muted-foreground hover:text-foreground transition-colors"
                       >
-                        {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                        {showConfirmPassword ? (
+                          <EyeOff className="h-4 w-4" />
+                        ) : (
+                          <Eye className="h-4 w-4" />
+                        )}
                       </button>
                     </div>
                   </div>
@@ -363,24 +415,46 @@ export default function Register() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="businessType">Business Type *</Label>
-                      <Select value={formData.businessType} onValueChange={(value) => handleSelectChange("businessType", value)}>
+                      <Select
+                        value={formData.businessType}
+                        onValueChange={(value) =>
+                          handleSelectChange("businessType", value)
+                        }
+                      >
                         <SelectTrigger>
                           <SelectValue placeholder="Select business type" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="electrical-contractor">Electrical Contractor</SelectItem>
-                          <SelectItem value="solar-installer">Solar Installer</SelectItem>
-                          <SelectItem value="ev-specialist">EV Charging Specialist</SelectItem>
-                          <SelectItem value="energy-consultant">Energy Consultant</SelectItem>
-                          <SelectItem value="general-contractor">General Contractor</SelectItem>
+                          <SelectItem value="electrical-contractor">
+                            Electrical Contractor
+                          </SelectItem>
+                          <SelectItem value="solar-installer">
+                            Solar Installer
+                          </SelectItem>
+                          <SelectItem value="ev-specialist">
+                            EV Charging Specialist
+                          </SelectItem>
+                          <SelectItem value="energy-consultant">
+                            Energy Consultant
+                          </SelectItem>
+                          <SelectItem value="general-contractor">
+                            General Contractor
+                          </SelectItem>
                           <SelectItem value="other">Other</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="yearsExperience">Years of Experience</Label>
-                      <Select value={formData.yearsExperience} onValueChange={(value) => handleSelectChange("yearsExperience", value)}>
+                      <Label htmlFor="yearsExperience">
+                        Years of Experience
+                      </Label>
+                      <Select
+                        value={formData.yearsExperience}
+                        onValueChange={(value) =>
+                          handleSelectChange("yearsExperience", value)
+                        }
+                      >
                         <SelectTrigger>
                           <SelectValue placeholder="Select experience" />
                         </SelectTrigger>
@@ -396,7 +470,9 @@ export default function Register() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="licenseNumber">Electrical License Number</Label>
+                    <Label htmlFor="licenseNumber">
+                      Electrical License Number
+                    </Label>
                     <Input
                       id="licenseNumber"
                       name="licenseNumber"
@@ -426,13 +502,23 @@ export default function Register() {
                     <Label>Services Offered (select all that apply)</Label>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-2 max-h-48 overflow-y-auto border rounded-md p-3">
                       {services.map((service) => (
-                        <div key={service} className="flex items-center space-x-2">
+                        <div
+                          key={service}
+                          className="flex items-center space-x-2"
+                        >
                           <Checkbox
                             id={service}
                             checked={formData.servicesOffered.includes(service)}
-                            onCheckedChange={(checked) => handleServiceToggle(service, checked as boolean)}
+                            onCheckedChange={(checked) =>
+                              handleServiceToggle(service, checked as boolean)
+                            }
                           />
-                          <Label htmlFor={service} className="text-sm leading-tight">{service}</Label>
+                          <Label
+                            htmlFor={service}
+                            className="text-sm leading-tight"
+                          >
+                            {service}
+                          </Label>
                         </div>
                       ))}
                     </div>
@@ -443,15 +529,33 @@ export default function Register() {
                       <Checkbox
                         id="agreeTerms"
                         checked={formData.agreeTerms}
-                        onCheckedChange={(checked) => setFormData({...formData, agreeTerms: checked as boolean})}
+                        onCheckedChange={(checked) =>
+                          setFormData({
+                            ...formData,
+                            agreeTerms: checked as boolean,
+                          })
+                        }
                         className="mt-1"
                       />
-                      <Label htmlFor="agreeTerms" className="text-sm leading-relaxed">
+                      <Label
+                        htmlFor="agreeTerms"
+                        className="text-sm leading-relaxed"
+                      >
                         I agree to the{" "}
-                        <Link to="/terms" className="text-primary hover:underline">Terms of Service</Link>
-                        {" "}and{" "}
-                        <Link to="/privacy" className="text-primary hover:underline">Privacy Policy</Link>
-                        {" "}*
+                        <Link
+                          to="/terms"
+                          className="text-primary hover:underline"
+                        >
+                          Terms of Service
+                        </Link>{" "}
+                        and{" "}
+                        <Link
+                          to="/privacy"
+                          className="text-primary hover:underline"
+                        >
+                          Privacy Policy
+                        </Link>{" "}
+                        *
                       </Label>
                     </div>
 
@@ -459,22 +563,36 @@ export default function Register() {
                       <Checkbox
                         id="agreeMarketing"
                         checked={formData.agreeMarketing}
-                        onCheckedChange={(checked) => setFormData({...formData, agreeMarketing: checked as boolean})}
+                        onCheckedChange={(checked) =>
+                          setFormData({
+                            ...formData,
+                            agreeMarketing: checked as boolean,
+                          })
+                        }
                         className="mt-1"
                       />
-                      <Label htmlFor="agreeMarketing" className="text-sm leading-relaxed">
-                        I would like to receive updates about new features, industry news, and special offers
+                      <Label
+                        htmlFor="agreeMarketing"
+                        className="text-sm leading-relaxed"
+                      >
+                        I would like to receive updates about new features,
+                        industry news, and special offers
                       </Label>
                     </div>
                   </div>
 
                   <div className="flex gap-3 pt-4">
-                    <Button type="button" variant="outline" onClick={handleBack} className="flex-1">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={handleBack}
+                      className="flex-1"
+                    >
                       Back
                     </Button>
-                    <Button 
-                      type="submit" 
-                      className="flex-1 h-11" 
+                    <Button
+                      type="submit"
+                      className="flex-1 h-11"
                       disabled={isLoading}
                     >
                       {isLoading ? (
@@ -497,7 +615,10 @@ export default function Register() {
             <div className="mt-6 text-center">
               <p className="text-sm text-muted-foreground">
                 Already have an account?{" "}
-                <Link to="/login" className="text-primary hover:underline font-medium">
+                <Link
+                  to="/login"
+                  className="text-primary hover:underline font-medium"
+                >
                   Sign in here
                 </Link>
               </p>
@@ -511,7 +632,9 @@ export default function Register() {
             <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
               <Clock className="w-5 h-5 text-primary" />
             </div>
-            <p className="text-xs text-muted-foreground">Quick 2-minute setup</p>
+            <p className="text-xs text-muted-foreground">
+              Quick 2-minute setup
+            </p>
           </div>
           <div className="flex flex-col items-center space-y-2">
             <div className="w-10 h-10 bg-secondary/10 rounded-full flex items-center justify-center">

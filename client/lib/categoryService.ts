@@ -176,7 +176,8 @@ class CategoryService {
           {
             id: "management-platform",
             name: "Management Platform",
-            description: "Software platforms for chargepoint management and monitoring",
+            description:
+              "Software platforms for chargepoint management and monitoring",
             categoryId: "services",
             order: 3,
           },
@@ -405,9 +406,7 @@ class CategoryService {
     }));
   }
 
-  getSubcategorySelectOptions(
-    categoryId?: string,
-  ): {
+  getSubcategorySelectOptions(categoryId?: string): {
     value: string;
     label: string;
     description: string;

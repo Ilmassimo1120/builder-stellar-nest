@@ -38,10 +38,10 @@ async function createBuckets() {
       public: true,
       allowedMimeTypes: ["image/jpeg", "image/png", "image/webp"],
       fileSizeLimit: 10 * 1024 * 1024, // 10MB
-      description: "Public product catalog images"
+      description: "Public product catalog images",
     },
     {
-      name: "documents", 
+      name: "documents",
       public: false,
       allowedMimeTypes: [
         "application/pdf",
@@ -50,36 +50,41 @@ async function createBuckets() {
         "application/vnd.ms-excel",
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         "text/plain",
-        "text/csv"
+        "text/csv",
       ],
       fileSizeLimit: 50 * 1024 * 1024, // 50MB
-      description: "Private project documents and files"
+      description: "Private project documents and files",
     },
     {
       name: "quote-attachments",
       public: false,
       allowedMimeTypes: ["application/pdf", "image/jpeg", "image/png"],
       fileSizeLimit: 20 * 1024 * 1024, // 20MB
-      description: "Private quote attachments and supporting documents"
-    }
+      description: "Private quote attachments and supporting documents",
+    },
   ];
 
   console.log("\n📋 Required Buckets:");
-  buckets.forEach(bucket => {
-    console.log(`   • ${bucket.name} (${bucket.public ? 'Public' : 'Private'}) - ${Math.round(bucket.fileSizeLimit / 1024 / 1024)}MB`);
+  buckets.forEach((bucket) => {
+    console.log(
+      `   • ${bucket.name} (${bucket.public ? "Public" : "Private"}) - ${Math.round(bucket.fileSizeLimit / 1024 / 1024)}MB`,
+    );
   });
 
   try {
     // First, check existing buckets
     console.log("\n🔍 Checking existing buckets...");
-    const { data: existingBuckets, error: listError } = await supabase.storage.listBuckets();
-    
+    const { data: existingBuckets, error: listError } =
+      await supabase.storage.listBuckets();
+
     if (listError) {
       throw new Error(`Failed to list buckets: ${listError.message}`);
     }
 
-    const existingNames = existingBuckets?.map(b => b.name) || [];
-    console.log(`   Found ${existingBuckets?.length || 0} existing buckets: ${existingNames.join(', ') || 'none'}`);
+    const existingNames = existingBuckets?.map((b) => b.name) || [];
+    console.log(
+      `   Found ${existingBuckets?.length || 0} existing buckets: ${existingNames.join(", ") || "none"}`,
+    );
 
     // Create missing buckets
     let created = 0;
@@ -87,7 +92,7 @@ async function createBuckets() {
     let errors = 0;
 
     console.log("\n🚀 Creating buckets...");
-    
+
     for (const bucket of buckets) {
       if (existingNames.includes(bucket.name)) {
         console.log(`   ✅ ${bucket.name} - Already exists`);
@@ -96,15 +101,18 @@ async function createBuckets() {
       }
 
       console.log(`   🆕 Creating ${bucket.name}...`);
-      
+
       const { data, error } = await supabase.storage.createBucket(bucket.name, {
         public: bucket.public,
         allowedMimeTypes: bucket.allowedMimeTypes,
-        fileSizeLimit: bucket.fileSizeLimit
+        fileSizeLimit: bucket.fileSizeLimit,
       });
 
       if (error) {
-        if (error.message.includes('already exists') || error.message.includes('duplicate')) {
+        if (
+          error.message.includes("already exists") ||
+          error.message.includes("duplicate")
+        ) {
           console.log(`   ✅ ${bucket.name} - Already exists (from error)`);
           existing++;
         } else {
@@ -130,22 +138,23 @@ async function createBuckets() {
       console.log("   2. Visit: http://localhost:8080/auth-test → Storage tab");
       console.log("   3. Try uploading a test file");
     } else {
-      console.log("\n⚠️  Some buckets could not be created. Check the errors above.");
+      console.log(
+        "\n⚠️  Some buckets could not be created. Check the errors above.",
+      );
     }
 
     // Verify final state
     console.log("\n🔍 Final verification...");
     const { data: finalBuckets } = await supabase.storage.listBuckets();
-    const finalNames = finalBuckets?.map(b => b.name) || [];
-    const requiredNames = buckets.map(b => b.name);
-    const missing = requiredNames.filter(name => !finalNames.includes(name));
-    
+    const finalNames = finalBuckets?.map((b) => b.name) || [];
+    const requiredNames = buckets.map((b) => b.name);
+    const missing = requiredNames.filter((name) => !finalNames.includes(name));
+
     if (missing.length === 0) {
       console.log("   ✅ All required buckets verified!");
     } else {
-      console.log(`   ⚠️  Still missing: ${missing.join(', ')}`);
+      console.log(`   ⚠️  Still missing: ${missing.join(", ")}`);
     }
-
   } catch (error) {
     console.error("\n❌ Bucket creation failed:");
     console.error(`   ${error.message}`);

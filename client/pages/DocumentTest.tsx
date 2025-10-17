@@ -336,7 +336,6 @@ export default function DocumentTest() {
         </div>
       </div>
 
-
       {/* Raw Bucket Verification - Check if buckets actually exist */}
       <BucketVerifier />
 

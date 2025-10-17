@@ -21,32 +21,32 @@ export function createServer() {
         method: "GET",
         path: "/api/ping",
         description: "Health check endpoint",
-        example: `${_req.protocol}://${_req.get('host')}/api/ping`
+        example: `${_req.protocol}://${_req.get("host")}/api/ping`,
       },
       {
         method: "GET",
         path: "/api/demo",
         description: "Demo data endpoint",
-        example: `${_req.protocol}://${_req.get('host')}/api/demo`
+        example: `${_req.protocol}://${_req.get("host")}/api/demo`,
       },
       {
         method: "POST",
         path: "/api/create-storage-buckets",
         description: "Create Supabase storage buckets",
-        example: `${_req.protocol}://${_req.get('host')}/api/create-storage-buckets`
+        example: `${_req.protocol}://${_req.get("host")}/api/create-storage-buckets`,
       },
       {
         method: "POST",
         path: "/api/crm/leads",
         description: "Submit CRM lead data",
-        example: `${_req.protocol}://${_req.get('host')}/api/crm/leads`
+        example: `${_req.protocol}://${_req.get("host")}/api/crm/leads`,
       },
       {
         method: "POST",
         path: "/api/email/demo-confirmation",
         description: "Send demo confirmation email",
-        example: `${_req.protocol}://${_req.get('host')}/api/email/demo-confirmation`
-      }
+        example: `${_req.protocol}://${_req.get("host")}/api/email/demo-confirmation`,
+      },
     ];
 
     res.json({
@@ -54,7 +54,7 @@ export function createServer() {
       version: "1.0.0",
       timestamp: new Date().toISOString(),
       endpoints: apiRoutes,
-      totalEndpoints: apiRoutes.length
+      totalEndpoints: apiRoutes.length,
     });
   });
 

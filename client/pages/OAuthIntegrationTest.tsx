@@ -26,16 +26,23 @@ export default function OAuthIntegrationTest() {
                 </span>
               </div>
               <div className="text-sm text-green-700">
-                <p>✅ GoogleOAuthButton component loads without context errors</p>
+                <p>
+                  ✅ GoogleOAuthButton component loads without context errors
+                </p>
                 <p>✅ useAuth hook is properly connected</p>
-                <p>✅ Authentication state: {isAuthenticated ? 'Authenticated' : 'Not authenticated'}</p>
+                <p>
+                  ✅ Authentication state:{" "}
+                  {isAuthenticated ? "Authenticated" : "Not authenticated"}
+                </p>
                 {user && <p>✅ User loaded: {user.email}</p>}
               </div>
             </div>
 
             <div className="space-y-2">
-              <p className="text-sm text-muted-foreground font-medium">Test Google OAuth Button:</p>
-              <GoogleOAuthButton 
+              <p className="text-sm text-muted-foreground font-medium">
+                Test Google OAuth Button:
+              </p>
+              <GoogleOAuthButton
                 text="Test Google Sign-In (Fixed)"
                 variant="default"
               />

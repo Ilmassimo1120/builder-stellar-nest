@@ -32,14 +32,14 @@ export default function SystemStatus() {
       results.push({
         name: "Local Storage",
         status: "success",
-        message: "Local storage is accessible"
+        message: "Local storage is accessible",
       });
     } catch (error) {
       results.push({
         name: "Local Storage",
         status: "error",
         message: "Local storage is not accessible",
-        details: error
+        details: error,
       });
     }
 
@@ -51,13 +51,13 @@ export default function SystemStatus() {
           name: "Authentication",
           status: "success",
           message: `Logged in as ${storedUser.email} (${storedUser.role})`,
-          details: storedUser
+          details: storedUser,
         });
       } else {
         results.push({
           name: "Authentication",
           status: "warning",
-          message: "No active session found"
+          message: "No active session found",
         });
       }
     } catch (error) {
@@ -65,7 +65,7 @@ export default function SystemStatus() {
         name: "Authentication",
         status: "error",
         message: "Auth system error",
-        details: error
+        details: error,
       });
     }
 
@@ -78,35 +78,37 @@ export default function SystemStatus() {
         status: "success",
         message: `Environment: ${config.NODE_ENV}`,
         details: {
-          supabaseConfigured: !!(config.VITE_SUPABASE_URL && config.VITE_SUPABASE_ANON_KEY),
-          environment: config.NODE_ENV
-        }
+          supabaseConfigured: !!(
+            config.VITE_SUPABASE_URL && config.VITE_SUPABASE_ANON_KEY
+          ),
+          environment: config.NODE_ENV,
+        },
       });
     } catch (error) {
       results.push({
         name: "Configuration",
         status: "error",
         message: "Config loading failed",
-        details: error
+        details: error,
       });
     }
 
     // Check 4: Supabase Connection (basic)
     try {
       const { supabase } = await import("@/lib/supabase");
-      
+
       // Just check if supabase client exists
       if (supabase) {
         results.push({
           name: "Supabase Client",
           status: "success",
-          message: "Supabase client initialized"
+          message: "Supabase client initialized",
         });
       } else {
         results.push({
           name: "Supabase Client",
           status: "error",
-          message: "Supabase client not initialized"
+          message: "Supabase client not initialized",
         });
       }
     } catch (error) {
@@ -114,7 +116,7 @@ export default function SystemStatus() {
         name: "Supabase Client",
         status: "error",
         message: "Supabase import failed",
-        details: error
+        details: error,
       });
     }
 
@@ -124,14 +126,14 @@ export default function SystemStatus() {
       results.push({
         name: "Router",
         status: "success",
-        message: `Current path: ${currentPath}`
+        message: `Current path: ${currentPath}`,
       });
     } catch (error) {
       results.push({
         name: "Router",
         status: "error",
         message: "Router check failed",
-        details: error
+        details: error,
       });
     }
 
@@ -155,23 +157,19 @@ export default function SystemStatus() {
   const getStatusBadge = (status: SystemCheck["status"]) => {
     const variants = {
       success: "default",
-      error: "destructive", 
+      error: "destructive",
       warning: "outline",
-      checking: "secondary"
+      checking: "secondary",
     } as const;
 
-    return (
-      <Badge variant={variants[status]}>
-        {status.toUpperCase()}
-      </Badge>
-    );
+    return <Badge variant={variants[status]}>{status.toUpperCase()}</Badge>;
   };
 
-  const overallStatus = checks.every(c => c.status === "success") 
-    ? "success" 
-    : checks.some(c => c.status === "error") 
-    ? "error" 
-    : "warning";
+  const overallStatus = checks.every((c) => c.status === "success")
+    ? "success"
+    : checks.some((c) => c.status === "error")
+      ? "error"
+      : "warning";
 
   return (
     <Card className="w-full max-w-4xl mx-auto">
@@ -180,8 +178,8 @@ export default function SystemStatus() {
           <CardTitle>System Status</CardTitle>
           <div className="flex items-center space-x-2">
             {getStatusBadge(overallStatus)}
-            <Button 
-              onClick={runSystemChecks} 
+            <Button
+              onClick={runSystemChecks}
               disabled={isRunning}
               size="sm"
               variant="outline"
@@ -213,12 +211,10 @@ export default function SystemStatus() {
             {overallStatus === "success" && (
               <Alert>
                 <CheckCircle className="h-4 w-4" />
-                <AlertDescription>
-                  ✅ All systems operational
-                </AlertDescription>
+                <AlertDescription>✅ All systems operational</AlertDescription>
               </Alert>
             )}
-            
+
             {overallStatus === "error" && (
               <Alert variant="destructive">
                 <XCircle className="h-4 w-4" />
@@ -230,12 +226,17 @@ export default function SystemStatus() {
 
             <div className="grid gap-3">
               {checks.map((check, index) => (
-                <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
+                <div
+                  key={index}
+                  className="flex items-center justify-between p-3 border rounded-lg"
+                >
                   <div className="flex items-center space-x-3">
                     {getStatusIcon(check.status)}
                     <div>
                       <div className="font-medium">{check.name}</div>
-                      <div className="text-sm text-muted-foreground">{check.message}</div>
+                      <div className="text-sm text-muted-foreground">
+                        {check.message}
+                      </div>
                     </div>
                   </div>
                   {getStatusBadge(check.status)}

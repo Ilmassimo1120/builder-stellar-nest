@@ -1,114 +1,184 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Supabase Connection Test</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        body { font-family: Arial, sans-serif; padding: 20px; max-width: 800px; margin: 0 auto; }
-        .test-result { margin: 10px 0; padding: 10px; border-radius: 5px; }
-        .success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-        .error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
-        .info { background-color: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
-        pre { background: #f8f9fa; padding: 10px; border-radius: 5px; overflow-x: auto; }
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+      .test-result {
+        margin: 10px 0;
+        padding: 10px;
+        border-radius: 5px;
+      }
+      .success {
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+      }
+      .error {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+      }
+      .info {
+        background-color: #d1ecf1;
+        color: #0c5460;
+        border: 1px solid #bee5eb;
+      }
+      pre {
+        background: #f8f9fa;
+        padding: 10px;
+        border-radius: 5px;
+        overflow-x: auto;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <h1>🔍 Supabase Connection Test</h1>
     <button onclick="testConnection()" id="testBtn">Test Connection</button>
     <div id="results"></div>
 
     <script>
-        const SUPABASE_URL = 'https://tepmkljodsifaexmrinl.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlcG1rbGpvZHNpZmFleG1yaW5sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ2MDQwMjUsImV4cCI6MjA3MDE4MDAyNX0.n4WdeHUHHc5PuJV8-2oDn826CoNxNzHHbt4KxeAhOYc';
+      const SUPABASE_URL = "https://tepmkljodsifaexmrinl.supabase.co";
+      const SUPABASE_ANON_KEY =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlcG1rbGpvZHNpZmFleG1yaW5sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ2MDQwMjUsImV4cCI6MjA3MDE4MDAyNX0.n4WdeHUHHc5PuJV8-2oDn826CoNxNzHHbt4KxeAhOYc";
 
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      const supabase = window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY,
+      );
 
-        function addResult(message, type = 'info') {
-            const resultsDiv = document.getElementById('results');
-            const div = document.createElement('div');
-            div.className = `test-result ${type}`;
-            div.innerHTML = message;
-            resultsDiv.appendChild(div);
-            console.log(message.replace(/<[^>]*>/g, ''));
-        }
+      function addResult(message, type = "info") {
+        const resultsDiv = document.getElementById("results");
+        const div = document.createElement("div");
+        div.className = `test-result ${type}`;
+        div.innerHTML = message;
+        resultsDiv.appendChild(div);
+        console.log(message.replace(/<[^>]*>/g, ""));
+      }
 
-        async function testConnection() {
-            const testBtn = document.getElementById('testBtn');
-            testBtn.disabled = true;
-            testBtn.textContent = 'Testing...';
-            
-            document.getElementById('results').innerHTML = '';
-            
-            try {
-                addResult('🚀 <strong>Starting Supabase Connection Test</strong>');
-                
-                // Test 1: Check configuration
-                addResult(`📋 <strong>Configuration Check:</strong><br>
+      async function testConnection() {
+        const testBtn = document.getElementById("testBtn");
+        testBtn.disabled = true;
+        testBtn.textContent = "Testing...";
+
+        document.getElementById("results").innerHTML = "";
+
+        try {
+          addResult("🚀 <strong>Starting Supabase Connection Test</strong>");
+
+          // Test 1: Check configuration
+          addResult(
+            `📋 <strong>Configuration Check:</strong><br>
                     URL: ${SUPABASE_URL}<br>
-                    Key: ${SUPABASE_ANON_KEY ? 'Present ✅' : 'Missing ❌'}`, 'info');
-                
-                // Test 2: Test basic API call
-                addResult('🔍 <strong>Testing API connection...</strong>');
-                
-                // Try to fetch from a simple endpoint
-                const response = await fetch(`${SUPABASE_URL}/rest/v1/`, {
-                    headers: {
-                        'apikey': SUPABASE_ANON_KEY,
-                        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
-                    }
-                });
-                
-                if (response.ok) {
-                    addResult('✅ <strong>API Endpoint Reachable!</strong> - Basic connection successful', 'success');
-                } else {
-                    addResult(`❌ <strong>API Connection Failed</strong> - Status: ${response.status}`, 'error');
-                }
-                
-                // Test 3: Test Auth
-                addResult('🔐 <strong>Testing Authentication...</strong>');
-                const { data: authData, error: authError } = await supabase.auth.getUser();
-                
-                if (authError) {
-                    addResult(`⚠️ <strong>Auth Status:</strong> ${authError.message} (Expected for anonymous access)`, 'info');
-                } else if (authData.user) {
-                    addResult(`✅ <strong>Authenticated as:</strong> ${authData.user.email}`, 'success');
-                } else {
-                    addResult('ℹ️ <strong>Anonymous Access</strong> - No user logged in (this is normal)', 'info');
-                }
-                
-                // Test 4: Try a simple database query
-                addResult('🗄️ <strong>Testing Database Access...</strong>');
-                try {
-                    const { data, error } = await supabase
-                        .from('users')
-                        .select('count')
-                        .limit(1);
-                    
-                    if (error) {
-                        if (error.code === 'PGRST116' || error.message.includes('relation') || error.message.includes('does not exist')) {
-                            addResult('⚠️ <strong>Database Tables Not Found</strong> - Need to run migrations first', 'error');
-                        } else {
-                            addResult(`❌ <strong>Database Error:</strong> ${error.message}`, 'error');
-                        }
-                    } else {
-                        addResult('✅ <strong>Database Connection Successful!</strong> Tables are accessible', 'success');
-                    }
-                } catch (dbError) {
-                    addResult(`❌ <strong>Database Test Failed:</strong> ${dbError.message}`, 'error');
-                }
-                
-                addResult('🎉 <strong>Connection test completed!</strong>', 'success');
-                
-            } catch (error) {
-                addResult(`💥 <strong>Unexpected Error:</strong> ${error.message}`, 'error');
-                console.error('Full error:', error);
-            } finally {
-                testBtn.disabled = false;
-                testBtn.textContent = 'Test Connection';
+                    Key: ${SUPABASE_ANON_KEY ? "Present ✅" : "Missing ❌"}`,
+            "info",
+          );
+
+          // Test 2: Test basic API call
+          addResult("🔍 <strong>Testing API connection...</strong>");
+
+          // Try to fetch from a simple endpoint
+          const response = await fetch(`${SUPABASE_URL}/rest/v1/`, {
+            headers: {
+              apikey: SUPABASE_ANON_KEY,
+              Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+            },
+          });
+
+          if (response.ok) {
+            addResult(
+              "✅ <strong>API Endpoint Reachable!</strong> - Basic connection successful",
+              "success",
+            );
+          } else {
+            addResult(
+              `❌ <strong>API Connection Failed</strong> - Status: ${response.status}`,
+              "error",
+            );
+          }
+
+          // Test 3: Test Auth
+          addResult("🔐 <strong>Testing Authentication...</strong>");
+          const { data: authData, error: authError } =
+            await supabase.auth.getUser();
+
+          if (authError) {
+            addResult(
+              `⚠️ <strong>Auth Status:</strong> ${authError.message} (Expected for anonymous access)`,
+              "info",
+            );
+          } else if (authData.user) {
+            addResult(
+              `✅ <strong>Authenticated as:</strong> ${authData.user.email}`,
+              "success",
+            );
+          } else {
+            addResult(
+              "ℹ️ <strong>Anonymous Access</strong> - No user logged in (this is normal)",
+              "info",
+            );
+          }
+
+          // Test 4: Try a simple database query
+          addResult("🗄️ <strong>Testing Database Access...</strong>");
+          try {
+            const { data, error } = await supabase
+              .from("users")
+              .select("count")
+              .limit(1);
+
+            if (error) {
+              if (
+                error.code === "PGRST116" ||
+                error.message.includes("relation") ||
+                error.message.includes("does not exist")
+              ) {
+                addResult(
+                  "⚠️ <strong>Database Tables Not Found</strong> - Need to run migrations first",
+                  "error",
+                );
+              } else {
+                addResult(
+                  `❌ <strong>Database Error:</strong> ${error.message}`,
+                  "error",
+                );
+              }
+            } else {
+              addResult(
+                "✅ <strong>Database Connection Successful!</strong> Tables are accessible",
+                "success",
+              );
             }
+          } catch (dbError) {
+            addResult(
+              `❌ <strong>Database Test Failed:</strong> ${dbError.message}`,
+              "error",
+            );
+          }
+
+          addResult(
+            "🎉 <strong>Connection test completed!</strong>",
+            "success",
+          );
+        } catch (error) {
+          addResult(
+            `💥 <strong>Unexpected Error:</strong> ${error.message}`,
+            "error",
+          );
+          console.error("Full error:", error);
+        } finally {
+          testBtn.disabled = false;
+          testBtn.textContent = "Test Connection";
         }
+      }
     </script>
-</body>
+  </body>
 </html>

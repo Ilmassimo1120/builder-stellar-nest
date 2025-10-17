@@ -1,156 +1,226 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Storage Bucket Status</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        body { font-family: Arial, sans-serif; padding: 20px; max-width: 800px; margin: 0 auto; }
-        .bucket { margin: 10px 0; padding: 15px; border-radius: 8px; border: 1px solid #ddd; }
-        .exists { background-color: #d4edda; border-color: #c3e6cb; }
-        .missing { background-color: #f8d7da; border-color: #f5c6cb; }
-        .test-btn { background: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; }
-        .test-btn:disabled { background: #6c757d; cursor: not-allowed; }
-        pre { background: #f8f9fa; padding: 10px; border-radius: 5px; overflow-x: auto; }
-        .status { font-weight: bold; }
-        .success { color: #28a745; }
-        .error { color: #dc3545; }
-        .warning { color: #ffc107; }
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+      .bucket {
+        margin: 10px 0;
+        padding: 15px;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+      }
+      .exists {
+        background-color: #d4edda;
+        border-color: #c3e6cb;
+      }
+      .missing {
+        background-color: #f8d7da;
+        border-color: #f5c6cb;
+      }
+      .test-btn {
+        background: #007bff;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      .test-btn:disabled {
+        background: #6c757d;
+        cursor: not-allowed;
+      }
+      pre {
+        background: #f8f9fa;
+        padding: 10px;
+        border-radius: 5px;
+        overflow-x: auto;
+      }
+      .status {
+        font-weight: bold;
+      }
+      .success {
+        color: #28a745;
+      }
+      .error {
+        color: #dc3545;
+      }
+      .warning {
+        color: #ffc107;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <h1>🪣 Storage Bucket Status Test</h1>
-    
+
     <div>
-        <button onclick="testStorageBuckets()" id="testBtn" class="test-btn">Test Storage Buckets</button>
-        <span id="status" class="status"></span>
+      <button onclick="testStorageBuckets()" id="testBtn" class="test-btn">
+        Test Storage Buckets
+      </button>
+      <span id="status" class="status"></span>
     </div>
-    
+
     <div id="results"></div>
 
     <h2>📋 Expected Buckets:</h2>
     <div>
-        <div class="bucket">
-            <strong>product-images</strong> (Public)<br>
-            <small>For product catalog images • 10MB limit • JPEG, PNG, WebP</small>
-        </div>
-        <div class="bucket">
-            <strong>documents</strong> (Private)<br>
-            <small>For project documents • 50MB limit • PDF, DOC, DOCX</small>
-        </div>
-        <div class="bucket">
-            <strong>quote-attachments</strong> (Private)<br>
-            <small>For quote attachments • 20MB limit • PDF, JPEG, PNG</small>
-        </div>
+      <div class="bucket">
+        <strong>product-images</strong> (Public)<br />
+        <small>For product catalog images • 10MB limit • JPEG, PNG, WebP</small>
+      </div>
+      <div class="bucket">
+        <strong>documents</strong> (Private)<br />
+        <small>For project documents • 50MB limit • PDF, DOC, DOCX</small>
+      </div>
+      <div class="bucket">
+        <strong>quote-attachments</strong> (Private)<br />
+        <small>For quote attachments • 20MB limit • PDF, JPEG, PNG</small>
+      </div>
     </div>
 
     <h2>🛠️ Setup Instructions:</h2>
-    <div style="background: #fff3cd; padding: 15px; border-radius: 5px; border: 1px solid #ffeaa7;">
-        <p><strong>To create missing buckets:</strong></p>
-        <ol>
-            <li>Get your Supabase service role key from dashboard > Settings > API</li>
-            <li>Set environment variable: <code>SUPABASE_SERVICE_ROLE_KEY=your-key</code></li>
-            <li>Run: <code>node scripts/setup-supabase.js</code></li>
-            <li>Or use the Storage tab in the Auth Test page at: <a href="/auth-test">localhost:8080/auth-test</a></li>
-        </ol>
+    <div
+      style="
+        background: #fff3cd;
+        padding: 15px;
+        border-radius: 5px;
+        border: 1px solid #ffeaa7;
+      "
+    >
+      <p><strong>To create missing buckets:</strong></p>
+      <ol>
+        <li>
+          Get your Supabase service role key from dashboard > Settings > API
+        </li>
+        <li>
+          Set environment variable:
+          <code>SUPABASE_SERVICE_ROLE_KEY=your-key</code>
+        </li>
+        <li>Run: <code>node scripts/setup-supabase.js</code></li>
+        <li>
+          Or use the Storage tab in the Auth Test page at:
+          <a href="/auth-test">localhost:8080/auth-test</a>
+        </li>
+      </ol>
     </div>
 
     <script>
-        const SUPABASE_URL = 'https://tepmkljodsifaexmrinl.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlcG1rbGpvZHNpZmFleG1yaW5sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ2MDQwMjUsImV4cCI6MjA3MDE4MDAyNX0.n4WdeHUHHc5PuJV8-2oDn826CoNxNzHHbt4KxeAhOYc';
+      const SUPABASE_URL = "https://tepmkljodsifaexmrinl.supabase.co";
+      const SUPABASE_ANON_KEY =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlcG1rbGpvZHNpZmFleG1yaW5sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ2MDQwMjUsImV4cCI6MjA3MDE4MDAyNX0.n4WdeHUHHc5PuJV8-2oDn826CoNxNzHHbt4KxeAhOYc";
 
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      const supabase = window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY,
+      );
 
-        async function testStorageBuckets() {
-            const testBtn = document.getElementById('testBtn');
-            const status = document.getElementById('status');
-            const results = document.getElementById('results');
-            
-            testBtn.disabled = true;
-            testBtn.textContent = 'Testing...';
-            status.textContent = 'Running tests...';
-            status.className = 'status';
-            results.innerHTML = '';
+      async function testStorageBuckets() {
+        const testBtn = document.getElementById("testBtn");
+        const status = document.getElementById("status");
+        const results = document.getElementById("results");
 
-            try {
-                // Test storage API access
-                const { data: buckets, error } = await supabase.storage.listBuckets();
-                
-                if (error) {
-                    status.innerHTML = '<span class="error">❌ Storage API Error</span>';
-                    results.innerHTML = `
+        testBtn.disabled = true;
+        testBtn.textContent = "Testing...";
+        status.textContent = "Running tests...";
+        status.className = "status";
+        results.innerHTML = "";
+
+        try {
+          // Test storage API access
+          const { data: buckets, error } = await supabase.storage.listBuckets();
+
+          if (error) {
+            status.innerHTML =
+              '<span class="error">❌ Storage API Error</span>';
+            results.innerHTML = `
                         <div class="bucket missing">
                             <strong>Error:</strong> ${error.message}<br>
                             <small>This might be a CORS issue or permission problem.</small>
                         </div>
                     `;
-                    return;
-                }
+            return;
+          }
 
-                status.innerHTML = '<span class="success">✅ Storage API Connected</span>';
+          status.innerHTML =
+            '<span class="success">✅ Storage API Connected</span>';
 
-                const expectedBuckets = ['product-images', 'documents', 'quote-attachments'];
-                const existingBuckets = buckets.map(b => b.name);
-                
-                let html = `<h3>🔍 Test Results (Found ${buckets.length} buckets):</h3>`;
-                
-                expectedBuckets.forEach(bucketName => {
-                    const exists = existingBuckets.includes(bucketName);
-                    const bucket = buckets.find(b => b.name === bucketName);
-                    
-                    html += `
-                        <div class="bucket ${exists ? 'exists' : 'missing'}">
-                            <strong>${bucketName}</strong> ${exists ? '✅ EXISTS' : '❌ MISSING'}<br>
-                            ${exists ? `<small>Created: ${bucket.created_at}</small>` : '<small>Needs to be created</small>'}
+          const expectedBuckets = [
+            "product-images",
+            "documents",
+            "quote-attachments",
+          ];
+          const existingBuckets = buckets.map((b) => b.name);
+
+          let html = `<h3>🔍 Test Results (Found ${buckets.length} buckets):</h3>`;
+
+          expectedBuckets.forEach((bucketName) => {
+            const exists = existingBuckets.includes(bucketName);
+            const bucket = buckets.find((b) => b.name === bucketName);
+
+            html += `
+                        <div class="bucket ${exists ? "exists" : "missing"}">
+                            <strong>${bucketName}</strong> ${exists ? "✅ EXISTS" : "❌ MISSING"}<br>
+                            ${exists ? `<small>Created: ${bucket.created_at}</small>` : "<small>Needs to be created</small>"}
                         </div>
                     `;
-                });
+          });
 
-                // Show any extra buckets
-                const extraBuckets = existingBuckets.filter(name => !expectedBuckets.includes(name));
-                if (extraBuckets.length > 0) {
-                    html += `<h4>📦 Additional Buckets Found:</h4>`;
-                    extraBuckets.forEach(name => {
-                        const bucket = buckets.find(b => b.name === name);
-                        html += `
+          // Show any extra buckets
+          const extraBuckets = existingBuckets.filter(
+            (name) => !expectedBuckets.includes(name),
+          );
+          if (extraBuckets.length > 0) {
+            html += `<h4>📦 Additional Buckets Found:</h4>`;
+            extraBuckets.forEach((name) => {
+              const bucket = buckets.find((b) => b.name === name);
+              html += `
                             <div class="bucket exists">
                                 <strong>${name}</strong> ✅ EXISTS<br>
                                 <small>Created: ${bucket.created_at}</small>
                             </div>
                         `;
-                    });
-                }
+            });
+          }
 
-                results.innerHTML = html;
+          results.innerHTML = html;
 
-                // Summary
-                const missingCount = expectedBuckets.filter(name => !existingBuckets.includes(name)).length;
-                if (missingCount === 0) {
-                    status.innerHTML = '<span class="success">✅ All Required Buckets Exist!</span>';
-                } else {
-                    status.innerHTML = `<span class="warning">⚠️ ${missingCount} Bucket(s) Missing</span>`;
-                }
-
-            } catch (error) {
-                status.innerHTML = '<span class="error">❌ Test Failed</span>';
-                results.innerHTML = `
+          // Summary
+          const missingCount = expectedBuckets.filter(
+            (name) => !existingBuckets.includes(name),
+          ).length;
+          if (missingCount === 0) {
+            status.innerHTML =
+              '<span class="success">✅ All Required Buckets Exist!</span>';
+          } else {
+            status.innerHTML = `<span class="warning">⚠️ ${missingCount} Bucket(s) Missing</span>`;
+          }
+        } catch (error) {
+          status.innerHTML = '<span class="error">❌ Test Failed</span>';
+          results.innerHTML = `
                     <div class="bucket missing">
                         <strong>Exception:</strong> ${error.message}<br>
                         <small>Network error or CORS issue. Check console for details.</small>
                     </div>
                 `;
-                console.error('Storage test error:', error);
-            } finally {
-                testBtn.disabled = false;
-                testBtn.textContent = 'Test Storage Buckets';
-            }
+          console.error("Storage test error:", error);
+        } finally {
+          testBtn.disabled = false;
+          testBtn.textContent = "Test Storage Buckets";
         }
+      }
 
-        // Auto-run test on page load
-        window.addEventListener('load', () => {
-            setTimeout(testStorageBuckets, 500);
-        });
+      // Auto-run test on page load
+      window.addEventListener("load", () => {
+        setTimeout(testStorageBuckets, 500);
+      });
     </script>
-</body>
+  </body>
 </html>

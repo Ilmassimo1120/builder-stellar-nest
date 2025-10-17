@@ -8,12 +8,12 @@ interface RouteRedirectProps {
 
 export default function RouteRedirect({ to, delay = 0 }: RouteRedirectProps) {
   const navigate = useNavigate();
-  
+
   useEffect(() => {
     const timer = setTimeout(() => {
       navigate(to, { replace: true });
     }, delay);
-    
+
     return () => clearTimeout(timer);
   }, [navigate, to, delay]);
 
@@ -21,9 +21,7 @@ export default function RouteRedirect({ to, delay = 0 }: RouteRedirectProps) {
     <div className="flex items-center justify-center min-h-screen">
       <div className="text-center">
         <div className="text-lg font-medium mb-2">Redirecting...</div>
-        <div className="text-sm text-muted-foreground">
-          Taking you to {to}
-        </div>
+        <div className="text-sm text-muted-foreground">Taking you to {to}</div>
       </div>
     </div>
   );

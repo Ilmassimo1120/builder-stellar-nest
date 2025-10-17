@@ -232,7 +232,11 @@ export const secureStorage = {
         const itemStr = localStorage.getItem(key);
         if (itemStr) {
           const item = safeParse<any>(itemStr, null);
-          if (item && item.expiration && new Date() > new Date(item.expiration)) {
+          if (
+            item &&
+            item.expiration &&
+            new Date() > new Date(item.expiration)
+          ) {
             localStorage.removeItem(key);
           }
         }
