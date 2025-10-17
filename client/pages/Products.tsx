@@ -255,7 +255,7 @@ const Products = () => {
           <div className="grid md:grid-cols-3 gap-8 mb-16">
             {productCategories.map((category, index) => (
               <Card
-                key={index}
+                key={stableKey(category, index)}
                 className="h-full hover:shadow-lg transition-shadow border-border/50 relative"
               >
                 {category.badge && (
@@ -278,7 +278,7 @@ const Products = () => {
                   <ul className="space-y-2 mb-6">
                     {category.products.map((product, productIndex) => (
                       <li
-                        key={productIndex}
+                        key={stableKey(product, productIndex)}
                         className="flex items-center gap-2 text-sm"
                       >
                         <CheckCircle className="w-4 h-4 text-secondary" />
@@ -312,7 +312,7 @@ const Products = () => {
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
             {featuredProducts.map((product, index) => (
               <Card
-                key={index}
+                key={stableKey(product, index)}
                 className={`h-full hover:shadow-lg transition-shadow relative ${
                   product.popular ? "border-primary/50" : "border-border/50"
                 }`}
