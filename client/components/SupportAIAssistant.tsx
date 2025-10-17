@@ -424,13 +424,13 @@ export function SupportAIAssistant() {
             `support-${supportRequest.category}`,
             "lead",
           ],
-          notes: `Initial contact via Support AI Assistant - ${category?.label}`,
           customFields: {
+            notes: `Initial contact via Support AI Assistant - ${category?.label}`,
             supportCategory: category?.label || "General",
             supportPriority: supportRequest.priority || "medium",
             contactSource: "Support AI Assistant",
             firstContactDate: new Date().toISOString(),
-            isNewLead: "true",
+            isNewLead: true,
           },
         });
 
@@ -446,8 +446,7 @@ export function SupportAIAssistant() {
         type: "note",
         subject: `Support Request: ${supportCategories.find((c) => c.id === supportRequest.category)?.label}`,
         content: `Support request submitted via AI Assistant:\n\nCategory: ${supportCategories.find((c) => c.id === supportRequest.category)?.label}\nPriority: ${supportRequest.priority}\nDescription: ${description}\n\nContact: ${supportRequest.name} (${supportRequest.email}, ${supportRequest.phone})\n\n${isNewCustomer ? "New customer created from support request." : "Existing customer updated."}`,
-        date: new Date().toISOString(),
-        direction: "inbound",
+        timestamp: new Date().toISOString(),
       });
 
       let dealId: string | undefined;
@@ -461,7 +460,7 @@ export function SupportAIAssistant() {
             value: 0, // Will be updated later when qualified
             stage: "prospect",
             probability: isNewCustomer ? 15 : 25, // Slightly higher probability for existing customers
-            source: "Support AI Assistant",
+            source: "native",
             description: `Sales inquiry submitted via Support AI Assistant:\n\n${description}`,
             expectedCloseDate: new Date(
               Date.now() + 30 * 24 * 60 * 60 * 1000,
