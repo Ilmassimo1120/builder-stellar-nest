@@ -225,7 +225,7 @@ DC installations require specialized expertise:
 • Adequate earthing systems
 • Cable sizing for continuous load
 • Emergency stop requirements
-• Accessibility compliance (DDA)
+��� Accessibility compliance (DDA)
 
 **Testing Requirements:**
 • Installation testing per AS/NZS 3017
@@ -805,10 +805,10 @@ Could you please be more specific about what you need help with?`;
         );
       }
       if (line.trim() === "") {
-        return <div key={index} className="h-2"></div>;
+        return <div key={stableKey(line, index)} className="h-2"></div>;
       }
       return (
-        <div key={index} className="text-sm">
+        <div key={stableKey(line, index)} className="text-sm">
           {line}
         </div>
       );
