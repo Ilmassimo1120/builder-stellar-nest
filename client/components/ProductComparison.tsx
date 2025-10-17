@@ -322,6 +322,7 @@ export default function ProductComparison({
                       size="sm"
                       className="absolute top-2 right-2 h-6 w-6 p-0"
                       onClick={() => onRemoveFromComparison(product.id)}
+                      aria-label="Remove product from comparison"
                     >
                       <X className="w-4 h-4" />
                     </Button>
@@ -380,6 +381,7 @@ export default function ProductComparison({
                                 className="h-6 w-6 p-0"
                                 onClick={() => updateQuantity(product.id, -1)}
                                 disabled={quantity <= 1}
+                                aria-label="Decrease quantity"
                               >
                                 <Minus className="w-3 h-3" />
                               </Button>
@@ -391,6 +393,7 @@ export default function ProductComparison({
                                 size="sm"
                                 className="h-6 w-6 p-0"
                                 onClick={() => updateQuantity(product.id, 1)}
+                                aria-label="Increase quantity"
                               >
                                 <Plus className="w-3 h-3" />
                               </Button>

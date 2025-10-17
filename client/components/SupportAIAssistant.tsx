@@ -807,6 +807,7 @@ export function SupportAIAssistant() {
                     variant="ghost"
                     size="sm"
                     onClick={() => setIsMinimized(!isMinimized)}
+                    aria-label={isMinimized ? "Maximize chat" : "Minimize chat"}
                   >
                     {isMinimized ? (
                       <Maximize2 className="w-4 h-4" />
@@ -938,6 +939,7 @@ export function SupportAIAssistant() {
                       size="sm"
                       onClick={handleSendMessage}
                       disabled={!inputMessage.trim() || isTyping}
+                      aria-label="Send message"
                     >
                       <Send className="w-4 h-4" />
                     </Button>

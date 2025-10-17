@@ -271,6 +271,7 @@ export function CustomerList({
               variant="outline"
               size="sm"
               onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
+              aria-label="Toggle sort order"
             >
               {sortOrder === "asc" ? "↑" : "↓"}
             </Button>
@@ -281,6 +282,7 @@ export function CustomerList({
                 size="sm"
                 onClick={() => setViewMode("table")}
                 className="border-0 rounded-none rounded-l-md"
+                aria-label="Table view"
               >
                 <List className="w-4 h-4" />
               </Button>
@@ -289,6 +291,7 @@ export function CustomerList({
                 size="sm"
                 onClick={() => setViewMode("grid")}
                 className="border-0 rounded-none rounded-r-md"
+                aria-label="Grid view"
               >
                 <Grid className="w-4 h-4" />
               </Button>
