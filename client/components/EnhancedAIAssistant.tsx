@@ -275,7 +275,7 @@ ${searchResult.buckets.length > 0 ? `**Search focused on**: ${searchResult.bucke
         // Add file results to response
         fileResults.slice(0, 5).forEach((file, index) => {
           const bucketName = getBucketDisplayName(file.bucketName);
-          response += `\n\n**${index + 1}. ${file.title || file.fileName}**\n• Type: ${bucketName} | Size: ${formatFileSize(file.fileSize)}\n• Status: ${file.status.replace("_", " ")}\n• Description: ${file.description || "No description available"}`;
+          response += `\n\n**${index + 1}. ${file.title || file.fileName}**\n• Type: ${bucketName} | Size: ${formatFileSize(file.fileSize)}\n• Status: ${file.status.replace("_", " ")}\n�� Description: ${file.description || "No description available"}`;
         });
 
         if (searchResult.totalFound > 5) {
@@ -395,7 +395,7 @@ I couldn't find any files matching your search for: **${searchResult.searchTerms
 
 **🛠️ Platform Features:**
 • Project creation and management
-��� Quote generation and customization
+• Quote generation and customization
 • File organization and sharing
 
 Could you be more specific about what you need help with? I can search your files or provide expert guidance.`;
@@ -540,10 +540,10 @@ Could you be more specific about what you need help with? I can search your file
         );
       }
       if (line.trim() === "") {
-        return <div key={index} className="h-2"></div>;
+        return <div key={stableKey(line, index)} className="h-2"></div>;
       }
       return (
-        <div key={index} className="text-sm">
+        <div key={stableKey(line, index)} className="text-sm">
           {line}
         </div>
       );
