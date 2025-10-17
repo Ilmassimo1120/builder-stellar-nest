@@ -44,6 +44,7 @@ import {
   Minimize2,
   Maximize2,
 } from "lucide-react";
+import { stableKey } from "@/lib/stableKey";
 import { useAIContext } from "@/hooks/useAIContext";
 import { findAIResponse } from "@/lib/aiKnowledge";
 import { useNavigate } from "react-router-dom";
@@ -727,7 +728,7 @@ Could you please be more specific about what you need help with?`;
     const standardsMessage: ChatMessage = {
       id: `standards-${Date.now()}`,
       type: "assistant",
-      content: `📋 **AS/NZS 3008 Cable Standards**\n\n**Key Standard Requirements:**\n\n**Cable Selection Criteria:**\n• Current-carrying capacity (continuous rating)\n�� Voltage drop limitations (<5% for power)\n• Short-circuit withstand capability\n• Environmental conditions\n\n**Installation Classifications:**\n• **Method 1:** Conduit on walls (Reference Method B)\n• **Method 3:** Clipped direct to surfaces\n• **Method 4:** Underground in ducts/direct burial\n• **Method 11:** Ceiling spaces with insulation\n\n**Derating Factors:**\n• Ambient temperature >30°C: Apply temperature derating\n• Grouping: Multiple cables reduce capacity\n• Thermal insulation: Significant derating required\n\n**Cable Types for EV:**\n• **V75 Single Core:** Conduit installations\n• **TPS Cable:** General purpose, not suitable for high current\n• **NYY Cable:** Underground, high current capacity\n• **Automotive Cable:** Flexible sections only\n\n**Compliance Documentation:**\nMaintain records of all cable calculations and selections.`,
+      content: `📋 **AS/NZS 3008 Cable Standards**\n\n**Key Standard Requirements:**\n\n**Cable Selection Criteria:**\n• Current-carrying capacity (continuous rating)\n�� Voltage drop limitations (<5% for power)\n• Short-circuit withstand capability\n• Environmental conditions\n\n**Installation Classifications:**\n• **Method 1:** Conduit on walls (Reference Method B)\n��� **Method 3:** Clipped direct to surfaces\n• **Method 4:** Underground in ducts/direct burial\n• **Method 11:** Ceiling spaces with insulation\n\n**Derating Factors:**\n• Ambient temperature >30°C: Apply temperature derating\n• Grouping: Multiple cables reduce capacity\n• Thermal insulation: Significant derating required\n\n**Cable Types for EV:**\n• **V75 Single Core:** Conduit installations\n• **TPS Cable:** General purpose, not suitable for high current\n• **NYY Cable:** Underground, high current capacity\n• **Automotive Cable:** Flexible sections only\n\n**Compliance Documentation:**\nMaintain records of all cable calculations and selections.`,
       timestamp: new Date(),
       suggestions: [
         "Download derating tables",
