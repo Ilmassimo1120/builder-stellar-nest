@@ -4,7 +4,7 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 import ProjectWizard from "../ProjectWizard";
 import { AuthProvider } from "../../hooks/useAuth";
-import { createTestUser } from "../../lib/testing";
+import { createTestUser, createMockLocalStorage } from "../../lib/testing";
 
 // Mock the auth hook
 vi.mock("../../hooks/useAuth", () => ({
