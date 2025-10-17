@@ -33,17 +33,20 @@ const renderWithProviders = (component: React.ReactElement) => {
 };
 
 describe("ProjectWizard Component", () => {
+  let uninstallLocalStorage: (() => void) | null = null;
+
   beforeEach(() => {
     vi.clearAllMocks();
     // Mock localStorage
-    Object.defineProperty(window, "localStorage", {
-      value: {
-        getItem: vi.fn(() => "[]"),
-        setItem: vi.fn(),
-        removeItem: vi.fn(),
-        clear: vi.fn(),
-      },
+    const { mock, install, uninstall } = createMockLocalStorage({
+      chargeSourceDrafts: "[]",
     });
+    install();
+    uninstallLocalStorage = uninstall;
+  });
+
+  afterEach(() => {
+    if (uninstallLocalStorage) uninstallLocalStorage();
   });
 
   it("renders first step correctly", () => {
