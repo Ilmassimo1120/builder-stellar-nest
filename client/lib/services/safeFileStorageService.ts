@@ -156,7 +156,7 @@ class SafeFileStorageService {
           "charge-source-user-files": { files: 0, size: 0 },
           "charge-source-documents": { files: 0, size: 0 },
           "charge-source-videos": { files: 0, size: 0 },
-        },
+        } as Partial<Record<BucketName, { files: number; size: number }>>,
         categoryBreakdown: {},
         error: errorMessage,
       };
