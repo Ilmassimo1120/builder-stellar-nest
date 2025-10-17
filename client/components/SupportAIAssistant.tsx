@@ -39,6 +39,7 @@ import {
   Minimize2,
   Maximize2,
 } from "lucide-react";
+import { stableKey } from "@/lib/stableKey";
 import { useAuth } from "@/hooks/useAuth";
 import { customerService } from "@/lib/services/customerService";
 
@@ -741,23 +742,23 @@ export function SupportAIAssistant() {
     return content.split("\n").map((line, index) => {
       if (line.startsWith("**") && line.endsWith("**")) {
         return (
-          <div key={index} className="font-semibold text-foreground mt-2 mb-1">
+          <div key={stableKey(line, index)} className="font-semibold text-foreground mt-2 mb-1">
             {line.slice(2, -2)}
           </div>
         );
       }
       if (line.startsWith("• ")) {
         return (
-          <div key={index} className="ml-4 text-sm">
+          <div key={stableKey(line, index)} className="ml-4 text-sm">
             {line}
           </div>
         );
       }
       if (line.trim() === "") {
-        return <div key={index} className="h-2"></div>;
+        return <div key={stableKey(line, index)} className="h-2"></div>;
       }
       return (
-        <div key={index} className="text-sm">
+        <div key={stableKey(line, index)} className="text-sm">
           {line}
         </div>
       );
@@ -852,7 +853,7 @@ export function SupportAIAssistant() {
                                 {message.suggestions.map(
                                   (suggestion, index) => (
                                     <Button
-                                      key={index}
+                                      key={stableKey(suggestion, index)}
                                       variant="outline"
                                       size="sm"
                                       className="text-xs h-6 px-2 mr-1 mb-1"
@@ -872,7 +873,7 @@ export function SupportAIAssistant() {
                             <div className="mt-3 space-y-1">
                               {message.actions.map((action, index) => (
                                 <Button
-                                  key={index}
+                                  key={stableKey(action, index)}
                                   variant={action.variant || "secondary"}
                                   size="sm"
                                   className="text-xs h-7 px-3 mr-1 mb-1"
