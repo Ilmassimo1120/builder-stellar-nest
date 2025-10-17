@@ -37,6 +37,7 @@ import {
   File,
   Archive,
 } from "lucide-react";
+import { stableKey } from "@/lib/stableKey";
 import { useAIContext } from "@/hooks/useAIContext";
 import { findAIResponse } from "@/lib/aiKnowledge";
 import {
