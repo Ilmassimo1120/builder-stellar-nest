@@ -94,9 +94,11 @@ export interface Quote {
 
   // Integration data
   projectData?: {
+    projectId?: string;
+    projectName?: string;
+    projectObjective?: string;
     siteAddress?: string;
     siteType?: string;
-    projectName?: string;
     estimatedInstallDate?: string;
   };
 
