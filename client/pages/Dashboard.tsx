@@ -51,6 +51,7 @@ import UserPreferencesManager from "@/components/UserPreferencesManager";
 import BucketInitializer from "@/components/BucketInitializer";
 import { supabase, autoConfigureSupabase } from "@/lib/supabase";
 import { safeGetLocal, generateId } from "@/lib/safeLocalStorage";
+import { stableKey } from "@/lib/stableKey";
 import { useAuth } from "@/hooks/useAuth";
 import RoleBasedNavigation, {
   RoleQuickActions,
