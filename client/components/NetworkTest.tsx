@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { stableKey } from "@/lib/stableKey";
 
 export default function NetworkTest() {
   const [results, setResults] = useState<string[]>([]);
@@ -71,7 +72,7 @@ export default function NetworkTest() {
           addResult(`❌ API error: ${text}`);
         }
       } catch (error) {
-        addResult(`❌ API request failed: ${error}`);
+        addResult(`��� API request failed: ${error}`);
         if (error instanceof TypeError && error.message.includes("fetch")) {
           addResult("💡 This appears to be a network connectivity issue");
           addResult("💡 Possible causes:");
