@@ -163,7 +163,7 @@ export default function BucketInitializer() {
           {logs.length > 0 && (
             <div className="bg-black text-green-400 p-3 rounded font-mono text-sm max-h-48 overflow-y-auto">
               {logs.map((log, index) => (
-                <div key={index}>{log}</div>
+                <div key={stableKey(log, index)}>{log}</div>
               ))}
             </div>
           )}
