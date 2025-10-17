@@ -30,6 +30,7 @@ import {
   Award,
 } from "lucide-react";
 import { Logo } from "@/components/ui/logo";
+import { stableKey } from "@/lib/stableKey";
 
 const Products = () => {
   const productCategories = [
