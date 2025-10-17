@@ -72,7 +72,7 @@ export default function NetworkTest() {
           addResult(`❌ API error: ${text}`);
         }
       } catch (error) {
-        addResult(`��� API request failed: ${error}`);
+        addResult(`❌ API request failed: ${error}`);
         if (error instanceof TypeError && error.message.includes("fetch")) {
           addResult("💡 This appears to be a network connectivity issue");
           addResult("💡 Possible causes:");
@@ -127,7 +127,7 @@ export default function NetworkTest() {
         {results.length > 0 && (
           <div className="bg-black text-green-400 p-4 rounded font-mono text-sm max-h-96 overflow-y-auto">
             {results.map((result, index) => (
-              <div key={index} className="mb-1">
+              <div key={stableKey(result, index)} className="mb-1">
                 {result}
               </div>
             ))}
