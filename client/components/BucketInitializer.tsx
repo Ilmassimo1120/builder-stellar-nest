@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { BucketInitService } from "@/lib/services/bucketInitService";
 import { AlertCircle, CheckCircle, Clock, Loader2 } from "lucide-react";
+import { stableKey } from "@/lib/stableKey";
 
 export default function BucketInitializer() {
   const [isInitializing, setIsInitializing] = useState(false);
