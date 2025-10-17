@@ -257,7 +257,7 @@ export default function Analytics() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {chartData.projects.map((item, index) => (
-                    <div key={index}>
+                    <div key={stableKey(item, index)}>
                       <div className="flex items-center justify-between mb-2">
                         <span className="text-sm font-medium">
                           {item.status}
@@ -284,7 +284,7 @@ export default function Analytics() {
                 <div className="space-y-4">
                   {chartData.productCategories.map((category, index) => (
                     <div
-                      key={index}
+                      key={stableKey(category, index)}
                       className="flex items-center justify-between p-4 border rounded-lg"
                     >
                       <div className="flex items-center gap-3">
