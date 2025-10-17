@@ -20,7 +20,9 @@ describe("Index landing page", () => {
       screen.getByRole("heading", { name: /Streamline Your/i }),
     ).toBeTruthy();
 
-    const ctas = screen.getAllByRole("link", { name: /Start Free Trial|Get Started/i });
+    const ctas = screen.getAllByRole("link", {
+      name: /Start Free Trial|Get Started/i,
+    });
     expect(ctas.length).toBeGreaterThan(0);
   });
 });
