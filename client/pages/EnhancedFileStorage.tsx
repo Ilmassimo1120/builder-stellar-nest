@@ -55,15 +55,17 @@ interface StatusStats {
   archived: number;
 }
 
-const bucketInfo: Record<
-  BucketName,
-  {
-    label: string;
-    icon: React.ComponentType<any>;
-    description: string;
-    color: string;
-    maxSize: string;
-  }
+const bucketInfo: Partial<
+  Record<
+    BucketName,
+    {
+      label: string;
+      icon: React.ComponentType<any>;
+      description: string;
+      color: string;
+      maxSize: string;
+    }
+  >
 > = {
   "charge-source-user-files": {
     label: "User Files",
