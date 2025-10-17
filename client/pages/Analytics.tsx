@@ -29,6 +29,7 @@ import {
 import { useAuth } from "@/hooks/useAuth";
 import { quoteService } from "@/lib/quoteService";
 import { QuoteAnalytics } from "@/lib/quoteTypes";
+import { stableKey } from "@/lib/stableKey";
 
 export default function Analytics() {
   const { user, hasPermission } = useAuth();
