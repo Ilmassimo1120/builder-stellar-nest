@@ -61,6 +61,35 @@ export default function CloudStatus() {
           <div className="lg:col-span-2">
             <SupabaseStorageDiagnostics />
           </div>
+
+          <div className="lg:col-span-2">
+            <Card>
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <CardTitle className="flex items-center gap-2">
+                      <HardDrive className="w-5 h-5" />
+                      Storage Testing
+                    </CardTitle>
+                    <CardDescription>
+                      Test file uploads and monitor storage quota limits
+                    </CardDescription>
+                  </div>
+                  <Button asChild>
+                    <Link to="/storage-testing">
+                      Open Storage Tests
+                    </Link>
+                  </Button>
+                </div>
+              </CardHeader>
+              <CardContent className="text-sm text-muted-foreground">
+                Need to test your storage buckets before committing to a paid plan?
+                Use our interactive Storage Testing Dashboard to upload test files,
+                monitor quota usage, and verify your Supabase storage limits work as
+                expected.
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </div>
     </div>
