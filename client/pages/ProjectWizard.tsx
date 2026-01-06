@@ -192,6 +192,63 @@ export default function ProjectWizard() {
     }
   };
 
+  // Geocoding functions
+  const handleAddressChange = async (value: string) => {
+    setSiteAssessment({ ...siteAssessment, siteAddress: value });
+
+    if (value.trim().length < 3) {
+      setAddressPredictions([]);
+      setShowAddressDropdown(false);
+      return;
+    }
+
+    try {
+      setIsGeocodingAddress(true);
+      const predictions = await geocodingService.getAddressPredictions(value);
+      setAddressPredictions(predictions);
+      setShowAddressDropdown(predictions.length > 0);
+    } catch (error) {
+      console.error("Error getting address predictions:", error);
+      setAddressPredictions([]);
+    } finally {
+      setIsGeocodingAddress(false);
+    }
+  };
+
+  const handleSelectAddress = async (
+    prediction: { description: string; place_id: string },
+  ) => {
+    try {
+      setIsGeocodingAddress(true);
+      setSiteAssessment({
+        ...siteAssessment,
+        siteAddress: prediction.description,
+      });
+
+      // Get coordinates for the selected address
+      const details = await geocodingService.getPlaceDetails(
+        prediction.place_id,
+      );
+
+      if (details) {
+        if (import.meta.env.DEV) {
+          console.log("📍 Address geocoded:", {
+            address: prediction.description,
+            latitude: details.latitude,
+            longitude: details.longitude,
+          });
+        }
+      }
+
+      setAddressPredictions([]);
+      setShowAddressDropdown(false);
+    } catch (error) {
+      console.error("Error selecting address:", error);
+    } finally {
+      setIsGeocodingAddress(false);
+    }
+  };
+
   const [clientRequirements, setClientRequirements] =
     useState<ClientRequirements>({
       contactPersonName: "",
