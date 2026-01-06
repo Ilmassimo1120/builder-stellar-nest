@@ -1685,19 +1685,41 @@ export default function ProjectWizard() {
               </div>
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-2 relative">
               <Label htmlFor="siteAddress">Site Address *</Label>
-              <Input
-                id="siteAddress"
-                value={siteAssessment.siteAddress}
-                onChange={(e) =>
-                  setSiteAssessment({
-                    ...siteAssessment,
-                    siteAddress: e.target.value,
-                  })
-                }
-                placeholder="Full site address including postcode"
-              />
+              <div className="relative">
+                <Input
+                  id="siteAddress"
+                  value={siteAssessment.siteAddress}
+                  onChange={(e) => handleAddressChange(e.target.value)}
+                  onFocus={() =>
+                    addressPredictions.length > 0 && setShowAddressDropdown(true)
+                  }
+                  placeholder="Full site address including postcode"
+                  disabled={isGeocodingAddress}
+                  className="pr-10"
+                />
+                {isGeocodingAddress && (
+                  <div className="absolute right-3 top-2.5">
+                    <div className="animate-spin h-4 w-4 border-2 border-primary border-t-transparent rounded-full" />
+                  </div>
+                )}
+              </div>
+
+              {showAddressDropdown && addressPredictions.length > 0 && (
+                <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-300 rounded-md shadow-lg z-50 max-h-60 overflow-y-auto">
+                  {addressPredictions.map((prediction) => (
+                    <button
+                      key={prediction.place_id}
+                      type="button"
+                      onClick={() => handleSelectAddress(prediction)}
+                      className="w-full text-left px-4 py-2 hover:bg-gray-100 border-b border-gray-200 last:border-b-0 focus:outline-none focus:bg-gray-100 transition-colors"
+                    >
+                      <div className="text-sm font-medium">{prediction.description}</div>
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
