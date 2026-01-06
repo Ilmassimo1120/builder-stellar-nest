@@ -418,6 +418,14 @@ const AppRoutes = () => (
       }
     />
     <Route
+      path="/storage-testing"
+      element={
+        <ProtectedLazyRoute>
+          <StorageTestingDashboard />
+        </ProtectedLazyRoute>
+      }
+    />
+    <Route
       path="/connection-diagnostics"
       element={
         <PublicLazyRoute>
