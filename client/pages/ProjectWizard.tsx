@@ -37,6 +37,7 @@ import { ProjectTemplate, applyTemplate } from "@/lib/projectTemplates";
 import { quoteService } from "@/lib/quoteService";
 import { safeGetLocal, generateId } from "@/lib/safeLocalStorage";
 import { useAuth } from "@/hooks/useAuth";
+import { geocodingService } from "@/lib/services/geocodingService";
 import {
   ArrowLeft,
   ArrowRight,
