@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ChargeSource Bucket Test</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        padding: 20px;
+        max-width: 900px;
+        margin: 0 auto;
+        background: #f5f5f5;
+      }
+      h1 {
+        color: #333;
+        margin-bottom: 10px;
+      }
+      .subtitle {
+        color: #666;
+        margin-bottom: 20px;
+      }
+      .controls {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+      }
+      button {
+        background: #007bff;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+      }
+      button:disabled {
+        background: #6c757d;
+        cursor: not-allowed;
+      }
+      button:hover:not(:disabled) {
+        background: #0056b3;
+      }
+      .container {
+        background: white;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      }
+      .status-bar {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 15px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        font-weight: 500;
+      }
+      .status-bar.success {
+        background: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+      }
+      .status-bar.error {
+        background: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+      }
+      .status-bar.warning {
+        background: #fff3cd;
+        color: #856404;
+        border: 1px solid #ffeaa7;
+      }
+      .status-bar.info {
+        background: #d1ecf1;
+        color: #0c5460;
+        border: 1px solid #bee5eb;
+      }
+      .bucket-row {
+        display: flex;
+        align-items: center;
+        padding: 12px;
+        border: 1px solid #e0e0e0;
+        border-radius: 5px;
+        margin-bottom: 10px;
+        gap: 15px;
+      }
+      .bucket-row.exists {
+        background: #f0f7f0;
+      }
+      .bucket-row.missing {
+        background: #fff0f0;
+      }
+      .bucket-status {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex: 1;
+      }
+      .bucket-icon {
+        font-size: 24px;
+      }
+      .bucket-info {
+        flex: 1;
+      }
+      .bucket-name {
+        font-weight: 600;
+        color: #333;
+      }
+      .bucket-desc {
+        font-size: 12px;
+        color: #666;
+        margin-top: 4px;
+      }
+      .bucket-actions {
+        display: flex;
+        gap: 8px;
+      }
+      .action-btn {
+        background: #f0f0f0;
+        color: #333;
+        padding: 6px 12px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 12px;
+        font-weight: 500;
+      }
+      .action-btn:hover {
+        background: #e0e0e0;
+      }
+      .action-btn:disabled {
+        background: #f9f9f9;
+        color: #999;
+        cursor: not-allowed;
+      }
+      .section-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: #333;
+        margin-top: 20px;
+        margin-bottom: 15px;
+      }
+      .test-result {
+        background: #f9f9f9;
+        padding: 12px;
+        border-radius: 5px;
+        margin-top: 10px;
+        font-family: 'Monaco', 'Courier New', monospace;
+        font-size: 12px;
+        white-space: pre-wrap;
+        word-break: break-all;
+        max-height: 200px;
+        overflow-y: auto;
+      }
+      .test-result.success {
+        background: #e8f5e9;
+        color: #2e7d32;
+      }
+      .test-result.error {
+        background: #ffebee;
+        color: #c62828;
+      }
+      .upload-area {
+        border: 2px dashed #ddd;
+        border-radius: 5px;
+        padding: 20px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+      .upload-area:hover {
+        border-color: #007bff;
+        background: #f0f7ff;
+      }
+      .upload-area.dragover {
+        border-color: #007bff;
+        background: #e7f3ff;
+      }
+      input[type="file"] {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🪣 ChargeSource Storage Buckets Test</h1>
+    <p class="subtitle">Test suite for ChargeSource file storage infrastructure</p>
+
+    <div class="container">
+      <div class="controls">
+        <button onclick="testAllBuckets()" id="testAllBtn">✅ Test All Buckets</button>
+        <button onclick="testFileUpload()" id="uploadTestBtn">📤 Test File Upload</button>
+        <button onclick="clearResults()" id="clearBtn">🗑️ Clear Results</button>
+      </div>
+
+      <div id="statusBar"></div>
+      <div id="bucketResults"></div>
+      <div id="uploadResults"></div>
+    </div>
+
+    <script>
+      const SUPABASE_URL = "https://tepmkljodsifaexmrinl.supabase.co";
+      const ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlcG1rbGpvZHNpZmFleG1yaW5sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ2MDQwMjUsImV4cCI6MjA3MDE4MDAyNX0.n4WdeHUHHc5PuJV8-2oDn826CoNxNzHHbt4KxeAhOYc";
+      const SERVICE_ROLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlcG1rbGpvZHNpZmFleG1yaW5sIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NDYwNDAyNSwiZXhwIjoyMDcwMTgwMDI1fQ.CsWSKOjCNgP3OKPe9KMN5vvqHHhV-EwZ8q2DfS7o7zM";
+
+      const supabase = window.supabase.createClient(SUPABASE_URL, ANON_KEY);
+      const supabaseAdmin = window.supabase.createClient(SUPABASE_URL, SERVICE_ROLE_KEY);
+
+      const REQUIRED_BUCKETS = [
+        {
+          name: "charge-source-user-files",
+          limit: "50MB",
+          desc: "Personal/user documents",
+          public: false
+        },
+        {
+          name: "charge-source-documents",
+          limit: "100MB",
+          desc: "Official project documents",
+          public: false
+        },
+        {
+          name: "charge-source-videos",
+          limit: "500MB",
+          desc: "Training/instructional videos",
+          public: false
+        }
+      ];
+
+      function updateStatus(message, type = "info") {
+        const bar = document.getElementById("statusBar");
+        bar.innerHTML = `<div class="status-bar ${type}">${message}</div>`;
+      }
+
+      function addResult(html) {
+        const results = document.getElementById("bucketResults");
+        results.innerHTML += html;
+      }
+
+      async function testAllBuckets() {
+        const btn = document.getElementById("testAllBtn");
+        btn.disabled = true;
+        btn.textContent = "Testing...";
+        updateStatus("🔄 Testing buckets...", "info");
+        document.getElementById("bucketResults").innerHTML = "";
+
+        try {
+          const { data: buckets, error } = await supabase.storage.listBuckets();
+
+          if (error) {
+            updateStatus("❌ Cannot access storage API: " + error.message, "error");
+            addResult(`<div class="test-result error">API Error: ${error.message}</div>`);
+            return;
+          }
+
+          const existingNames = buckets.map(b => b.name);
+          let allExist = true;
+          let html = '<div class="section-title">📋 Bucket Status</div>';
+
+          REQUIRED_BUCKETS.forEach(bucket => {
+            const exists = existingNames.includes(bucket.name);
+            const foundBucket = buckets.find(b => b.name === bucket.name);
+            
+            if (!exists) allExist = false;
+
+            html += `
+              <div class="bucket-row ${exists ? 'exists' : 'missing'}">
+                <div class="bucket-status">
+                  <div class="bucket-icon">${exists ? '✅' : '❌'}</div>
+                  <div class="bucket-info">
+                    <div class="bucket-name">${bucket.name}</div>
+                    <div class="bucket-desc">${bucket.desc} • ${bucket.limit}</div>
+                    ${exists ? `<div class="bucket-desc">Created: ${new Date(foundBucket.created_at).toLocaleString()}</div>` : ''}
+                  </div>
+                </div>
+                <div class="bucket-actions">
+                  ${exists ? `<button class="action-btn" onclick="testBucketAccess('${bucket.name}')">Test Access</button>` : '<button class="action-btn" disabled>N/A</button>'}
+                </div>
+              </div>
+            `;
+          });
+
+          // Check for extra buckets
+          const extraBuckets = existingNames.filter(name => !REQUIRED_BUCKETS.map(b => b.name).includes(name));
+          if (extraBuckets.length > 0) {
+            html += '<div class="section-title">📦 Additional Buckets</div>';
+            extraBuckets.forEach(name => {
+              const bucket = buckets.find(b => b.name === name);
+              html += `
+                <div class="bucket-row exists">
+                  <div class="bucket-status">
+                    <div class="bucket-icon">📦</div>
+                    <div class="bucket-info">
+                      <div class="bucket-name">${name}</div>
+                      <div class="bucket-desc">Created: ${new Date(bucket.created_at).toLocaleString()}</div>
+                    </div>
+                  </div>
+                </div>
+              `;
+            });
+          }
+
+          addResult(html);
+
+          if (allExist) {
+            updateStatus(`✅ All ${REQUIRED_BUCKETS.length} buckets exist and are ready!`, "success");
+          } else {
+            const missing = REQUIRED_BUCKETS.filter(b => !existingNames.includes(b.name)).length;
+            updateStatus(`⚠️ ${missing} of ${REQUIRED_BUCKETS.length} buckets missing`, "warning");
+          }
+        } catch (error) {
+          updateStatus("❌ Test failed: " + error.message, "error");
+          addResult(`<div class="test-result error">Exception: ${error.message}</div>`);
+          console.error("Test error:", error);
+        } finally {
+          btn.disabled = false;
+          btn.textContent = "✅ Test All Buckets";
+        }
+      }
+
+      async function testBucketAccess(bucketName) {
+        const result = document.getElementById("bucketResults");
+        let html = `<div class="section-title">🔍 Testing Access: ${bucketName}</div>`;
+
+        try {
+          // Try to list files in bucket
+          const { data, error } = await supabase.storage.from(bucketName).list('', { limit: 1 });
+
+          if (error) {
+            html += `<div class="test-result error">Error listing files: ${error.message}</div>`;
+          } else {
+            html += `<div class="test-result success">✅ Bucket accessible
+Files in bucket: ${data.length}
+Sample: ${data.length > 0 ? JSON.stringify(data[0], null, 2) : 'Empty bucket'}</div>`;
+          }
+        } catch (error) {
+          html += `<div class="test-result error">Exception: ${error.message}</div>`;
+        }
+
+        result.innerHTML += html;
+      }
+
+      async function testFileUpload() {
+        const btn = document.getElementById("uploadTestBtn");
+        updateStatus("📤 Testing file upload...", "info");
+        document.getElementById("uploadResults").innerHTML = "";
+
+        // Create a test file
+        const testContent = `ChargeSource Test File
+Created: ${new Date().toISOString()}
+Test ID: ${Math.random().toString(36).substring(7)}`;
+        
+        const testFile = new File([testContent], "chargesource-test.txt", { type: "text/plain" });
+
+        try {
+          // Test upload to first bucket
+          const bucketName = REQUIRED_BUCKETS[0].name;
+          const fileName = `test/${Date.now()}-${testFile.name}`;
+
+          let html = `<div class="section-title">📤 File Upload Test</div>`;
+          html += `<div class="bucket-row">
+            <div class="bucket-info">
+              <div class="bucket-name">Uploading to: ${bucketName}</div>
+              <div class="bucket-desc">File: ${fileName}</div>
+            </div>
+          </div>`;
+
+          const { data, error } = await supabase.storage
+            .from(bucketName)
+            .upload(fileName, testFile, { upsert: false });
+
+          if (error) {
+            html += `<div class="test-result error">Upload failed: ${error.message}</div>`;
+            updateStatus("❌ Upload test failed", "error");
+          } else {
+            html += `<div class="test-result success">✅ Upload successful
+Path: ${data.path}
+Full Path: ${data.fullPath}</div>`;
+
+            // Try to download
+            const { data: downloadData, error: downloadError } = await supabase.storage
+              .from(bucketName)
+              .download(fileName);
+
+            if (downloadError) {
+              html += `<div class="test-result error">Download failed: ${downloadError.message}</div>`;
+            } else {
+              html += `<div class="test-result success">✅ Download successful
+File size: ${downloadData.size} bytes
+Content-Type: ${downloadData.type}</div>`;
+
+              // Try to delete
+              const { error: deleteError } = await supabase.storage
+                .from(bucketName)
+                .remove([fileName]);
+
+              if (deleteError) {
+                html += `<div class="test-result error">Delete failed: ${deleteError.message}</div>`;
+              } else {
+                html += `<div class="test-result success">✅ Delete successful
+Test file cleaned up</div>`;
+                updateStatus("✅ Upload test passed - all operations successful!", "success");
+              }
+            }
+          }
+
+          document.getElementById("uploadResults").innerHTML = html;
+        } catch (error) {
+          updateStatus("❌ Test exception: " + error.message, "error");
+          document.getElementById("uploadResults").innerHTML = `<div class="test-result error">Exception: ${error.message}</div>`;
+          console.error("Upload test error:", error);
+        } finally {
+          btn.disabled = false;
+          btn.textContent = "📤 Test File Upload";
+        }
+      }
+
+      function clearResults() {
+        document.getElementById("bucketResults").innerHTML = "";
+        document.getElementById("uploadResults").innerHTML = "";
+        document.getElementById("statusBar").innerHTML = "";
+      }
+
+      // Auto-run test on load
+      window.addEventListener("load", () => {
+        setTimeout(testAllBuckets, 300);
+      });
+    </script>
+  </body>
+</html>
