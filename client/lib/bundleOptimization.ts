@@ -159,10 +159,16 @@ export const bundleAnalyzer = {
   },
 };
 
-// Auto-run bundle analysis in development
-if (import.meta.env.DEV) {
-  // Run after initial load
-  setTimeout(() => {
-    bundleAnalyzer.logBundleInfo();
-  }, 2000);
+// Auto-run bundle analysis in development (deferred to avoid HMR timing issues)
+if (typeof window !== "undefined" && import.meta.env.DEV) {
+  // Wait for HMR client to connect before logging
+  window.addEventListener(
+    "load",
+    () => {
+      setTimeout(() => {
+        bundleAnalyzer.logBundleInfo();
+      }, 2000);
+    },
+    { once: true },
+  );
 }
