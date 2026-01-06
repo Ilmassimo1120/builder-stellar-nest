@@ -33,6 +33,9 @@ const Customers = lazy(() => import("../pages/Customers"));
 const EnhancedFileStorage = lazy(() => import("../pages/EnhancedFileStorage"));
 const FileStorage = lazy(() => import("../pages/FileStorage"));
 const CloudStatus = lazy(() => import("../pages/CloudStatus"));
+const StorageTestingDashboard = lazy(
+  () => import("../pages/StorageTestingDashboard"),
+);
 const ConnectionDiagnostics = lazy(
   () => import("../pages/ConnectionDiagnostics"),
 );
