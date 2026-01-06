@@ -128,8 +128,8 @@ Website: www.chargesource.com.au
   };
 };
 
-// This would integrate with your email service provider
-// Examples: SendGrid, AWS SES, Mailgun, etc.
+// SendGrid email integration
+// Requires SENDGRID_API_KEY environment variable
 const sendEmail = async (
   to: string,
   subject: string,
@@ -137,35 +137,66 @@ const sendEmail = async (
   text: string,
 ) => {
   try {
-    // Example using SendGrid or similar service
-    // const response = await fetch('https://api.sendgrid.com/v3/mail/send', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Authorization': `Bearer ${process.env.SENDGRID_API_KEY}`,
-    //     'Content-Type': 'application/json'
-    //   },
-    //   body: JSON.stringify({
-    //     personalizations: [{ to: [{ email: to }] }],
-    //     from: { email: 'demo@chargesource.com.au', name: 'ChargeSource Demo Team' },
-    //     subject: subject,
-    //     content: [
-    //       { type: 'text/html', value: html },
-    //       { type: 'text/plain', value: text }
-    //     ]
-    //   })
-    // });
+    const sendgridApiKey = process.env.SENDGRID_API_KEY;
+    const fromEmail = process.env.SENDGRID_FROM_EMAIL || "demo@chargesource.com.au";
+    const fromName = "ChargeSource Demo Team";
 
-    // For demo purposes, we'll log the email and simulate success
-    console.log(`Demo confirmation email would be sent to: ${to}`);
-    console.log(`Subject: ${subject}`);
+    // Check if SendGrid is configured
+    if (!sendgridApiKey) {
+      console.warn(
+        "⚠️ SENDGRID_API_KEY not configured. Falling back to demo mode.",
+      );
+      console.log(`[DEMO MODE] Email would be sent to: ${to}`);
+      console.log(`[DEMO MODE] Subject: ${subject}`);
+      return {
+        success: true,
+        messageId: `demo_email_${Date.now()}`,
+        message: "Email sent successfully (demo mode)",
+        isDemoMode: true,
+      };
+    }
+
+    // Send via SendGrid API
+    const response = await fetch("https://api.sendgrid.com/v3/mail/send", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${sendgridApiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        personalizations: [{ to: [{ email: to }] }],
+        from: { email: fromEmail, name: fromName },
+        subject: subject,
+        content: [
+          { type: "text/html", value: html },
+          { type: "text/plain", value: text },
+        ],
+      }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      console.error("SendGrid API error:", errorData);
+      throw new Error(
+        `SendGrid API returned ${response.status}: ${response.statusText}`,
+      );
+    }
+
+    const messageId = response.headers.get("x-message-id") || `sendgrid_${Date.now()}`;
+
+    console.log(`✅ Email sent successfully to ${to} (MessageID: ${messageId})`);
 
     return {
       success: true,
-      messageId: `demo_email_${Date.now()}`,
+      messageId: messageId,
       message: "Email sent successfully",
+      isDemoMode: false,
     };
   } catch (error) {
-    console.error("Email sending error:", error);
+    console.error(
+      "Email sending error:",
+      error instanceof Error ? error.message : String(error),
+    );
     throw new Error("Failed to send confirmation email");
   }
 };
