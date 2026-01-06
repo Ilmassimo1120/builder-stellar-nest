@@ -34,7 +34,11 @@ class StorageQuotaService {
    * Get current storage quota information for all buckets
    */
   async getQuotaInfo(): Promise<QuotaInfo> {
-    const requiredBuckets = ["product-images", "documents", "quote-attachments"];
+    const requiredBuckets = [
+      "product-images",
+      "documents",
+      "quote-attachments",
+    ];
     let totalSize = 0;
     let totalFiles = 0;
     const buckets: BucketQuotaInfo[] = [];
@@ -57,10 +61,7 @@ class StorageQuotaService {
           totalFiles += bucketInfo.fileCount;
           buckets.push(bucketInfo);
         } catch (error) {
-          console.warn(
-            `Failed to get usage for bucket ${bucketName}:`,
-            error,
-          );
+          console.warn(`Failed to get usage for bucket ${bucketName}:`, error);
           // Continue with other buckets
           buckets.push({
             name: bucketName,
@@ -174,11 +175,9 @@ class StorageQuotaService {
     }
 
     const blob = new Blob(chunks, { type: "application/octet-stream" });
-    return new File(
-      [blob],
-      `test-${sizeInMB}MB-${Date.now()}.bin`,
-      { type: "application/octet-stream" },
-    );
+    return new File([blob], `test-${sizeInMB}MB-${Date.now()}.bin`, {
+      type: "application/octet-stream",
+    });
   }
 
   /**

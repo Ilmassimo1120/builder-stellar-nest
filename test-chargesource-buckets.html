@@ -7,7 +7,8 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
       body {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         padding: 20px;
         max-width: 900px;
         margin: 0 auto;
@@ -49,7 +50,7 @@
         border-radius: 8px;
         padding: 20px;
         margin-bottom: 20px;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
       }
       .status-bar {
         display: flex;
@@ -150,7 +151,7 @@
         padding: 12px;
         border-radius: 5px;
         margin-top: 10px;
-        font-family: 'Monaco', 'Courier New', monospace;
+        font-family: "Monaco", "Courier New", monospace;
         font-size: 12px;
         white-space: pre-wrap;
         word-break: break-all;
@@ -188,12 +189,18 @@
   </head>
   <body>
     <h1>🪣 ChargeSource Storage Buckets Test</h1>
-    <p class="subtitle">Test suite for ChargeSource file storage infrastructure</p>
+    <p class="subtitle">
+      Test suite for ChargeSource file storage infrastructure
+    </p>
 
     <div class="container">
       <div class="controls">
-        <button onclick="testAllBuckets()" id="testAllBtn">✅ Test All Buckets</button>
-        <button onclick="testFileUpload()" id="uploadTestBtn">📤 Test File Upload</button>
+        <button onclick="testAllBuckets()" id="testAllBtn">
+          ✅ Test All Buckets
+        </button>
+        <button onclick="testFileUpload()" id="uploadTestBtn">
+          📤 Test File Upload
+        </button>
         <button onclick="clearResults()" id="clearBtn">🗑️ Clear Results</button>
       </div>
 
@@ -204,31 +211,36 @@
 
     <script>
       const SUPABASE_URL = "https://tepmkljodsifaexmrinl.supabase.co";
-      const ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlcG1rbGpvZHNpZmFleG1yaW5sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ2MDQwMjUsImV4cCI6MjA3MDE4MDAyNX0.n4WdeHUHHc5PuJV8-2oDn826CoNxNzHHbt4KxeAhOYc";
-      const SERVICE_ROLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlcG1rbGpvZHNpZmFleG1yaW5sIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NDYwNDAyNSwiZXhwIjoyMDcwMTgwMDI1fQ.CsWSKOjCNgP3OKPe9KMN5vvqHHhV-EwZ8q2DfS7o7zM";
+      const ANON_KEY =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlcG1rbGpvZHNpZmFleG1yaW5sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ2MDQwMjUsImV4cCI6MjA3MDE4MDAyNX0.n4WdeHUHHc5PuJV8-2oDn826CoNxNzHHbt4KxeAhOYc";
+      const SERVICE_ROLE_KEY =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlcG1rbGpvZHNpZmFleG1yaW5sIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NDYwNDAyNSwiZXhwIjoyMDcwMTgwMDI1fQ.CsWSKOjCNgP3OKPe9KMN5vvqHHhV-EwZ8q2DfS7o7zM";
 
       const supabase = window.supabase.createClient(SUPABASE_URL, ANON_KEY);
-      const supabaseAdmin = window.supabase.createClient(SUPABASE_URL, SERVICE_ROLE_KEY);
+      const supabaseAdmin = window.supabase.createClient(
+        SUPABASE_URL,
+        SERVICE_ROLE_KEY,
+      );
 
       const REQUIRED_BUCKETS = [
         {
           name: "charge-source-user-files",
           limit: "50MB",
           desc: "Personal/user documents",
-          public: false
+          public: false,
         },
         {
           name: "charge-source-documents",
           limit: "100MB",
           desc: "Official project documents",
-          public: false
+          public: false,
         },
         {
           name: "charge-source-videos",
           limit: "500MB",
           desc: "Training/instructional videos",
-          public: false
-        }
+          public: false,
+        },
       ];
 
       function updateStatus(message, type = "info") {
@@ -252,29 +264,34 @@
           const { data: buckets, error } = await supabase.storage.listBuckets();
 
           if (error) {
-            updateStatus("❌ Cannot access storage API: " + error.message, "error");
-            addResult(`<div class="test-result error">API Error: ${error.message}</div>`);
+            updateStatus(
+              "❌ Cannot access storage API: " + error.message,
+              "error",
+            );
+            addResult(
+              `<div class="test-result error">API Error: ${error.message}</div>`,
+            );
             return;
           }
 
-          const existingNames = buckets.map(b => b.name);
+          const existingNames = buckets.map((b) => b.name);
           let allExist = true;
           let html = '<div class="section-title">📋 Bucket Status</div>';
 
-          REQUIRED_BUCKETS.forEach(bucket => {
+          REQUIRED_BUCKETS.forEach((bucket) => {
             const exists = existingNames.includes(bucket.name);
-            const foundBucket = buckets.find(b => b.name === bucket.name);
-            
+            const foundBucket = buckets.find((b) => b.name === bucket.name);
+
             if (!exists) allExist = false;
 
             html += `
-              <div class="bucket-row ${exists ? 'exists' : 'missing'}">
+              <div class="bucket-row ${exists ? "exists" : "missing"}">
                 <div class="bucket-status">
-                  <div class="bucket-icon">${exists ? '✅' : '❌'}</div>
+                  <div class="bucket-icon">${exists ? "✅" : "❌"}</div>
                   <div class="bucket-info">
                     <div class="bucket-name">${bucket.name}</div>
                     <div class="bucket-desc">${bucket.desc} • ${bucket.limit}</div>
-                    ${exists ? `<div class="bucket-desc">Created: ${new Date(foundBucket.created_at).toLocaleString()}</div>` : ''}
+                    ${exists ? `<div class="bucket-desc">Created: ${new Date(foundBucket.created_at).toLocaleString()}</div>` : ""}
                   </div>
                 </div>
                 <div class="bucket-actions">
@@ -285,11 +302,13 @@
           });
 
           // Check for extra buckets
-          const extraBuckets = existingNames.filter(name => !REQUIRED_BUCKETS.map(b => b.name).includes(name));
+          const extraBuckets = existingNames.filter(
+            (name) => !REQUIRED_BUCKETS.map((b) => b.name).includes(name),
+          );
           if (extraBuckets.length > 0) {
             html += '<div class="section-title">📦 Additional Buckets</div>';
-            extraBuckets.forEach(name => {
-              const bucket = buckets.find(b => b.name === name);
+            extraBuckets.forEach((name) => {
+              const bucket = buckets.find((b) => b.name === name);
               html += `
                 <div class="bucket-row exists">
                   <div class="bucket-status">
@@ -307,14 +326,24 @@
           addResult(html);
 
           if (allExist) {
-            updateStatus(`✅ All ${REQUIRED_BUCKETS.length} buckets exist and are ready!`, "success");
+            updateStatus(
+              `✅ All ${REQUIRED_BUCKETS.length} buckets exist and are ready!`,
+              "success",
+            );
           } else {
-            const missing = REQUIRED_BUCKETS.filter(b => !existingNames.includes(b.name)).length;
-            updateStatus(`⚠️ ${missing} of ${REQUIRED_BUCKETS.length} buckets missing`, "warning");
+            const missing = REQUIRED_BUCKETS.filter(
+              (b) => !existingNames.includes(b.name),
+            ).length;
+            updateStatus(
+              `⚠️ ${missing} of ${REQUIRED_BUCKETS.length} buckets missing`,
+              "warning",
+            );
           }
         } catch (error) {
           updateStatus("❌ Test failed: " + error.message, "error");
-          addResult(`<div class="test-result error">Exception: ${error.message}</div>`);
+          addResult(
+            `<div class="test-result error">Exception: ${error.message}</div>`,
+          );
           console.error("Test error:", error);
         } finally {
           btn.disabled = false;
@@ -328,14 +357,16 @@
 
         try {
           // Try to list files in bucket
-          const { data, error } = await supabase.storage.from(bucketName).list('', { limit: 1 });
+          const { data, error } = await supabase.storage
+            .from(bucketName)
+            .list("", { limit: 1 });
 
           if (error) {
             html += `<div class="test-result error">Error listing files: ${error.message}</div>`;
           } else {
             html += `<div class="test-result success">✅ Bucket accessible
 Files in bucket: ${data.length}
-Sample: ${data.length > 0 ? JSON.stringify(data[0], null, 2) : 'Empty bucket'}</div>`;
+Sample: ${data.length > 0 ? JSON.stringify(data[0], null, 2) : "Empty bucket"}</div>`;
           }
         } catch (error) {
           html += `<div class="test-result error">Exception: ${error.message}</div>`;
@@ -353,8 +384,10 @@ Sample: ${data.length > 0 ? JSON.stringify(data[0], null, 2) : 'Empty bucket'}</
         const testContent = `ChargeSource Test File
 Created: ${new Date().toISOString()}
 Test ID: ${Math.random().toString(36).substring(7)}`;
-        
-        const testFile = new File([testContent], "chargesource-test.txt", { type: "text/plain" });
+
+        const testFile = new File([testContent], "chargesource-test.txt", {
+          type: "text/plain",
+        });
 
         try {
           // Test upload to first bucket
@@ -382,9 +415,8 @@ Path: ${data.path}
 Full Path: ${data.fullPath}</div>`;
 
             // Try to download
-            const { data: downloadData, error: downloadError } = await supabase.storage
-              .from(bucketName)
-              .download(fileName);
+            const { data: downloadData, error: downloadError } =
+              await supabase.storage.from(bucketName).download(fileName);
 
             if (downloadError) {
               html += `<div class="test-result error">Download failed: ${downloadError.message}</div>`;
@@ -403,7 +435,10 @@ Content-Type: ${downloadData.type}</div>`;
               } else {
                 html += `<div class="test-result success">✅ Delete successful
 Test file cleaned up</div>`;
-                updateStatus("✅ Upload test passed - all operations successful!", "success");
+                updateStatus(
+                  "✅ Upload test passed - all operations successful!",
+                  "success",
+                );
               }
             }
           }
@@ -411,7 +446,8 @@ Test file cleaned up</div>`;
           document.getElementById("uploadResults").innerHTML = html;
         } catch (error) {
           updateStatus("❌ Test exception: " + error.message, "error");
-          document.getElementById("uploadResults").innerHTML = `<div class="test-result error">Exception: ${error.message}</div>`;
+          document.getElementById("uploadResults").innerHTML =
+            `<div class="test-result error">Exception: ${error.message}</div>`;
           console.error("Upload test error:", error);
         } finally {
           btn.disabled = false;

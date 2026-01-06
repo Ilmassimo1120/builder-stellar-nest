@@ -27,7 +27,10 @@ import {
   RefreshCw,
   HardDrive,
 } from "lucide-react";
-import { storageQuotaService, type StorageMetrics } from "@/lib/services/storageQuotaService";
+import {
+  storageQuotaService,
+  type StorageMetrics,
+} from "@/lib/services/storageQuotaService";
 import { toast } from "sonner";
 
 interface TestResult {
@@ -202,9 +205,9 @@ export default function StorageQuotaTester() {
         <Alert className="border-yellow-200 bg-yellow-50">
           <AlertTriangle className="h-4 w-4 text-yellow-600" />
           <AlertDescription className="text-yellow-800">
-            Test files use your storage quota. Files are stored in a /tests/ folder and
-            can be manually cleaned up. Use "Cleanup Old Files" to remove test files
-            older than 1 hour.
+            Test files use your storage quota. Files are stored in a /tests/
+            folder and can be manually cleaned up. Use "Cleanup Old Files" to
+            remove test files older than 1 hour.
           </AlertDescription>
         </Alert>
 
@@ -295,7 +298,9 @@ export default function StorageQuotaTester() {
         {testResults.length > 0 && (
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <h3 className="font-medium">Test Results ({testResults.length})</h3>
+              <h3 className="font-medium">
+                Test Results ({testResults.length})
+              </h3>
               <Button
                 onClick={() => setTestResults([])}
                 variant="ghost"

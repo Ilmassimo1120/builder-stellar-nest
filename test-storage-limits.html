@@ -13,7 +13,8 @@
       }
 
       body {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         min-height: 100vh;
         padding: 20px;
@@ -280,7 +281,11 @@
             <span class="summary-value">Ready</span>
           </div>
         </div>
-        <button class="btn-primary" onclick="runAllTests()" style="margin-top: 20px; width: 100%;">
+        <button
+          class="btn-primary"
+          onclick="runAllTests()"
+          style="margin-top: 20px; width: 100%"
+        >
           🚀 Run All Limit Tests
         </button>
       </div>
@@ -344,7 +349,7 @@
                     onclick="setTestSize('${bucket.name}', ${testSize.size})">
                     ${testSize.label}
                   </button>
-                `
+                `,
                 ).join("")}
               </div>
 
@@ -439,14 +444,14 @@
             addStatus(
               bucketName,
               `❌ Upload failed: ${error.message}`,
-              "error"
+              "error",
             );
             console.error("Upload error:", error);
           } else {
             addStatus(
               bucketName,
               `✅ Successfully uploaded ${sizeMB} MB file`,
-              "success"
+              "success",
             );
             await listBucketFiles(bucketName);
           }
@@ -462,7 +467,10 @@
         try {
           const { data, error } = await supabase.storage
             .from(bucketName)
-            .list("", { limit: 100, sortBy: { column: "created_at", order: "desc" } });
+            .list("", {
+              limit: 100,
+              sortBy: { column: "created_at", order: "desc" },
+            });
 
           if (error) {
             addStatus(bucketName, `❌ List error: ${error.message}`, "error");
@@ -471,14 +479,17 @@
 
           const state = bucketStates[bucketName];
           state.files = data || [];
-          state.totalSize = data.reduce((acc, f) => acc + (f.metadata?.size || 0), 0);
+          state.totalSize = data.reduce(
+            (acc, f) => acc + (f.metadata?.size || 0),
+            0,
+          );
 
           updateProgress(bucketName);
           displayFiles(bucketName);
           addStatus(
             bucketName,
             `✅ Found ${data.length} files (${formatBytes(state.totalSize)} total)`,
-            "success"
+            "success",
           );
         } catch (error) {
           addStatus(bucketName, `❌ Error: ${error.message}`, "error");
@@ -504,7 +515,7 @@
             <div class="file-size">${formatBytes(file.metadata?.size || 0)}</div>
             <div class="timestamp">${new Date(file.created_at).toLocaleString()}</div>
           </div>
-        `
+        `,
           )
           .join("");
       }
@@ -515,9 +526,13 @@
         const percentage = Math.min((state.totalSize / limit) * 100, 100);
         const usageMB = (state.totalSize / (1024 * 1024)).toFixed(1);
 
-        document.getElementById(`progress-${bucketName}`).style.width = percentage + "%";
-        document.getElementById(`progress-${bucketName}`).classList.toggle("warning", percentage > 80);
-        document.getElementById(`usage-${bucketName}`).textContent = `${usageMB} / 50 MB`;
+        document.getElementById(`progress-${bucketName}`).style.width =
+          percentage + "%";
+        document
+          .getElementById(`progress-${bucketName}`)
+          .classList.toggle("warning", percentage > 80);
+        document.getElementById(`usage-${bucketName}`).textContent =
+          `${usageMB} / 50 MB`;
 
         if (percentage >= 100) {
           addStatus(bucketName, "⚠️ Bucket at 50MB limit!", "warning");
@@ -541,13 +556,21 @@
             .remove(fileNames);
 
           if (error) {
-            addStatus(bucketName, `❌ Cleanup failed: ${error.message}`, "error");
+            addStatus(
+              bucketName,
+              `❌ Cleanup failed: ${error.message}`,
+              "error",
+            );
           } else {
             state.files = [];
             state.totalSize = 0;
             updateProgress(bucketName);
             displayFiles(bucketName);
-            addStatus(bucketName, `✅ Deleted ${fileNames.length} files`, "success");
+            addStatus(
+              bucketName,
+              `✅ Deleted ${fileNames.length} files`,
+              "success",
+            );
           }
         } catch (error) {
           addStatus(bucketName, `❌ Error: ${error.message}`, "error");
@@ -559,7 +582,7 @@
 
         for (const bucket of BUCKETS) {
           addStatus(bucket.name, "Running test...", "info");
-          
+
           // Test 1MB upload
           setTestSize(bucket.name, TEST_SIZES[0].size);
           await uploadTestFile(bucket.name);
@@ -569,7 +592,11 @@
           await listBucketFiles(bucket.name);
         }
 
-        addStatus("all", "Tests completed! Check storage usage above.", "success");
+        addStatus(
+          "all",
+          "Tests completed! Check storage usage above.",
+          "success",
+        );
       }
 
       function addStatus(bucketName, message, type) {
@@ -592,7 +619,9 @@
         const k = 1024;
         const sizes = ["Bytes", "KB", "MB", "GB"];
         const i = Math.floor(Math.log(bytes) / Math.log(k));
-        return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + " " + sizes[i];
+        return (
+          Math.round((bytes / Math.pow(k, i)) * 100) / 100 + " " + sizes[i]
+        );
       }
 
       // Initialize on load

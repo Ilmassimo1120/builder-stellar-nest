@@ -215,9 +215,10 @@ export default function ProjectWizard() {
     }
   };
 
-  const handleSelectAddress = async (
-    prediction: { description: string; place_id: string },
-  ) => {
+  const handleSelectAddress = async (prediction: {
+    description: string;
+    place_id: string;
+  }) => {
     try {
       setIsGeocodingAddress(true);
       setSiteAssessment({
@@ -407,10 +408,7 @@ export default function ProjectWizard() {
             console.log("✅ Draft saved to cloud:", draftId);
         } catch (cloudError) {
           // Log but don't fail - localStorage is our fallback
-          console.log(
-            "⚠️ Cloud save failed, using local storage:",
-            cloudError,
-          );
+          console.log("⚠️ Cloud save failed, using local storage:", cloudError);
         }
       }
 
@@ -592,7 +590,10 @@ export default function ProjectWizard() {
               console.log("✅ Loaded project from cloud:", projectId);
           }
         } catch (cloudError) {
-          console.log("⚠️ Could not load from cloud, trying local storage:", cloudError);
+          console.log(
+            "⚠️ Could not load from cloud, trying local storage:",
+            cloudError,
+          );
         }
       }
 
@@ -607,54 +608,108 @@ export default function ProjectWizard() {
       // Map project data to form state
       if (projectData) {
         if (projectData.client_info || projectData.clientRequirements) {
-          const clientInfo = projectData.client_info || projectData.clientRequirements;
+          const clientInfo =
+            projectData.client_info || projectData.clientRequirements;
           setClientRequirements({
-            contactPersonName: clientInfo.contact_person_name || clientInfo.contactPersonName || "",
-            contactTitle: clientInfo.contact_title || clientInfo.contactTitle || "",
-            contactEmail: clientInfo.contact_email || clientInfo.contactEmail || "",
-            contactPhone: clientInfo.contact_phone || clientInfo.contactPhone || "",
-            organizationType: clientInfo.organization_type || clientInfo.organizationType || "",
-            projectObjective: clientInfo.project_objective || clientInfo.projectObjective || "",
-            numberOfVehicles: clientInfo.number_of_vehicles ? String(clientInfo.number_of_vehicles) : "",
-            vehicleTypes: clientInfo.vehicle_types || clientInfo.vehicleTypes || [],
-            dailyUsagePattern: clientInfo.daily_usage_pattern || clientInfo.dailyUsagePattern || "",
-            budgetRange: clientInfo.budget_range || clientInfo.budgetRange || "",
-            projectTimeline: clientInfo.project_timeline || clientInfo.projectTimeline || "",
-            sustainabilityGoals: clientInfo.sustainability_goals || clientInfo.sustainabilityGoals || [],
-            accessibilityRequirements: clientInfo.accessibility_requirements || clientInfo.accessibilityRequirements || false,
-            specialRequirements: clientInfo.special_requirements || clientInfo.specialRequirements || "",
-            preferredChargerBrands: clientInfo.preferred_charger_brands || clientInfo.preferredChargerBrands || [],
-            paymentModel: clientInfo.payment_model || clientInfo.paymentModel || "",
+            contactPersonName:
+              clientInfo.contact_person_name ||
+              clientInfo.contactPersonName ||
+              "",
+            contactTitle:
+              clientInfo.contact_title || clientInfo.contactTitle || "",
+            contactEmail:
+              clientInfo.contact_email || clientInfo.contactEmail || "",
+            contactPhone:
+              clientInfo.contact_phone || clientInfo.contactPhone || "",
+            organizationType:
+              clientInfo.organization_type || clientInfo.organizationType || "",
+            projectObjective:
+              clientInfo.project_objective || clientInfo.projectObjective || "",
+            numberOfVehicles: clientInfo.number_of_vehicles
+              ? String(clientInfo.number_of_vehicles)
+              : "",
+            vehicleTypes:
+              clientInfo.vehicle_types || clientInfo.vehicleTypes || [],
+            dailyUsagePattern:
+              clientInfo.daily_usage_pattern ||
+              clientInfo.dailyUsagePattern ||
+              "",
+            budgetRange:
+              clientInfo.budget_range || clientInfo.budgetRange || "",
+            projectTimeline:
+              clientInfo.project_timeline || clientInfo.projectTimeline || "",
+            sustainabilityGoals:
+              clientInfo.sustainability_goals ||
+              clientInfo.sustainabilityGoals ||
+              [],
+            accessibilityRequirements:
+              clientInfo.accessibility_requirements ||
+              clientInfo.accessibilityRequirements ||
+              false,
+            specialRequirements:
+              clientInfo.special_requirements ||
+              clientInfo.specialRequirements ||
+              "",
+            preferredChargerBrands:
+              clientInfo.preferred_charger_brands ||
+              clientInfo.preferredChargerBrands ||
+              [],
+            paymentModel:
+              clientInfo.payment_model || clientInfo.paymentModel || "",
           });
         }
 
         if (projectData.site_assessment || projectData.siteAssessment) {
-          const siteData = projectData.site_assessment || projectData.siteAssessment;
+          const siteData =
+            projectData.site_assessment || projectData.siteAssessment;
           setSiteAssessment({
             projectName: siteData.project_name || siteData.projectName || "",
             clientName: siteData.client_name || siteData.clientName || "",
             siteAddress: siteData.site_address || siteData.siteAddress || "",
             siteType: siteData.site_type || siteData.siteType || "",
-            existingPowerSupply: siteData.existing_power_supply || siteData.existingPowerSupply || "",
-            availableAmperes: siteData.available_amperes ? String(siteData.available_amperes) : "",
-            estimatedLoad: siteData.estimated_load || siteData.estimatedLoad || "",
-            parkingSpaces: siteData.parking_spaces ? String(siteData.parking_spaces) : "",
-            accessRequirements: siteData.access_requirements || siteData.accessRequirements || "",
+            existingPowerSupply:
+              siteData.existing_power_supply ||
+              siteData.existingPowerSupply ||
+              "",
+            availableAmperes: siteData.available_amperes
+              ? String(siteData.available_amperes)
+              : "",
+            estimatedLoad:
+              siteData.estimated_load || siteData.estimatedLoad || "",
+            parkingSpaces: siteData.parking_spaces
+              ? String(siteData.parking_spaces)
+              : "",
+            accessRequirements:
+              siteData.access_requirements || siteData.accessRequirements || "",
             photos: siteData.photos || siteData.photos || [],
-            additionalNotes: siteData.additional_notes || siteData.additionalNotes || "",
+            additionalNotes:
+              siteData.additional_notes || siteData.additionalNotes || "",
           });
         }
 
         if (projectData.charger_selection || projectData.chargerSelection) {
-          const chargerData = projectData.charger_selection || projectData.chargerSelection;
+          const chargerData =
+            projectData.charger_selection || projectData.chargerSelection;
           setChargerSelection({
-            chargingType: chargerData.charging_type || chargerData.chargingType || "",
-            powerRating: chargerData.power_rating || chargerData.powerRating || "",
-            mountingType: chargerData.mounting_type || chargerData.mountingType || "",
-            numberOfChargers: chargerData.number_of_chargers ? String(chargerData.number_of_chargers) : "",
-            connectorTypes: chargerData.connector_types || chargerData.connectorTypes || [],
-            weatherProtection: chargerData.weather_protection || chargerData.weatherProtection || false,
-            networkConnectivity: chargerData.network_connectivity || chargerData.networkConnectivity || "",
+            chargingType:
+              chargerData.charging_type || chargerData.chargingType || "",
+            powerRating:
+              chargerData.power_rating || chargerData.powerRating || "",
+            mountingType:
+              chargerData.mounting_type || chargerData.mountingType || "",
+            numberOfChargers: chargerData.number_of_chargers
+              ? String(chargerData.number_of_chargers)
+              : "",
+            connectorTypes:
+              chargerData.connector_types || chargerData.connectorTypes || [],
+            weatherProtection:
+              chargerData.weather_protection ||
+              chargerData.weatherProtection ||
+              false,
+            networkConnectivity:
+              chargerData.network_connectivity ||
+              chargerData.networkConnectivity ||
+              "",
           });
         }
 
@@ -957,7 +1012,10 @@ export default function ProjectWizard() {
           // Update if editing existing project, create if new
           const existingProject = await projectService.getProject(projectId);
           if (existingProject) {
-            project = await projectService.updateProject(projectId, supabaseData);
+            project = await projectService.updateProject(
+              projectId,
+              supabaseData,
+            );
             console.log("Project Updated Successfully in Supabase:", project);
           } else {
             project = await projectService.createProject(supabaseData);
@@ -993,7 +1051,10 @@ export default function ProjectWizard() {
           setShowSuccessDialog(true);
           return;
         } catch (error) {
-          console.log("Cloud storage failed, using local storage fallback:", error);
+          console.log(
+            "Cloud storage failed, using local storage fallback:",
+            error,
+          );
           // Fall through to localStorage
         }
       }
@@ -1693,7 +1754,8 @@ export default function ProjectWizard() {
                   value={siteAssessment.siteAddress}
                   onChange={(e) => handleAddressChange(e.target.value)}
                   onFocus={() =>
-                    addressPredictions.length > 0 && setShowAddressDropdown(true)
+                    addressPredictions.length > 0 &&
+                    setShowAddressDropdown(true)
                   }
                   placeholder="Full site address including postcode"
                   disabled={isGeocodingAddress}
@@ -1715,7 +1777,9 @@ export default function ProjectWizard() {
                       onClick={() => handleSelectAddress(prediction)}
                       className="w-full text-left px-4 py-2 hover:bg-gray-100 border-b border-gray-200 last:border-b-0 focus:outline-none focus:bg-gray-100 transition-colors"
                     >
-                      <div className="text-sm font-medium">{prediction.description}</div>
+                      <div className="text-sm font-medium">
+                        {prediction.description}
+                      </div>
                     </button>
                   ))}
                 </div>

@@ -636,7 +636,10 @@ export default function Projects() {
           await projectService.deleteProject(projectId);
           console.log("✅ Project deleted from cloud:", projectId);
         } catch (cloudError) {
-          console.log("⚠️ Could not delete from cloud, using local delete only:", cloudError);
+          console.log(
+            "⚠️ Could not delete from cloud, using local delete only:",
+            cloudError,
+          );
         }
       }
 

@@ -49,19 +49,19 @@ export default function StorageTestingDashboard() {
             <Info className="h-4 w-4 text-blue-600" />
             <AlertDescription className="text-blue-800">
               <strong>What this tool does:</strong> This dashboard allows you to
-              test file uploads to your Supabase storage buckets, monitor storage
-              quota usage, and verify performance before using production data. Test
-              files are created in a <code>/tests/</code> folder and can be
-              automatically cleaned up.
+              test file uploads to your Supabase storage buckets, monitor
+              storage quota usage, and verify performance before using
+              production data. Test files are created in a <code>/tests/</code>{" "}
+              folder and can be automatically cleaned up.
             </AlertDescription>
           </Alert>
 
           <Alert className="border-amber-200 bg-amber-50">
             <Info className="h-4 w-4 text-amber-600" />
             <AlertDescription className="text-amber-800">
-              <strong>Storage Limits:</strong> Each bucket has a 50MB limit. When
-              testing file uploads, ensure you have enough free space. The metrics
-              below show your current usage across all buckets.
+              <strong>Storage Limits:</strong> Each bucket has a 50MB limit.
+              When testing file uploads, ensure you have enough free space. The
+              metrics below show your current usage across all buckets.
             </AlertDescription>
           </Alert>
         </div>
@@ -163,18 +163,18 @@ export default function StorageTestingDashboard() {
               <h3 className="font-semibold mb-2">About Quota Limits</h3>
               <p className="text-sm text-muted-foreground">
                 ChargeSource includes 50MB storage per bucket as part of your
-                Supabase project. This dashboard helps you verify that uploads and
-                downloads work correctly before reaching the limit. Test files are
-                stored in a dedicated /tests/ folder for easy cleanup.
+                Supabase project. This dashboard helps you verify that uploads
+                and downloads work correctly before reaching the limit. Test
+                files are stored in a dedicated /tests/ folder for easy cleanup.
               </p>
             </div>
             <div>
               <h3 className="font-semibold mb-2">Troubleshooting</h3>
               <p className="text-sm text-muted-foreground">
-                If uploads fail with "quota exceeded" errors, use the "Cleanup Old
-                Files" button to remove test files. If you need more storage,
-                consider upgrading your Supabase plan. For other issues, contact
-                support.
+                If uploads fail with "quota exceeded" errors, use the "Cleanup
+                Old Files" button to remove test files. If you need more
+                storage, consider upgrading your Supabase plan. For other
+                issues, contact support.
               </p>
             </div>
           </div>

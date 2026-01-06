@@ -138,7 +138,8 @@ const sendEmail = async (
 ) => {
   try {
     const sendgridApiKey = process.env.SENDGRID_API_KEY;
-    const fromEmail = process.env.SENDGRID_FROM_EMAIL || "demo@chargesource.com.au";
+    const fromEmail =
+      process.env.SENDGRID_FROM_EMAIL || "demo@chargesource.com.au";
     const fromName = "ChargeSource Demo Team";
 
     // Check if SendGrid is configured
@@ -182,9 +183,12 @@ const sendEmail = async (
       );
     }
 
-    const messageId = response.headers.get("x-message-id") || `sendgrid_${Date.now()}`;
+    const messageId =
+      response.headers.get("x-message-id") || `sendgrid_${Date.now()}`;
 
-    console.log(`✅ Email sent successfully to ${to} (MessageID: ${messageId})`);
+    console.log(
+      `✅ Email sent successfully to ${to} (MessageID: ${messageId})`,
+    );
 
     return {
       success: true,

@@ -21,7 +21,9 @@ const submitToHubSpot = async (leadData: DemoRequestData) => {
   const hubspotApiKey = process.env.HUBSPOT_API_KEY;
 
   if (!hubspotApiKey) {
-    console.warn("⚠️ HUBSPOT_API_KEY not configured. Falling back to demo mode.");
+    console.warn(
+      "⚠️ HUBSPOT_API_KEY not configured. Falling back to demo mode.",
+    );
     return null;
   }
 

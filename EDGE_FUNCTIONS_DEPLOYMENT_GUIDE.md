@@ -58,6 +58,7 @@ supabase link --project-ref XXXXXXXXXXXX
 ```
 
 To find your project ID:
+
 1. Go to https://supabase.com/dashboard
 2. Select your project
 3. Go to Project Settings → General
@@ -99,6 +100,7 @@ supabase functions list
 ```
 
 Expected output:
+
 ```
 Deployment Status: Success
 Function            Last Deployed
@@ -120,6 +122,7 @@ calculate-quote-totals 2024-01-06 14:30:40 UTC
 **Endpoint:** `https://[project-id].supabase.co/functions/v1/secure-file-upload`
 
 **Request:**
+
 ```json
 {
   "bucket": "charge-source-user-files",
@@ -129,6 +132,7 @@ calculate-quote-totals 2024-01-06 14:30:40 UTC
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -145,6 +149,7 @@ calculate-quote-totals 2024-01-06 14:30:40 UTC
 **Endpoint:** `https://[project-id].supabase.co/functions/v1/secure-file-list`
 
 **Request:**
+
 ```json
 {
   "bucket": "charge-source-user-files",
@@ -153,6 +158,7 @@ calculate-quote-totals 2024-01-06 14:30:40 UTC
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -174,6 +180,7 @@ calculate-quote-totals 2024-01-06 14:30:40 UTC
 **Endpoint:** `https://[project-id].supabase.co/functions/v1/secure-file-delete`
 
 **Request:**
+
 ```json
 {
   "bucket": "charge-source-user-files",
@@ -182,6 +189,7 @@ calculate-quote-totals 2024-01-06 14:30:40 UTC
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -196,6 +204,7 @@ calculate-quote-totals 2024-01-06 14:30:40 UTC
 **Endpoint:** `https://[project-id].supabase.co/functions/v1/generate-quote-pdf`
 
 **Request:**
+
 ```json
 {
   "quoteId": "quote-123",
@@ -216,6 +225,7 @@ calculate-quote-totals 2024-01-06 14:30:40 UTC
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -231,6 +241,7 @@ calculate-quote-totals 2024-01-06 14:30:40 UTC
 **Endpoint:** `https://[project-id].supabase.co/functions/v1/calculate-quote-totals`
 
 **Request:**
+
 ```json
 {
   "items": [
@@ -245,11 +256,12 @@ calculate-quote-totals 2024-01-06 14:30:40 UTC
       "unitPrice": 150
     }
   ],
-  "taxRate": 0.10
+  "taxRate": 0.1
 }
 ```
 
 **Response:**
+
 ```json
 {
   "items": [
@@ -297,11 +309,13 @@ curl -i --location --request POST 'http://127.0.0.1:54321/functions/v1/secure-fi
 ## Troubleshooting
 
 ### Error: "Project not linked"
+
 ```bash
 supabase link --project-ref YOUR_PROJECT_ID
 ```
 
 ### Error: "Authentication required"
+
 ```bash
 supabase logout
 supabase login
@@ -378,6 +392,7 @@ If functions need environment variables (API keys, etc.), they can be set in:
 2. **Production:** Set in Supabase Dashboard → Project Settings → Edge Functions
 
 Functions can access environment variables via:
+
 ```typescript
 const apiKey = Deno.env.get("MY_API_KEY");
 ```
@@ -391,6 +406,7 @@ const apiKey = Deno.env.get("MY_API_KEY");
 - **Monitor usage:** Supabase Dashboard → Project Settings → Billing
 
 For ChargeSource (typical usage):
+
 - ~1000 file uploads/month = 1000 invocations
 - ~500 PDF generations/month = 500 invocations
 - Should stay well within free tier

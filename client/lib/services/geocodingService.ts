@@ -210,7 +210,11 @@ export const reverseGeocode = async (
  */
 export const validateAustralianAddress = async (
   address: string,
-): Promise<{ valid: boolean; normalized?: string; coordinates?: GeocodeResult }> => {
+): Promise<{
+  valid: boolean;
+  normalized?: string;
+  coordinates?: GeocodeResult;
+}> => {
   if (!address || address.trim().length === 0) {
     return { valid: false };
   }

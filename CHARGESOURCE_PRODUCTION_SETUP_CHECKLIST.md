@@ -8,17 +8,20 @@
 ## ✅ Completed Implementation Tasks
 
 ### 1. **Cloud Persistence** ✅
+
 - [x] ProjectWizard auto-save to Supabase
 - [x] Project load from cloud (edit mode)
 - [x] Project delete from cloud
 - [x] Fallback to localStorage on cloud failures
 
 **Files Modified:**
+
 - `client/pages/ProjectWizard.tsx` - Cloud save integration
 - `client/pages/Projects.tsx` - Cloud delete implementation
 - `client/lib/supabase.ts` - ProjectService methods
 
 **Testing:**
+
 - Create a project → Auto-saves to Supabase
 - Edit existing project → Loads from cloud
 - Delete project → Removes from Supabase
@@ -27,21 +30,25 @@
 ---
 
 ### 2. **Email Integration** ✅
+
 - [x] SendGrid integration implemented
 - [x] Email template system ready
 - [x] Demo mode fallback for development
 - [x] Production API key support
 
 **Files Modified:**
+
 - `server/routes/email-confirmation.ts` - SendGrid implementation
 
 **Environment Variables Needed:**
+
 ```
 SENDGRID_API_KEY=SG.xxxxxxxxxxxxxxxxxx
 SENDGRID_FROM_EMAIL=demo@chargesource.com.au
 ```
 
 **How to Get SendGrid API Key:**
+
 1. Go to https://sendgrid.com/
 2. Create free account (up to 100 emails/day)
 3. Go to Settings → API Keys
@@ -49,6 +56,7 @@ SENDGRID_FROM_EMAIL=demo@chargesource.com.au
 5. Copy and save the key
 
 **Testing:**
+
 - Submit demo request form
 - Check email inbox for confirmation
 - Verify email contains correct branding
@@ -56,24 +64,30 @@ SENDGRID_FROM_EMAIL=demo@chargesource.com.au
 ---
 
 ### 3. **Geocoding & Address Validation** ✅
+
 - [x] Google Maps Geocoding API integrated
 - [x] Address autocomplete in wizard
 - [x] Coordinate lookup for addresses
 - [x] Australian address validation
 
 **Files Created:**
+
 - `client/lib/services/geocodingService.ts` - Geocoding service
 
 **Files Modified:**
+
 - `client/pages/ProjectWizard.tsx` - Address field with autocomplete
 
 **Environment Variable:**
+
 ```
 VITE_GOOGLE_MAPS_API_KEY=AIzaSyCyDVhsKDcSSlnOxfX2ahsURFzoiFIBArk
 ```
+
 (Already configured in your environment)
 
 **Testing:**
+
 - In ProjectWizard, enter partial address
 - See autocomplete suggestions
 - Select address → Coordinates populated
@@ -82,15 +96,18 @@ VITE_GOOGLE_MAPS_API_KEY=AIzaSyCyDVhsKDcSSlnOxfX2ahsURFzoiFIBArk
 ---
 
 ### 4. **CRM Integration** ✅
+
 - [x] HubSpot integration with real API calls
 - [x] Pipedrive integration with fallback
 - [x] Dual-provider support with failover
 - [x] Demo mode for development
 
 **Files Modified:**
+
 - `server/routes/crm-leads.ts` - HubSpot and Pipedrive integration
 
 **Environment Variables Needed:**
+
 ```
 # HubSpot
 HUBSPOT_API_KEY=pat-xxxxxxxxxxxx
@@ -105,18 +122,21 @@ CRM_PROVIDER=pipedrive
 **How to Get API Keys:**
 
 **HubSpot:**
+
 1. Go to https://app.hubapi.com/
 2. Settings → Private Apps
 3. Create Private App with "crm.objects.contacts.write" scope
 4. Copy Access Token
 
 **Pipedrive:**
+
 1. Go to https://pipedrive.com/
 2. Settings → API
 3. Copy API Token
 4. Note your company domain (e.g., company.pipedrive.com)
 
 **Testing:**
+
 - Submit demo request
 - Check HubSpot or Pipedrive account
 - Verify contact/deal created with correct data
@@ -124,12 +144,14 @@ CRM_PROVIDER=pipedrive
 ---
 
 ### 5. **File Storage & Edge Functions** ✅
+
 - [x] Document metadata tables created
 - [x] Storage bucket schema ready
 - [x] Edge Functions code ready for deployment
 - [x] Deployment guide created
 
 **Files:**
+
 - `supabase/functions/secure-file-upload/index.ts`
 - `supabase/functions/secure-file-list/index.ts`
 - `supabase/functions/secure-file-delete/index.ts`
@@ -137,14 +159,17 @@ CRM_PROVIDER=pipedrive
 - `supabase/functions/calculate-quote-totals/index.ts`
 
 **Deployment Guide:**
+
 - See `EDGE_FUNCTIONS_DEPLOYMENT_GUIDE.md`
 
 **Buckets Needed:**
+
 - `charge-source-user-files` (50MB)
 - `charge-source-documents` (100MB)
 - `charge-source-videos` (500MB)
 
 **Testing:**
+
 - File upload success
 - PDF generation
 - File deletion
@@ -183,6 +208,7 @@ CRM_PROVIDER=pipedrive
 ### Step 2: Supabase Configuration
 
 **Create Storage Buckets:**
+
 ```bash
 1. Go to Supabase Dashboard
 2. Navigate to Storage
@@ -193,6 +219,7 @@ CRM_PROVIDER=pipedrive
 ```
 
 **Verify Database Schema:**
+
 ```bash
 1. Go to Supabase Dashboard
 2. Check SQL Editor
@@ -208,6 +235,7 @@ CRM_PROVIDER=pipedrive
 ```
 
 **Test Database Connection:**
+
 ```bash
 npm run test:supabase
 ```
@@ -215,6 +243,7 @@ npm run test:supabase
 ### Step 3: Google OAuth Configuration
 
 **For Supabase Google Auth:**
+
 1. Go to https://supabase.com/dashboard
 2. Select your project
 3. Go to Authentication → Providers → Google
@@ -222,6 +251,7 @@ npm run test:supabase
 5. Example: `https://app.chargesource.com.au/auth/callback`
 
 **For Google Cloud Console:**
+
 1. Go to https://console.cloud.google.com/
 2. Create OAuth 2.0 Client ID
 3. Add authorized redirect URIs:
@@ -256,6 +286,7 @@ See: `EDGE_FUNCTIONS_DEPLOYMENT_GUIDE.md` for details
 
 **For Netlify:**
 Add to `netlify.toml`:
+
 ```toml
 [[headers]]
   for = "/*"
@@ -268,13 +299,14 @@ Add to `netlify.toml`:
 ```
 
 **Content Security Policy (CSP):**
+
 ```
-Content-Security-Policy: 
-  default-src 'self'; 
-  script-src 'self' https://maps.googleapis.com; 
-  style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; 
-  font-src 'self' https://fonts.gstatic.com; 
-  img-src 'self' https: data:; 
+Content-Security-Policy:
+  default-src 'self';
+  script-src 'self' https://maps.googleapis.com;
+  style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+  font-src 'self' https://fonts.gstatic.com;
+  img-src 'self' https: data:;
   connect-src 'self' https://api.sendgrid.com https://api.hubapi.com https://*.pipedrive.com https://maps.googleapis.com;
 ```
 
@@ -283,48 +315,56 @@ Content-Security-Policy:
 ## 📋 Pre-Production Validation
 
 ### Database
+
 - [ ] All tables created and indexed
 - [ ] RLS policies configured
 - [ ] Triggers working (updated_at timestamps)
 - [ ] Test data loaded successfully
 
 ### Storage
+
 - [ ] 3 buckets created and private
 - [ ] File upload/download/delete working
 - [ ] Signed URLs generating correctly
 - [ ] Storage usage monitored
 
 ### Authentication
+
 - [ ] Email/password signup working
 - [ ] Google OAuth configured
 - [ ] Session persistence working
 - [ ] Redirect URIs correct for production domain
 
 ### Email
+
 - [ ] SendGrid API key valid
 - [ ] Test email sent successfully
 - [ ] Email template rendering correctly
 - [ ] Unsubscribe links working
 
 ### Geocoding
+
 - [ ] Google Maps API key valid
 - [ ] Address autocomplete working
 - [ ] Address validation accurate
 - [ ] Coordinates populating correctly
 
 ### CRM
+
 - [ ] HubSpot/Pipedrive API key valid
 - [ ] Test contact created in CRM
 - [ ] Custom fields mapping correct
 - [ ] Fallback mode working
 
 ### Edge Functions
+
 - [ ] All 5 functions deployed
 - [ ] File upload function working
 - [ ] Quote PDF generation working
 - [ ] Function logs clean (no errors)
 
 ### Performance
+
 - [ ] Bundle size < 1MB (with code splitting)
 - [ ] Page load time < 3s on 3G
 - [ ] Database queries optimized
@@ -350,17 +390,20 @@ Content-Security-Policy:
 ### Post-Deployment Validation
 
 1. **Test User Registration:**
+
    - Sign up with new email
    - Verify confirmation email received
    - Verify email link works
 
 2. **Test Project Creation:**
+
    - Create new project
    - Fill out all steps
    - Submit project
    - Verify in Supabase database
 
 3. **Test Cloud Sync:**
+
    - Create project
    - Refresh page
    - Verify data persists
@@ -368,12 +411,14 @@ Content-Security-Policy:
    - Verify updates save
 
 4. **Test Email:**
+
    - Submit demo request
    - Check inbox within 2 minutes
    - Verify email contains correct info
    - Click links in email
 
 5. **Test Geocoding:**
+
    - Start new project
    - Enter partial address
    - See autocomplete suggestions
@@ -390,38 +435,39 @@ Content-Security-Policy:
 
 ## 📊 Feature Status Matrix
 
-| Feature | Status | Files | Config | Testing |
-|---------|--------|-------|--------|---------|
-| Cloud Save | ✅ Complete | ProjectWizard.tsx | Supabase URL/Key | Create → Submit → Check DB |
-| Cloud Delete | ✅ Complete | Projects.tsx | Supabase URL/Key | Delete → Check DB |
-| Email | ✅ Complete | email-confirmation.ts | SendGrid Key | Send → Check Inbox |
-| Geocoding | ✅ Complete | geocodingService.ts | Google Maps Key | Address → Autocomplete |
-| CRM | ✅ Complete | crm-leads.ts | HubSpot/Pipedrive Key | Submit → Check CRM |
-| File Storage | ✅ Ready | Edge Functions | Bucket Names | Upload → List → Delete |
-| OAuth | ⚠️ Partial | Supabase Auth | Redirect URIs | Login → Redirect OK |
-| Edge Functions | ⚠️ Needs Deploy | supabase/functions/ | Supabase CLI | Deploy → Test |
-| TypeScript Strict | ⏳ Pending | Multiple files | tsconfig.json | Run tsc --strict |
-| Tests | ⏳ Pending | __tests__/ | vitest.config.ts | npm run test |
-| Security Headers | ⏳ Pending | netlify.toml | CSP headers | Check Response Headers |
-| Monitoring | ⏳ Pending | Sentry integration | Sentry Key | Error → Check Dashboard |
+| Feature           | Status          | Files                 | Config                | Testing                    |
+| ----------------- | --------------- | --------------------- | --------------------- | -------------------------- |
+| Cloud Save        | ✅ Complete     | ProjectWizard.tsx     | Supabase URL/Key      | Create → Submit → Check DB |
+| Cloud Delete      | ✅ Complete     | Projects.tsx          | Supabase URL/Key      | Delete → Check DB          |
+| Email             | ✅ Complete     | email-confirmation.ts | SendGrid Key          | Send → Check Inbox         |
+| Geocoding         | ✅ Complete     | geocodingService.ts   | Google Maps Key       | Address → Autocomplete     |
+| CRM               | ✅ Complete     | crm-leads.ts          | HubSpot/Pipedrive Key | Submit → Check CRM         |
+| File Storage      | ✅ Ready        | Edge Functions        | Bucket Names          | Upload → List → Delete     |
+| OAuth             | ⚠️ Partial      | Supabase Auth         | Redirect URIs         | Login → Redirect OK        |
+| Edge Functions    | ⚠️ Needs Deploy | supabase/functions/   | Supabase CLI          | Deploy → Test              |
+| TypeScript Strict | ⏳ Pending      | Multiple files        | tsconfig.json         | Run tsc --strict           |
+| Tests             | ⏳ Pending      | **tests**/            | vitest.config.ts      | npm run test               |
+| Security Headers  | ⏳ Pending      | netlify.toml          | CSP headers           | Check Response Headers     |
+| Monitoring        | ⏳ Pending      | Sentry integration    | Sentry Key            | Error → Check Dashboard    |
 
 ---
 
 ## 🔑 Quick Reference: Required API Keys
 
-| Service | Key Name | Where to Get | Free Tier |
-|---------|----------|--------------|-----------|
-| SendGrid | SENDGRID_API_KEY | sendgrid.com | 100 emails/day |
-| HubSpot | HUBSPOT_API_KEY | hubapi.com | Free CRM |
-| Pipedrive | PIPEDRIVE_API_KEY | pipedrive.com | Free plan |
-| Google Maps | VITE_GOOGLE_MAPS_API_KEY | console.cloud.google.com | $200 credit |
-| Supabase | VITE_SUPABASE_*_KEY | supabase.com | 500MB DB + Auth |
+| Service     | Key Name                 | Where to Get             | Free Tier       |
+| ----------- | ------------------------ | ------------------------ | --------------- |
+| SendGrid    | SENDGRID_API_KEY         | sendgrid.com             | 100 emails/day  |
+| HubSpot     | HUBSPOT_API_KEY          | hubapi.com               | Free CRM        |
+| Pipedrive   | PIPEDRIVE_API_KEY        | pipedrive.com            | Free plan       |
+| Google Maps | VITE_GOOGLE_MAPS_API_KEY | console.cloud.google.com | $200 credit     |
+| Supabase    | VITE*SUPABASE*\*\_KEY    | supabase.com             | 500MB DB + Auth |
 
 ---
 
 ## 📞 Troubleshooting
 
 ### Cloud Save Not Working
+
 ```
 ✓ Check VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY are set
 ✓ Verify projects table exists in Supabase
@@ -430,6 +476,7 @@ Content-Security-Policy:
 ```
 
 ### Email Not Sending
+
 ```
 ✓ Check SENDGRID_API_KEY is set
 ✓ Verify SENDGRID_FROM_EMAIL is valid
@@ -439,6 +486,7 @@ Content-Security-Policy:
 ```
 
 ### Geocoding Not Working
+
 ```
 ✓ Check VITE_GOOGLE_MAPS_API_KEY is set
 ✓ Verify API key enabled in Google Cloud Console
@@ -448,6 +496,7 @@ Content-Security-Policy:
 ```
 
 ### CRM Sync Failing
+
 ```
 ✓ Check CRM API key is set correctly
 ✓ Verify CRM_PROVIDER env variable
@@ -469,6 +518,7 @@ Content-Security-Policy:
 ---
 
 **Next Steps:**
+
 1. Set all environment variables ✓ (See checklist above)
 2. Create Supabase storage buckets ✓
 3. Validate OAuth redirect URIs ⏳

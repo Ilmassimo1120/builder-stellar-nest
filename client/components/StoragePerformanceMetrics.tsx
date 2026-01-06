@@ -16,7 +16,10 @@ import {
   CheckCircle,
   HardDrive,
 } from "lucide-react";
-import { storageQuotaService, type QuotaInfo } from "@/lib/services/storageQuotaService";
+import {
+  storageQuotaService,
+  type QuotaInfo,
+} from "@/lib/services/storageQuotaService";
 import { toast } from "sonner";
 
 export default function StoragePerformanceMetrics() {
@@ -80,7 +83,9 @@ export default function StoragePerformanceMetrics() {
         </CardHeader>
         <CardContent className="flex items-center justify-center py-8">
           <RefreshCw className="w-5 h-5 animate-spin text-muted-foreground mr-2" />
-          <span className="text-muted-foreground">Loading quota information...</span>
+          <span className="text-muted-foreground">
+            Loading quota information...
+          </span>
         </CardContent>
       </Card>
     );
@@ -98,7 +103,9 @@ export default function StoragePerformanceMetrics() {
         <CardContent className="space-y-4">
           <Alert className="border-red-200 bg-red-50">
             <AlertTriangle className="h-4 w-4 text-red-600" />
-            <AlertDescription className="text-red-800">{error}</AlertDescription>
+            <AlertDescription className="text-red-800">
+              {error}
+            </AlertDescription>
           </Alert>
           <Button onClick={loadQuotaInfo} variant="outline" className="w-full">
             <RefreshCw className="w-4 h-4 mr-2" />
@@ -124,9 +131,7 @@ export default function StoragePerformanceMetrics() {
                 <TrendingUp className="w-5 h-5" />
                 Overall Storage Status
               </CardTitle>
-              <CardDescription>
-                Total usage across all buckets
-              </CardDescription>
+              <CardDescription>Total usage across all buckets</CardDescription>
             </div>
             <div className="text-right">
               {getStatusBadge(quotaInfo.usagePercent)}
@@ -139,8 +144,8 @@ export default function StoragePerformanceMetrics() {
             <Alert className="border-red-200 bg-red-50">
               <AlertTriangle className="h-4 w-4 text-red-600" />
               <AlertDescription className="text-red-800">
-                Storage quota has been exceeded! Files cannot be uploaded until space
-                is freed.
+                Storage quota has been exceeded! Files cannot be uploaded until
+                space is freed.
               </AlertDescription>
             </Alert>
           )}
@@ -149,8 +154,8 @@ export default function StoragePerformanceMetrics() {
             <Alert className="border-orange-200 bg-orange-50">
               <AlertTriangle className="h-4 w-4 text-orange-600" />
               <AlertDescription className="text-orange-800">
-                You are approaching the storage limit. Consider deleting old test files
-                or upgrading your plan.
+                You are approaching the storage limit. Consider deleting old
+                test files or upgrading your plan.
               </AlertDescription>
             </Alert>
           )}
@@ -171,7 +176,9 @@ export default function StoragePerformanceMetrics() {
               <p className="text-xs text-muted-foreground font-medium">
                 USED SPACE
               </p>
-              <p className={`text-2xl font-bold mt-2 ${getProgressPercentage(quotaInfo.usagePercent)}`}>
+              <p
+                className={`text-2xl font-bold mt-2 ${getProgressPercentage(quotaInfo.usagePercent)}`}
+              >
                 {storageQuotaService.formatBytes(quotaInfo.totalSize)}
               </p>
               <p className="text-xs text-muted-foreground mt-1">
@@ -194,13 +201,15 @@ export default function StoragePerformanceMetrics() {
 
             {/* Usage Percentage */}
             <div className="bg-slate-50 rounded-lg p-4 border">
-              <p className="text-xs text-muted-foreground font-medium">
-                USAGE
-              </p>
-              <p className={`text-2xl font-bold mt-2 ${getProgressPercentage(quotaInfo.usagePercent)}`}>
+              <p className="text-xs text-muted-foreground font-medium">USAGE</p>
+              <p
+                className={`text-2xl font-bold mt-2 ${getProgressPercentage(quotaInfo.usagePercent)}`}
+              >
                 {Math.round(quotaInfo.usagePercent)}%
               </p>
-              <p className="text-xs text-muted-foreground mt-1">of total quota</p>
+              <p className="text-xs text-muted-foreground mt-1">
+                of total quota
+              </p>
             </div>
           </div>
 
@@ -230,7 +239,9 @@ export default function StoragePerformanceMetrics() {
             variant="outline"
             className="w-full"
           >
-            <RefreshCw className={`w-4 h-4 mr-2 ${loading ? "animate-spin" : ""}`} />
+            <RefreshCw
+              className={`w-4 h-4 mr-2 ${loading ? "animate-spin" : ""}`}
+            />
             Refresh Metrics
           </Button>
 
@@ -281,7 +292,9 @@ export default function StoragePerformanceMetrics() {
                   </div>
                   <div className="bg-white p-2 rounded border">
                     <p className="text-muted-foreground">Usage</p>
-                    <p className="font-medium">{Math.round(bucket.usagePercent)}%</p>
+                    <p className="font-medium">
+                      {Math.round(bucket.usagePercent)}%
+                    </p>
                   </div>
                 </div>
 
@@ -297,7 +310,8 @@ export default function StoragePerformanceMetrics() {
 
                 {/* Capacity Info */}
                 <p className="text-xs text-muted-foreground">
-                  {storageQuotaService.formatBytes(bucket.totalSize)} of 50 MB limit
+                  {storageQuotaService.formatBytes(bucket.totalSize)} of 50 MB
+                  limit
                 </p>
               </div>
             ))}

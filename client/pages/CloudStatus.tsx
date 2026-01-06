@@ -76,17 +76,15 @@ export default function CloudStatus() {
                     </CardDescription>
                   </div>
                   <Button asChild>
-                    <Link to="/storage-testing">
-                      Open Storage Tests
-                    </Link>
+                    <Link to="/storage-testing">Open Storage Tests</Link>
                   </Button>
                 </div>
               </CardHeader>
               <CardContent className="text-sm text-muted-foreground">
-                Need to test your storage buckets before committing to a paid plan?
-                Use our interactive Storage Testing Dashboard to upload test files,
-                monitor quota usage, and verify your Supabase storage limits work as
-                expected.
+                Need to test your storage buckets before committing to a paid
+                plan? Use our interactive Storage Testing Dashboard to upload
+                test files, monitor quota usage, and verify your Supabase
+                storage limits work as expected.
               </CardContent>
             </Card>
           </div>
