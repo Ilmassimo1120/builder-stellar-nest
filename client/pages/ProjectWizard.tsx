@@ -156,6 +156,14 @@ export default function ProjectWizard() {
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
   const [createdProject, setCreatedProject] = useState<any>(null);
 
+  // Geocoding state
+  const [addressPredictions, setAddressPredictions] = useState<
+    Array<{ description: string; place_id: string }>
+  >([]);
+  const [showAddressDropdown, setShowAddressDropdown] = useState(false);
+  const [isGeocodingAddress, setIsGeocodingAddress] = useState(false);
+  const [coordinatesLocked, setCoordinatesLocked] = useState(false);
+
   // Auto-save throttling refs
   const lastAutoSaveRef = useRef<number>(0);
   const autoSaveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
