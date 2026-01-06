@@ -632,7 +632,12 @@ export default function Projects() {
     try {
       // Remove from Supabase if connected
       if (isSupabaseConnected) {
-        // TODO: Implement delete in projectService
+        try {
+          await projectService.deleteProject(projectId);
+          console.log("✅ Project deleted from cloud:", projectId);
+        } catch (cloudError) {
+          console.log("⚠️ Could not delete from cloud, using local delete only:", cloudError);
+        }
       }
 
       // Remove from localStorage
