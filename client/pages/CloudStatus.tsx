@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, HardDrive } from "lucide-react";
 import { Link } from "react-router-dom";
 import ConnectionStatus from "@/components/ConnectionStatus";
 import SupabaseStorageDiagnostics from "@/components/SupabaseStorageDiagnostics";
