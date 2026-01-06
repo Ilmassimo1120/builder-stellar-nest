@@ -315,6 +315,39 @@ export default function ProjectWizard() {
         progress: Math.round((currentStep / totalSteps) * 100),
       };
 
+      // Save to Supabase if connected (as a draft project)
+      if (isSupabaseConnected) {
+        try {
+          const draftProjectData = {
+            id: draftId,
+            name: draft.draftName,
+            description: `Draft: ${draft.draftName}`,
+            status: "draft" as const,
+            user_id: user.id,
+            client_info: draft.clientRequirements,
+            site_assessment: draft.siteAssessment,
+            charger_selection: draft.chargerSelection,
+            estimated_budget: null,
+            progress: draft.progress,
+          };
+
+          const existingProject = await projectService.getProject(draftId);
+          if (existingProject) {
+            await projectService.updateProject(draftId, draftProjectData);
+          } else {
+            await projectService.createProject(draftProjectData);
+          }
+          if (import.meta.env.DEV)
+            console.log("✅ Draft saved to cloud:", draftId);
+        } catch (cloudError) {
+          // Log but don't fail - localStorage is our fallback
+          console.log(
+            "⚠️ Cloud save failed, using local storage:",
+            cloudError,
+          );
+        }
+      }
+
       // Get existing drafts
       const existingDrafts = safeGetLocal("chargeSourceDrafts", []);
 
@@ -481,44 +514,86 @@ export default function ProjectWizard() {
   // Load existing project for edit mode
   const loadExistingProject = async (projectId: string) => {
     try {
-      // First try to get from localStorage (for now)
-      const projects = safeGetLocal("chargeSourceProjects", []);
-      if (projects && projects.length > 0) {
-        const projects = safeGetLocal("chargeSourceProjects", []);
-        const project = projects.find((p: any) => p.id === projectId);
+      let projectData = null;
 
-        if (project) {
-          // Map project data to form state
-          if (project.clientRequirements) {
-            setClientRequirements(project.clientRequirements);
+      // Try Supabase first if connected
+      if (isSupabaseConnected) {
+        try {
+          const cloudProject = await projectService.getProject(projectId);
+          if (cloudProject) {
+            projectData = cloudProject;
+            if (import.meta.env.DEV)
+              console.log("✅ Loaded project from cloud:", projectId);
           }
-          if (project.siteAssessment) {
-            setSiteAssessment(project.siteAssessment);
-          }
-          if (project.chargerSelection) {
-            setChargerSelection(project.chargerSelection);
-          }
-          if (project.gridCapacity) {
-            setGridCapacity(project.gridCapacity);
-          }
-          if (project.compliance) {
-            setCompliance(project.compliance);
-          }
-
-          // Set current step to last completed step or first step
-          if (project.currentStep) {
-            setCurrentStep(project.currentStep);
-          }
+        } catch (cloudError) {
+          console.log("⚠️ Could not load from cloud, trying local storage:", cloudError);
         }
       }
 
-      // TODO: Later integrate with Supabase for cloud storage
-      // if (isSupabaseConnected) {
-      //   const project = await projectService.getProject(projectId);
-      //   if (project) {
-      //     // Load project data
-      //   }
-      // }
+      // Fall back to localStorage if cloud load failed or not connected
+      if (!projectData) {
+        const projects = safeGetLocal("chargeSourceProjects", []);
+        if (projects && projects.length > 0) {
+          projectData = projects.find((p: any) => p.id === projectId);
+        }
+      }
+
+      // Map project data to form state
+      if (projectData) {
+        if (projectData.client_info || projectData.clientRequirements) {
+          const clientInfo = projectData.client_info || projectData.clientRequirements;
+          setClientRequirements({
+            contactPersonName: clientInfo.contact_person_name || clientInfo.contactPersonName || "",
+            contactTitle: clientInfo.contact_title || clientInfo.contactTitle || "",
+            contactEmail: clientInfo.contact_email || clientInfo.contactEmail || "",
+            contactPhone: clientInfo.contact_phone || clientInfo.contactPhone || "",
+            organizationType: clientInfo.organization_type || clientInfo.organizationType || "",
+            projectObjective: clientInfo.project_objective || clientInfo.projectObjective || "",
+            numberOfVehicles: clientInfo.number_of_vehicles ? String(clientInfo.number_of_vehicles) : "",
+            vehicleTypes: clientInfo.vehicle_types || clientInfo.vehicleTypes || [],
+            dailyUsagePattern: clientInfo.daily_usage_pattern || clientInfo.dailyUsagePattern || "",
+            budgetRange: clientInfo.budget_range || clientInfo.budgetRange || "",
+            projectTimeline: clientInfo.project_timeline || clientInfo.projectTimeline || "",
+            sustainabilityGoals: clientInfo.sustainability_goals || clientInfo.sustainabilityGoals || [],
+            accessibilityRequirements: clientInfo.accessibility_requirements || clientInfo.accessibilityRequirements || false,
+            specialRequirements: clientInfo.special_requirements || clientInfo.specialRequirements || "",
+            preferredChargerBrands: clientInfo.preferred_charger_brands || clientInfo.preferredChargerBrands || [],
+            paymentModel: clientInfo.payment_model || clientInfo.paymentModel || "",
+          });
+        }
+
+        if (projectData.site_assessment || projectData.siteAssessment) {
+          const siteData = projectData.site_assessment || projectData.siteAssessment;
+          setSiteAssessment({
+            projectName: siteData.project_name || siteData.projectName || "",
+            clientName: siteData.client_name || siteData.clientName || "",
+            siteAddress: siteData.site_address || siteData.siteAddress || "",
+            siteType: siteData.site_type || siteData.siteType || "",
+            existingPowerSupply: siteData.existing_power_supply || siteData.existingPowerSupply || "",
+            availableAmperes: siteData.available_amperes ? String(siteData.available_amperes) : "",
+            estimatedLoad: siteData.estimated_load || siteData.estimatedLoad || "",
+            parkingSpaces: siteData.parking_spaces ? String(siteData.parking_spaces) : "",
+            accessRequirements: siteData.access_requirements || siteData.accessRequirements || "",
+            photos: siteData.photos || siteData.photos || [],
+            additionalNotes: siteData.additional_notes || siteData.additionalNotes || "",
+          });
+        }
+
+        if (projectData.charger_selection || projectData.chargerSelection) {
+          const chargerData = projectData.charger_selection || projectData.chargerSelection;
+          setChargerSelection({
+            chargingType: chargerData.charging_type || chargerData.chargingType || "",
+            powerRating: chargerData.power_rating || chargerData.powerRating || "",
+            mountingType: chargerData.mounting_type || chargerData.mountingType || "",
+            numberOfChargers: chargerData.number_of_chargers ? String(chargerData.number_of_chargers) : "",
+            connectorTypes: chargerData.connector_types || chargerData.connectorTypes || [],
+            weatherProtection: chargerData.weather_protection || chargerData.weatherProtection || false,
+            networkConnectivity: chargerData.network_connectivity || chargerData.networkConnectivity || "",
+          });
+        }
+
+        setCurrentDraftId(projectId);
+      }
     } catch (error) {
       console.error("Error loading project:", error);
     } finally {
@@ -810,25 +885,39 @@ export default function ProjectWizard() {
       if (isSupabaseConnected) {
         try {
           const supabaseData = createSupabaseProjectData();
-          const project = await projectService.createProject(supabaseData);
+          const projectId = supabaseData.id;
+          let project;
 
-          console.log("Project Created Successfully in Supabase:", project);
+          // Update if editing existing project, create if new
+          const existingProject = await projectService.getProject(projectId);
+          if (existingProject) {
+            project = await projectService.updateProject(projectId, supabaseData);
+            console.log("Project Updated Successfully in Supabase:", project);
+          } else {
+            project = await projectService.createProject(supabaseData);
+            console.log("Project Created Successfully in Supabase:", project);
+          }
 
           // Remove draft if it exists
-          if (currentDraftId) {
-            const drafts = safeGetLocal("chargeSourceDrafts", []);
-            const filteredDrafts = drafts.filter(
-              (d: ProjectDraft) => d.id !== currentDraftId,
-            );
-            localStorage.setItem(
-              "chargeSourceDrafts",
-              JSON.stringify(filteredDrafts),
-            );
+          if (currentDraftId && currentDraftId !== projectId) {
+            try {
+              await projectService.deleteProject(currentDraftId);
+              const drafts = safeGetLocal("chargeSourceDrafts", []);
+              const filteredDrafts = drafts.filter(
+                (d: ProjectDraft) => d.id !== currentDraftId,
+              );
+              localStorage.setItem(
+                "chargeSourceDrafts",
+                JSON.stringify(filteredDrafts),
+              );
+            } catch {
+              // Silently fail on draft cleanup
+            }
           }
 
           // Show success dialog
           const recommendations = getChargerRecommendations();
-          console.log("✅ Project created successfully in Supabase:", project);
+          console.log("✅ Project saved successfully in Supabase:", project);
 
           setCreatedProject({
             ...project,
@@ -838,7 +927,7 @@ export default function ProjectWizard() {
           setShowSuccessDialog(true);
           return;
         } catch (error) {
-          console.log("Cloud storage failed, using local storage fallback");
+          console.log("Cloud storage failed, using local storage fallback:", error);
           // Fall through to localStorage
         }
       }
